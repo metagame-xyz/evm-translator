@@ -4,6 +4,7 @@ import { TxData } from '@/types/covalent'
 import Covalent from './clients/Covalent'
 import logger from './logger'
 import { ChainId } from '@/types/utils'
+import { Interaction } from './insights/InterpretEvents'
 
 export type ActivityData = {
 	data: ActivityEntry[]
@@ -28,7 +29,14 @@ export type ActivityEntry = {
 	}
 	value_in_eth: string
 	explorer_url: string
-	insights: Record<string, unknown>
+	insights: {
+		contractName?: string
+		fromENS?: string
+		toENS?: string
+		generalPurpose?: string
+		method?: string
+		interactions?: Array<Interaction>
+	}
 }
 
 type Config = {
