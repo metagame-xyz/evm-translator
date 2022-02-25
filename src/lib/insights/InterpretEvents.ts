@@ -1,8 +1,8 @@
-import Insight, { InsightFailed } from '@/lib/Insight'
-import Augmenter from '@/lib/Augmenter'
-import { TxData } from '@/types/covalent'
 import { ethers } from 'ethers'
 import collect from 'collect.js'
+import Insight from '@/lib/Insight'
+import Augmenter from '@/lib/Augmenter'
+import { TxData } from '@/types/covalent'
 
 type Event = {
 	contract: string
