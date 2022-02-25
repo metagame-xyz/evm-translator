@@ -1,5 +1,5 @@
 import axios, { Axios } from 'axios'
-import { GetTransactionsOptions, GetTransactionsResponse } from '@/types/covalent'
+import { GetBalancesResponse, GetTransactionsOptions, GetTransactionsResponse } from '@/types/covalent'
 
 class Covalent {
 	#client: Axios
@@ -11,6 +11,20 @@ class Covalent {
 				password: '',
 			},
 		})
+	}
+
+	getBalancesFor(
+		address: string,
+		{ chainId, page, limit }: GetTransactionsOptions = {}
+	): Promise<GetBalancesResponse> {
+		return this.#client
+			.get(`${chainId ?? 1}/address/${address}/balances_v2/`, {
+				params: {
+					'page-size': limit ?? 100,
+					'page-number': page ?? 0,
+				},
+			})
+			.then(res => res.data.data)
 	}
 
 	getTransactionsFor(
