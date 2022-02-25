@@ -3,6 +3,9 @@ import collect from 'collect.js'
 import Augmenter from '@/lib/Augmenter'
 import { TxData } from '@/types/covalent'
 import Insight, { Config } from '@/lib/Insight'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 type Event = {
 	contract: string
@@ -63,9 +66,24 @@ class InterpretEvents extends Insight {
 				}
 			})
 
+		const contractData = interactions.get(tx.to_address)
+
+		if (contractData) {
+			prisma.contract.createMany({
+				data: [
+					{
+						address: contractData.contract_address.toLowerCase(),
+						name: contractData.contract,
+						chainId: config.chainId,
+					},
+				],
+				skipDuplicates: true,
+			})
+		}
+
 		return {
 			interactions: interactions.values().toArray(),
-			contractName: interactions.get(tx.to_address)?.contract,
+			contractName: contractData?.contract,
 		}
 	}
 }
