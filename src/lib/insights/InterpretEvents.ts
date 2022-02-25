@@ -1,8 +1,8 @@
 import { ethers } from 'ethers'
 import collect from 'collect.js'
-import Insight from '@/lib/Insight'
 import Augmenter from '@/lib/Augmenter'
 import { TxData } from '@/types/covalent'
+import Insight, { Config } from '@/lib/Insight'
 
 type Event = {
 	contract: string
@@ -15,7 +15,7 @@ type Event = {
 class InterpretEvents extends Insight {
 	name = 'Interpret Events'
 
-	public async apply(tx: TxData): Promise<{ interactions: Array<{}>; contractName: string | null }> {
+	public async apply(tx: TxData, config: Config): Promise<{ interactions: Array<{}>; contractName: string | null }> {
 		const interactions = collect(tx.log_events)
 			.reject(event => !event.sender_name)
 			.mapToGroups((event): [string, Event] => {
