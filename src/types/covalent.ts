@@ -6,17 +6,68 @@ export type GetTransactionsOptions = {
 	chainId?: ChainId
 }
 
-export type GetTransactionsResponse = {
+type CovalentResponse<T> = {
 	address: string
 	updated_at: string
 	next_update_at: string
+	quote_currency: string
 	chain_id: number
-	items: Array<TxData>
+	items: Array<T>
 	pagination: {
 		has_more: boolean
 		page_number: number
 		page_size: number
 	}
+}
+
+export type GetTransactionsResponse = CovalentResponse<TxData>
+
+export type GetBalancesResponse = CovalentResponse<TokenBalance>
+
+type ERC = 'erc20' | 'erc721'
+
+export type TokenBalance = {
+	contract_decimals: number
+	contract_name: string
+	contract_ticker_symbol: string
+	contract_address: string
+	supports_erc?: ERC[]
+	logo_url: string
+	last_transferred_at: Date
+	type: 'cryptocurrency' | 'dust'
+	balance: string
+	balance_24h: string
+	quote_rate: number
+	quote_rate_24h?: any
+	quote: number
+	quote_24h?: any
+	nft_data?: Array<{
+		token_id: string
+		token_balance: string
+		token_url: string
+		supports_erc: ERC[]
+		token_price_wei?: any
+		token_quote_rate_eth?: any
+		original_owner: string
+		external_data: {
+			name: string
+			description: string
+			image: string
+			image_256: string
+			image_512: string
+			image_1024: string
+			animation_url?: string
+			external_url: string
+			attributes: Array<{
+				trait_type: string
+				value: string
+			}>
+			owner?: string
+		}
+		owner: string
+		owner_address?: string
+		burned?: boolean
+	}>
 }
 
 export type TxData = {
