@@ -3,6 +3,7 @@ import Augmenter from './Augmenter'
 import { TxData } from '@/types/covalent'
 import Covalent from './clients/Covalent'
 import logger from './logger'
+import { ChainId } from '@/types/utils'
 
 export type ActivityData = {
 	data: ActivityEntry[]
@@ -30,15 +31,16 @@ export type ActivityEntry = {
 	insights: Record<string, unknown>
 }
 
-type PaginationConfig = {
+type Config = {
+	chainId?: ChainId
 	page?: number
 	limit?: number
 }
 
 class Activity {
-	public async forAddress(address: string, { page, limit }: PaginationConfig = {}): Promise<ActivityData> {
+	public async forAddress(address: string, { chainId, page, limit }: Config = {}): Promise<ActivityData> {
 		logger.startTimer('fetch')
-		const txData = await Covalent.getTransactionsFor(address, { page, limit })
+		const txData = await Covalent.getTransactionsFor(address, { chainId, page, limit })
 		logger.endTimer('fetch')
 
 		logger.startTimer('augmenting')
@@ -56,7 +58,7 @@ class Activity {
 						reverted: !tx.successful,
 						timestamp: new Date(tx.block_signed_at).getTime() / 1000,
 					},
-					insights: await Augmenter.augment(tx),
+					insights: await Augmenter.augment(tx, { chainId: chainId ?? 1 }),
 					explorer_url: `https://etherscan.io/tx/${tx.tx_hash}`,
 					value_in_eth: tx.value == '0' ? '0' : ethers.utils.formatUnits(tx.value),
 				}
@@ -64,7 +66,10 @@ class Activity {
 		)
 		logger.endTimer('augmenting')
 
-		return { data: activity, pagination: { page, items: activity.length, last_page: !txData.pagination.has_more } }
+		return {
+			data: activity,
+			pagination: { page: page + 1, items: activity.length, last_page: !txData.pagination.has_more },
+		}
 	}
 }
 
