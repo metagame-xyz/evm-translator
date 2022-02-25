@@ -1,7 +1,9 @@
+import { ChainId } from './utils'
+
 export type GetTransactionsOptions = {
 	page?: number
 	limit?: number
-	network?: 1 | 137
+	chainId?: ChainId
 }
 
 export type GetTransactionsResponse = {
