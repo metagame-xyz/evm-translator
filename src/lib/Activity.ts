@@ -4,7 +4,16 @@ import { TxData } from '@/types/covalent'
 import Covalent from './clients/Covalent'
 import logger from './logger'
 
-type ActivityEntry = {
+export type ActivityData = {
+	data: ActivityEntry[]
+	pagination: {
+		page: number
+		items: number
+		last_page: boolean
+	}
+}
+
+export type ActivityEntry = {
 	id: string
 	raw: {
 		to: string
@@ -21,14 +30,19 @@ type ActivityEntry = {
 	insights: Record<string, unknown>
 }
 
+type PaginationConfig = {
+	page?: number
+	limit?: number
+}
+
 class Activity {
-	public async forAddress(address: string): Promise<ActivityEntry[]> {
+	public async forAddress(address: string, { page, limit }: PaginationConfig = {}): Promise<ActivityData> {
 		logger.startTimer('fetch')
-		const txData = await Covalent.getTransactionsFor(address)
-		logger.endTimer('init')
+		const txData = await Covalent.getTransactionsFor(address, { page, limit })
+		logger.endTimer('fetch')
 
 		logger.startTimer('augmenting')
-		return Promise.all(
+		const activity = await Promise.all(
 			txData.items.map(async (tx: TxData): Promise<ActivityEntry> => {
 				return {
 					id: tx.tx_hash,
@@ -47,7 +61,10 @@ class Activity {
 					value_in_eth: tx.value == '0' ? '0' : ethers.utils.formatUnits(tx.value),
 				}
 			})
-		).finally(() => logger.endTimer('augmenting'))
+		)
+		logger.endTimer('augmenting')
+
+		return { data: activity, pagination: { page, items: activity.length, last_page: !txData.pagination.has_more } }
 	}
 }
 
