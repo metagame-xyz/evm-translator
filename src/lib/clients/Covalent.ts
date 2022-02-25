@@ -15,10 +15,10 @@ class Covalent {
 
 	getTransactionsFor(
 		address: string,
-		{ network, page, limit }: GetTransactionsOptions = {}
+		{ chainId, page, limit }: GetTransactionsOptions = {}
 	): Promise<GetTransactionsResponse> {
 		return this.#client
-			.get(`${network ?? 1}/address/${address}/transactions_v2/`, {
+			.get(`${chainId ?? 1}/address/${address}/transactions_v2/`, {
 				params: {
 					'page-size': limit ?? 100,
 					'page-number': page ?? 0,
