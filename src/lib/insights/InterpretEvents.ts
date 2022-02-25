@@ -12,10 +12,20 @@ type Event = {
 	details: Record<string, unknown>
 }
 
+export type Interaction = {
+	contract: string
+	contract_symbol: string
+	contract_address: string
+	details: Array<{ event: string } & Record<string, unknown>>
+}
+
 class InterpretEvents extends Insight {
 	name = 'Interpret Events'
 
-	public async apply(tx: TxData, config: Config): Promise<{ interactions: Array<{}>; contractName: string | null }> {
+	public async apply(
+		tx: TxData,
+		config: Config
+	): Promise<{ interactions: Array<Interaction>; contractName: string | null }> {
 		const interactions = collect(tx.log_events)
 			.reject(event => !event.sender_name)
 			.mapToGroups((event): [string, Event] => {
