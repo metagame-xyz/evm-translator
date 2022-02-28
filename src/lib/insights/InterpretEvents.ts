@@ -4,6 +4,7 @@ import Augmenter from '@/lib/Augmenter'
 import { TxData } from '@/types/covalent'
 import Insight, { Config } from '@/lib/Insight'
 import { PrismaClient } from '@prisma/client'
+import { correctContractName } from '../utils'
 
 const prisma = new PrismaClient()
 
@@ -83,7 +84,7 @@ class InterpretEvents extends Insight {
 
 		return {
 			interactions: interactions.values().toArray(),
-			contractName: contractData?.contract,
+			contractName: correctContractName(contractData?.contract),
 		}
 	}
 }
