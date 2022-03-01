@@ -1,23 +1,31 @@
+import {
+	NFTMint,
+	ENSRenewal,
+	TokensSent,
+	OpenSeaBuy,
+	GeneralSwap,
+	ETHTransfer,
+	AaveDeposit,
+	MintReceived,
+	UniswapV2Swap,
+	LooksRareSale,
+	TokenApproval,
+	OpenSeaCancel,
+	TokensReceived,
+	ContractDeploy,
+	SpamTransaction,
+} from './inspectors'
+import logger from './logger'
+import OxSwap from './inspectors/0xSwap'
 import { ActivityEntry } from './Activity'
 import Inspector, { Config, InspectorResult } from './Inspector'
-import ContractDeploy from './inspectors/ContractDeploy'
 import ContractInteraction from './inspectors/ContractInteraction'
-import ENSRenewal from './inspectors/ENSRenewal'
-import ETHTransfer from './inspectors/ETHTransfer'
 import ExternalInteraction from './inspectors/ExternalInteraction'
-import MintReceived from './inspectors/MintReceived'
-import NFTMint from './inspectors/NFTMint'
-import TokensSent from './inspectors/TokensSent'
-import OpenSeaBuy from './inspectors/OpenSeaBuy'
-import OpenSeaCancel from './inspectors/OpenSeaCancel'
-import TokensReceived from './inspectors/TokensReceived'
-import UniswapV2Swap from './inspectors/UniswapV2Swap'
-import LooksRareSale from './inspectors/LooksRareSale'
-import TokenApproval from './inspectors/TokenApproval'
-import SpamTransaction from './inspectors/SpamTransaction'
 
-const INSPECTORS = [
+const INSPECTORS: Array<Inspector> = [
 	/* Specific Providers */
+	new AaveDeposit(),
+	new OxSwap(),
 	new OpenSeaBuy(),
 	new OpenSeaCancel(),
 	new ENSRenewal(),
@@ -28,6 +36,7 @@ const INSPECTORS = [
 	new TokensSent(),
 	new NFTMint(),
 	new TokenApproval(),
+	new GeneralSwap(),
 
 	/* General Received */
 	new TokensReceived(),
@@ -54,6 +63,7 @@ class Interpreter {
 		} catch (error) {
 			if (process.env.NODE_ENV === 'production') return { hideTransaction: true }
 
+			logger.debug(entry)
 			throw error
 		}
 	}
