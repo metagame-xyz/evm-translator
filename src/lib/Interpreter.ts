@@ -16,6 +16,7 @@ import {
 	OpenSeaCancel,
 	TokensReceived,
 	ContractDeploy,
+	PolygonBridge,
 	SpamTransaction,
 	JuiceboxContribution,
 	FailedTransaction,
@@ -41,6 +42,7 @@ const INSPECTORS: Array<Inspector> = [
 	new JuiceboxContribution(),
 	new GnosisCall(),
 	new WrapEther(),
+	new PolygonBridge(),
 
 	/* Sent Transactions */
 	new TokensSent(),
