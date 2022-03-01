@@ -21,6 +21,7 @@ import {
 	ENSReverseRecord,
 	FailedTransaction,
 	JuiceboxContribution,
+	GnosisCreate,
 } from './inspectors'
 import OxSwap from './inspectors/0xSwap'
 import { ActivityEntry } from './Activity'
@@ -42,6 +43,7 @@ const INSPECTORS: Array<Inspector> = [
 	new LooksRareSale(),
 	new JuiceboxContribution(),
 	new GnosisCall(),
+	new GnosisCreate(),
 	new WrapEther(),
 	new PolygonBridge(),
 	new ENSReverseRecord(),
