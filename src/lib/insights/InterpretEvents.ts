@@ -69,7 +69,7 @@ class InterpretEvents extends Insight {
 
 		const contractData = interactions.get(tx.to_address)
 
-		if (contractData) {
+		if (contractData?.contract) {
 			prisma.contract.createMany({
 				data: [
 					{
