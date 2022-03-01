@@ -1,9 +1,9 @@
+import logger from './logger'
 import { ethers } from 'ethers'
 import Augmenter from './Augmenter'
+import { ChainId } from '@/types/utils'
 import { TxData } from '@/types/covalent'
 import Covalent from './clients/Covalent'
-import logger from './logger'
-import { ChainId } from '@/types/utils'
 import { Interaction } from './insights/InterpretEvents'
 
 export type ActivityData = {
