@@ -4,6 +4,7 @@ import {
 	ENSRenewal,
 	TokensSent,
 	OpenSeaBuy,
+	GnosisCall,
 	GeneralSwap,
 	ETHTransfer,
 	AaveDeposit,
@@ -15,6 +16,7 @@ import {
 	TokensReceived,
 	ContractDeploy,
 	SpamTransaction,
+	JuiceboxContribution,
 } from './inspectors'
 import logger from './logger'
 import OxSwap from './inspectors/0xSwap'
@@ -32,6 +34,8 @@ const INSPECTORS: Array<Inspector> = [
 	new ENSRenewal(),
 	new UniswapV2Swap(),
 	new LooksRareSale(),
+	new JuiceboxContribution(),
+	new GnosisCall(),
 
 	/* Sent Transactions */
 	new TokensSent(),
@@ -60,7 +64,15 @@ class Interpreter {
 	#inspectors: Array<Inspector> = INSPECTORS
 
 	public augment(entry: ActivityEntry, config: Config): InspectorResult {
-		return this.#inspectors.find(inspector => inspector.check(entry, config)).resolve(entry, config)
+		const inspector = this.#inspectors.find(inspector => inspector.check(entry, config))
+
+		try {
+			return inspector.resolve(entry, config)
+		} catch (error) {
+			logger.debug('error!!!', inspector.name, entry)
+
+			throw error
+		}
 	}
 }
 
