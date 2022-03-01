@@ -87,6 +87,8 @@ export type TxData = {
 	gas_price: any
 	gas_quote: number
 	gas_quote_rate: number
+	data?: string
+	creates?: string
 	log_events: Array<{
 		block_signed_at: Date
 		block_height: number
