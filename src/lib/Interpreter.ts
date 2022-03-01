@@ -14,12 +14,13 @@ import {
 	LooksRareSale,
 	TokenApproval,
 	OpenSeaCancel,
+	PolygonBridge,
 	TokensReceived,
 	ContractDeploy,
-	PolygonBridge,
 	SpamTransaction,
-	JuiceboxContribution,
+	ENSReverseRecord,
 	FailedTransaction,
+	JuiceboxContribution,
 } from './inspectors'
 import OxSwap from './inspectors/0xSwap'
 import { ActivityEntry } from './Activity'
@@ -43,6 +44,7 @@ const INSPECTORS: Array<Inspector> = [
 	new GnosisCall(),
 	new WrapEther(),
 	new PolygonBridge(),
+	new ENSReverseRecord(),
 
 	/* Sent Transactions */
 	new TokensSent(),
