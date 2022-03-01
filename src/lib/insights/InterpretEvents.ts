@@ -34,10 +34,10 @@ class InterpretEvents extends Insight {
 			.reject(event => !event.sender_name)
 			.mapToGroups((event): [string, Event] => {
 				const details = Object.fromEntries(
-					event.decoded.params.map(param => [
+					event.decoded.params?.map(param => [
 						param.name,
 						Array.isArray(param.value) ? param.value.map(arg => arg.value) : param.value,
-					])
+					]) ?? []
 				)
 
 				if (details.value && event.sender_contract_decimals)
