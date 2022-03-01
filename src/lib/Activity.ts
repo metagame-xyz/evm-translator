@@ -53,8 +53,10 @@ class Activity {
 
 		logger.startTimer('augmenting')
 		const activity = await Promise.all(
-			txData.items.map(async (tx: TxData): Promise<ActivityEntry> => {
-				return {
+			(
+				await Augmenter.augmentAll(txData.items, { chainId: chainId ?? 1 })
+			).map(
+				async (tx: TxData, i): Promise<ActivityEntry> => ({
 					id: tx.tx_hash,
 					raw: {
 						value: tx.value,
@@ -69,8 +71,8 @@ class Activity {
 					insights: await Augmenter.augment(tx, { chainId: chainId ?? 1 }),
 					explorer_url: `https://etherscan.io/tx/${tx.tx_hash}`,
 					value_in_eth: tx.value == '0' ? '0' : ethers.utils.formatUnits(tx.value),
-				}
-			})
+				})
+			)
 		)
 		logger.endTimer('augmenting')
 
