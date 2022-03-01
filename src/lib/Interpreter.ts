@@ -1,6 +1,7 @@
 import {
 	NFTMint,
 	Fallback,
+	WrapEther,
 	ENSRenewal,
 	TokensSent,
 	OpenSeaBuy,
@@ -17,6 +18,7 @@ import {
 	ContractDeploy,
 	SpamTransaction,
 	JuiceboxContribution,
+	FailedTransaction,
 } from './inspectors'
 import OxSwap from './inspectors/0xSwap'
 import { ActivityEntry } from './Activity'
@@ -25,6 +27,9 @@ import ContractInteraction from './inspectors/ContractInteraction'
 import ExternalInteraction from './inspectors/ExternalInteraction'
 
 const INSPECTORS: Array<Inspector> = [
+	/* Hide failed transactions */
+	new FailedTransaction(),
+
 	/* Specific Providers */
 	new AaveDeposit(),
 	new OxSwap(),
@@ -35,6 +40,7 @@ const INSPECTORS: Array<Inspector> = [
 	new LooksRareSale(),
 	new JuiceboxContribution(),
 	new GnosisCall(),
+	new WrapEther(),
 
 	/* Sent Transactions */
 	new TokensSent(),
