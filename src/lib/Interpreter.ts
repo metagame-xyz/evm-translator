@@ -49,12 +49,13 @@ class Interpreter {
 	#inspectors: Array<Inspector> = INSPECTORS
 
 	public augment(entry: ActivityEntry, config: Config): InspectorResult {
-		return this.#inspectors
-			.find(inspector => {
-				console.log(`checking ${inspector.name}`)
-				return inspector.check(entry, config)
-			})
-			.resolve(entry, config)
+		try {
+			return this.#inspectors.find(inspector => inspector.check(entry, config)).resolve(entry, config)
+		} catch (error) {
+			if (process.env.NODE_ENV === 'production') return { hideTransaction: true }
+
+			throw error
+		}
 	}
 }
 
