@@ -26,6 +26,7 @@ export type ActivityEntry = {
 		gas_units: number
 		gas_price: number
 		reverted: boolean
+		input: string
 	}
 	value_in_eth: string
 	explorer_url: string
@@ -59,6 +60,7 @@ class Activity {
 				async (tx: TxData, i): Promise<ActivityEntry> => ({
 					id: tx.tx_hash,
 					raw: {
+						input: tx.data,
 						value: tx.value,
 						to: tx.to_address,
 						from: tx.from_address,
