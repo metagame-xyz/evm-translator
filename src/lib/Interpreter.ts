@@ -36,7 +36,6 @@ const INSPECTORS: Array<Inspector> = [
 	/* Specific Providers */
 	new AaveDeposit(),
 	new OxSwap(),
-	new OpenSeaBuy(),
 	new OpenSeaCancel(),
 	new ENSRenewal(),
 	new UniswapV2Swap(),
@@ -47,6 +46,7 @@ const INSPECTORS: Array<Inspector> = [
 	new WrapEther(),
 	new PolygonBridge(),
 	new ENSReverseRecord(),
+	new OpenSeaBuy(),
 
 	/* Sent Transactions */
 	new TokensSent(),
