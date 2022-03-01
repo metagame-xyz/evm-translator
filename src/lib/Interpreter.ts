@@ -18,10 +18,9 @@ import {
 	SpamTransaction,
 	JuiceboxContribution,
 } from './inspectors'
-import logger from './logger'
 import OxSwap from './inspectors/0xSwap'
 import { ActivityEntry } from './Activity'
-import Inspector, { Config, InspectorResult } from './Inspector'
+import Inspector, { Config, InspectorError, InspectorResult } from './Inspector'
 import ContractInteraction from './inspectors/ContractInteraction'
 import ExternalInteraction from './inspectors/ExternalInteraction'
 
@@ -69,9 +68,7 @@ class Interpreter {
 		try {
 			return inspector.resolve(entry, config)
 		} catch (error) {
-			logger.debug('error!!!', inspector.name, entry)
-
-			throw error
+			throw new InspectorError(inspector, entry, error)
 		}
 	}
 }
