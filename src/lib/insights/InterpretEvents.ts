@@ -2,9 +2,9 @@ import { ethers } from 'ethers'
 import collect from 'collect.js'
 import Augmenter from '@/lib/Augmenter'
 import { TxData } from '@/types/covalent'
-import Insight, { Config } from '@/lib/Insight'
 import { PrismaClient } from '@prisma/client'
 import { correctContractName } from '../utils'
+import Insight, { Config } from '@/lib/Insight'
 
 const prisma = new PrismaClient()
 
