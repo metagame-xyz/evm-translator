@@ -1,5 +1,6 @@
 import {
 	NFTMint,
+	Fallback,
 	ENSRenewal,
 	TokensSent,
 	OpenSeaBuy,
@@ -32,40 +33,34 @@ const INSPECTORS: Array<Inspector> = [
 	new UniswapV2Swap(),
 	new LooksRareSale(),
 
-	/* General Sent */
+	/* Sent Transactions */
 	new TokensSent(),
 	new NFTMint(),
 	new TokenApproval(),
 	new GeneralSwap(),
 
-	/* General Received */
+	/* Received Transactions */
 	new TokensReceived(),
 	new MintReceived(),
 
 	/* Spam Filter */
 	new SpamTransaction(),
 
-	/* Fallbacks */
+	/* General */
 	new ContractInteraction(),
 	new ExternalInteraction(),
 
 	/* Other */
 	new ETHTransfer(),
 	new ContractDeploy(),
+	new Fallback(),
 ]
 
 class Interpreter {
 	#inspectors: Array<Inspector> = INSPECTORS
 
 	public augment(entry: ActivityEntry, config: Config): InspectorResult {
-		try {
-			return this.#inspectors.find(inspector => inspector.check(entry, config)).resolve(entry, config)
-		} catch (error) {
-			if (process.env.NODE_ENV === 'production') return { hideTransaction: true }
-
-			logger.debug(entry)
-			throw error
-		}
+		return this.#inspectors.find(inspector => inspector.check(entry, config)).resolve(entry, config)
 	}
 }
 
