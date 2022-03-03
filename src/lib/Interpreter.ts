@@ -49,10 +49,10 @@ const INSPECTORS: Array<Inspector> = [
 	new OpenSeaBuy(),
 
 	/* Sent Transactions */
+	new GeneralSwap(),
 	new TokensSent(),
 	new NFTMint(),
 	new TokenApproval(),
-	new GeneralSwap(),
 
 	/* Received Transactions */
 	new TokensReceived(),
