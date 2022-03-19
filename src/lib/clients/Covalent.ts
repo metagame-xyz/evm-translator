@@ -40,6 +40,20 @@ class Covalent {
 			})
 			.then(res => res.data.data)
 	}
+
+	getTransactionFor(
+        txHash: string,
+		{ chainId, page, limit }: GetTransactionsOptions = {}
+	): Promise<GetTransactionsResponse> {
+		return this.#client
+			.get(`${chainId ?? 1}/transaction_v2/${txHash}/`, {
+				params: {
+					'page-size': limit ?? 100,
+					'page-number': page ?? 0,
+				},
+			})
+			.then(res => res.data.data)
+	}
 }
 
 export default new Covalent()
