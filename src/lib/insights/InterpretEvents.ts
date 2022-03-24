@@ -1,4 +1,5 @@
 import { ethers } from 'ethers'
+import { BigNumber } from 'ethers'
 import collect from 'collect.js'
 import Augmenter from '@/lib/Augmenter'
 import { TxData } from '@/types/covalent'
@@ -23,6 +24,23 @@ export type Interaction = {
     details: Array<{ event: string } & Record<string, unknown>>
 }
 
+// covalent returns 'value:null' for ERC721's instead of decoding the param as tokenId
+function covalentERC721Shim(details, event) {
+    const incorrectValueParam = event.decoded.params.find(
+        (param) => param.name === 'value' && !param.decoded,
+    )
+
+    if (incorrectValueParam) {
+        const decodedValue = BigNumber.from(event.raw_log_topics[3])?.toString()
+        if (decodedValue) {
+            details.tokenId = decodedValue
+            delete details.value
+        }
+    }
+
+    return details
+}
+
 class InterpretEvents extends Insight {
     name = 'Interpret Events'
 
@@ -30,13 +48,13 @@ class InterpretEvents extends Insight {
         tx: TxData,
         config: Config,
     ): Promise<{ interactions: Array<Interaction>; contractName: string | null }> {
-        console.log('log events', tx.log_events)
+        // console.log('log events', tx.log_events)
         const interactions = collect(tx.log_events)
             // .reject((event) => !event.sender_name)
             .reject((event) => !event.decoded)
             .mapToGroups((event): [string, Event] => {
                 console.log('params', event.decoded.params)
-                const details = Object.fromEntries(
+                let details = Object.fromEntries(
                     event.decoded.params?.map((param) => [
                         param.name,
                         Array.isArray(param.value)
@@ -45,10 +63,16 @@ class InterpretEvents extends Insight {
                     ]) ?? [],
                 )
 
+                console.log('details', details)
+
                 if (details.value && event.sender_contract_decimals)
                     details.value = ethers.utils
                         .formatUnits(details.value, event.sender_contract_decimals)
                         .replace(/\.0$/, '')
+
+                details = covalentERC721Shim(details, event)
+                // console.log('event', event)
+                // console.log('detials', details)
 
                 return [
                     event.sender_address,
