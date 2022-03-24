@@ -128,7 +128,7 @@ class Interpreter {
             } else if (interaction.details[0]._amount || interaction.details[0]._amounts) {
                 tokenType = TokenType.ERC1155
                 // ERC-721
-            } else if (interaction.details[0].value === null) {
+            } else if (interaction.details[0].tokenId) {
                 tokenType = TokenType.ERC721
                 // ERC-20
             } else if (interaction.details[0].value > 0) {
@@ -156,7 +156,8 @@ class Interpreter {
                 name: i.contract,
                 symbol: i.contract_symbol,
                 address: i.contract_address,
-                amount: i.details[0].value as string,
+                amount: i.details[0].value,
+                tokenId: i.details[0].tokenId,
             }
         })
 
