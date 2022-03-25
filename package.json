@@ -1,0 +1,28 @@
+{
+  "name": "evm-translator",
+  "version": "0.0.1",
+  "description": "a library for making EVM-based blockchain data more human-readable",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/the-metagame/evm-translator.git"
+  },
+  "keywords": [
+    "Ethereum",
+    "ETH",
+    "EVM",
+    "Polygon",
+    "Blockchain",
+    "Crypto",
+    "Web3"
+  ],
+  "author": "Brenner Spear",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/the-metagame/evm-translator/issues"
+  },
+  "homepage": "https://github.com/the-metagame/evm-translator#readme"
+}
