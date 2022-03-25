@@ -1,13 +1,13 @@
-import { Address, ChainId } from './utils'
+import { Address } from '@types'
 
 export type GetTransactionsOptions = {
     page?: number
     limit?: number
-    chainId?: ChainId
+    chainId?: string
 }
 
 export type CovalentConfig = {
-    chainId?: ChainId
+    chainId?: string
     page?: number
     limit?: number
 }
