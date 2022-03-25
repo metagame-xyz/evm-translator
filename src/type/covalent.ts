@@ -1,4 +1,4 @@
-import { Address } from '@types'
+import { Address } from 'type'
 
 export type GetTransactionsOptions = {
     page?: number

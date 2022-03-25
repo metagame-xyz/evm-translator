@@ -2,8 +2,10 @@
 // import { Address, Chain, chains, EthersAPIKeys } from '@/types/utils'
 // import { BaseProvider, TransactionReceipt } from '@ethersproject/providers'
 // import { getDefaultProvider } from 'ethers'
-import { Chain } from '@types'
+import { Chain } from '@type'
+import { TxData } from '@type/covalent'
 import { chains } from '@utils'
+import Covalent from '@utils/clients/Covalent'
 
 export type EthersAPIKeys = {
     alchemy: string
@@ -14,6 +16,74 @@ export type EthersAPIKeys = {
         applicationSecretKey: string
     }
 }
+
+// export const defaultMainnetProvider = getDefaultProvider('homestead', ethersApiKeys)
+
+export type TranslatorConfig = {
+    chain: Chain
+    covalentApiKey: string
+    walletAddressAsContext?: string // should it say "bought" vs "sold"? Depends on the context
+    // ethersApiKeys?: EthersAPIKeys
+    // getContractNames?: boolean
+    // getMethodNames?: boolean
+    // filterOutSpam?: boolean
+    // queryNode?: boolean
+    // spamRegistry?: string
+}
+
+class Translator {
+    #Covalent: Covalent
+    config: TranslatorConfig = {
+        chain: chains.ethereum,
+        covalentApiKey: '',
+        // queryNode: false,
+        // getContractNames: false,
+        // getMethodNames: false,
+        // filterOutSpam: false,
+    }
+    // provider: BaseProvider
+
+    constructor(config: TranslatorConfig) {
+        this.config = { ...this.config, ...config }
+
+        this.#Covalent = new Covalent(this.config.covalentApiKey, this.config.chain.id)
+        // this.provider = provider || getDefaultProvider('homestead', ethersApiKeys)
+    }
+
+    public async translateFromHash(txHash: string): Promise<TxData | boolean> {
+        const response = await this.#Covalent.getTransactionFor(txHash)
+        const txData = response.items[0]
+
+        return txData
+    }
+
+    // public async translateFromHashes(hashes: string[]): Promise<TransactionReceipt[] | boolean> {
+    //     return []
+    // }
+
+    // will require a connection to etherscan or some other wallet-indexed source
+    // public async translateFromWalletAddress(address: string): Promise<Activity[] | boolean> {
+    //     return []
+    // }
+
+    // public translateFromTransactions(transactions: TransactionReceipt[]): Activity[] {
+    //     const transaction = transactions[0]
+    //     const userAddress = transaction.from as Address
+
+    //     return []
+    // }
+
+    // for use with translateFromTransactions, other functions can have this built in
+    // public async filterOutSpam(activities: Activity[]): Promise<Activity[]> {
+    //     if (!this.config.spamRegistry) {
+    //         return activities
+    //     }
+    //     // ...
+    //     return []
+    // }
+}
+
+export default Translator
 
 export function createEthersAPIKeyObj(
     alchemy: string,
@@ -32,78 +102,6 @@ export function createEthersAPIKeyObj(
         },
     }
 }
-
-// export const defaultMainnetProvider = getDefaultProvider('homestead', ethersApiKeys)
-
-export type TranslatorConfig = {
-    chain?: Chain
-    walletAddressAsContext?: string // should it say "bought" vs "sold"? Depends on the context
-    queryNode?: boolean
-    ethersApiKeys?: EthersAPIKeys
-    getContractNames?: boolean
-    getMethodNames?: boolean
-    filterOutSpam?: boolean
-    spamRegistry?: string
-}
-
-class Translator {
-    config: TranslatorConfig = {
-        chain: chains.ethereum,
-        queryNode: false,
-        getContractNames: false,
-        getMethodNames: false,
-        filterOutSpam: false,
-    }
-    // provider: BaseProvider
-
-    constructor(config: TranslatorConfig, provider?: any) {
-        this.config = { ...this.config, ...config }
-        // this.provider = provider || getDefaultProvider('homestead', ethersApiKeys)
-    }
-
-    public translateFromTransactions(transactions: TransactionReceipt[]): Activity[] {
-        const transaction = transactions[0]
-        const userAddress = transaction.from as Address
-
-        return []
-    }
-
-    public async translateFromHashes(hashes: string[]): Promise<TransactionReceipt[] | boolean> {
-        if (!this.config.queryNode) {
-            return false
-        }
-        /*
-        query node for transaction hashes, returns TransactionReceipts
-        
-
-        this.translateFromTransactions(transactions)
-        */
-
-        const transactionReceipt = await this.provider.getTransactionReceipt(hashes[0])
-        const activity = this.translateFromTransactions([transactionReceipt])
-        return [transactionReceipt]
-    }
-
-    // will require a connection to etherscan or some other wallet-indexed source
-    public async translateFromWalletAddress(address: string): Promise<Activity[] | boolean> {
-        if (!this.config.queryNode) {
-            return false
-        }
-        // ...
-        return []
-    }
-
-    // for use with translateFromTransactions, other functions can have this built in
-    public async filterOutSpam(activities: Activity[]): Promise<Activity[]> {
-        if (!this.config.spamRegistry) {
-            return activities
-        }
-        // ...
-        return []
-    }
-}
-
-export default Translator
 
 // const insightsExample: Activity = {
 //     source: 'on-chain',

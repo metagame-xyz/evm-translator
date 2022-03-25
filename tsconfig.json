@@ -1,14 +1,14 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "es6",
         "module": "commonjs",
         "declaration": true,
         "outDir": "./lib",
         "strict": true,
         "baseUrl": "src/",
         "paths": {
-            "@types": ["types"],
-            "@types/*": ["types/*"],
+            "@type": ["type"],
+            "@type/*": ["type/*"],
             "@utils": ["utils"],
             "@utils/*": ["utils/*"]
         }
