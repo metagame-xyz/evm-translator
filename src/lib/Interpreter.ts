@@ -2,6 +2,7 @@ import Inspector, { Config } from './Inspector'
 import { ActivityEntry, Interaction, Interpretation, Token, TokenType } from '@/types/activity'
 import defaultContractInterpreters from './contractInterpreters'
 import { Address } from '@/types/utils'
+import collect from 'collect.js'
 
 function deepCopy(obj: any) {
     return JSON.parse(JSON.stringify(obj))
@@ -50,10 +51,16 @@ class Interpreter {
         const filters = keyMapping.filters
         const index = keyMapping.index || 0
 
-        console.log('interactions', interactions)
+        // console.log('interactions', interactions)
         let filteredInteractions = deepCopy(interactions)
 
         // console.log('interactions', interactions)
+
+        interactions.forEach((interaction) => {
+            interaction.details.forEach((detail) => {
+                console.log('detail', detail)
+            })
+        })
 
         for (const [key, value] of Object.entries(filters)) {
             let valueToFind = value
@@ -71,16 +78,16 @@ class Interpreter {
             // if there aren't any details left, we don't want that interaction
             filteredInteractions = filteredInteractions.filter((i) => i.details.length > 0)
 
-            // filter out interactions by top level ke
+            // filter out interactions by top level key
             if (isTopLevel(key)) {
                 filteredInteractions = filteredInteractions.filter((i) => i[key] === valueToFind)
             }
         }
-        // console.log('keyMapping.key', keyMapping.key)
+        console.log('keyMapping.key', keyMapping.key)
 
         const interaction = filteredInteractions[index]
         const prefix = keyMapping.prefix || ''
-        const str = interaction?.[keyMapping.key]
+        const str = interaction?.[keyMapping.key] || interaction?.details[index]?.[keyMapping.key]
         const postfix = keyMapping.postfix || ''
         const value = str ? prefix + str + postfix : keyMapping.default_value
 
@@ -172,16 +179,25 @@ class Interpreter {
         return this.getTokens(interactions, userAddress, 'from')
     }
 
-    private
-
     private useMapping(
         interactions: Interaction[],
         interpretationMapping: any,
         methodSpecificMapping: any,
     ) {
-        const keysRequired: Array<string> = getInputsFromTemplate(
+        const keysRequired1: Array<string> = getInputsFromTemplate(
             methodSpecificMapping.example_description_template,
         )
+
+        const includeKeys = ['action', 'contract_name', 'example_description']
+        const excludeKeys = ['example_description', 'exmaple_description_template']
+        const variableKeys = Object.keys(methodSpecificMapping)
+
+        const keysRequired: Array<string> = collect(variableKeys)
+            .except(excludeKeys)
+            .concat(includeKeys)
+            .all()
+
+        console.log('keysRequired', keysRequired)
         const keyValueMap: Record<string, string> = {}
 
         for (let key of keysRequired) {
