@@ -5,7 +5,7 @@
 import { Chain } from '@type'
 import { TxData } from '@type/covalent'
 import { chains } from '@utils'
-import Covalent from '@utils/clients/Covalent'
+import covalent from '@utils/clients/Covalent'
 
 export type EthersAPIKeys = {
     alchemy: string
@@ -32,7 +32,7 @@ export type TranslatorConfig = {
 }
 
 class Translator {
-    #Covalent: Covalent
+    #Covalent
     config: TranslatorConfig = {
         chain: chains.ethereum,
         covalentApiKey: '',
@@ -46,7 +46,9 @@ class Translator {
     constructor(config: TranslatorConfig) {
         this.config = { ...this.config, ...config }
 
-        this.#Covalent = new Covalent(this.config.covalentApiKey, this.config.chain.id)
+        console.log(covalent)
+
+        this.#Covalent = new covalent(this.config.covalentApiKey, this.config.chain.id)
         // this.provider = provider || getDefaultProvider('homestead', ethersApiKeys)
     }
 

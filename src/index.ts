@@ -1,1 +1,4 @@
-export { default as Translator, createEthersAPIKeyObj } from 'Translator'
+import Translator from 'Translator'
+
+export { createEthersAPIKeyObj } from 'Translator'
+export default Translator

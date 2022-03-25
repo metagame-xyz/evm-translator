@@ -1,7 +1,7 @@
 import { GetBalancesResponse, GetTransactionsOptions, GetTransactionsResponse } from '@type/covalent'
 import axios, { Axios } from 'axios'
 
-class Covalent {
+export default class covalent {
     #client: Axios
     chainId: number
     constructor(covalentApiKey: string, chainId: number = 1) {
@@ -44,5 +44,3 @@ class Covalent {
         return this.#client.get(`${this.chainId}/transaction_v2/${txHash}/`).then((res: any) => res.data.data)
     }
 }
-
-export default Covalent
