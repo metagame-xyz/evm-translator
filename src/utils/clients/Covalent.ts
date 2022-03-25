@@ -1,7 +1,7 @@
 import { GetBalancesResponse, GetTransactionsOptions, GetTransactionsResponse } from '@type/covalent'
 import axios, { Axios } from 'axios'
 
-export default class covalent {
+export default class Covalent {
     #client: Axios
     chainId: number
     constructor(covalentApiKey: string, chainId: number = 1) {
@@ -12,7 +12,7 @@ export default class covalent {
                 password: '',
             },
         })
-        this.chainId = chainId //default to 1 for ethereum
+        this.chainId = chainId // default to 1 for ethereum
     }
 
     getBalancesFor(address: string, { page, limit }: GetTransactionsOptions = {}): Promise<GetBalancesResponse> {

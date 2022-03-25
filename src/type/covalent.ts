@@ -18,7 +18,7 @@ type CovalentResponse<T> = {
     next_update_at: string
     quote_currency: string
     chain_id: number
-    items: Array<T>
+    items: T[]
     pagination: {
         has_more: boolean
         page_number: number
@@ -47,7 +47,7 @@ export type TokenBalance = {
     quote_rate_24h?: any
     quote: number
     quote_24h?: any
-    nft_data?: Array<{
+    nft_data?: {
         token_id: string
         token_balance: string
         token_url: string
@@ -64,16 +64,16 @@ export type TokenBalance = {
             image_1024: string
             animation_url?: string
             external_url: string
-            attributes: Array<{
+            attributes: {
                 trait_type: string
                 value: string
-            }>
+            }[]
             owner?: string
         }
         owner: string
         owner_address?: string
         burned?: boolean
-    }>
+    }[]
 }
 
 export type TxData = {
@@ -95,7 +95,7 @@ export type TxData = {
     gas_quote_rate: number
     data?: string
     creates?: string
-    log_events: Array<{
+    log_events: {
         block_signed_at: Date
         block_height: number
         tx_offset: number
@@ -112,13 +112,13 @@ export type TxData = {
         decoded: {
             name: string
             signature: string
-            params: Array<{
+            params: {
                 name: string
                 type: string
                 indexed: boolean
                 decoded: boolean
                 value: any
-            }>
+            }[]
         }
-    }>
+    }[]
 }
