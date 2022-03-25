@@ -1,0 +1,8 @@
+{
+    "root": true,
+    "extends": ["plugin:@typescript-eslint/recommended", "eslint:recommended", "plugin:jest/recommended", "prettier"],
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint", "jest"],
+    "ignorePatterns": ["src/__tests__/*"],
+    "rules": {}
+}

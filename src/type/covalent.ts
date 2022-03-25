@@ -18,7 +18,7 @@ type CovalentResponse<T> = {
     next_update_at: string
     quote_currency: string
     chain_id: number
-    items: T[]
+    items: Array<T>
     pagination: {
         has_more: boolean
         page_number: number

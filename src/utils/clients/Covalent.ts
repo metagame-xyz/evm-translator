@@ -4,7 +4,7 @@ import axios, { Axios } from 'axios'
 export default class Covalent {
     #client: Axios
     chainId: number
-    constructor(covalentApiKey: string, chainId: number = 1) {
+    constructor(covalentApiKey: string, chainId = 1) {
         this.#client = axios.create({
             baseURL: 'https://api.covalenthq.com/v1/',
             auth: {
