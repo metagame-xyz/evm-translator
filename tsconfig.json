@@ -1,11 +1,18 @@
 {
     "compilerOptions": {
-      "target": "es5",
-      "module": "commonjs",
-      "declaration": true,
-      "outDir": "./lib",
-      "strict": true
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": true,
+        "outDir": "./lib",
+        "strict": true,
+        "baseUrl": "src/",
+        "paths": {
+            "@types": ["types"],
+            "@types/*": ["types/*"],
+            "@utils": ["utils"],
+            "@utils/*": ["utils/*"]
+        }
     },
     "include": ["src"],
     "exclude": ["node_modules", "**/__tests__/*"]
-  }
+}

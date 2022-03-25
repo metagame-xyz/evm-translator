@@ -1,1 +1,1 @@
-export const Greeter = (name: string) => `Hello ${name}`
+export { default as Translator, createEthersAPIKeyObj } from 'Translator'
