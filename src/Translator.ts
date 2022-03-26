@@ -2,10 +2,10 @@
 // import { Address, Chain, chains, EthersAPIKeys } from '@/types/utils'
 // import { BaseProvider, TransactionReceipt } from '@ethersproject/providers'
 // import { getDefaultProvider } from 'ethers'
-import { Chain } from '@interfaces'
-import { TxData } from '@interfaces/covalent'
+import { Chain, RawTxData } from '@interfaces'
 import { chains } from '@utils'
 import Covalent from '@utils/clients/Covalent'
+import { covalentToRawTxData } from 'core/rawTransformations'
 
 export type EthersAPIKeys = {
     alchemy: string
@@ -20,8 +20,8 @@ export type EthersAPIKeys = {
 // export const defaultMainnetProvider = getDefaultProvider('homestead', ethersApiKeys)
 
 export type TranslatorConfig = {
-    chain: Chain
     covalentApiKey: string
+    chain?: Chain
     walletAddressAsContext?: string // should it say "bought" vs "sold"? Depends on the context
     // ethersApiKeys?: EthersAPIKeys
     // getContractNames?: boolean
@@ -46,15 +46,24 @@ class Translator {
     constructor(config: TranslatorConfig) {
         this.config = { ...this.config, ...config }
 
-        this.#Covalent = new Covalent(this.config.covalentApiKey, this.config.chain.id)
+        this.#Covalent = new Covalent(this.config.covalentApiKey, this.config.chain?.id)
+
         // this.provider = provider || getDefaultProvider('homestead', ethersApiKeys)
     }
 
-    public async translateFromHash(txHash: string): Promise<TxData | boolean> {
+    public async translateFromHash(txHash: string): Promise<RawTxData | boolean> {
         const response = await this.#Covalent.getTransactionFor(txHash)
-        const txData = response.items[0]
+        const rawCovalentData = response.items[0]
 
-        return txData
+        const rawTxData = covalentToRawTxData(rawCovalentData)
+        // const decodedTxData = await decode(rawTxData, {
+        //     covalentData: rawCovalentData,
+        //     useNodeForENS: false,
+        //     use4ByteDirectory: false,
+        //     useTinTin: false,
+        // })
+
+        return rawTxData
     }
 
     // public async translateFromHashes(hashes: string[]): Promise<TransactionReceipt[] | boolean> {

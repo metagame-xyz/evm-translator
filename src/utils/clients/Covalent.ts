@@ -26,6 +26,7 @@ export default class Covalent {
             .then((res: any) => res.data.data)
     }
 
+    // TODO pagination loop logic should live in here, with a txn count limit optional param
     getTransactionsFor(
         address: string,
         { page, limit }: GetTransactionsOptions = {},

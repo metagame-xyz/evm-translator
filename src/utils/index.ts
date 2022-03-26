@@ -1,4 +1,4 @@
-import { Chain } from '@interfaces'
+import { Chain, Chains } from '@interfaces'
 
 const ethereum: Chain = {
     EVM: true,
@@ -9,6 +9,6 @@ const ethereum: Chain = {
     blockExplorerUrl: 'https://etherscan.io/',
 }
 
-export const chains: Record<string, Chain> = {
+export const chains: Chains = {
     ethereum,
 }

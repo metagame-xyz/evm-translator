@@ -26,7 +26,7 @@ type CovalentResponse<T> = {
     }
 }
 
-export type GetTransactionsResponse = CovalentResponse<TxData>
+export type GetTransactionsResponse = CovalentResponse<CovalentTxData>
 
 export type GetBalancesResponse = CovalentResponse<TokenBalance>
 
@@ -76,7 +76,34 @@ export type TokenBalance = {
     }[]
 }
 
-export type TxData = {
+export type CovalentLogEvent = {
+    block_signed_at: Date
+    block_height: number
+    tx_offset: number
+    log_offset: number
+    tx_hash: string
+    raw_log_topics: string[]
+    sender_contract_decimals: number
+    sender_name: string
+    sender_contract_ticker_symbol: string
+    sender_address: string
+    sender_address_label?: any
+    sender_logo_url: string
+    raw_log_data: string
+    decoded: {
+        name: string
+        signature: string
+        params: Array<{
+            name: string
+            type: string
+            indexed: boolean
+            decoded: boolean
+            value: any
+        }>
+    }
+}
+
+export type CovalentTxData = {
     block_signed_at: Date
     block_height: number
     tx_hash: string
@@ -95,30 +122,5 @@ export type TxData = {
     gas_quote_rate: number
     data?: string
     creates?: string
-    log_events: {
-        block_signed_at: Date
-        block_height: number
-        tx_offset: number
-        log_offset: number
-        tx_hash: string
-        raw_log_topics: string[]
-        sender_contract_decimals: number
-        sender_name: string
-        sender_contract_ticker_symbol: string
-        sender_address: string
-        sender_address_label?: any
-        sender_logo_url: string
-        raw_log_data: string
-        decoded: {
-            name: string
-            signature: string
-            params: {
-                name: string
-                type: string
-                indexed: boolean
-                decoded: boolean
-                value: any
-            }[]
-        }
-    }[]
+    log_events: CovalentLogEvent[]
 }
