@@ -1,5 +1,5 @@
-import Translator, { TranslatorConfig } from '../Translator'
-import { chains } from '../utils'
+import { chains } from '@utils'
+import Translator, { TranslatorConfig } from 'Translator'
 
 test('Translator', () => {
     const translatorConfig: TranslatorConfig = {

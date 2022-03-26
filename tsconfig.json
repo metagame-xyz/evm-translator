@@ -3,7 +3,7 @@
         "target": "es6",
         "module": "commonjs",
         "declaration": true,
-        "outDir": "./lib",
+        "outDir": "lib",
         "strict": true,
         "baseUrl": "src/",
         "paths": {
@@ -14,5 +14,5 @@
         }
     },
     "include": ["src"],
-    "exclude": ["node_modules", "**/__tests__/*"]
+    "exclude": ["node_modules"]
 }
