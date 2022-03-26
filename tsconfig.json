@@ -6,6 +6,7 @@
         "outDir": "lib",
         "strict": true,
         "baseUrl": "src/",
+        "resolveJsonModule": true,
         "paths": {
             "@interfaces": ["interfaces"],
             "@interfaces/*": ["interfaces/*"],
