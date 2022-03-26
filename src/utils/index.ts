@@ -1,4 +1,4 @@
-import { Chain } from '@type'
+import { Chain } from '@interfaces'
 
 const ethereum: Chain = {
     EVM: true,

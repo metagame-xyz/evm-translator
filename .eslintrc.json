@@ -4,5 +4,7 @@
     "parser": "@typescript-eslint/parser",
     "plugins": ["@typescript-eslint", "jest"],
     "ignorePatterns": ["src/__tests__/*"],
-    "rules": {}
+    "rules": {
+        "@typescript-eslint/no-explicit-any": "off"
+    }
 }

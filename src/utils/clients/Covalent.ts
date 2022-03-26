@@ -1,4 +1,4 @@
-import { GetBalancesResponse, GetTransactionsOptions, GetTransactionsResponse } from '@type/covalent'
+import { GetBalancesResponse, GetTransactionsOptions, GetTransactionsResponse } from '@interfaces/covalent'
 import axios, { Axios } from 'axios'
 
 export default class Covalent {

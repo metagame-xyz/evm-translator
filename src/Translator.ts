@@ -2,8 +2,8 @@
 // import { Address, Chain, chains, EthersAPIKeys } from '@/types/utils'
 // import { BaseProvider, TransactionReceipt } from '@ethersproject/providers'
 // import { getDefaultProvider } from 'ethers'
-import { Chain } from '@type'
-import { TxData } from '@type/covalent'
+import { Chain } from '@interfaces'
+import { TxData } from '@interfaces/covalent'
 import { chains } from '@utils'
 import Covalent from '@utils/clients/Covalent'
 

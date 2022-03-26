@@ -7,8 +7,8 @@
         "strict": true,
         "baseUrl": "src/",
         "paths": {
-            "@type": ["type"],
-            "@type/*": ["type/*"],
+            "@interfaces": ["interfaces"],
+            "@interfaces/*": ["interfaces/*"],
             "@utils": ["utils"],
             "@utils/*": ["utils/*"]
         }

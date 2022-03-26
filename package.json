@@ -6,8 +6,8 @@
     "types": "lib/index.d.ts",
     "scripts": {
         "test": "jest --config jest.config.js",
-        "build": "tsc",
-        "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+        "build": "tsc && tsc-alias",
+        "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",
         "prepare": "npm run build",
         "preversion": "npm run lint",
@@ -49,6 +49,7 @@
         "jest": "^27.5.1",
         "prettier": "^2.6.0",
         "ts-jest": "^27.1.4",
+        "tsc-alias": "^1.6.5",
         "typescript": "^4.6.3"
     },
     "dependencies": {
