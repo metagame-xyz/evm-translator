@@ -7,6 +7,7 @@
         "strict": true,
         "baseUrl": "src/",
         "resolveJsonModule": true,
+        "esModuleInterop": true,
         "paths": {
             "@interfaces": ["interfaces"],
             "@interfaces/*": ["interfaces/*"],

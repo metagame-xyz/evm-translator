@@ -1,3 +1,5 @@
+import { TransactionReceipt, TransactionResponse } from '@ethersproject/abstract-provider'
+
 /* eslint-disable no-unused-vars */
 export type Address = `0x${string}`
 export type Chain = {
@@ -11,7 +13,23 @@ export type Chain = {
 
 export type Chains = Record<string, Chain>
 
+export enum TX_TYPE {
+    TRANSFER = 'native token transfer',
+    CONTRACT_DEPLOY = 'contract deploy',
+    CONTRACT_INTERACTION = 'contract interaction',
+}
+
 export type RawTxData = {
+    transactionResponse: TransactionResponse & { creates: string }
+    transactionReceipt: TransactionReceipt
+}
+
+export type InProgressActivity = {
+    rawTxData?: RawTxData
+    decoded?: Decoded
+}
+
+export type RawTxDataOld = {
     txHash: string
     txIndex: number
     to: Address
@@ -35,21 +53,20 @@ export type RawLogEvent = {
 
 //  100% objective additional info (data taken from a blockchain)
 export type Decoded = {
-    transactionType: TransactionType
-    officialContractName?: string
-    fromENS?: string
-    toENS?: string
+    txType?: TX_TYPE
     contractMethod?: string
+    contractName?: string
+    officialContractName?: string
+    fromENS?: string | null
+    toENS?: string | null
     interactions?: Array<Interaction>
 }
-
-export type TransactionType = 'contract_deploy' | 'eth_transfer' | 'contract_interaction'
 
 export type Interaction = {
     contract: string
     contract_symbol: string
     contract_address: string
-    details: Array<{ event: string } & Record<string, unknown>>
+    events: Array<{ event: string } & Record<string, unknown>>
 }
 
 // Generally objective additional info (data hardcoded by humans)
@@ -66,7 +83,7 @@ export type Interpreted = {
 export type TranslatedActivity = {
     chain: Chain
     explorerUrl: string
-    raw: RawTxData
+    raw: RawTxDataOld
     decoded?: Decoded
     interpreted?: Interpreted
 }
@@ -106,4 +123,14 @@ export type Token = {
     token0?: Token
     token1?: Token
     pair?: string // "RARE-WETH"
+}
+
+export type EthersAPIKeys = {
+    alchemy: string
+    etherscan: string
+    infura: string
+    pocket: {
+        applicationId: string
+        applicationSecretKey: string
+    }
 }

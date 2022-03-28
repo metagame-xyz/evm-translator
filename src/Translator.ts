@@ -2,20 +2,12 @@
 // import { Address, Chain, chains, EthersAPIKeys } from '@/types/utils'
 // import { BaseProvider, TransactionReceipt } from '@ethersproject/providers'
 // import { getDefaultProvider } from 'ethers'
-import { Chain, RawTxData } from '@interfaces'
+import { BaseProvider, getDefaultProvider } from '@ethersproject/providers'
+import { Chain, Decoded, EthersAPIKeys, RawTxData } from '@interfaces'
 import { chains } from '@utils'
 import Covalent from '@utils/clients/Covalent'
-import { covalentToRawTxData } from 'core/rawTransformations'
-
-export type EthersAPIKeys = {
-    alchemy: string
-    etherscan: string
-    infura: string
-    pocket: {
-        applicationId: string
-        applicationSecretKey: string
-    }
-}
+import { Augmenter } from 'core/decode'
+import { RawDataFetcher } from 'core/rawTransformations'
 
 // export const defaultMainnetProvider = getDefaultProvider('homestead', ethersApiKeys)
 
@@ -23,7 +15,7 @@ export type TranslatorConfig = {
     covalentApiKey: string
     chain?: Chain
     walletAddressAsContext?: string // should it say "bought" vs "sold"? Depends on the context
-    // ethersApiKeys?: EthersAPIKeys
+    ethersApiKeys: EthersAPIKeys
     // getContractNames?: boolean
     // getMethodNames?: boolean
     // filterOutSpam?: boolean
@@ -32,30 +24,36 @@ export type TranslatorConfig = {
 }
 
 class Translator {
-    #Covalent: Covalent
-    config: TranslatorConfig = {
-        chain: chains.ethereum,
-        covalentApiKey: '',
-        // queryNode: false,
-        // getContractNames: false,
-        // getMethodNames: false,
-        // filterOutSpam: false,
-    }
-    // provider: BaseProvider
+    config: TranslatorConfig
+
+    provider: BaseProvider
+    covalent: Covalent
+
+    rawDataFetcher: RawDataFetcher
+    augmenter: Augmenter
 
     constructor(config: TranslatorConfig) {
-        this.config = { ...this.config, ...config }
+        this.config = { chain: chains.ethereum, ...config }
+        this.provider = getDefaultProvider(this.config.chain?.id, this.config.ethersApiKeys)
+        this.covalent = new Covalent(this.config.covalentApiKey, this.config.chain?.id)
 
-        this.#Covalent = new Covalent(this.config.covalentApiKey, this.config.chain?.id)
-
-        // this.provider = provider || getDefaultProvider('homestead', ethersApiKeys)
+        this.rawDataFetcher = new RawDataFetcher(this.provider)
+        this.augmenter = new Augmenter(this.provider, this.covalent)
     }
 
-    public async translateFromHash(txHash: string): Promise<RawTxData | boolean> {
-        const response = await this.#Covalent.getTransactionFor(txHash)
-        const rawCovalentData = response.items[0]
+    public async translateFromHash(txHash: string): Promise<{ rawTxData: RawTxData; decodedData: Decoded }> {
+        // step 1 (parallelize)
+        // get tx from ethers
+        // get txReceipt from ethers
+        const rawTxData = await this.rawDataFetcher.getTxData(txHash)
 
-        const rawTxData = covalentToRawTxData(rawCovalentData)
+        // step 2 (parallelize)
+        // decode method name from tx.data via contract JSON, ABI, or 4byte
+        // augment contractName from contract JSON, Covalent, or TinTin
+        // augment param data of logs from ABI (etherscan) or Covalent)
+        // augment addresses from Ethers (need to find all address-shaped params)
+
+        const decodedData = await this.augmenter.decode(rawTxData)
         // const decodedTxData = await decode(rawTxData, {
         //     covalentData: rawCovalentData,
         //     useNodeForENS: false,
@@ -63,7 +61,8 @@ class Translator {
         //     useTinTin: false,
         // })
 
-        return rawTxData
+        // return rawCovalentData
+        return { rawTxData, decodedData }
     }
 
     // public async translateFromHashes(hashes: string[]): Promise<TransactionReceipt[] | boolean> {
