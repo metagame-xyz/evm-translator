@@ -1,6 +1,6 @@
-import UniswapV2 from './UniswapV2'
 import JuiceboxContribution from './JuiceboxContribution'
 import OpenSea from './OpenSea'
+import UniswapV2 from './UniswapV2'
 
 const contractInterpreters = {
     '0xd569d3cce55b71a8a3f3c418c329a66e5f714431': JuiceboxContribution,

@@ -1,9 +1,10 @@
 import { transformCovalentEvents } from './transformCovalentLogs'
 import { BaseProvider, Formatter } from '@ethersproject/providers'
-import { Decoded, InProgressActivity, RawTxData, TX_TYPE } from '@interfaces'
+import { Address, Decoded, InProgressActivity, Interaction, RawTxData, TX_TYPE } from '@interfaces'
 import reverseRecords from 'ABIs/ReverseRecords.json'
 import { normalize } from 'eth-ens-namehash'
 import { Contract } from 'ethers'
+import { formatUnits } from 'ethers/lib/utils'
 import { CovalentTxData } from 'interfaces/covalent'
 import Covalent from 'utils/clients/Covalent'
 import fourByteDirectory from 'utils/clients/FourByteDirectory'
@@ -44,11 +45,12 @@ export class Augmenter {
 
     inProgressActivity!: InProgressActivity
     rawTxData!: RawTxData
-    decoded: Decoded = {}
+    decoded: Decoded = { interactions: [] }
 
     covalentData?: CovalentTxData
 
     fnSigCache: Record<string, string> = {}
+    ensCache: Record<Address, string> = {}
 
     constructor(provder: BaseProvider, covalent: Covalent) {
         this.provider = provder
@@ -58,6 +60,7 @@ export class Augmenter {
     async decode(rawTxData: RawTxData): Promise<Decoded> {
         this.rawTxData = rawTxData
         this.augmentTxType()
+        this.formatValuesNicely()
         if (this.decoded.txType === TX_TYPE.CONTRACT_INTERACTION) {
             await this.decodeMethodName()
 
@@ -73,7 +76,24 @@ export class Augmenter {
         return this.decoded
     }
 
-    async getCovalentData(): Promise<CovalentTxData> {
+    private formatValuesNicely() {
+        const value = this.rawTxData.transactionResponse.value.toString()
+        const txReceipt = this.rawTxData.transactionReceipt
+
+        const transformedData = {
+            nativeTokenValueSent: value == '0' ? '0' : formatUnits(value),
+            txIndex: txReceipt.transactionIndex,
+            reverted: txReceipt.status == 0,
+            gasUsed: txReceipt.gasUsed.toString(),
+            effectiveGasPrice: txReceipt.effectiveGasPrice.toString(),
+            fromAddress: txReceipt.from as Address,
+            toAddress: txReceipt.to as Address,
+        }
+
+        this.decoded = { ...this.decoded, ...transformedData }
+    }
+
+    private async getCovalentData(): Promise<CovalentTxData> {
         const covalentRespose = await this.covalent.getTransactionFor(this.rawTxData.transactionResponse.hash)
         const covalentData = covalentRespose.items[0]
         this.covalentData = covalentData
@@ -81,7 +101,7 @@ export class Augmenter {
         return covalentData
     }
 
-    augmentOfficialContractName() {
+    private augmentOfficialContractName() {
         let officalContractName = null
 
         if (this.covalentData) {
@@ -91,8 +111,8 @@ export class Augmenter {
         this.decoded.officialContractName = officalContractName
     }
 
-    augmentInteractionData() {
-        let interactions
+    private augmentInteractionData() {
+        let interactions: Interaction[] = []
 
         // we can get do this transformation with the ABI too. We can trust Covalent for now, but we already have a shim in there for ERC721s...
         if (this.covalentData) {
@@ -102,8 +122,10 @@ export class Augmenter {
         this.decoded.interactions = interactions
     }
 
-    async augmentENSnames() {
+    private async augmentENSnames() {
         const ReverseRecords = new Contract(REVERSE_RECORDS_CONTRACT_ADDRESS, reverseRecords.abi, this.provider)
+
+        // TODO use the ensCache
 
         async function getNames(addresses: string[]): Promise<string[]> {
             const allNames = await ReverseRecords.getNames(addresses)
@@ -117,6 +139,8 @@ export class Augmenter {
         this.decoded.fromENS = fromAndToNames[0] || null
         this.decoded.toENS = fromAndToNames[1] || null
 
+        // TODO get all the ENS names in all the interactions and map them back on
+
         // const allAddresses = this.decoded.interactions
         //     ?.map((interaction) => interaction.events.map((event) => [event.from, event.to]))
         //     .flat(2)
@@ -125,7 +149,7 @@ export class Augmenter {
         // console.log('allAddresses', allAddresses)
     }
 
-    augmentTxType() {
+    private augmentTxType() {
         const { transactionReceipt, transactionResponse } = this.rawTxData
 
         let txType: TX_TYPE
@@ -134,13 +158,14 @@ export class Augmenter {
         } else if (transactionResponse.data == '0x') {
             txType = TX_TYPE.TRANSFER
         } else {
+            // TODO txReciept.contractAddress is the address of the contract created, add it
             txType = TX_TYPE.CONTRACT_INTERACTION
         }
 
         this.decoded.txType = txType
     }
 
-    async decodeMethodName() {
+    private async decodeMethodName() {
         // first try to get if from the contract-specific interpreter, or ABI
 
         let contractMethod = null

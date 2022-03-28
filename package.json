@@ -9,12 +9,13 @@
         "build": "tsc && tsc-alias",
         "local-dev": "concurrently --kill-others \"tsc -w\" \"tsc-alias -w\"",
         "format": "prettier --write \"src/**/*.ts\"",
-        "lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",
-        "prepare": "npm run build",
-        "preversion": "npm run lint",
-        "version": "npm run format && git add -A src",
+        "lint": "eslint --ignore-path .eslintignore --ext .ts .",
+        "check": "yarn run lint && yarn run format && yarn run test",
+        "prepare": "yarn run build",
+        "preversion": "yarn run lint",
+        "version": "yarn run format && git add -A src",
         "postversion": "git push && git push --tags",
-        "prepublishOnly": "npm test && npm run lint"
+        "prepublishOnly": "yarn test && yarn run lint"
     },
     "repository": {
         "type": "git",

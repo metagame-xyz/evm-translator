@@ -59,25 +59,39 @@ export type Decoded = {
     officialContractName?: string
     fromENS?: string | null
     toENS?: string | null
-    interactions?: Array<Interaction>
+    interactions: Array<Interaction>
+    nativeTokenValueSent?: string
+    nativeTokenValueReceived?: string // so hard to get this
+    nativeTokenSymbol?: string
+    txIndex?: number
+    fromAddress?: Address
+    toAddress?: Address
+
+    reverted?: boolean
+    timestamp?: number
+
+    gasUsed?: string
+    effectiveGasPrice?: string
 }
 
 export type Interaction = {
     contract: string
     contract_symbol: string
     contract_address: string
-    events: Array<{ event: string } & Record<string, unknown>>
+    events: Array<InteractionEvent>
 }
 
+export type InteractionEvent = { event: string; logIndex: number; value?: string } & Record<string, unknown>
+
 // Generally objective additional info (data hardcoded by humans)
-export type Interpreted = {
+export type Interpretation = {
     contract_name?: string
     action?: Action
     example_description?: string
     tokens_sent?: Token[] // usually just one token
     tokens_received?: Token[] // usually just one token
-    ether_sent?: string
-    ether_received?: string
+    nativeTokenValueSent?: string
+    nativeTokenValueReceived?: string
 }
 
 export type TranslatedActivity = {
@@ -85,7 +99,7 @@ export type TranslatedActivity = {
     explorerUrl: string
     raw: RawTxDataOld
     decoded?: Decoded
-    interpreted?: Interpreted
+    interpretation?: Interpretation
 }
 
 export type Action =

@@ -8,10 +8,11 @@ import { BigNumber } from 'ethers'
 // const prisma = new PrismaClient()
 
 type Event = {
-    contract: string
-    contract_symbol: string | null
-    contract_address: string
+    contractName: string
+    contractSymbol: string | null
+    contractAddress: string
     name: string
+    logIndex: number
     events: Record<string, unknown>
 }
 
@@ -31,6 +32,10 @@ function covalentERC721Shim(events: Record<string, any>, event: CovalentLogEvent
 }
 
 export function transformCovalentEvents(tx: CovalentTxData): Array<Interaction> {
+    // tx.log_events.forEach((event) => {
+    //     console.log('decoded', event)
+    // })
+
     const interactions = collect(tx.log_events)
         // .reject((event) => !event.sender_name)
         .reject((event) => !event.decoded)
@@ -43,7 +48,7 @@ export function transformCovalentEvents(tx: CovalentTxData): Array<Interaction> 
                 ]) ?? [],
             )
 
-            console.log('details', events)
+            // console.log('details', events)
 
             if (events.value && event.sender_contract_decimals)
                 events.value = ethers.utils
@@ -57,10 +62,11 @@ export function transformCovalentEvents(tx: CovalentTxData): Array<Interaction> 
             return [
                 event.sender_address,
                 {
-                    contract: event.sender_name,
-                    contract_symbol: event.sender_contract_ticker_symbol,
-                    contract_address: event.sender_address,
+                    contractName: event.sender_name,
+                    contractSymbol: event.sender_contract_ticker_symbol,
+                    contractAddress: event.sender_address,
                     name: event.decoded.name,
+                    logIndex: event.log_offset,
                     events,
                 },
             ]
@@ -69,10 +75,14 @@ export function transformCovalentEvents(tx: CovalentTxData): Array<Interaction> 
             const event = events[0] as Event
 
             return {
-                contract: event.contract,
-                contract_symbol: event.contract_symbol,
-                contract_address: event.contract_address,
-                events: events.map((event: Event) => ({ event: event.name, ...event.events })),
+                contractName: event.contractName,
+                contractSymbol: event.contractSymbol,
+                contractAddress: event.contractAddress,
+                events: events.map((event: Event) => ({
+                    event: event.name,
+                    logIndex: event.logIndex,
+                    ...event.events,
+                })),
             }
         })
 
