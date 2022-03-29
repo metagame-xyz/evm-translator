@@ -74,7 +74,7 @@ class Translator {
             interpret the decoded data
         */
         // const userAddress =
-        const addressForContext = (userAddress || rawTxData.transactionResponse.from) as Address
+        const addressForContext = (userAddress || rawTxData.txResponse.from) as Address
         const interpreter = new Interpreter(addressForContext, contractInterpreters, this.config.chain)
 
         const interpretedData = interpreter.interpret(rawTxData, decodedData)

@@ -1,7 +1,11 @@
-import { TransactionReceipt, TransactionResponse } from '@ethersproject/abstract-provider'
+import {
+    TransactionReceipt as unvalidatedTransactionReceipt,
+    TransactionResponse as unvalidatedTransactionResponse,
+} from '@ethersproject/providers'
 
 /* eslint-disable no-unused-vars */
 export type Address = `0x${string}`
+export type TxHash = `0x${string}`
 export type Chain = {
     EVM: boolean
     id: number
@@ -19,9 +23,12 @@ export enum TX_TYPE {
     CONTRACT_INTERACTION = 'contract interaction',
 }
 
+export type TxResponse = unvalidatedTransactionResponse & { from: Address; creates: string }
+export type TxReceipt = unvalidatedTransactionReceipt & { from: Address; to: Address }
+
 export type RawTxData = {
-    transactionResponse: TransactionResponse & { creates: string }
-    transactionReceipt: TransactionReceipt
+    txResponse: TxResponse
+    txReceipt: TxReceipt
 }
 
 export type InProgressActivity = {

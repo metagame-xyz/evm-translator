@@ -56,8 +56,8 @@ export class Augmenter {
     }
 
     private formatValuesNicely() {
-        const value = this.rawTxData.transactionResponse.value.toString()
-        const txReceipt = this.rawTxData.transactionReceipt
+        const value = this.rawTxData.txResponse.value.toString()
+        const txReceipt = this.rawTxData.txReceipt
 
         const transformedData = {
             nativeTokenValueSent: value == '0' ? '0' : formatUnits(value),
@@ -73,7 +73,7 @@ export class Augmenter {
     }
 
     private async getCovalentData(): Promise<CovalentTxData> {
-        const covalentRespose = await this.covalent.getTransactionFor(this.rawTxData.transactionResponse.hash)
+        const covalentRespose = await this.covalent.getTransactionFor(this.rawTxData.txResponse.hash)
         const covalentData = covalentRespose.items[0]
         this.covalentData = covalentData
 
@@ -112,7 +112,7 @@ export class Augmenter {
             return validNames
         }
 
-        const fromAndToAddresses = [this.rawTxData.transactionReceipt.from, this.rawTxData.transactionReceipt.to]
+        const fromAndToAddresses = [this.rawTxData.txReceipt.from, this.rawTxData.txReceipt.to]
         const fromAndToNames = await getNames(fromAndToAddresses)
 
         this.decoded.fromENS = fromAndToNames[0] || null
@@ -129,12 +129,12 @@ export class Augmenter {
     }
 
     private augmentTxType() {
-        const { transactionReceipt, transactionResponse } = this.rawTxData
+        const { txReceipt, txResponse } = this.rawTxData
 
         let txType: TX_TYPE
-        if (!transactionReceipt.to) {
+        if (!txReceipt.to) {
             txType = TX_TYPE.CONTRACT_DEPLOY
-        } else if (transactionResponse.data == '0x') {
+        } else if (txResponse.data == '0x') {
             txType = TX_TYPE.TRANSFER
         } else {
             // TODO txReciept.contractAddress is the address of the contract created, add it
@@ -149,7 +149,7 @@ export class Augmenter {
 
         let contractMethod = null
 
-        const hexSignature = this.rawTxData.transactionResponse.data.slice(0, 10)
+        const hexSignature = this.rawTxData.txResponse.data.slice(0, 10)
         if (this.fnSigCache[hexSignature]) {
             contractMethod = this.fnSigCache[hexSignature]
         } else {
