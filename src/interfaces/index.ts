@@ -92,6 +92,7 @@ export type Interpretation = {
     tokensReceived?: Token[] // usually just one token
     nativeTokenValueSent?: string
     nativeTokenValueReceived?: string
+    nativeTokenSymbol?: string
 }
 
 export type TranslatedActivity = {

@@ -73,6 +73,7 @@ class Interpreter {
             nativeTokenValueSent: decodedData.nativeTokenValueSent,
             tokensReceived: this.getTokensReiceived(interactions, this.userAddress),
             tokensSent: this.getTokensSent(interactions, this.userAddress),
+            nativeTokenSymbol: this.chain.symbol,
         }
 
         const interpretationMapping = this.contractSpecificInterpreters[toAddress]
