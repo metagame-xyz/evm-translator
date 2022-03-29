@@ -81,7 +81,7 @@ class Translator {
 
         // return rawCovalentData
 
-        const allData = { rawTxData, decodedData, interpretedData }
+        const allData = { interpretedData, decodedData, rawTxData }
         traverse(allData).forEach(function (x) {
             if (x instanceof BigNumber) {
                 this.update(x.toString())

@@ -10,7 +10,7 @@ const UniswapV2 = {
     addLiquidityETH: {
         action: 'added liquidity',
         project: {
-            key: 'contract_symbol',
+            key: 'contractSymbol',
             filters: {
                 event: 'Transfer',
                 from: '{userAddress}',
@@ -23,7 +23,7 @@ const UniswapV2 = {
     addLiquidity: {
         action: 'added liquidity',
         token_0: {
-            key: 'contract_symbol',
+            key: 'contractSymbol',
             filters: {
                 event: 'Transfer',
                 from: '{userAddress}',
@@ -31,7 +31,7 @@ const UniswapV2 = {
             defaultValue: 'unknown',
         },
         token_1: {
-            key: 'contract_symbol',
+            key: 'contractSymbol',
             filters: {
                 event: 'Transfer',
                 from: '{userAddress}',
@@ -45,7 +45,7 @@ const UniswapV2 = {
     removeLiquidityWithPermit: {
         action: 'removed liquidity',
         token_0: {
-            key: 'contract_symbol',
+            key: 'contractSymbol',
             filters: {
                 event: 'Transfer',
                 to: '{userAddress}',
@@ -53,7 +53,7 @@ const UniswapV2 = {
             defaultValue: 'unknown',
         },
         token_1: {
-            key: 'contract_symbol',
+            key: 'contractSymbol',
             filters: {
                 event: 'Transfer',
                 to: '{userAddress}',
