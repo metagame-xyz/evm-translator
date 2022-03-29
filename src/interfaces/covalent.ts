@@ -34,7 +34,7 @@ type ERC = 'erc20' | 'erc721'
 
 export type TokenBalance = {
     contract_decimals: number
-    contract_name: string
+    contractName: string
     contract_ticker_symbol: string
     contract_address: string
     supports_erc?: ERC[]

@@ -21,7 +21,7 @@ type ContractInterpretersMap = Record<Address, any>
 
 type KeyMapping = {
     key: string
-    default_value: string
+    defaultValue: string
     filters?: {
         event?: string
         to?: string
@@ -71,8 +71,8 @@ class Interpreter {
         // not contract-specific
         interpretation = {
             nativeTokenValueSent: decodedData.nativeTokenValueSent,
-            tokens_received: this.getTokensReiceived(interactions, this.userAddress),
-            tokens_sent: this.getTokensSent(interactions, this.userAddress),
+            tokensReceived: this.getTokensReiceived(interactions, this.userAddress),
+            tokensSent: this.getTokensSent(interactions, this.userAddress),
         }
 
         const interpretationMapping = this.contractSpecificInterpreters[toAddress]
@@ -83,23 +83,23 @@ class Interpreter {
             const keyValueMap = this.useMapping(interactions, interpretationMapping, methodSpecificMapping)
 
             keyValueMap.nativeTokenValueSent = decodedData.nativeTokenValueSent!
-            keyValueMap.user_name = decodedData.fromENS || fromAddress.substring(0, 6)
+            keyValueMap.userName = decodedData.fromENS || fromAddress.substring(0, 6)
 
             // generate example description
             const exampleDescription = this.fillDescriptionTemplate(
-                interpretationMapping[method].example_description_template,
+                interpretationMapping[method].exampleDescriptionTemplate,
                 keyValueMap,
             )
 
             interpretation = {
                 ...interpretation,
                 ...keyValueMap,
-                example_description: exampleDescription,
+                exampleDescription: exampleDescription,
             }
 
-            // interpretation.contract_name = keyValueMap.contract_name
+            // interpretation.contractName = keyValueMap.contractName
             // interpretation.action = keyValueMap.action as Action
-            // interpretation.example_description = exampleDescription
+            // interpretation.exampleDescription = exampleDescription
         } else {
             // fallback interpretation
         }
@@ -126,7 +126,7 @@ class Interpreter {
             let valueToFind = value
 
             // special case for when we want to match on the contextualized user address
-            if (value === '{user_address}') valueToFind = userAddress
+            if (value === '{userAddress}') valueToFind = userAddress
 
             // filter out by events that don't have the keys we want
             for (const interaction of filteredInteractions) {
@@ -140,17 +140,16 @@ class Interpreter {
 
             // filter out interactions by top level key
             if (isTopLevel(key)) {
-                filteredInteractions = filteredInteractions.filter((i) => i[key as keyof typeof i] === valueToFind)
+                filteredInteractions = filteredInteractions.filter((i) => (i as any)[key] === valueToFind)
             }
         }
         console.log('keyMapping.key', keyMapping.key)
 
         const interaction = filteredInteractions[index]
         const prefix = keyMapping.prefix || ''
-        const str =
-            interaction?.[keyMapping.key as keyof typeof interaction] || interaction?.events[index]?.[keyMapping.key]
+        const str = (interaction as any)?.[keyMapping.key] || interaction?.events[index]?.[keyMapping.key]
         const postfix = keyMapping.postfix || ''
-        const value = str ? prefix + str + postfix : keyMapping.default_value
+        const value = str ? prefix + str + postfix : keyMapping.defaultValue
 
         return value
     }
@@ -184,7 +183,7 @@ class Interpreter {
             let tokenType = TokenType.DEFAULT
 
             // LP Token
-            if (LPTokenSymbols.includes(interaction.contract_symbol)) {
+            if (LPTokenSymbols.includes(interaction.contractSymbol)) {
                 tokenType = TokenType.LPToken
                 // ERC-1155
             } else if (interaction.events[0]._amount || interaction.events[0]._amounts) {
@@ -215,9 +214,9 @@ class Interpreter {
 
             return {
                 type: tokenType,
-                name: i.contract,
-                symbol: i.contract_symbol,
-                address: i.contract_address,
+                name: i.contractName,
+                symbol: i.contractSymbol,
+                address: i.contractAddress,
                 amount: i.events[0].value,
                 tokenId: i.events[0].tokenId,
             }
@@ -235,8 +234,8 @@ class Interpreter {
     }
 
     private useMapping(interactions: Interaction[], interpretationMapping: any, methodSpecificMapping: any) {
-        const includeKeys = ['action', 'contract_name', 'example_description']
-        const excludeKeys = ['example_description', 'exmaple_description_template']
+        const includeKeys = ['action', 'contractName', 'exampleDescription']
+        const excludeKeys = ['exampleDescription', 'exmapleDescriptionTemplate']
         const variableKeys = Object.keys(methodSpecificMapping)
 
         const keysRequired: Array<string> = collect(variableKeys).except(excludeKeys).concat(includeKeys).all()
@@ -247,7 +246,7 @@ class Interpreter {
         for (const key of keysRequired) {
             const methodSpecificValue = methodSpecificMapping[key]
 
-            // contract_address is in the top level
+            // contractAddress is in the top level
             if (interpretationMapping[key]) {
                 keyValueMap[key] = interpretationMapping[key]
 
@@ -255,7 +254,7 @@ class Interpreter {
             } else if (typeof methodSpecificValue === 'string') {
                 keyValueMap[key] = methodSpecificValue
 
-                // project_name and other data is stored somewhere in the interactions
+                // projectName and other data is stored somewhere in the interactions
             } else if (typeof methodSpecificValue === 'object') {
                 keyValueMap[key] = this.findValue(interactions, methodSpecificValue, this.userAddress)
             }

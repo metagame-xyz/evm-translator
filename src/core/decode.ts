@@ -17,27 +17,6 @@ export type DecoderConfig = {
     useTinTin: boolean
 }
 
-// function augmentFromCovalent(decodedData: Decoded, rawTxData: RawTxDataOld, covalentData: CovalentTxData): Decoded {
-//     const usefulCovalentData = {
-//         officalContractName: covalentData.to_address_label,
-//         nativeTokenValueSent: covalentData.value == '0' ? '0' : ethers.utils.formatUnits(covalentData.value),
-//         reverted: !covalentData.successful,
-//     }
-
-//     decodedData = { ...decodedData }
-//     return decodedData
-// }
-
-// export function decode(rawTxData: RawTxDataOld, config: DecoderConfig): Decoded {
-//     let decodedData = {} as Decoded
-
-//     if (config.covalentData) {
-//         decodedData = augmentFromCovalent(decodedData, rawTxData, config.covalentData)
-//     }
-
-//     return decodedData
-// }
-
 export class Augmenter {
     provider: BaseProvider
     covalent: Covalent

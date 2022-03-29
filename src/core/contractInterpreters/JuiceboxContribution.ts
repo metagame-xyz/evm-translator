@@ -6,20 +6,20 @@ const JuiceboxContribution = {
         0x3015a5b5: ['redeem', 'redeem(address,uint256,uint256,uint256,address,bool)'],
     },
     contract_official_name: 'TerminalV1',
-    contract_name: 'Juicebox',
+    contractName: 'Juicebox',
     pay: {
         action: 'contributed',
         project: {
             key: 'contract',
             filters: {
                 event: 'Transfer',
-                to: '{user_address}',
+                to: '{userAddress}',
             },
             prefix: 'the ',
-            default_value: 'an unknown',
+            defaultValue: 'an unknown',
         },
-        example_description_template: `{user_name} {action} {ether_sent} ETH to {project} {contract_name}`,
-        example_description: 'brenner.eth contributed 0.12 ETH  to the ConstitutionDAO Juicebox',
+        exampleDescriptionTemplate: `{userName} {action} {nativeTokenValueSent} ETH to {project} {contractName}`,
+        exampleDescription: 'brenner.eth contributed 0.12 ETH  to the ConstitutionDAO Juicebox',
     },
 }
 

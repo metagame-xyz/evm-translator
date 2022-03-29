@@ -10,6 +10,8 @@ import contractInterpreters from 'core/contractInterpreters'
 import { Augmenter } from 'core/decode'
 import Interpreter from 'core/Interpreter'
 import { RawDataFetcher } from 'core/rawTransformations'
+import { BigNumber } from 'ethers'
+import traverse from 'traverse'
 
 // export const defaultMainnetProvider = getDefaultProvider('homestead', ethersApiKeys)
 
@@ -48,7 +50,7 @@ class Translator {
 
     public async translateFromHash(
         txHash: string,
-        userAddress = '0x17a059b6b0c8af433032d554b0392995155452e6',
+        userAddress = null as Address | null,
     ): Promise<{ rawTxData: RawTxData; decodedData: Decoded; interpretedData: Interpretation }> {
         /*
             step 1 (parallelize)
@@ -78,7 +80,17 @@ class Translator {
         const interpretedData = interpreter.interpret(rawTxData, decodedData)
 
         // return rawCovalentData
-        return { rawTxData, decodedData, interpretedData }
+
+        const allData = { rawTxData, decodedData, interpretedData }
+        traverse(allData).forEach(function (x) {
+            if (x instanceof BigNumber) {
+                this.update(x.toString())
+            }
+            if (typeof x === 'undefined') {
+                this.update(null)
+            }
+        })
+        return allData
     }
 }
 

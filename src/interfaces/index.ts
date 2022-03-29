@@ -75,9 +75,9 @@ export type Decoded = {
 }
 
 export type Interaction = {
-    contract: string
-    contract_symbol: string
-    contract_address: string
+    contractName: string
+    contractSymbol: string
+    contractAddress: string
     events: Array<InteractionEvent>
 }
 
@@ -85,11 +85,11 @@ export type InteractionEvent = { event: string; logIndex: number; value?: string
 
 // Generally objective additional info (data hardcoded by humans)
 export type Interpretation = {
-    contract_name?: string
+    contractName?: string
     action?: Action
-    example_description?: string
-    tokens_sent?: Token[] // usually just one token
-    tokens_received?: Token[] // usually just one token
+    exampleDescription?: string
+    tokensSent?: Token[] // usually just one token
+    tokensReceived?: Token[] // usually just one token
     nativeTokenValueSent?: string
     nativeTokenValueReceived?: string
 }

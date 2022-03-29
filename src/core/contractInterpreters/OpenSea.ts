@@ -5,28 +5,28 @@ const OpenSea = {
         0x02c8986f: ['atomicMatch_', 'pay(uint256,address,string,bool)'],
     },
     contract_official_name: 'Wyvern Exchange Contract',
-    contract_name: 'OpenSea',
+    contractName: 'OpenSea',
     atomicMatch_: {
         action: 'bought',
         NFT: {
             key: 'contract',
             filters: {
                 event: 'Transfer',
-                to: '{user_address}',
+                to: '{userAddress}',
             },
-            default_value: 'an unknown NFT',
+            defaultValue: 'an unknown NFT',
         },
         tokenId: {
             key: 'tokenId',
             filters: {
                 event: 'Transfer',
-                to: '{user_address}',
+                to: '{userAddress}',
             },
             prefix: '#',
-            default_value: '???',
+            defaultValue: '???',
         },
-        example_description_template: `{user_name} {action} {NFT} {tokenId} on {contract_name} for {ether_sent} ETH`,
-        // example_description: 'brenner.eth bought Blitmap #1115 on OpenSea for 0.01 ETH',
+        exampleDescriptionTemplate: `{userName} {action} {NFT} {tokenId} on {contractName} for {nativeTokenValueSent} ETH`,
+        // exampleDescription: 'brenner.eth bought Blitmap #1115 on OpenSea for 0.01 ETH',
     },
 }
 
