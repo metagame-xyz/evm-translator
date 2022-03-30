@@ -55,7 +55,21 @@ class Interpreter {
         this.chain = chain
     }
 
-    public interpret(rawTxData: RawTxData, decodedData: Decoded): Interpretation {
+    public interpret(rawTxDataArr: RawTxData[], decodedDataArr: Decoded[]): Interpretation[] {
+        const interpretations: Interpretation[] = []
+
+        for (let i = 0; i < rawTxDataArr.length; i++) {
+            const rawTxData = rawTxDataArr[i]
+            const decodedData = decodedDataArr[i]
+
+            const interpretation = this.interpretSingleTx(rawTxData, decodedData)
+            interpretations.push(interpretation)
+        }
+
+        return interpretations
+    }
+
+    public interpretSingleTx(rawTxData: RawTxData, decodedData: Decoded): Interpretation {
         const method = decodedData.contractMethod!
         const interactions = decodedData.interactions!
 
@@ -66,7 +80,8 @@ class Interpreter {
         // let methodSpecificMapping
         let interpretation: Interpretation
 
-        console.log('decodedData', decodedData)
+        // console.log('decodedData', decodedData)
+        // console.log('address', this.userAddress)
 
         // not contract-specific
         interpretation = {
@@ -105,6 +120,8 @@ class Interpreter {
             // fallback interpretation
         }
 
+        // console.log('interpretation', interpretation)
+
         return interpretation
     }
 
@@ -112,16 +129,13 @@ class Interpreter {
         const filters = keyMapping.filters || {}
         const index = keyMapping.index || 0
 
-        // console.log('interactions', interactions)
         let filteredInteractions = deepCopy(interactions) as Interaction[]
 
-        // console.log('interactions', interactions)
-
-        interactions.forEach((interaction) => {
-            interaction.events.forEach((event) => {
-                console.log('event', event)
-            })
-        })
+        // interactions.forEach((interaction) => {
+        //     interaction.events.forEach((event) => {
+        //         console.log('event', event)
+        //     })
+        // })
 
         for (const [key, value] of Object.entries(filters)) {
             let valueToFind = value
@@ -144,7 +158,6 @@ class Interpreter {
                 filteredInteractions = filteredInteractions.filter((i) => (i as any)[key] === valueToFind)
             }
         }
-        console.log('keyMapping.key', keyMapping.key)
 
         const interaction = filteredInteractions[index]
         const prefix = keyMapping.prefix || ''
@@ -205,13 +218,9 @@ class Interpreter {
             return directionArr.filter((key) => event[key] === userAddress).length > 0
         }
 
-        console.log('filteredInteractions', filteredInteractions)
-
         // TODO this is only ERC20 tokens
         tokens = filteredInteractions.map((i) => {
             const tokenType = getTokenType(i)
-
-            console.log('token', i.events)
 
             return {
                 type: tokenType,
@@ -241,7 +250,6 @@ class Interpreter {
 
         const keysRequired: Array<string> = collect(variableKeys).except(excludeKeys).concat(includeKeys).all()
 
-        console.log('keysRequired', keysRequired)
         const keyValueMap: Record<string, string> = {}
 
         for (const key of keysRequired) {
@@ -260,8 +268,6 @@ class Interpreter {
                 keyValueMap[key] = this.findValue(interactions, methodSpecificValue, this.userAddress)
             }
         }
-
-        console.log('keyValueMap', keyValueMap)
 
         return keyValueMap
     }

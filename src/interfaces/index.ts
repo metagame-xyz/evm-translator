@@ -61,7 +61,7 @@ export type RawLogEvent = {
 //  100% objective additional info (data taken from a blockchain)
 export type Decoded = {
     txType?: TX_TYPE
-    contractMethod?: string
+    contractMethod?: string | null
     contractName?: string
     officialContractName?: string
     fromENS?: string | null
@@ -98,6 +98,12 @@ export type Interpretation = {
     nativeTokenValueSent?: string
     nativeTokenValueReceived?: string
     nativeTokenSymbol?: string
+}
+
+export type ActivityData = {
+    rawTxData: RawTxData
+    decodedData: Decoded
+    interpretedData: Interpretation
 }
 
 export type Action =

@@ -4,9 +4,9 @@ import contractInterpreters from 'core/contractInterpreters'
 import Interpreter from 'core/Interpreter'
 import RawDataFetcher from 'core/RawDataFetcher'
 import { BigNumber } from 'ethers'
-import { Address, Chain, Decoded, EthersAPIKeys, Interpretation, RawTxData } from 'interfaces'
+import { ActivityData, Address, Chain, Decoded, EthersAPIKeys, Interpretation, RawTxData } from 'interfaces'
 import traverse from 'traverse'
-import { chains } from 'utils'
+import { chains, cleanseDataInPlace } from 'utils'
 import Covalent from 'utils/clients/Covalent'
 
 // export const defaultMainnetProvider = getDefaultProvider('homestead', ethersApiKeys)
@@ -40,14 +40,11 @@ class Translator {
         this.provider = getDefaultProvider(this.config.chain.id, this.config.ethersApiKeys)
         this.covalent = new Covalent(this.config.covalentApiKey, this.config.chain.id)
 
-        this.rawDataFetcher = new RawDataFetcher(this.provider)
+        this.rawDataFetcher = new RawDataFetcher(this.provider, this.covalent)
         this.augmenter = new Augmenter(this.provider, this.covalent)
     }
 
-    public async translateFromHash(
-        txHash: string,
-        userAddress = null as Address | null,
-    ): Promise<{ rawTxData: RawTxData; decodedData: Decoded; interpretedData: Interpretation }> {
+    public async translateFromHash(txHash: string, userAddress = null as Address | null): Promise<ActivityData> {
         /*
             step 1 (parallelize)
             get tx from ethers
@@ -63,7 +60,7 @@ class Translator {
             augment addresses from Ethers (need to find all address-shaped params)
         */
 
-        const decodedData = await this.augmenter.decode(rawTxData)
+        const decodedDataArr = await this.augmenter.decode([rawTxData])
 
         /*
             step 3
@@ -73,19 +70,55 @@ class Translator {
         const addressForContext = userAddress || rawTxData.txResponse.from
         const interpreter = new Interpreter(addressForContext, contractInterpreters, this.config.chain)
 
-        const interpretedData = interpreter.interpret(rawTxData, decodedData)
+        const interpretedData = interpreter.interpretSingleTx(rawTxData, decodedDataArr[0])
 
         // return rawCovalentData
 
-        const allData = { interpretedData, decodedData, rawTxData }
-        traverse(allData).forEach(function (x) {
-            if (x instanceof BigNumber) {
-                this.update(x.toString())
+        const allData = { interpretedData, decodedData: decodedDataArr[0], rawTxData }
+        cleanseDataInPlace(allData)
+
+        return allData
+    }
+
+    public async translateFromAddress(
+        addressUnclean: Address,
+        initiatedTxsOnly = true,
+        limit = 100,
+    ): Promise<ActivityData[]> {
+        const address = addressUnclean.toLowerCase() as Address
+
+        console.log('adddress we made it', address)
+
+        const { rawTxDataArr, covalentTxDataArr } = await this.rawDataFetcher.getTxDataWithCovalentByAddress(
+            address,
+            initiatedTxsOnly,
+            limit,
+        )
+
+        const decodedDataArr = await this.augmenter.decode(rawTxDataArr, covalentTxDataArr)
+
+        const interpreter = new Interpreter(address, contractInterpreters, this.config.chain)
+
+        const interpretedDataArr = interpreter.interpret(rawTxDataArr, decodedDataArr)
+
+        const allData: ActivityData[] = []
+
+        for (let i = 0; i < rawTxDataArr.length; i++) {
+            const rawTxData = rawTxDataArr[i]
+            const decodedData = decodedDataArr[i]
+            const interpretedData = interpretedDataArr[i]
+
+            const allDataItem: ActivityData = {
+                decodedData,
+                interpretedData,
+                rawTxData,
             }
-            if (typeof x === 'undefined') {
-                this.update(null)
-            }
-        })
+
+            cleanseDataInPlace(allDataItem)
+
+            allData.push(allDataItem)
+        }
+
         return allData
     }
 }
