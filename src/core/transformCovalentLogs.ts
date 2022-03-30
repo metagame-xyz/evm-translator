@@ -1,8 +1,8 @@
-import { Interaction } from '@interfaces'
-import { CovalentLogEvent, CovalentTxData } from '@interfaces/covalent'
 import collect from 'collect.js'
 import { ethers } from 'ethers'
 import { BigNumber } from 'ethers'
+import { Interaction } from 'interfaces'
+import { CovalentLogEvent, CovalentTxData } from 'interfaces/covalent'
 
 // import { PrismaClient } from '@prisma/client'
 // const prisma = new PrismaClient()

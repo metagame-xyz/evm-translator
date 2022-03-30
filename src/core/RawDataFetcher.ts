@@ -45,7 +45,7 @@ function validateAndFormatTxData(
     return txResponseFormatted
 }
 
-export class RawDataFetcher {
+export default class RawDataFetcher {
     provider: BaseProvider
     formatter = new Formatter()
 

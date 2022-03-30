@@ -1,4 +1,4 @@
-import { Address } from '@interfaces'
+import { Address } from 'interfaces'
 
 export type GetTransactionsOptions = {
     page?: number

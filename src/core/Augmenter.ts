@@ -1,10 +1,10 @@
 import { transformCovalentEvents } from './transformCovalentLogs'
 import { BaseProvider, Formatter } from '@ethersproject/providers'
-import { Address, Decoded, InProgressActivity, Interaction, RawTxData, TX_TYPE } from '@interfaces'
 import reverseRecords from 'ABIs/ReverseRecords.json'
 import { normalize } from 'eth-ens-namehash'
 import { Contract } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
+import { Address, Decoded, InProgressActivity, Interaction, RawTxData, TX_TYPE } from 'interfaces'
 import { CovalentTxData } from 'interfaces/covalent'
 import Covalent from 'utils/clients/Covalent'
 import fourByteDirectory from 'utils/clients/FourByteDirectory'
@@ -49,9 +49,8 @@ export class Augmenter {
 
             this.augmentInteractionData()
 
-            await this.augmentENSnames()
         }
-
+        await this.augmentENSnames()
         return this.decoded
     }
 
@@ -65,8 +64,8 @@ export class Augmenter {
             reverted: txReceipt.status == 0,
             gasUsed: txReceipt.gasUsed.toString(),
             effectiveGasPrice: txReceipt.effectiveGasPrice.toString(),
-            fromAddress: txReceipt.from as Address,
-            toAddress: txReceipt.to as Address,
+            fromAddress: txReceipt.from,
+            toAddress: txReceipt.to,
         }
 
         this.decoded = { ...this.decoded, ...transformedData }

@@ -1,5 +1,5 @@
-import { chains } from '@utils'
 import Translator, { createEthersAPIKeyObj, TranslatorConfig } from 'Translator'
+import { chains } from 'utils'
 
 test('Translator', () => {
     const translatorConfig: TranslatorConfig = {

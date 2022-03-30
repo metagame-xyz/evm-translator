@@ -59,8 +59,8 @@ class Interpreter {
         const method = decodedData.contractMethod!
         const interactions = decodedData.interactions!
 
-        const toAddress = rawTxData.txReceipt.to as Address
-        const fromAddress = rawTxData.txReceipt.from as Address
+        const toAddress = rawTxData.txReceipt.to
+        const fromAddress = rawTxData.txReceipt.from
 
         // let interpretationMapping
         // let methodSpecificMapping

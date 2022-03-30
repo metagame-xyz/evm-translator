@@ -1,17 +1,13 @@
-// import { Activity } from '@/types/activity'
-// import { Address, Chain, chains, EthersAPIKeys } from '@/types/utils'
-// import { BaseProvider, TransactionReceipt } from '@ethersproject/providers'
-// import { getDefaultProvider } from 'ethers'
 import { BaseProvider, getDefaultProvider } from '@ethersproject/providers'
-import { Address, Chain, Decoded, EthersAPIKeys, Interpretation, RawTxData } from '@interfaces'
-import { chains } from '@utils'
-import Covalent from '@utils/clients/Covalent'
+import { Augmenter } from 'core/Augmenter'
 import contractInterpreters from 'core/contractInterpreters'
-import { Augmenter } from 'core/decode'
 import Interpreter from 'core/Interpreter'
-import { RawDataFetcher } from 'core/rawTransformations'
+import RawDataFetcher from 'core/RawDataFetcher'
 import { BigNumber } from 'ethers'
+import { Address, Chain, Decoded, EthersAPIKeys, Interpretation, RawTxData } from 'interfaces'
 import traverse from 'traverse'
+import { chains } from 'utils'
+import Covalent from 'utils/clients/Covalent'
 
 // export const defaultMainnetProvider = getDefaultProvider('homestead', ethersApiKeys)
 
@@ -74,7 +70,7 @@ class Translator {
             interpret the decoded data
         */
         // const userAddress =
-        const addressForContext = (userAddress || rawTxData.txResponse.from) as Address
+        const addressForContext = userAddress || rawTxData.txResponse.from
         const interpreter = new Interpreter(addressForContext, contractInterpreters, this.config.chain)
 
         const interpretedData = interpreter.interpret(rawTxData, decodedData)

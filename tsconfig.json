@@ -8,12 +8,7 @@
         "baseUrl": "src/",
         "resolveJsonModule": true,
         "esModuleInterop": true,
-        "paths": {
-            "@interfaces": ["interfaces"],
-            "@interfaces/*": ["interfaces/*"],
-            "@utils": ["utils"],
-            "@utils/*": ["utils/*"]
-        }
+        "paths": {}
     },
     "include": ["src"],
     "exclude": ["node_modules"]

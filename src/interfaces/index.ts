@@ -23,8 +23,8 @@ export enum TX_TYPE {
     CONTRACT_INTERACTION = 'contract interaction',
 }
 
-export type TxResponse = unvalidatedTransactionResponse & { from: Address; creates: string }
-export type TxReceipt = unvalidatedTransactionReceipt & { from: Address; to: Address }
+export type TxResponse = Omit<unvalidatedTransactionResponse, 'from' | 'to'> & { from: Address; creates: string }
+export type TxReceipt = Omit<unvalidatedTransactionReceipt, 'from' | 'to'> & { from: Address; to: Address }
 
 export type RawTxData = {
     txResponse: TxResponse
@@ -73,10 +73,8 @@ export type Decoded = {
     txIndex?: number
     fromAddress?: Address
     toAddress?: Address
-
     reverted?: boolean
     timestamp?: number
-
     gasUsed?: string
     effectiveGasPrice?: string
 }
@@ -100,14 +98,6 @@ export type Interpretation = {
     nativeTokenValueSent?: string
     nativeTokenValueReceived?: string
     nativeTokenSymbol?: string
-}
-
-export type TranslatedActivity = {
-    chain: Chain
-    explorerUrl: string
-    raw: RawTxDataOld
-    decoded?: Decoded
-    interpretation?: Interpretation
 }
 
 export type Action =
