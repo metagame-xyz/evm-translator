@@ -1,27 +1,54 @@
 {
     "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
     "methods": {
-        "0x02c8986f": ["pay", "pay(uint256,address,string,bool)"],
-        "0x3015a5b5": ["redeem", "redeem(address,uint256,uint256,uint256,address,bool)"]
+        "0xe8e33700": ["addLiquidity", "addLiquidity(address,address,uint256,uint256,uint256,uint256,address,uint256)"],
+        "0xf305d719": ["addLiquidityETH", "addLiquidityETH(address,uint256,uint256,uint256,address,uint256)"],
+        "0xbaa2abde": ["removeLiquidity", "removeLiquidity(address,address,uint256,uint256,uint256,address,uint256)"],
+        "0x02751cec": ["removeLiquidityETH", "removeLiquidityETH(address,uint256,uint256,uint256,address,uint256)"],
+        "0xaf2979eb": [
+            "removeLiquidityETHSupportingFeeOnTransferTokens",
+            "removeLiquidityETHSupportingFeeOnTransferTokens(address,uint256,uint256,uint256,address,uint256)"
+        ],
+        "0xded9382a": [
+            "removeLiquidityETHWithPermit",
+            "removeLiquidityETHWithPermit(address,uint256,uint256,uint256,address,uint256,bool,uint8,bytes32,bytes32)"
+        ],
+        "0x5b0d5984": [
+            "removeLiquidityETHWithPermitSupportingFeeOnTransferTokens",
+            "removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(address,uint256,uint256,uint256,address,uint256,bool,uint8,bytes32,bytes32)"
+        ],
+        "0x2195995c": [
+            "removeLiquidityWithPermit",
+            "removeLiquidityWithPermit(address,address,uint256,uint256,uint256,address,uint256,bool,uint8,bytes32,bytes32)"
+        ],
+        "0xfb3bdb41": ["swapETHForExactTokens", "swapETHForExactTokens(uint256,address[],address,uint256)"],
+        "0x7ff36ab5": ["swapExactETHForTokens", "swapExactETHForTokens(uint256,address[],address,uint256)"],
+        "0xb6f9de95": [
+            "swapExactETHForTokensSupportingFeeOnTransferTokens",
+            "swapExactETHForTokensSupportingFeeOnTransferTokens(uint256,address[],address,uint256)"
+        ],
+        "0x18cbafe5": ["swapExactTokensForETH", "swapExactTokensForETH(uint256,uint256,address[],address,uint256)"],
+        "0x791ac947": [
+            "swapExactTokensForETHSupportingFeeOnTransferTokens",
+            "swapExactTokensForETHSupportingFeeOnTransferTokens(uint256,uint256,address[],address,uint256)"
+        ],
+        "0x38ed1739": [
+            "swapExactTokensForTokens",
+            "swapExactTokensForTokens(uint256,uint256,address[],address,uint256)"
+        ],
+        "0x5c11d795": [
+            "swapExactTokensForTokensSupportingFeeOnTransferTokens",
+            "swapExactTokensForTokensSupportingFeeOnTransferTokens(uint256,uint256,address[],address,uint256)"
+        ],
+        "0x4a25d94a": ["swapTokensForExactETH", "swapTokensForExactETH(uint256,uint256,address[],address,uint256)"],
+        "0x8803dbee": [
+            "swapTokensForExactTokens",
+            "swapTokensForExactTokens(uint256,uint256,address[],address,uint256)"
+        ]
     },
     "contractOfficialName": "UniswapV2Router02",
-    "contractName": "Uniswap",
+    "contractName": "Uniswap V2",
     "writeFunctions": {
-        "addLiquidityETH": {
-            "action": "added liquidity",
-            "keywords": {
-                "project": {
-                    "key": "contractSymbol",
-                    "filters": {
-                        "event": "Transfer",
-                        "from": "{userAddress}"
-                    },
-                    "defaultValue": "an unknown"
-                }
-            },
-            "exampleDescriptionTemplate": "{userName} added {nativeTokenValueSent} ETH of liquidity to {project} {contractName}",
-            "exampleDescription": "brenner.eth added 0.12 ETH of liquidity to the ETH-FWB Liquidity Pool"
-        },
         "addLiquidity": {
             "action": "added liquidity",
             "keywords": {
@@ -44,31 +71,202 @@
                 }
             },
             "exampleDescriptionTemplate": "{userName} added liquidity to the {token_0}-{token_1} {contractName} pool",
-            "exampleDescription": "brenner.eth added 0.12 ETH of liquidity to the ETH-FWB Liquidity Pool"
+            "exampleDescription": "0xf1a9 added liquidity to the SUPER-WETH Uniswap pool"
         },
-        "removeLiquidityWithPermit": {
-            "action": "removed liquidity",
+        "addLiquidityETH": {
+            "action": "added liquidity",
             "keywords": {
                 "token_0": {
                     "key": "contractSymbol",
                     "filters": {
                         "event": "Transfer",
-                        "to": "{userAddress}"
+                        "from": "{userAddress}"
                     },
-                    "defaultValue": "unknown"
-                },
-                "token_1": {
-                    "key": "contractSymbol",
-                    "filters": {
-                        "event": "Transfer",
-                        "to": "{userAddress}"
-                    },
-                    "index": 1,
                     "defaultValue": "unknown"
                 }
             },
-            "exampleDescriptionTemplate": "{userName} removed liquidity from the {token_0}-{token_1} {contractName} pool",
-            "exampleDescription": "brenner.eth removed liquidity to the ETH-FWB Liquidity Pool"
+            "exampleDescriptionTemplate": "{userName} added liquidity to the {token_0}-{nativeTokenSymbol} {contractName} pool",
+            "exampleDescription": "0xf1a9 added liquidity to the ACYC-ETH Uniswap pool"
+        },
+        "removeLiquidity": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "removeLiquidityETH": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "removeLiquidityETHSupportingFeeOnTransferTokens": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "removeLiquidityETHWithPermit": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "removeLiquidityETHWithPermitSupportingFeeOnTransferTokens": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "removeLiquidityWithPermit": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "swapETHForExactTokens": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "swapExactETHForTokens": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "swapExactETHForTokensSupportingFeeOnTransferTokens": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "swapExactTokensForETH": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "swapExactTokensForETHSupportingFeeOnTransferTokens": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "swapExactTokensForTokens": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "swapExactTokensForTokensSupportingFeeOnTransferTokens": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "swapTokensForExactETH": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "swapTokensForExactTokens": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
         }
     }
 }

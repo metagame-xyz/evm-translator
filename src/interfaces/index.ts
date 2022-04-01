@@ -98,6 +98,8 @@ export type Interpretation = {
     nativeTokenValueSent?: string
     nativeTokenValueReceived?: string
     nativeTokenSymbol?: string
+    userName: string
+    extra?: Record<string, unknown>
 }
 
 export type ActivityData = {

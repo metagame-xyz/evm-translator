@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import collect from 'collect.js'
 import {
     Address,
     Chain,
@@ -59,7 +60,6 @@ class Interpreter {
         contractInterpreters.forEach((contractInterpreter) => {
             this.contractSpecificInterpreters[contractInterpreter.contractAddress] = contractInterpreter
         })
-        console.log(this.contractSpecificInterpreters)
     }
 
     public interpret(rawTxDataArr: RawTxData[], decodedDataArr: Decoded[]): Interpretation[] {
@@ -83,19 +83,13 @@ class Interpreter {
         const toAddress = rawTxData.txReceipt.to
         const fromAddress = rawTxData.txReceipt.from
 
-        // let interpretationMapping
-        // let methodSpecificMapping
-        let interpretation: Interpretation
-
-        // console.log('decodedData', decodedData)
-        // console.log('address', this.userAddress)
-
         // not contract-specific
-        interpretation = {
+        const interpretation: Interpretation = {
             nativeTokenValueSent: decodedData.nativeTokenValueSent,
             tokensReceived: this.getTokensReiceived(interactions, this.userAddress),
             tokensSent: this.getTokensSent(interactions, this.userAddress),
             nativeTokenSymbol: this.chain.symbol,
+            userName: decodedData.fromENS || fromAddress.substring(0, 6),
         }
 
         const interpretationMapping = this.contractSpecificInterpreters[toAddress]
@@ -103,31 +97,19 @@ class Interpreter {
 
         // contract-specific interpretation
         if (interpretationMapping && methodSpecificMapping) {
-            const keyValueMap = this.useMapping(interactions, interpretationMapping, methodSpecificMapping)
+            // some of these will be arribtrary keys
+            interpretation.contractName = interpretationMapping.contractName
+            interpretation.action = methodSpecificMapping.action
+            interpretation.exampleDescription = methodSpecificMapping.exampleDescription
+            interpretation.extra = this.useMethodMapping(interactions, methodSpecificMapping)
 
-            keyValueMap.nativeTokenValueSent = decodedData.nativeTokenValueSent!
-            keyValueMap.userName = decodedData.fromENS || fromAddress.substring(0, 6)
-
-            // generate example description
-            const exampleDescription = this.fillDescriptionTemplate(
+            interpretation.exampleDescription = this.fillDescriptionTemplate(
                 interpretationMapping.writeFunctions[method].exampleDescriptionTemplate,
-                keyValueMap,
+                interpretation,
             )
-
-            interpretation = {
-                ...interpretation,
-                ...keyValueMap,
-                exampleDescription: exampleDescription,
-            }
-
-            // interpretation.contractName = keyValueMap.contractName
-            // interpretation.action = keyValueMap.action as Action
-            // interpretation.exampleDescription = exampleDescription
         } else {
             // fallback interpretation
         }
-
-        // console.log('interpretation', interpretation)
 
         return interpretation
     }
@@ -250,44 +232,34 @@ class Interpreter {
         return this.getTokens(interactions, userAddress, 'from')
     }
 
-    private useMapping(
-        interactions: Interaction[],
-        interpretationMapping: InterpreterMap,
-        methodSpecificMapping: MethodMap,
-    ): Record<string, string> {
-        const keywordsMap = methodSpecificMapping.keywords || {}
-        const variableKeys = Object.keys(keywordsMap)
-
+    private useMethodMapping(interactions: Interaction[], methodSpecificMapping: MethodMap): Record<string, string> {
+        const keywordsMap = methodSpecificMapping.keywords
         const keyValueMap: Record<string, string> = {}
 
-        for (const key of variableKeys) {
-            const methodSpecificValue = keywordsMap[key]
+        const ignoreKeys = ['action', 'contractName', 'exampleDescription']
 
+        for (const [key, value] of Object.entries(keywordsMap).filter(([key]) => !ignoreKeys.includes(key))) {
             // if the value is a string, we can just use it
-            if (typeof methodSpecificValue === 'string') {
-                keyValueMap[key] = methodSpecificValue
+            if (typeof value === 'string') {
+                keyValueMap[key] = value
 
                 // some data requires searching for it
-            } else if (typeof methodSpecificValue === 'object') {
-                keyValueMap[key] = this.findValue(interactions, methodSpecificValue, this.userAddress)
+            } else if (typeof value === 'object') {
+                keyValueMap[key] = this.findValue(interactions, value, this.userAddress)
             }
         }
-
-        // these are required and override anything in the keywords map
-        keyValueMap.contractName = interpretationMapping.contractName
-        keyValueMap.action = methodSpecificMapping.action
-        keyValueMap.exampleDescription = methodSpecificMapping.exampleDescription
 
         return keyValueMap
     }
 
-    private fillDescriptionTemplate(template: string, keyValueMap: Record<string, string>) {
-        for (const key in keyValueMap) {
-            const value = keyValueMap[key]
+    private fillDescriptionTemplate(template: string, interpretation: Interpretation): string {
+        const merged = collect(interpretation.extra).merge(interpretation).all()
 
-            template = template.replace(`{${key}}`, value)
+        for (const [key, value] of Object.entries(merged)) {
+            if (typeof value === 'string') {
+                template = template.replace(`{${key}}`, value)
+            }
         }
-
         return template
     }
 }

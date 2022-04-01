@@ -146,9 +146,6 @@ export class Augmenter {
         addresses.forEach((address, index) => {
             addressToNameMap[address] = names[index]
         })
-
-        console.log('addressToNameMap', addressToNameMap)
-
         //
         // "events":[
         //     :{

@@ -1,4 +1,4 @@
-import { Address } from 'interfaces'
+import { Action, Address } from 'interfaces'
 
 export type KeywordMap = {
     key: string
@@ -10,7 +10,7 @@ export type KeywordMap = {
 }
 
 export type MethodMap = {
-    action: string
+    action: Action
     exampleDescriptionTemplate: string
     exampleDescription: string
     keywords: Record<string, KeywordMap>
