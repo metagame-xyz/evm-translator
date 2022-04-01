@@ -1,5 +1,3 @@
-import { InterpreterMap } from 'interfaces/contractInterpreter'
-
 const JuiceboxContribution = {
     contractAddress: '0xd569d3cce55b71a8a3f3c418c329a66e5f714431',
     methods: {
@@ -28,4 +26,4 @@ const JuiceboxContribution = {
         },
     },
 }
-export default JuiceboxContribution as InterpreterMap
+export default JuiceboxContribution

@@ -1,4 +1,5 @@
-import Etherscan from './clients/Etherscan'
+import Etherscan, { SourceCodeObject } from './clients/Etherscan'
+import { keccak256, toUtf8Bytes } from 'ethers/lib/utils'
 import { Address } from 'interfaces'
 import { InterpreterMap } from 'interfaces/contractInterpreter'
 
@@ -10,23 +11,37 @@ export default class InterepterTemplateGenerator {
     }
 
     async generateInterpreter(contractAddress: Address): Promise<InterpreterMap> {
-        const abiString = await this.etherscan.getABI(contractAddress)
-        const abiUnfiltered: ABI_ItemUnfiltered[] = JSON.parse(abiString)
+        let sourceCode: SourceCodeObject
+        try {
+            sourceCode = await this.etherscan.getSourceCode(contractAddress)
+        } catch (e: any) {
+            console.error(e)
+            throw new Error(`Etherscan API error: ${e.message}`)
+        }
+
+        const abiUnfiltered: ABI_ItemUnfiltered[] = JSON.parse(sourceCode.ABI)
+
+        console.log('contract name', sourceCode.ContractName)
+
+        const contractOfficialName = sourceCode.ContractName
 
         const abi = abiUnfiltered.filter(({ type }) => type === 'function' || type === 'event') as ABI_Item[]
-
-        // console.log(abi)
 
         const interpreterMap: InterpreterMap = {
             contractAddress,
             methods: {},
-            contractOfficialName: '',
+            contractOfficialName,
             contractName: '______TODO______',
             writeFunctions: {},
         }
 
         const map = getSignatures(abi) // these include events but we curerently dont need them
-        const writeFunctionsArr = getWriteFunctionArr(map)
+        const writeFunctionsArr = getWriteFunctionArr(map.writeFunction)
+        const writeFunctionHashSigs = getWriteFunctionHashSigs(map.writeFunction)
+
+        writeFunctionHashSigs.forEach((hash, index) => {
+            interpreterMap.methods[hash] = [writeFunctionsArr[index], map.writeFunction[index]]
+        })
 
         writeFunctionsArr.forEach((writeFunction) => {
             interpreterMap.writeFunctions[writeFunction] = {
@@ -43,17 +58,16 @@ export default class InterepterTemplateGenerator {
             }
         })
 
-        console.log('map', writeFunctionsArr)
-        // console.log(abi)
         return interpreterMap
     }
 }
-const getWriteFunctionArr = (map: ABIStringMap): string[] => map.writeFunction.map((sig) => sig.split('(')[0])
 
-const getFunctionSignature = (func: ABI_Item): string => {
-    console.log('func:', func, 'inputs:', func.inputs)
-    return func.name + '(' + func.inputs.map((i) => i.type).join(',') + ')'
-}
+const getWriteFunctionHashSigs = (writeFunctionSigs: string[]): string[] =>
+    writeFunctionSigs.map((sig) => keccak256(toUtf8Bytes(sig)).slice(0, 10))
+const getWriteFunctionArr = (writeFunctionSigs: string[]): string[] => writeFunctionSigs.map((sig) => sig.split('(')[0])
+
+const getFunctionSignature = (func: ABI_Item): string =>
+    func.name + '(' + func.inputs.map((i) => i.type).join(',') + ')'
 
 const getSignatures = (abi: ABI_Item[]): ABIStringMap => {
     const map: ABIStringMap = {

@@ -1,0 +1,74 @@
+{
+    "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+    "methods": {
+        "0x02c8986f": ["pay", "pay(uint256,address,string,bool)"],
+        "0x3015a5b5": ["redeem", "redeem(address,uint256,uint256,uint256,address,bool)"]
+    },
+    "contractOfficialName": "UniswapV2Router02",
+    "contractName": "Uniswap",
+    "writeFunctions": {
+        "addLiquidityETH": {
+            "action": "added liquidity",
+            "keywords": {
+                "project": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "event": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown"
+                }
+            },
+            "exampleDescriptionTemplate": "{userName} added {nativeTokenValueSent} ETH of liquidity to {project} {contractName}",
+            "exampleDescription": "brenner.eth added 0.12 ETH of liquidity to the ETH-FWB Liquidity Pool"
+        },
+        "addLiquidity": {
+            "action": "added liquidity",
+            "keywords": {
+                "token_0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "event": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "token_1": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "event": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "index": 1,
+                    "defaultValue": "unknown"
+                }
+            },
+            "exampleDescriptionTemplate": "{userName} added liquidity to the {token_0}-{token_1} {contractName} pool",
+            "exampleDescription": "brenner.eth added 0.12 ETH of liquidity to the ETH-FWB Liquidity Pool"
+        },
+        "removeLiquidityWithPermit": {
+            "action": "removed liquidity",
+            "keywords": {
+                "token_0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "event": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "token_1": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "event": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "index": 1,
+                    "defaultValue": "unknown"
+                }
+            },
+            "exampleDescriptionTemplate": "{userName} removed liquidity from the {token_0}-{token_1} {contractName} pool",
+            "exampleDescription": "brenner.eth removed liquidity to the ETH-FWB Liquidity Pool"
+        }
+    }
+}

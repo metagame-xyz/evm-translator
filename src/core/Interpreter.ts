@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import defaultContractInterpreters from './contractInterpreters'
 import {
     Address,
     Chain,
@@ -38,21 +37,29 @@ function isTopLevel(key: string) {
     return TopLevelInteractionKeys.includes(key)
 }
 
+const getHardcodedContractInterpreters = (): InterpreterMap[] => {
+    const files = require.context('./contractInterpreters', true, /\.json$/)
+    return files.keys().map((key) => files(key))
+}
+
 class Interpreter {
-    contractSpecificInterpreters: ContractInterpretersMap
+    contractSpecificInterpreters: ContractInterpretersMap = {}
     // fallbackInterpreters: Array<Inspector> = []
     userAddress: Address
     chain: Chain
 
     constructor(
         userAddress: Address,
-        contractInterpreters: ContractInterpretersMap = defaultContractInterpreters,
+        // contractInterpreters: ContractInterpretersMap = defaultContractInterpreters,
         chain: Chain,
     ) {
-        this.contractSpecificInterpreters = contractInterpreters
-        // this.fallbackInterpreters = [] //Todo
         this.userAddress = userAddress
         this.chain = chain
+        const contractInterpreters = getHardcodedContractInterpreters()
+        contractInterpreters.forEach((contractInterpreter) => {
+            this.contractSpecificInterpreters[contractInterpreter.contractAddress] = contractInterpreter
+        })
+        console.log(this.contractSpecificInterpreters)
     }
 
     public interpret(rawTxDataArr: RawTxData[], decodedDataArr: Decoded[]): Interpretation[] {

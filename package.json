@@ -43,6 +43,7 @@
         "@trivago/prettier-plugin-sort-imports": "^3.2.0",
         "@types/jest": "^27.4.1",
         "@types/traverse": "^0.6.32",
+        "@types/webpack-env": "^1.16.3",
         "@typescript-eslint/eslint-plugin": "^5.16.0",
         "@typescript-eslint/parser": "^5.16.0",
         "concurrently": "^7.0.0",

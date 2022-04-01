@@ -1,6 +1,5 @@
 import { BaseProvider, getDefaultProvider } from '@ethersproject/providers'
 import { Augmenter } from 'core/Augmenter'
-import contractInterpreters from 'core/contractInterpreters'
 import Interpreter from 'core/Interpreter'
 import RawDataFetcher from 'core/RawDataFetcher'
 import { ActivityData, Address, Chain, EthersAPIKeys } from 'interfaces'
@@ -66,7 +65,7 @@ class Translator {
         */
         // const userAddress =
         const addressForContext = userAddress || rawTxData.txResponse.from
-        const interpreter = new Interpreter(addressForContext, contractInterpreters, this.config.chain)
+        const interpreter = new Interpreter(addressForContext, this.config.chain)
 
         const interpretedData = interpreter.interpretSingleTx(rawTxData, decodedDataArr[0])
 
@@ -95,7 +94,7 @@ class Translator {
 
         const decodedDataArr = await this.augmenter.decode(rawTxDataArr, covalentTxDataArr)
 
-        const interpreter = new Interpreter(address, contractInterpreters, this.config.chain)
+        const interpreter = new Interpreter(address, this.config.chain)
 
         const interpretedDataArr = interpreter.interpret(rawTxDataArr, decodedDataArr)
 
