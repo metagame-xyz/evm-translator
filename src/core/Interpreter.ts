@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import defaultContractInterpreters from './contractInterpreters'
-import collect from 'collect.js'
 import {
     Address,
     Chain,
@@ -12,12 +11,13 @@ import {
     Token,
     TokenType,
 } from 'interfaces'
+import { InterpreterMap, MethodMap } from 'interfaces/contractInterpreter'
 
 function deepCopy(obj: any) {
     return JSON.parse(JSON.stringify(obj))
 }
 
-type ContractInterpretersMap = Record<Address, any>
+type ContractInterpretersMap = Record<Address, InterpreterMap>
 
 type KeyMapping = {
     key: string
@@ -92,7 +92,7 @@ class Interpreter {
         }
 
         const interpretationMapping = this.contractSpecificInterpreters[toAddress]
-        const methodSpecificMapping = interpretationMapping?.[method]
+        const methodSpecificMapping = interpretationMapping?.writeFunctions[method]
 
         // contract-specific interpretation
         if (interpretationMapping && methodSpecificMapping) {
@@ -103,7 +103,7 @@ class Interpreter {
 
             // generate example description
             const exampleDescription = this.fillDescriptionTemplate(
-                interpretationMapping[method].exampleDescriptionTemplate,
+                interpretationMapping.writeFunctions[method].exampleDescriptionTemplate,
                 keyValueMap,
             )
 
@@ -243,31 +243,33 @@ class Interpreter {
         return this.getTokens(interactions, userAddress, 'from')
     }
 
-    private useMapping(interactions: Interaction[], interpretationMapping: any, methodSpecificMapping: any) {
-        const includeKeys = ['action', 'contractName', 'exampleDescription']
-        const excludeKeys = ['exampleDescription', 'exmapleDescriptionTemplate']
-        const variableKeys = Object.keys(methodSpecificMapping)
-
-        const keysRequired: Array<string> = collect(variableKeys).except(excludeKeys).concat(includeKeys).all()
+    private useMapping(
+        interactions: Interaction[],
+        interpretationMapping: InterpreterMap,
+        methodSpecificMapping: MethodMap,
+    ): Record<string, string> {
+        const keywordsMap = methodSpecificMapping.keywords || {}
+        const variableKeys = Object.keys(keywordsMap)
 
         const keyValueMap: Record<string, string> = {}
 
-        for (const key of keysRequired) {
-            const methodSpecificValue = methodSpecificMapping[key]
+        for (const key of variableKeys) {
+            const methodSpecificValue = keywordsMap[key]
 
-            // contractAddress is in the top level
-            if (interpretationMapping[key]) {
-                keyValueMap[key] = interpretationMapping[key]
-
-                // action and others are store in the methodSpecificMapping
-            } else if (typeof methodSpecificValue === 'string') {
+            // if the value is a string, we can just use it
+            if (typeof methodSpecificValue === 'string') {
                 keyValueMap[key] = methodSpecificValue
 
-                // projectName and other data is stored somewhere in the interactions
+                // some data requires searching for it
             } else if (typeof methodSpecificValue === 'object') {
                 keyValueMap[key] = this.findValue(interactions, methodSpecificValue, this.userAddress)
             }
         }
+
+        // these are required and override anything in the keywords map
+        keyValueMap.contractName = interpretationMapping.contractName
+        keyValueMap.action = methodSpecificMapping.action
+        keyValueMap.exampleDescription = methodSpecificMapping.exampleDescription
 
         return keyValueMap
     }

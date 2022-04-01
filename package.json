@@ -7,7 +7,7 @@
     "scripts": {
         "test": "jest --config jest.config.ts",
         "build": "tsc && tsc-alias",
-        "local-dev": "concurrently --kill-others \"tsc -w\" \"tsc-alias -w\"",
+        "dev": "concurrently --kill-others \"tsc -w\" \"tsc-alias -w\"",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint --ignore-path .eslintignore --ext .ts .",
         "check": "yarn run lint && yarn run format && yarn run test",

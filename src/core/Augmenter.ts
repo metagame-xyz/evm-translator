@@ -149,6 +149,23 @@ export class Augmenter {
 
         console.log('addressToNameMap', addressToNameMap)
 
+        //
+        // "events":[
+        //     :{
+        //     "event":"SafeSetup"
+        //     "logIndex":112
+        //     "initiator":"0xa6b71e26c5e0845f74c812102ca7114b6a896ab2"
+        //     "owners":[
+        //     :"0x17a059b6b0c8af433032d554b0392995155452e6"
+        //     :"0x13e2ed5724e9d6df54ed1ea5b4fa81310458c1d9"
+        //     :"0x825728f78912b98adfb06380f1fcdcda76fd0f87"
+        //     ]
+        //     "threshold":"2"
+        //     "initializer":"0x0000000000000000000000000000000000000000"
+        //     "fallbackHandler":"0xf48f2b2d2a534e402487b3ee7c18c33aec0fe5e4"
+        //     }
+        // ]
+
         // filter out addresses:names with no names (most of them lol)
         addressToNameMap = Object.fromEntries(Object.entries(addressToNameMap).filter(([, v]) => v != ''))
         const decodedArrWithENS = traverse(this.decodedArr).map((thing) => {

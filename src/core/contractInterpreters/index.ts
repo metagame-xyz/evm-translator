@@ -1,6 +1,7 @@
 import JuiceboxContribution from './JuiceboxContribution'
 import OpenSea from './OpenSea'
 import UniswapV2 from './UniswapV2'
+import { InterpreterMap } from 'interfaces/contractInterpreter'
 
 const contractInterpreters = {
     '0xd569d3cce55b71a8a3f3c418c329a66e5f714431': JuiceboxContribution,
@@ -8,4 +9,4 @@ const contractInterpreters = {
     '0x7f268357a8c2552623316e2562d90e642bb538e5': OpenSea,
 }
 
-export default contractInterpreters
+export default contractInterpreters as Record<string, InterpreterMap>
