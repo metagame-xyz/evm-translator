@@ -101,7 +101,16 @@ class Interpreter {
             interpretation.contractName = interpretationMapping.contractName
             interpretation.action = methodSpecificMapping.action
             interpretation.exampleDescription = methodSpecificMapping.exampleDescription
-            interpretation.extra = this.useMethodMapping(interactions, methodSpecificMapping)
+
+            if (decodedData.reverted) {
+                interpretation.reverted = true
+                // TODO the description and extras should be different for reverted transactions
+            }
+            interpretation.extra = this.useMethodMapping(
+                interactions,
+                methodSpecificMapping,
+                interpretationMapping.contractAddress,
+            )
 
             interpretation.exampleDescription = this.fillDescriptionTemplate(
                 interpretationMapping.writeFunctions[method].exampleDescriptionTemplate,
@@ -114,7 +123,12 @@ class Interpreter {
         return interpretation
     }
 
-    private findValue(interactions: Interaction[], keyMapping: KeyMapping, userAddress: Address): string {
+    private findValue(
+        interactions: Interaction[],
+        keyMapping: KeyMapping,
+        userAddress: Address,
+        contractAddress: Address,
+    ): string {
         const filters = keyMapping.filters || {}
         const index = keyMapping.index || 0
 
@@ -131,6 +145,7 @@ class Interpreter {
 
             // special case for when we want to match on the contextualized user address
             if (value === '{userAddress}') valueToFind = userAddress
+            if (value === '{contractAddress}') valueToFind = contractAddress
 
             // filter out by events that don't have the keys we want
             for (const interaction of filteredInteractions) {
@@ -232,7 +247,11 @@ class Interpreter {
         return this.getTokens(interactions, userAddress, 'from')
     }
 
-    private useMethodMapping(interactions: Interaction[], methodSpecificMapping: MethodMap): Record<string, string> {
+    private useMethodMapping(
+        interactions: Interaction[],
+        methodSpecificMapping: MethodMap,
+        contractAddress: Address,
+    ): Record<string, string> {
         const keywordsMap = methodSpecificMapping.keywords
         const keyValueMap: Record<string, string> = {}
 
@@ -245,7 +264,7 @@ class Interpreter {
 
                 // some data requires searching for it
             } else if (typeof value === 'object') {
-                keyValueMap[key] = this.findValue(interactions, value, this.userAddress)
+                keyValueMap[key] = this.findValue(interactions, value, this.userAddress, contractAddress)
             }
         }
 

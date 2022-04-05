@@ -100,6 +100,7 @@ export type Interpretation = {
     nativeTokenSymbol?: string
     userName: string
     extra?: Record<string, unknown>
+    reverted?: boolean
 }
 
 export type ActivityData = {
@@ -118,6 +119,7 @@ export type Action =
     | 'executed'
     | 'bought'
     | 'sold'
+    | 'swapped'
     | 'canceled'
     | 'transferred ownership'
     | 'received ownership'
@@ -126,6 +128,7 @@ export type Action =
     | 'claimed'
     | 'contributed'
     | 'redeemed'
+    | '______TODO______'
 
 export enum TokenType {
     ERC20 = 'ERC20',
