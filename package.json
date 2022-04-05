@@ -63,6 +63,7 @@
         "collect.js": "^4.32.0",
         "eth-ens-namehash": "^2.0.8",
         "ethers": "^5.6.2",
+        "require-context": "^1.1.0",
         "traverse": "^0.6.6"
     }
 }
