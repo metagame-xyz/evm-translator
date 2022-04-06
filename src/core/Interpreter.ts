@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import contractInterpreters from './contractInterpreters'
 import collect from 'collect.js'
 import glob from 'glob'
 import {
@@ -39,22 +40,22 @@ function isTopLevel(key: string) {
     return TopLevelInteractionKeys.includes(key)
 }
 
-const getHardcodedContractInterpreters = (): any[] => {
-    let files: any[] = []
-    glob('**/contractInterpreters/*.json', (err, data) => {
-        console.log('ANYthing')
-        if (err) {
-            console.log('glob error:', err)
-        }
-        console.log('data', data)
-        const unique = data.slice(0, data.length / 2)
-        const filesNames = unique.map((item) => './' + item.split('/').slice(-2).join('/'))
-        console.log('filesNames', filesNames)
-        files = filesNames.map((fileName) => require(fileName)) as any[]
-        console.log('files', files[0])
-    })
-    return files
-}
+// const getHardcodedContractInterpreters = (): any[] => {
+//     let files: any[] = []
+//     glob('**/contractInterpreters/*.json', (err, data) => {
+//         console.log('ANYthing')
+//         if (err) {
+//             console.log('glob error:', err)
+//         }
+//         console.log('data', data)
+//         const unique = data.slice(0, data.length / 2)
+//         const filesNames = unique.map((item) => './' + item.split('/').slice(-2).join('/'))
+//         console.log('filesNames', filesNames)
+//         files = filesNames.map((fileName) => require(fileName)) as any[]
+//         console.log('files', files[0])
+//     })
+//     return files
+// }
 
 class Interpreter {
     contractSpecificInterpreters: ContractInterpretersMap = {}
@@ -62,17 +63,13 @@ class Interpreter {
     userAddress: Address
     chain: Chain
 
-    constructor(
-        userAddress: Address,
-        // contractInterpreters: ContractInterpretersMap = defaultContractInterpreters,
-        chain: Chain,
-    ) {
+    constructor(userAddress: Address, chain: Chain) {
         this.userAddress = userAddress
         this.chain = chain
-        const contractInterpreters = getHardcodedContractInterpreters()
-        contractInterpreters.forEach((contractInterpreter) => {
-            this.contractSpecificInterpreters[contractInterpreter.contractAddress] = contractInterpreter
-        })
+
+        for (const [address, map] of Object.entries(contractInterpreters)) {
+            this.contractSpecificInterpreters[address as Address] = map as InterpreterMap
+        }
     }
 
     public interpret(rawTxDataArr: RawTxData[], decodedDataArr: Decoded[]): Interpretation[] {
