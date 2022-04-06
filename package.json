@@ -41,7 +41,9 @@
     "homepage": "https://github.com/the-metagame/evm-translator#readme",
     "devDependencies": {
         "@trivago/prettier-plugin-sort-imports": "^3.2.0",
+        "@types/glob": "^7.2.0",
         "@types/jest": "^27.4.1",
+        "@types/node": "^17.0.23",
         "@types/traverse": "^0.6.32",
         "@types/webpack-env": "^1.16.3",
         "@typescript-eslint/eslint-plugin": "^5.16.0",
@@ -63,6 +65,7 @@
         "collect.js": "^4.32.0",
         "eth-ens-namehash": "^2.0.8",
         "ethers": "^5.6.2",
+        "glob": "^7.2.0",
         "require-context": "^1.1.0",
         "traverse": "^0.6.6"
     }

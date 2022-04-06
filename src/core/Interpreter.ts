@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import collect from 'collect.js'
+import glob from 'glob'
 import {
     Address,
     Chain,
@@ -38,9 +39,18 @@ function isTopLevel(key: string) {
     return TopLevelInteractionKeys.includes(key)
 }
 
-const getHardcodedContractInterpreters = (): InterpreterMap[] => {
-    const files = require.context('./contractInterpreters', true, /\.json$/)
-    return files.keys().map((key) => files(key))
+const getHardcodedContractInterpreters = (): any[] => {
+    let files: any[] = []
+    glob('**/contractInterpreters/*.json', (err, data) => {
+        console.log('ANYthing')
+        if (err) {
+            console.log('glob error:', err)
+        }
+        const unique = data.slice(0, data.length / 2)
+        const filesNames = unique.map((item) => './' + item.split('/').slice(-2).join('/'))
+        files = filesNames.map((fileName) => require(fileName)) as any[]
+    })
+    return files
 }
 
 class Interpreter {
