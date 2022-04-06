@@ -46,9 +46,12 @@ const getHardcodedContractInterpreters = (): any[] => {
         if (err) {
             console.log('glob error:', err)
         }
+        console.log('data', data)
         const unique = data.slice(0, data.length / 2)
         const filesNames = unique.map((item) => './' + item.split('/').slice(-2).join('/'))
+        console.log('filesNames', filesNames)
         files = filesNames.map((fileName) => require(fileName)) as any[]
+        console.log('files', files[0])
     })
     return files
 }
