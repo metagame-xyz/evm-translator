@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import contractInterpreters from './contractInterpreters'
 import collect from 'collect.js'
-import glob from 'glob'
 import {
     Address,
     Chain,
