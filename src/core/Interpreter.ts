@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import contractInterpreters from './contractInterpreters'
 import collect from 'collect.js'
+import { BigNumber } from 'ethers'
+import { formatEther } from 'ethers/lib/utils'
 import {
     Address,
     Chain,
@@ -11,6 +13,7 @@ import {
     RawTxData,
     Token,
     TokenType,
+    TX_TYPE,
 } from 'interfaces'
 import { InterpreterMap, MethodMap } from 'interfaces/contractInterpreter'
 
@@ -92,6 +95,10 @@ class Interpreter {
         const toAddress = rawTxData.txReceipt.to
         const fromAddress = rawTxData.txReceipt.from
 
+        const gasUsed = formatEther(
+            BigNumber.from(decodedData.gasUsed).mul(BigNumber.from(decodedData.effectiveGasPrice)),
+        )
+
         // not contract-specific
         const interpretation: Interpretation = {
             nativeTokenValueSent: decodedData.nativeTokenValueSent,
@@ -99,11 +106,13 @@ class Interpreter {
             tokensSent: this.getTokensSent(interactions, this.userAddress),
             nativeTokenSymbol: this.chain.symbol,
             userName: decodedData.fromENS || fromAddress.substring(0, 6),
+            gasPaid: gasUsed,
         }
 
         const interpretationMapping = this.contractSpecificInterpreters[toAddress]
         const methodSpecificMapping = interpretationMapping?.writeFunctions[method]
 
+        // console.log('interpretationMapping', interpretationMapping)
         // contract-specific interpretation
         if (interpretationMapping && methodSpecificMapping) {
             // some of these will be arribtrary keys
@@ -126,10 +135,26 @@ class Interpreter {
                 interpretation,
             )
         } else {
-            // fallback interpretation
+            console.log('in here')
+            // const fallbackData = this.fallbackInterpreters(rawTxData, decodedData)
         }
 
         return interpretation
+    }
+
+    // private genericERC721Interpreter(rawTxData: RawTxData, decodedData: Decoded): Record<string, any> {}
+
+    private fallbackInterpreters(rawTxData: RawTxData, decodedData: Decoded): Record<string, any> {
+        const data = {}
+
+        // contract Deploy
+        if (decodedData.txType === TX_TYPE.CONTRACT_DEPLOY) {
+            return {}
+        } else if (decodedData.txType === TX_TYPE.CONTRACT_INTERACTION) {
+            return {}
+        }
+
+        return data
     }
 
     private findValue(
@@ -183,8 +208,10 @@ class Interpreter {
 
     private getTokens(interactions: Interaction[], userAddress: Address, direction: 'to' | 'from'): Token[] {
         let tokens: Token[] = []
+        type FlattenedInteraction = Omit<Interaction, 'events'> & InteractionEvent
 
         let filteredInteractions = deepCopy(interactions) as Interaction[]
+        const flattenedInteractions = flattenEvents(filteredInteractions)
 
         const toKeys = ['to', '_to']
         const fromKeys = ['from', '_from']
@@ -205,7 +232,9 @@ class Interpreter {
                 ).length > 0, // filters out interactions that don't have any events objects left
         )
 
-        function getTokenType(interaction: Interaction): TokenType {
+        // console.log('filteredInteractions', filteredInteractions)
+
+        function getTokenType(interaction: FlattenedInteraction): TokenType {
             const LPTokenSymbols = ['UNI-V2']
             let tokenType = TokenType.DEFAULT
 
@@ -213,13 +242,13 @@ class Interpreter {
             if (LPTokenSymbols.includes(interaction.contractSymbol)) {
                 tokenType = TokenType.LPToken
                 // ERC-1155
-            } else if (interaction.events[0]._amount || interaction.events[0]._amounts) {
+            } else if (interaction._amount || interaction._amounts) {
                 tokenType = TokenType.ERC1155
                 // ERC-721
-            } else if (interaction.events[0].tokenId) {
+            } else if (interaction.tokenId) {
                 tokenType = TokenType.ERC721
                 // ERC-20
-            } else if (Number(interaction.events[0].value) > 0) {
+            } else if (Number(interaction.value) > 0) {
                 tokenType = TokenType.ERC20
             }
 
@@ -231,8 +260,28 @@ class Interpreter {
             return directionArr.filter((key) => event[key] === userAddress).length > 0
         }
 
-        // TODO this is only ERC20 tokens
-        tokens = filteredInteractions.map((i) => {
+        // each transfer event can have a token in it. for example, minting multiple NFTs
+        function flattenEvents(interactions: Interaction[]) {
+            const flattenedInteractions: FlattenedInteraction[] = []
+
+            let flattenedInteraction: FlattenedInteraction
+            for (const interaction of interactions) {
+                flattenedInteraction = deepCopy(interaction) as FlattenedInteraction
+                delete flattenedInteraction.events
+
+                for (const event of interaction.events) {
+                    // flattenedInteraction.event = event.event
+                    // flattenedInteraction.logIndex = event.logIndex
+                    flattenedInteraction = { ...flattenedInteraction, ...event }
+                    flattenedInteractions.push(flattenedInteraction)
+                }
+                // console.log('flattenedInteraction', flattenedInteraction)
+            }
+
+            return flattenedInteractions
+        }
+
+        tokens = flattenedInteractions.map((i) => {
             const tokenType = getTokenType(i)
 
             return {
@@ -240,8 +289,8 @@ class Interpreter {
                 name: i.contractName,
                 symbol: i.contractSymbol,
                 address: i.contractAddress,
-                amount: i.events[0].value,
-                tokenId: i.events[0].tokenId,
+                amount: i.value,
+                tokenId: i.tokenId,
             }
         })
 

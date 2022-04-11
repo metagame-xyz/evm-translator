@@ -101,6 +101,7 @@ export type Interpretation = {
     userName: string
     extra?: Record<string, unknown>
     reverted?: boolean
+    gasPaid?: string
 }
 
 export type ActivityData = {
