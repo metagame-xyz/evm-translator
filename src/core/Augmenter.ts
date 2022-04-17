@@ -47,45 +47,54 @@ export class Augmenter {
 
         await this.decodeMethodNames()
 
-        if (!this.covalentDataArr.length) {
+        if (!this.covalentDataArr.length && this.rawTxDataArr.length) {
             await this.getCovalentData()
         }
 
-        this.augmentOfficialContractNames()
+        this.augmentTimestampWithCovalent()
+        await this.augmentOfficialContractNames()
         this.augmentInteractionData()
-        await this.augmentENSnames()
+        if (this.provider.network.chainId == 1) {
+            // only mainnet
+            await this.augmentENSnames()
+        }
 
         return this.decodedArr
     }
 
     private createDecodedArr() {
         const formattedRawTxDataArr = this.rawTxDataArr.map((rawTxData) => {
-            const { txReceipt, txResponse } = rawTxData
-            const value = rawTxData.txResponse.value.toString()
+            try {
+                const { txReceipt, txResponse } = rawTxData
+                const value = rawTxData.txResponse.value.toString()
 
-            let txType: TX_TYPE
-            if (!txReceipt.to) {
-                txType = TX_TYPE.CONTRACT_DEPLOY
-            } else if (txResponse.data == '0x') {
-                txType = TX_TYPE.TRANSFER
-            } else {
-                // TODO txReciept.contractAddress is the address of the contract created, add it
-                txType = TX_TYPE.CONTRACT_INTERACTION
+                let txType: TX_TYPE
+                if (!txReceipt.to) {
+                    txType = TX_TYPE.CONTRACT_DEPLOY
+                } else if (txResponse.data == '0x') {
+                    txType = TX_TYPE.TRANSFER
+                } else {
+                    // TODO txReciept.contractAddress is the address of the contract created, add it
+                    txType = TX_TYPE.CONTRACT_INTERACTION
+                }
+
+                const transformedData = {
+                    txType: txType,
+                    nativeTokenValueSent: value == '0' ? '0' : formatUnits(value),
+                    txIndex: txReceipt.transactionIndex,
+                    reverted: txReceipt.status == 0,
+                    gasUsed: txReceipt.gasUsed.toString(),
+                    effectiveGasPrice: txReceipt.effectiveGasPrice?.toString() || txResponse?.gasPrice?.toString(),
+                    fromAddress: txReceipt.from,
+                    toAddress: txReceipt.to,
+                    interactions: [],
+                }
+
+                return transformedData
+            } catch (e) {
+                console.error('error in createDecodedArr', e)
+                throw e
             }
-
-            const transformedData = {
-                txType: txType,
-                nativeTokenValueSent: value == '0' ? '0' : formatUnits(value),
-                txIndex: txReceipt.transactionIndex,
-                reverted: txReceipt.status == 0,
-                gasUsed: txReceipt.gasUsed.toString(),
-                effectiveGasPrice: txReceipt.effectiveGasPrice.toString(),
-                fromAddress: txReceipt.from,
-                toAddress: txReceipt.to,
-                interactions: [],
-            }
-
-            return transformedData
         })
 
         this.decodedArr = formattedRawTxDataArr
@@ -95,8 +104,8 @@ export class Augmenter {
         if (this.rawTxDataArr.length > 1) {
             throw new Error('Not implemented. This only happens if you already got raw data via Covalent')
         } else {
-            const covalentRespose = await this.covalent.getTransactionFor(this.rawTxDataArr[0].txResponse.hash)
-            const covalentData = covalentRespose.items[0]
+            const covalentResponse = await this.covalent.getTransactionFor(this.rawTxDataArr[0].txResponse.hash)
+            const covalentData = covalentResponse.items[0]
             this.covalentDataArr.push(covalentData)
         }
     }
@@ -110,6 +119,11 @@ export class Augmenter {
         }
     }
 
+    private augmentTimestampWithCovalent() {
+        this.covalentDataArr.forEach((covalentData, index) => {
+            this.decodedArr[index].timestamp = covalentData.block_signed_at
+        })
+    }
     private augmentInteractionData() {
         // we can get do this transformation with the ABI too. We can trust Covalent for now, but we already have a shim in there for ERC721s...
         if (this.covalentDataArr.length) {
@@ -123,7 +137,14 @@ export class Augmenter {
         const ReverseRecords = new Contract(REVERSE_RECORDS_CONTRACT_ADDRESS, reverseRecords.abi, this.provider)
 
         async function getNames(addresses: string[]): Promise<string[]> {
-            const allNames = await ReverseRecords.getNames(addresses)
+            let allDirtyNames = (await ReverseRecords.getNames(addresses)) as string[]
+            // remove blank names
+            allDirtyNames = allDirtyNames.filter((name) => name != '')
+            // remove illegal chars
+            const allNames = allDirtyNames.map((name) => {
+                return name.replace(/([^\w\s+*:;,.()/\\]+)/gi, '¿')
+            })
+            // "normalize", whatever that means. ENS told me too. prob not needed after the regex
             const validNames = allNames.filter((n: string) => normalize(n) === n)
             return validNames
         }
@@ -146,7 +167,8 @@ export class Augmenter {
         addresses.forEach((address, index) => {
             addressToNameMap[address] = names[index]
         })
-        //
+
+        // TODO handle arrays of addresses
         // "events":[
         //     :{
         //     "event":"SafeSetup"

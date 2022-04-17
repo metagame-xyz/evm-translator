@@ -115,6 +115,7 @@ class Interpreter {
         // console.log('interpretationMapping', interpretationMapping)
         // contract-specific interpretation
         if (interpretationMapping && methodSpecificMapping) {
+            // console.log('contract-specific interpretation', interpretationMapping.contractName, method)
             // some of these will be arribtrary keys
             interpretation.contractName = interpretationMapping.contractName
             interpretation.action = methodSpecificMapping.action
@@ -135,7 +136,6 @@ class Interpreter {
                 interpretation,
             )
         } else {
-            console.log('in here')
             // const fallbackData = this.fallbackInterpreters(rawTxData, decodedData)
         }
 
@@ -211,28 +211,28 @@ class Interpreter {
         type FlattenedInteraction = Omit<Interaction, 'events'> & InteractionEvent
 
         let filteredInteractions = deepCopy(interactions) as Interaction[]
-        const flattenedInteractions = flattenEvents(filteredInteractions)
 
         const toKeys = ['to', '_to']
         const fromKeys = ['from', '_from']
         const transferEvents = ['Transfer', 'TransferBatch', 'TransferSingle']
 
-        // filter non-transfer  events only
         for (const interaction of filteredInteractions) {
+            // filter non-transfer events
             interaction.events = interaction.events.filter((d) => transferEvents.includes(d.event))
+            // filter out events that aren't to/from the user in the right direction
+            interaction.events = interaction.events.filter((d) => toOrFromUser(d, direction, userAddress))
         }
 
         // filter out interactions without any of the events we want
         filteredInteractions = filteredInteractions.filter(
             (i) =>
                 i.events.filter(
-                    (d) =>
-                        transferEvents.includes(d.event) && // filters out all non transfer events
-                        toOrFromUser(d, direction, userAddress), // filters out event objects that aren't the right direction, and to the user
+                    (d) => transferEvents.includes(d.event), // filters out all non transfer events
                 ).length > 0, // filters out interactions that don't have any events objects left
         )
 
-        // console.log('filteredInteractions', filteredInteractions)
+        // console.log('filteredInteractions', filteredInteractions[0].events)
+        const flattenedInteractions = flattenEvents(filteredInteractions)
 
         function getTokenType(interaction: FlattenedInteraction): TokenType {
             const LPTokenSymbols = ['UNI-V2']
@@ -290,7 +290,7 @@ class Interpreter {
                 symbol: i.contractSymbol,
                 address: i.contractAddress,
                 amount: i.value,
-                tokenId: i.tokenId,
+                tokenId: i.tokenId as string,
             }
         })
 

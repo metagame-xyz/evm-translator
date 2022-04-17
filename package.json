@@ -39,6 +39,15 @@
         "url": "https://github.com/the-metagame/evm-translator/issues"
     },
     "homepage": "https://github.com/the-metagame/evm-translator#readme",
+    "dependencies": {
+        "axios": "^0.26.1",
+        "collect.js": "^4.32.0",
+        "eth-ens-namehash": "^2.0.8",
+        "ethers": "^5.6.2",
+        "limiter": "^2.1.0",
+        "require-context": "^1.1.0",
+        "traverse": "^0.6.6"
+    },
     "devDependencies": {
         "@trivago/prettier-plugin-sort-imports": "^3.2.0",
         "@types/jest": "^27.4.1",
@@ -58,13 +67,5 @@
         "ts-node": "^10.7.0",
         "tsc-alias": "^1.6.5",
         "typescript": "^4.6.3"
-    },
-    "dependencies": {
-        "axios": "^0.26.1",
-        "collect.js": "^4.32.0",
-        "eth-ens-namehash": "^2.0.8",
-        "ethers": "^5.6.2",
-        "require-context": "^1.1.0",
-        "traverse": "^0.6.6"
     }
 }

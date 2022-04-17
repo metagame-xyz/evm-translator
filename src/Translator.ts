@@ -1,8 +1,9 @@
-import { BaseProvider, getDefaultProvider } from '@ethersproject/providers'
+import { AlchemyProvider, BaseProvider } from '@ethersproject/providers'
 import { Augmenter } from 'core/Augmenter'
 import Interpreter from 'core/Interpreter'
 import RawDataFetcher from 'core/RawDataFetcher'
-import { ActivityData, Address, Chain, EthersAPIKeys } from 'interfaces'
+import TaxFormatter from 'core/TaxFormatter'
+import { ActivityData, Address, Chain, EthersAPIKeys, ZenLedgerRow } from 'interfaces'
 import { chains, cleanseDataInPlace } from 'utils'
 import Covalent from 'utils/clients/Covalent'
 
@@ -34,8 +35,17 @@ class Translator {
 
     constructor(config: TranslatorConfig) {
         this.config = { chain: chains.ethereum, ...config }
-        this.provider = getDefaultProvider(this.config.chain.id, this.config.ethersApiKeys)
-        this.covalent = new Covalent(this.config.covalentApiKey, this.config.chain.id)
+
+        const chainId = this.config.chain.id
+
+        if (this.config.chain === chains.polygon) {
+            this.provider = new AlchemyProvider(chainId, this.config.ethersApiKeys.alchemy)
+        } else {
+            this.provider = new AlchemyProvider(chainId, this.config.ethersApiKeys.alchemy)
+            // this.provider = getDefaultProvider(1, this.config.ethersApiKeys)
+        }
+
+        this.covalent = new Covalent(this.config.covalentApiKey, chainId)
 
         this.rawDataFetcher = new RawDataFetcher(this.provider, this.covalent)
         this.augmenter = new Augmenter(this.provider, this.covalent)
@@ -79,7 +89,8 @@ class Translator {
 
     public async translateFromAddress(
         addressUnclean: Address,
-        initiatedTxsOnly = true,
+        includeInitiatedTxs = true,
+        includeNotInitiatedTxs = false,
         limit = 100,
     ): Promise<ActivityData[]> {
         const address = addressUnclean.toLowerCase() as Address
@@ -88,7 +99,8 @@ class Translator {
 
         const { rawTxDataArr, covalentTxDataArr } = await this.rawDataFetcher.getTxDataWithCovalentByAddress(
             address,
-            initiatedTxsOnly,
+            includeInitiatedTxs,
+            includeNotInitiatedTxs,
             limit,
         )
 
@@ -117,6 +129,31 @@ class Translator {
         }
 
         return allData
+    }
+
+    public async translateWithTaxData(
+        addressUnclean: Address,
+        includeInitiatedTxs = true,
+        includeNotInitiatedTxs = false,
+        limit = 100,
+    ): Promise<ZenLedgerRow[]> {
+        try {
+            const address = addressUnclean.toLowerCase() as Address
+
+            const allData = await this.translateFromAddress(address, includeInitiatedTxs, includeNotInitiatedTxs, limit)
+
+            const taxFormatter = new TaxFormatter(address, 'brenners wallet', this.config.chain)
+            const rows = taxFormatter.format(allData)
+
+            allData.forEach((element, index) => {
+                element.taxData = rows[index]
+            })
+
+            return rows
+        } catch (error) {
+            console.log('error in translateWithTaxData', error)
+            return []
+        }
     }
 }
 

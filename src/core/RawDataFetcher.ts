@@ -31,29 +31,40 @@ export default class RawDataFetcher {
 
     // could be parallelized, but each has a different dependency graph
     async getTxData(txHash: string): Promise<RawTxData> {
-        const [txResponse, txReceipt] = await Promise.all([this.getTxResponse(txHash), this.getTxReciept(txHash)])
-        // const txResponse = await this.getTxResponse(txHash)
-        // const txReceipt = await this.getTxReciept(txHash)
-
-        return {
-            txResponse,
-            txReceipt,
+        let txResponse: TxResponse
+        let txReceipt: TxReceipt
+        try {
+            ;[txResponse, txReceipt] = await Promise.all([this.getTxResponse(txHash), this.getTxReciept(txHash)])
+            return {
+                txResponse,
+                txReceipt,
+            }
+        } catch (e) {
+            console.error('error in getTxData', e)
+            throw e
         }
     }
 
     async getTxDataWithCovalentByAddress(
         address: Address,
-        initiatedTxsOnly: boolean,
+        includedInitiatedTxs: boolean,
+        includedNotInitiatedTxs: boolean,
         limit: number,
     ): Promise<{ rawTxDataArr: RawTxData[]; covalentTxDataArr: CovalentTxData[] }> {
         const allCovalentTxDataArr = await this.covalent.getTransactionsFor(address, limit)
 
         const covalentTxDataArr = allCovalentTxDataArr.filter((tx) => {
-            if (initiatedTxsOnly) {
+            if (includedInitiatedTxs && includedNotInitiatedTxs) {
+                return true
+            } else if (includedInitiatedTxs) {
                 return tx.from_address === address // only transactions initiated by the user, no scam airdrops
+            } else if (includedNotInitiatedTxs) {
+                return tx.from_address !== address // only transactions not initiated by the user, just airdrops
+            } else {
+                return false
             }
-            return true
         })
+
         const rawTxDataArr = await Promise.all(
             covalentTxDataArr.map(async (tx) => {
                 return await this.getTxData(tx.tx_hash)

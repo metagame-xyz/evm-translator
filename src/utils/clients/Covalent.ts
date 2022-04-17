@@ -1,5 +1,5 @@
 import axios, { Axios } from 'axios'
-import { Address } from 'eth-ens-namehash'
+import { Address } from 'interfaces'
 import {
     CovalentTxData,
     GetBalancesResponse,

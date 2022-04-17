@@ -104,7 +104,7 @@ export type CovalentLogEvent = {
 }
 
 export type CovalentTxData = {
-    block_signed_at: Date
+    block_signed_at: string
     block_height: number
     tx_hash: string
     tx_offset: number

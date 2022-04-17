@@ -11,8 +11,18 @@ const ethereum: Chain = {
     blockExplorerUrl: 'https://etherscan.io/',
 }
 
+const polygon: Chain = {
+    EVM: true,
+    id: 137,
+    name: 'Polygon',
+    symbol: 'MATIC',
+    testnet: false,
+    blockExplorerUrl: 'https://polygonscan.com/',
+}
+
 export const chains: Chains = {
     ethereum,
+    polygon,
 }
 
 export const isAddress = (address: string): boolean => {

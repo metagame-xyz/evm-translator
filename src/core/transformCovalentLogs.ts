@@ -18,6 +18,11 @@ type Event = {
 
 // covalent returns 'value:null' for ERC721's instead of decoding the param as tokenId
 function covalentERC721Shim(events: Record<string, any>, event: CovalentLogEvent) {
+    // only transfer events, other contract-related events might break this
+    if (event.decoded.name !== 'Transfer') {
+        return events
+    }
+
     const incorrectValueParam = event?.decoded?.params?.find((param) => param.name === 'value' && !param.decoded)
 
     if (incorrectValueParam) {
