@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import contractInterpreters from './contractInterpreters'
 import contractDeployInterpreter from './genericInterpreters/ContractDeploy.json'
-import ERC721Interpreter from './genericInterpreters/ERC721.json'
-import collect from 'collect.js'
+import interpretGenericERC721 from './genericInterpreters/erc721'
 import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import {
@@ -18,7 +17,8 @@ import {
     TokenType,
     TX_TYPE,
 } from 'interfaces'
-import { AmbiguousMap, ERCMap, InterpreterMap } from 'interfaces/contractInterpreter'
+import { InterpreterMap } from 'interfaces/contractInterpreter'
+import { fillDescriptionTemplate } from 'utils'
 
 function deepCopy(obj: any) {
     return JSON.parse(JSON.stringify(obj))
@@ -113,14 +113,13 @@ class Interpreter {
             gasPaid: gasUsed,
         }
 
-        let interpretationMapping: AmbiguousMap = this.contractSpecificInterpreters[toAddress]
-        let methodSpecificMapping = interpretationMapping?.writeFunctions[method]
+        const interpretationMapping = this.contractSpecificInterpreters[toAddress]
+        const methodSpecificMapping = interpretationMapping?.writeFunctions[method]
 
         // if there's no contract-specific mapping, try to use the fallback mapping
         if (!interpretationMapping) {
             if (decodedData.contractType === ContractType.ERC721) {
-                interpretationMapping = ERC721Interpreter as ERCMap
-                methodSpecificMapping = interpretationMapping.writeFunctions[method]
+                interpretGenericERC721(rawTxData, decodedData, interpretation)
             }
         }
 
@@ -139,7 +138,7 @@ class Interpreter {
                 '0x_DOESNT_EXIST',
             )
 
-            interpretation.exampleDescription = this.fillDescriptionTemplate(
+            interpretation.exampleDescription = fillDescriptionTemplate(
                 contractDeployInterpreter.exampleDescriptionTemplate,
                 interpretation,
             )
@@ -158,7 +157,7 @@ class Interpreter {
             }
             interpretation.extra = this.useKeywordMap(interactions, methodSpecificMapping.keywords, toAddress)
 
-            interpretation.exampleDescription = this.fillDescriptionTemplate(
+            interpretation.exampleDescription = fillDescriptionTemplate(
                 interpretationMapping.writeFunctions[method].exampleDescriptionTemplate,
                 interpretation,
             )
@@ -178,12 +177,6 @@ class Interpreter {
         const array = keyMapping.array || false
 
         let filteredInteractions = deepCopy(interactions) as Interaction[]
-
-        // interactions.forEach((interaction) => {
-        //     interaction.events.forEach((event) => {
-        //         console.log('event', event)
-        //     })
-        // })
 
         for (const [key, value] of Object.entries(filters)) {
             let valueToFind = value
@@ -367,17 +360,6 @@ class Interpreter {
         }
 
         return keyValueMap
-    }
-
-    private fillDescriptionTemplate(template: string, interpretation: Interpretation): string {
-        const merged = collect(interpretation.extra).merge(interpretation).all()
-
-        for (const [key, value] of Object.entries(merged)) {
-            if (typeof value === 'string') {
-                template = template.replace(`{${key}}`, value)
-            }
-        }
-        return template
     }
 }
 

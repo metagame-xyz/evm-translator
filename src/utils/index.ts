@@ -1,5 +1,6 @@
+import collect from 'collect.js'
 import { BigNumber } from 'ethers'
-import { Chain, Chains } from 'interfaces'
+import { Chain, Chains, Interpretation } from 'interfaces'
 import traverse from 'traverse'
 
 const ethereum: Chain = {
@@ -107,4 +108,15 @@ export async function fetcher(url: string, options = fetchOptions) {
             await sleep(2000)
         }
     }
+}
+
+export function fillDescriptionTemplate(template: string, interpretation: Interpretation): string {
+    const merged = collect(interpretation.extra).merge(interpretation).all()
+
+    for (const [key, value] of Object.entries(merged)) {
+        if (typeof value === 'string') {
+            template = template.replace(`{${key}}`, value)
+        }
+    }
+    return template
 }

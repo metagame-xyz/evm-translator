@@ -29,13 +29,3 @@ export type DeployInterpreterMap = {
     exampleDescription: string
     keywords: Record<string, KeywordMap>
 }
-
-export type ERCMap = {
-    contractAddress: null
-    contractName: null
-    methods: Record<string, string[]>
-    contractOfficialName: string
-    writeFunctions: Record<string, MethodMap>
-}
-
-export type AmbiguousMap = InterpreterMap | ERCMap

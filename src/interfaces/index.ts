@@ -64,7 +64,7 @@ export type Decoded = {
     nativeTokenValueReceived?: string // so hard to get this
     nativeTokenSymbol?: string
     txIndex?: number
-    fromAddress?: Address
+    fromAddress: Address
     toAddress?: Address
     reverted?: boolean
     timestamp?: string //
