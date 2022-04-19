@@ -1,10 +1,11 @@
+import checkInterface from './genericInterpreters/checkInterface'
 import { transformCovalentEvents } from './transformCovalentLogs'
 import { BaseProvider, Formatter } from '@ethersproject/providers'
 import reverseRecords from 'ABIs/ReverseRecords.json'
 import { normalize } from 'eth-ens-namehash'
 import { Contract } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
-import { Address, Decoded, InProgressActivity, RawTxData, TX_TYPE } from 'interfaces'
+import { Address, ContractType, Decoded, InProgressActivity, RawTxData, TX_TYPE } from 'interfaces'
 import { CovalentTxData } from 'interfaces/covalent'
 import traverse from 'traverse'
 import { isAddress } from 'utils'
@@ -46,6 +47,7 @@ export class Augmenter {
         this.createDecodedArr()
 
         await this.decodeMethodNames()
+        await this.getContractTypes()
 
         if (!this.covalentDataArr.length && this.rawTxDataArr.length) {
             await this.getCovalentData()
@@ -88,6 +90,7 @@ export class Augmenter {
                     fromAddress: txReceipt.from,
                     toAddress: txReceipt.to,
                     interactions: [],
+                    contractType: ContractType.OTHER,
                 }
 
                 return transformedData
@@ -191,7 +194,13 @@ export class Augmenter {
             if (!!thing && typeof thing === 'object' && !Array.isArray(thing)) {
                 for (const [key, val] of Object.entries(thing)) {
                     if (addressToNameMap[val as string]) {
-                        thing[key + 'ENS'] = addressToNameMap[val as string]
+                        if (key == 'toAddress') {
+                            thing.toENS = addressToNameMap[val as string]
+                        } else if (key == 'fromAddress') {
+                            thing.fromENS = addressToNameMap[val as string]
+                        } else {
+                            thing[key + 'ENS'] = addressToNameMap[val as string]
+                        }
                     }
                 }
             }
@@ -229,6 +238,29 @@ export class Augmenter {
 
         methodNames.forEach((methodName, index) => {
             this.decodedArr[index].contractMethod = methodName
+        })
+    }
+
+    private async getContractType(contractAddress: Address): Promise<ContractType> {
+        const contractType = await checkInterface(contractAddress, this.provider)
+        return contractType
+    }
+    private async getContractTypes() {
+        const contractTypes = await Promise.all(
+            this.rawTxDataArr.map(async (rawTxData, index) => {
+                let contractType = ContractType.OTHER
+                if (this.decodedArr[index].txType == TX_TYPE.CONTRACT_INTERACTION) {
+                    contractType = await this.getContractType(rawTxData.txReceipt.to)
+                }
+                //     else if (this.decodedArr[index].txType == TX_TYPE.CONTRACT_DEPLOY) {
+                //         //TODO
+                // }
+                return contractType
+            }),
+        )
+
+        contractTypes.forEach((contractType, index) => {
+            this.decodedArr[index].contractType = contractType
         })
     }
 }

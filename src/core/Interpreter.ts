@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import contractInterpreters from './contractInterpreters'
+import contractDeployInterpreter from './genericInterpreters/ContractDeploy.json'
+import ERC721Interpreter from './genericInterpreters/ERC721.json'
 import collect from 'collect.js'
 import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import {
     Address,
     Chain,
+    ContractType,
     Decoded,
     Interaction,
     InteractionEvent,
@@ -15,7 +18,7 @@ import {
     TokenType,
     TX_TYPE,
 } from 'interfaces'
-import { InterpreterMap, MethodMap } from 'interfaces/contractInterpreter'
+import { AmbiguousMap, ERCMap, InterpreterMap } from 'interfaces/contractInterpreter'
 
 function deepCopy(obj: any) {
     return JSON.parse(JSON.stringify(obj))
@@ -109,13 +112,40 @@ class Interpreter {
             gasPaid: gasUsed,
         }
 
-        const interpretationMapping = this.contractSpecificInterpreters[toAddress]
-        const methodSpecificMapping = interpretationMapping?.writeFunctions[method]
+        let interpretationMapping: AmbiguousMap = this.contractSpecificInterpreters[toAddress]
+        let methodSpecificMapping = interpretationMapping?.writeFunctions[method]
 
-        // console.log('interpretationMapping', interpretationMapping)
-        // contract-specific interpretation
-        if (interpretationMapping && methodSpecificMapping) {
-            // console.log('contract-specific interpretation', interpretationMapping.contractName, method)
+        // if there's no contract-specific mapping, try to use the fallback mapping
+        if (!interpretationMapping) {
+            if (decodedData.contractType === ContractType.ERC721) {
+                interpretationMapping = ERC721Interpreter as ERCMap
+                methodSpecificMapping = interpretationMapping.writeFunctions[method]
+            }
+        }
+
+        if (decodedData.txType === TX_TYPE.CONTRACT_DEPLOY) {
+            interpretation.action = 'deployed'
+            interpretation.exampleDescription = contractDeployInterpreter.exampleDescription
+
+            if (decodedData.reverted) {
+                interpretation.reverted = true
+                // TODO the description and extras should be different for reverted transactions
+            }
+
+            interpretation.extra = this.useKeywordMap(
+                interactions,
+                contractDeployInterpreter.keywords,
+                '0x_DOESNT_EXIST',
+            )
+
+            interpretation.exampleDescription = this.fillDescriptionTemplate(
+                contractDeployInterpreter.exampleDescriptionTemplate,
+                interpretation,
+            )
+
+            // contract-specific interpretation
+        } else if (interpretationMapping && methodSpecificMapping) {
+            console.log('contract-specific interpretation', interpretationMapping.contractName, method)
             // some of these will be arribtrary keys
             interpretation.contractName = interpretationMapping.contractName
             interpretation.action = methodSpecificMapping.action
@@ -125,36 +155,15 @@ class Interpreter {
                 interpretation.reverted = true
                 // TODO the description and extras should be different for reverted transactions
             }
-            interpretation.extra = this.useMethodMapping(
-                interactions,
-                methodSpecificMapping,
-                interpretationMapping.contractAddress,
-            )
+            interpretation.extra = this.useKeywordMap(interactions, methodSpecificMapping.keywords, toAddress)
 
             interpretation.exampleDescription = this.fillDescriptionTemplate(
                 interpretationMapping.writeFunctions[method].exampleDescriptionTemplate,
                 interpretation,
             )
-        } else {
-            // const fallbackData = this.fallbackInterpreters(rawTxData, decodedData)
         }
 
         return interpretation
-    }
-
-    // private genericERC721Interpreter(rawTxData: RawTxData, decodedData: Decoded): Record<string, any> {}
-
-    private fallbackInterpreters(rawTxData: RawTxData, decodedData: Decoded): Record<string, any> {
-        const data = {}
-
-        // contract Deploy
-        if (decodedData.txType === TX_TYPE.CONTRACT_DEPLOY) {
-            return {}
-        } else if (decodedData.txType === TX_TYPE.CONTRACT_INTERACTION) {
-            return {}
-        }
-
-        return data
     }
 
     private findValue(
@@ -305,12 +314,11 @@ class Interpreter {
         return this.getTokens(interactions, userAddress, 'from')
     }
 
-    private useMethodMapping(
+    private useKeywordMap(
         interactions: Interaction[],
-        methodSpecificMapping: MethodMap,
+        keywordsMap: Record<string, KeyMapping>,
         contractAddress: Address,
     ): Record<string, string> {
-        const keywordsMap = methodSpecificMapping.keywords
         const keyValueMap: Record<string, string> = {}
 
         const ignoreKeys = ['action', 'contractName', 'exampleDescription']

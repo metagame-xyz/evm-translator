@@ -36,21 +36,6 @@ export type InProgressActivity = {
     decoded?: Decoded
 }
 
-export type RawTxDataOld = {
-    txHash: string
-    txIndex: number
-    to: Address
-    from: Address
-    block: number
-    value: string
-    timestamp: Date
-    gas_units: number
-    gas_price: number
-    successful: boolean
-    input: string | null
-    log_events: RawLogEvent[]
-}
-
 export type RawLogEvent = {
     address: Address
     topics: string[]
@@ -58,9 +43,17 @@ export type RawLogEvent = {
     logIndex: number
 }
 
+export enum ContractType {
+    ERC20 = 'ERC20',
+    ERC721 = 'ERC721',
+    ERC1155 = 'ERC1155',
+    OTHER = 'OTHER',
+}
+
 //  100% objective additional info (data taken from a blockchain)
 export type Decoded = {
     txType?: TX_TYPE
+    contractType: ContractType
     contractMethod?: string | null
     contractName?: string
     officialContractName?: string | null
@@ -90,7 +83,7 @@ export type InteractionEvent = { event: string; logIndex: number; value?: string
 
 // Generally objective additional info (data hardcoded by humans)
 export type Interpretation = {
-    contractName?: string
+    contractName?: string | null
     action?: Action
     exampleDescription?: string
     tokensSent: Token[] // usually just one token

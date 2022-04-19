@@ -1,4 +1,4 @@
-import { AlchemyProvider, BaseProvider } from '@ethersproject/providers'
+import { AlchemyProvider, BaseProvider, getDefaultProvider } from '@ethersproject/providers'
 import { Augmenter } from 'core/Augmenter'
 import Interpreter from 'core/Interpreter'
 import RawDataFetcher from 'core/RawDataFetcher'
@@ -6,6 +6,7 @@ import TaxFormatter from 'core/TaxFormatter'
 import { ActivityData, Address, Chain, EthersAPIKeys, ZenLedgerRow } from 'interfaces'
 import { chains, cleanseDataInPlace } from 'utils'
 import Covalent from 'utils/clients/Covalent'
+import Etherscan from 'utils/clients/Etherscan'
 
 // export const defaultMainnetProvider = getDefaultProvider('homestead', ethersApiKeys)
 
@@ -28,6 +29,7 @@ class Translator {
 
     provider: BaseProvider
     covalent: Covalent
+    etherscan: Etherscan
 
     rawDataFetcher: RawDataFetcher
     augmenter: Augmenter
@@ -41,11 +43,12 @@ class Translator {
         if (this.config.chain === chains.polygon) {
             this.provider = new AlchemyProvider(chainId, this.config.ethersApiKeys.alchemy)
         } else {
-            this.provider = new AlchemyProvider(chainId, this.config.ethersApiKeys.alchemy)
-            // this.provider = getDefaultProvider(1, this.config.ethersApiKeys)
+            // this.provider = new AlchemyProvider(chainId, this.config.ethersApiKeys.alchemy)
+            this.provider = getDefaultProvider(1, this.config.ethersApiKeys)
         }
 
         this.covalent = new Covalent(this.config.covalentApiKey, chainId)
+        this.etherscan = new Etherscan(this.config.ethersApiKeys.etherscan)
 
         this.rawDataFetcher = new RawDataFetcher(this.provider, this.covalent)
         this.augmenter = new Augmenter(this.provider, this.covalent)

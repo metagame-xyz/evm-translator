@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 import {
     TransactionReceipt as unvalidatedTransactionReceipt,
     TransactionResponse as unvalidatedTransactionResponse,
@@ -18,13 +19,16 @@ export default class RawDataFetcher {
     }
 
     async getTxResponse(txHash: string): Promise<TxResponse> {
-        const txData = this.formatter.transactionResponse(await this.provider.getTransaction(txHash))
+        const unformatted = await this.provider.getTransaction(txHash)
+        // console.log('unformatted:', unformatted)
+        const txData = this.formatter.transactionResponse(unformatted)
         const validatedAndFormattedTxResponse = validateAndFormatTxData(txData)
         return validatedAndFormattedTxResponse
     }
 
     async getTxReciept(txHash: string): Promise<TxReceipt> {
         const txReceipt = await this.provider.getTransactionReceipt(txHash)
+        // console.log('txReceipt:', txReceipt)
         const validatedAndFormattedTxReceipt = validateAndFormatTxData(txReceipt)
         return validatedAndFormattedTxReceipt
     }
@@ -33,6 +37,7 @@ export default class RawDataFetcher {
     async getTxData(txHash: string): Promise<RawTxData> {
         let txResponse: TxResponse
         let txReceipt: TxReceipt
+
         try {
             ;[txResponse, txReceipt] = await Promise.all([this.getTxResponse(txHash), this.getTxReciept(txHash)])
             return {

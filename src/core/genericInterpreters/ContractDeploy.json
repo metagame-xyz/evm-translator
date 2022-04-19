@@ -1,0 +1,30 @@
+{
+    "exampleDescriptionTemplate": "{userName} {action} {deployedContractName} ({deployedContractSymbol}) for {gasPaid} {nativeTokenSymbol}",
+    "exampleDescription": "dev.brenner.eth deployed contract Birthblock (BBLOCK) for 0.45 ETH",
+    "keywords": {
+        "deployedContractName": {
+            "key": "contractName",
+            "filters": {
+                "event": "OwnershipTransferred",
+                "previousOwner": "0x0000000000000000000000000000000000000000"
+            },
+            "defaultValue": "unknown contract name"
+        },
+        "deployedContractSymbol": {
+            "key": "contractSymbol",
+            "filters": {
+                "event": "OwnershipTransferred",
+                "previousOwner": "0x0000000000000000000000000000000000000000"
+            },
+            "defaultValue": "unknown contract symbol"
+        },
+        "deployedContractAddress": {
+            "key": "contractAddress",
+            "filters": {
+                "event": "OwnershipTransferred",
+                "previousOwner": "0x0000000000000000000000000000000000000000"
+            },
+            "defaultValue": "unknown contract address"
+        }
+    }
+}
