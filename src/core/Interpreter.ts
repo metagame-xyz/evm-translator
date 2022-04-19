@@ -38,6 +38,7 @@ type KeyMapping = {
     index?: number
     prefix?: string
     postfix?: string
+    array?: boolean
 }
 
 const TopLevelInteractionKeys = ['contractName', 'contractSymbol', 'contractAddress', 'logIndex']
@@ -171,9 +172,10 @@ class Interpreter {
         keyMapping: KeyMapping,
         userAddress: Address,
         contractAddress: Address,
-    ): string {
+    ): string | string[] {
         const filters = keyMapping.filters || {}
         const index = keyMapping.index || 0
+        const array = keyMapping.array || false
 
         let filteredInteractions = deepCopy(interactions) as Interaction[]
 
@@ -206,11 +208,37 @@ class Interpreter {
             }
         }
 
-        const interaction = filteredInteractions[index]
-        const prefix = keyMapping.prefix || ''
-        const str = (interaction as any)?.[keyMapping.key] || interaction?.events[index]?.[keyMapping.key]
-        const postfix = keyMapping.postfix || ''
-        const value = str ? prefix + str + postfix : keyMapping.defaultValue
+        let value = null
+
+        if (!array) {
+            const interaction = filteredInteractions[index]
+            const prefix = keyMapping.prefix || ''
+            const str = (interaction as any)?.[keyMapping.key] || interaction?.events[index]?.[keyMapping.key]
+            const postfix = keyMapping.postfix || ''
+            value = str ? prefix + str + postfix : keyMapping.defaultValue
+        } else {
+            value = []
+            const prefix = keyMapping.prefix || ''
+            const postfix = keyMapping.postfix || ''
+
+            // if the key is in the interaction-level, just loop through those
+            if ((filteredInteractions[0] as any)?.[keyMapping.key]) {
+                for (const interaction of filteredInteractions) {
+                    const str = (interaction as any)?.[keyMapping.key]
+                    const fullStr = str ? prefix + str + postfix : keyMapping.defaultValue
+                    value.push(fullStr)
+                }
+                // if the key is in the event-level, we need to loop through the events in each interaction
+            } else {
+                for (const interaction of filteredInteractions) {
+                    for (const event of interaction.events) {
+                        const str = event[keyMapping.key]
+                        const fullStr = str ? prefix + str + postfix : keyMapping.defaultValue
+                        value.push(fullStr)
+                    }
+                }
+            }
+        }
 
         return value
     }
@@ -318,8 +346,8 @@ class Interpreter {
         interactions: Interaction[],
         keywordsMap: Record<string, KeyMapping>,
         contractAddress: Address,
-    ): Record<string, string> {
-        const keyValueMap: Record<string, string> = {}
+    ): Record<string, string | string[]> {
+        const keyValueMap: Record<string, string | string[]> = {}
 
         const ignoreKeys = ['action', 'contractName', 'exampleDescription']
 
@@ -331,6 +359,10 @@ class Interpreter {
                 // some data requires searching for it
             } else if (typeof value === 'object') {
                 keyValueMap[key] = this.findValue(interactions, value, this.userAddress, contractAddress)
+
+                if (Array.isArray(keyValueMap[key])) {
+                    keyValueMap[`${key}Count`] = keyValueMap[key].length.toString()
+                }
             }
         }
 

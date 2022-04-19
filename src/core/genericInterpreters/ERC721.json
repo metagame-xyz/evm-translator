@@ -34,7 +34,8 @@
                     "key": "contractName",
                     "filters": {
                         "event": "Transfer",
-                        "from": "0x0000000000000000000000000000000000000000"
+                        "from": "0x0000000000000000000000000000000000000000",
+                        "to": "{userAddress}"
                     },
                     "defaultValue": "unknown contract name"
                 },
@@ -42,7 +43,8 @@
                     "key": "contractSymbol",
                     "filters": {
                         "event": "Transfer",
-                        "from": "0x0000000000000000000000000000000000000000"
+                        "from": "0x0000000000000000000000000000000000000000",
+                        "to": "{userAddress}"
                     },
                     "defaultValue": "unknown contract symbol"
                 },
@@ -50,7 +52,8 @@
                     "key": "contractAddress",
                     "filters": {
                         "event": "Transfer",
-                        "from": "0x0000000000000000000000000000000000000000"
+                        "from": "0x0000000000000000000000000000000000000000",
+                        "to": "{userAddress}"
                     },
                     "defaultValue": "unknown contract address"
                 },
@@ -58,9 +61,20 @@
                     "key": "tokenId",
                     "filters": {
                         "event": "Transfer",
-                        "from": "0x0000000000000000000000000000000000000000"
+                        "from": "0x0000000000000000000000000000000000000000",
+                        "to": "{userAddress}"
                     },
                     "defaultValue": "unknown TokenId"
+                },
+                "tokenIds": {
+                    "key": "tokenId",
+                    "filters": {
+                        "event": "Transfer",
+                        "from": "0x0000000000000000000000000000000000000000",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "unknown TokenId",
+                    "array": true
                 }
             }
         },
