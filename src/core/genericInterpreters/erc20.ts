@@ -33,16 +33,14 @@ function getTokenInfo(interpretation: Interpretation, action: Action): Token {
     switch (action) {
         case 'minted':
         case 'received':
-            console.log(interpretation.tokensReceived[0])
             return interpretation.tokensReceived[0]
         case 'sent':
         default:
-            console.log(interpretation.tokensSent[0])
             return interpretation.tokensSent[0]
     }
 }
 
-function interpretGenericERC721(decodedData: Decoded, interpretation: Interpretation, userAddress: Address) {
+function interpretGenericERC20(decodedData: Decoded, interpretation: Interpretation, userAddress: Address) {
     let exampleDescription = '______TODO______'
     let counterpartyNames: string[] = []
 
@@ -55,20 +53,12 @@ function interpretGenericERC721(decodedData: Decoded, interpretation: Interpreta
 
     console.log(interpretation)
 
-    const { name, symbol, tokenId } = getTokenInfo(interpretation, action)
-    let tokenCount = 0
+    const { name, symbol, amount } = getTokenInfo(interpretation, action)
 
     if (action === 'minted') {
-        tokenCount = interpretation.tokensReceived.length
-
-        if (tokenCount > 1) {
-            exampleDescription = `${interpretation.userName} ${action} ${tokenCount} ${symbol || '???'} from ${name}`
-        } else {
-            exampleDescription = `${interpretation.userName} ${action} ${symbol || '???'}s of #${tokenId} from ${name}`
-        }
+        exampleDescription = `${interpretation.userName} ${action} ${amount} $${symbol || '???'} from ${name}`
     }
     if (action === 'received') {
-        tokenCount = interpretation.tokensReceived.length
         const userName = tokenEvents
             .filter((e) => isReceiveEvent(e, userAddress))
             .map((e) => e.toENS || (e.to as string))[0]
@@ -77,44 +67,33 @@ function interpretGenericERC721(decodedData: Decoded, interpretation: Interpreta
 
         counterpartyNames = tokenEvents
             .filter((e) => isReceiveEvent(e, userAddress))
-            .map((e) => e.fromENS || (e.from as string))
+            .map((e) => e.fromENS || (e.from.slice(0, 6) as string))
 
-        if (tokenCount > 1) {
-            exampleDescription = `${interpretation.userName}  ${action} ${tokenCount} ${
-                symbol || '???'
-            }  #${tokenId} from ${counterpartyNames[0]}`
-        } else {
-            exampleDescription = `${userName}  ${action} ${symbol || '???'} #${tokenId} from ${counterpartyNames[0]}`
-        }
+        exampleDescription = `${interpretation.userName}  ${action} ${amount} $${symbol || '???'} from ${
+            counterpartyNames[0]
+        }`
     }
 
     if (action === 'sent') {
-        tokenCount = interpretation.tokensSent.length
         counterpartyNames = tokenEvents
             .filter((e) => isSendEvent(e, userAddress))
             .map((e) => e.toENS || (e.to as string))
 
-        if (tokenCount > 1) {
-            exampleDescription = `${interpretation.userName}  ${action} ${tokenCount} ${
-                symbol || '???'
-            }  #${tokenId} to ${counterpartyNames[0]}`
-        } else {
-            exampleDescription = `${interpretation.userName}  ${action} ${symbol || '???'}  #${tokenId} to ${
-                counterpartyNames[0]
-            }`
-        }
+        exampleDescription = `${interpretation.userName}  ${action} ${amount} $${symbol || '???'} to ${
+            counterpartyNames[0]
+        }`
     }
 
     interpretation.action = action
     interpretation.exampleDescription = exampleDescription
     interpretation.extra = {}
 
-    if (counterpartyNames.length > 0) {
+    if (counterpartyNames.length > 1) {
         interpretation.extra.counterpartyNames = counterpartyNames
     }
     if (counterpartyNames.length === 1) {
-        interpretation.extra.counterpartyName = counterpartyNames[0]
+        interpretation.counterpartyName = counterpartyNames[0]
     }
 }
 
-export default interpretGenericERC721
+export default interpretGenericERC20

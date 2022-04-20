@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import contractInterpreters from './contractInterpreters'
 import contractDeployInterpreter from './genericInterpreters/ContractDeploy.json'
+import interpretGenericERC20 from './genericInterpreters/erc20'
 import interpretGenericERC721 from './genericInterpreters/erc721'
+import interpretGenericERC1155 from './genericInterpreters/erc1155'
 import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import {
@@ -103,13 +105,24 @@ class Interpreter {
             BigNumber.from(decodedData.gasUsed).mul(BigNumber.from(decodedData.effectiveGasPrice)),
         )
 
+        let userName = this.userAddress.substring(0, 6)
+
+        if (fromAddress === this.userAddress) {
+            userName = decodedData.fromENS || userName
+        }
+        if (toAddress === this.userAddress) {
+            userName = decodedData.toENS || userName
+        }
+
+        // TODO generalize this so it'll get any ENS (ex: _operatorENS)
+
         // not contract-specific
         const interpretation: Interpretation = {
             nativeTokenValueSent: decodedData.nativeTokenValueSent,
             tokensReceived: this.getTokensReiceived(interactions, this.userAddress),
             tokensSent: this.getTokensSent(interactions, this.userAddress),
             nativeTokenSymbol: this.chain.symbol,
-            userName: decodedData.fromENS || fromAddress.substring(0, 6),
+            userName,
             gasPaid: gasUsed,
         }
 
@@ -119,7 +132,13 @@ class Interpreter {
         // if there's no contract-specific mapping, try to use the fallback mapping
         if (!interpretationMapping) {
             if (decodedData.contractType === ContractType.ERC721) {
-                interpretGenericERC721(rawTxData, decodedData, interpretation)
+                interpretGenericERC721(decodedData, interpretation, this.userAddress)
+            }
+            if (decodedData.contractType === ContractType.ERC1155) {
+                interpretGenericERC1155(decodedData, interpretation, this.userAddress)
+            }
+            if (decodedData.contractType === ContractType.ERC20) {
+                interpretGenericERC20(decodedData, interpretation, this.userAddress)
             }
         }
 
@@ -314,14 +333,19 @@ class Interpreter {
         tokens = flattenedInteractions.map((i) => {
             const tokenType = getTokenType(i)
 
-            return {
+            const amount = tokenType === TokenType.ERC1155 ? i._amount : i.value
+            const tokenId = (tokenType === TokenType.ERC1155 ? i._id : i.tokenId)?.toString()
+
+            const token: Token = {
                 type: tokenType,
                 name: i.contractName,
                 symbol: i.contractSymbol,
                 address: i.contractAddress,
-                amount: i.value,
-                tokenId: i.tokenId as string,
             }
+            amount ? (token.amount = amount) : null
+            tokenId ? (token.tokenId = tokenId) : null
+
+            return token
         })
 
         return tokens

@@ -1,4 +1,5 @@
 import { Address } from 'interfaces'
+import { ABI_ItemUnfiltered } from 'interfaces/abi'
 import { fetcher } from 'utils'
 
 export type SourceCodeObject = {
@@ -34,7 +35,7 @@ export default class Etherscan {
         return url.toString()
     }
 
-    async getABI(contractAddress: Address): Promise<string> {
+    async getABI(contractAddress: Address): Promise<ABI_ItemUnfiltered[]> {
         const params = {
             module: 'contract',
             action: 'getabi',
@@ -44,9 +45,10 @@ export default class Etherscan {
 
         if (response.status !== '1') {
             throw new Error(`Etherscan API error: ${response.result}`)
+            return []
         }
 
-        return response.result
+        return JSON.parse(response.result)
     }
 
     async getSourceCode(contractAddress: Address): Promise<SourceCodeObject> {

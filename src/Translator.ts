@@ -51,43 +51,49 @@ class Translator {
         this.etherscan = new Etherscan(this.config.ethersApiKeys.etherscan)
 
         this.rawDataFetcher = new RawDataFetcher(this.provider, this.covalent)
-        this.augmenter = new Augmenter(this.provider, this.covalent)
+        this.augmenter = new Augmenter(this.provider, this.covalent, this.etherscan)
     }
 
     public async translateFromHash(txHash: string, userAddress = null as Address | null): Promise<ActivityData> {
-        /*
+        try {
+            /*
             step 1 (parallelize)
             get tx from ethers
             get txReceipt from ethers
-        */
-        const rawTxData = await this.rawDataFetcher.getTxData(txHash)
+            */
+            const rawTxData = await this.rawDataFetcher.getTxData(txHash)
+            // console.log('rawTxData', rawTxData)
 
-        /*
-            step 2 (parallelize)
-            decode method name from tx.data via contract JSON, ABI, or 4byte
-            augment contractName from contract JSON, Covalent, or TinTin
-            augment param data of logs from ABI (etherscan) or Covalent)
-            augment addresses from Ethers (need to find all address-shaped params)
-        */
+            /*
+           step 2 (parallelize)
+           decode method name from tx.data via contract JSON, ABI, or 4byte
+           augment contractName from contract JSON, Covalent, or TinTin
+           augment param data of logs from ABI (etherscan) or Covalent)
+           augment addresses from Ethers (need to find all address-shaped params)
+           */
 
-        const decodedDataArr = await this.augmenter.decode([rawTxData])
+            const decodedDataArr = await this.augmenter.decode([rawTxData])
 
-        /*
-            step 3
-            interpret the decoded data
-        */
-        // const userAddress =
-        const addressForContext = userAddress || rawTxData.txResponse.from
-        const interpreter = new Interpreter(addressForContext, this.config.chain)
+            /*
+          step 3
+          interpret the decoded data
+          */
+            // const userAddress =
+            const addressForContext = userAddress || rawTxData.txResponse.from
+            const interpreter = new Interpreter(addressForContext, this.config.chain)
 
-        const interpretedData = interpreter.interpretSingleTx(rawTxData, decodedDataArr[0])
+            const interpretedData = interpreter.interpretSingleTx(rawTxData, decodedDataArr[0])
 
-        // return rawCovalentData
+            // return rawCovalentData
 
-        const allData = { interpretedData, decodedData: decodedDataArr[0], rawTxData }
-        cleanseDataInPlace(allData)
+            const allData = { interpretedData, decodedData: decodedDataArr[0], rawTxData }
+            cleanseDataInPlace(allData)
 
-        return allData
+            return allData
+        } catch (e) {
+            console.log('err', e)
+            throw e
+        }
     }
 
     public async translateFromAddress(

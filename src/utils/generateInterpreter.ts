@@ -1,6 +1,7 @@
 import Etherscan, { SourceCodeObject } from './clients/Etherscan'
 import { keccak256, toUtf8Bytes } from 'ethers/lib/utils'
 import { Address } from 'interfaces'
+import { ABI_Item, ABI_ItemUnfiltered, ABIStringMap } from 'interfaces/abi'
 import { InterpreterMap } from 'interfaces/contractInterpreter'
 
 export default class InterepterTemplateGenerator {
@@ -90,65 +91,4 @@ const getSignatures = (abi: ABI_Item[]): ABIStringMap => {
         }
     }
     return map
-}
-
-type ABIStringMap = {
-    constructor: string
-    event: string[]
-    writeFunction: string[]
-    readFunction: string[]
-}
-
-type ABI_ItemUnfiltered = ABI_Function | ABI_Event | ABI_Constructor | ABI_Fallbacks | ABI_Error
-type ABI_Item = ABI_Function | ABI_Event
-
-type StateMutability = 'pure' | 'view' | 'nonpayable' | 'payable'
-
-type ABI_Constructor = {
-    type: 'constructor'
-    inputs: ABI_FunctionInput[]
-    stateMutability: StateMutability
-}
-
-type ABI_Function = {
-    name: string
-    inputs: ABI_FunctionInput[]
-    outputs: ABI_FunctionOutput[]
-    type: 'function'
-    stateMutability: StateMutability
-}
-
-type ABI_Event = {
-    type: 'event'
-    name: string
-    inputs: ABI_EventInput[]
-    anonymous: boolean
-}
-
-type ABI_Fallbacks = {
-    type: 'receive' | 'fallback'
-    stateMutability: StateMutability
-}
-
-type ABI_Error = {
-    type: 'error'
-    name: string
-    inputs: ABI_FunctionInput[]
-}
-
-type ABI_FunctionOutput = {
-    name: string
-    internalType: string
-    type: string
-}
-type ABI_FunctionInput = {
-    name: string
-    internalType: string
-    type: string
-}
-type ABI_EventInput = {
-    name: string
-    internalType: string
-    type: string
-    indexed: boolean
 }

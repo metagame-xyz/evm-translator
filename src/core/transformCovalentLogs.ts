@@ -39,6 +39,9 @@ function covalentERC721Shim(events: Record<string, any>, event: CovalentLogEvent
 export function transformCovalentEvents(tx: CovalentTxData): Array<Interaction> {
     // tx.log_events.forEach((event) => {
     //     console.log('decoded', event)
+    //     event.decoded.params.forEach((param) => {
+    //         console.log('param', param)
+    //     })
     // })
 
     const interactions = collect(tx.log_events)

@@ -79,7 +79,7 @@ export type Interaction = {
     events: Array<InteractionEvent>
 }
 
-export type InteractionEvent = { event: string; logIndex: number; value?: string } & Record<string, unknown>
+export type InteractionEvent = { event: string; logIndex: number; value?: string } & Record<string, string>
 
 // Generally objective additional info (data hardcoded by humans)
 export type Interpretation = {
@@ -92,6 +92,7 @@ export type Interpretation = {
     nativeTokenValueReceived?: string
     nativeTokenSymbol?: string
     userName: string
+    counterpartyName?: string // the opposite side of the tx, opposite of userName
     extra?: Record<string, unknown>
     reverted?: boolean
     gasPaid?: string

@@ -1,17 +1,19 @@
-import checkInterface from './genericInterpreters/checkInterface'
 import { transformCovalentEvents } from './transformCovalentLogs'
 import { BaseProvider, Formatter } from '@ethersproject/providers'
 import reverseRecords from 'ABIs/ReverseRecords.json'
-import { normalize } from 'eth-ens-namehash'
+// import { normalize } from 'eth-ens-namehash'
 import { Contract } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
 import { Address, ContractType, Decoded, InProgressActivity, RawTxData, TX_TYPE } from 'interfaces'
 import { CovalentTxData } from 'interfaces/covalent'
 import traverse from 'traverse'
 import { isAddress } from 'utils'
+import checkInterface from 'utils/checkInterface'
 import Covalent from 'utils/clients/Covalent'
+import Etherscan from 'utils/clients/Etherscan'
 import fourByteDirectory from 'utils/clients/FourByteDirectory'
 import { REVERSE_RECORDS_CONTRACT_ADDRESS } from 'utils/constants'
+import getTypeFromABI from 'utils/getTypeFromABI'
 
 export type DecoderConfig = {
     covalentData?: CovalentTxData
@@ -23,6 +25,7 @@ export type DecoderConfig = {
 export class Augmenter {
     provider: BaseProvider
     covalent: Covalent
+    etherscan: Etherscan
     formatter = new Formatter()
 
     inProgressActivity!: InProgressActivity
@@ -35,9 +38,10 @@ export class Augmenter {
     fnSigCache: Record<string, string> = {}
     ensCache: Record<Address, string> = {}
 
-    constructor(provder: BaseProvider, covalent: Covalent) {
+    constructor(provder: BaseProvider, covalent: Covalent, etherscan: Etherscan) {
         this.provider = provder
         this.covalent = covalent
+        this.etherscan = etherscan
     }
 
     async decode(rawTxDataArr: RawTxData[], covalentTxDataArr: CovalentTxData[] = []): Promise<Decoded[]> {
@@ -140,16 +144,12 @@ export class Augmenter {
         const ReverseRecords = new Contract(REVERSE_RECORDS_CONTRACT_ADDRESS, reverseRecords.abi, this.provider)
 
         async function getNames(addresses: string[]): Promise<string[]> {
-            let allDirtyNames = (await ReverseRecords.getNames(addresses)) as string[]
-            // remove blank names
-            allDirtyNames = allDirtyNames.filter((name) => name != '')
+            const allDirtyNames = (await ReverseRecords.getNames(addresses)) as string[]
             // remove illegal chars
             const allNames = allDirtyNames.map((name) => {
                 return name.replace(/([^\w\s+*:;,.()/\\]+)/gi, '¿')
             })
-            // "normalize", whatever that means. ENS told me too. prob not needed after the regex
-            const validNames = allNames.filter((n: string) => normalize(n) === n)
-            return validNames
+            return allNames
         }
 
         const allAddresses: string[] = []
@@ -190,6 +190,10 @@ export class Augmenter {
 
         // filter out addresses:names with no names (most of them lol)
         addressToNameMap = Object.fromEntries(Object.entries(addressToNameMap).filter(([, v]) => v != ''))
+
+        // "normalize", whatever that means. ENS told me too. prob not needed after the regex
+        // const validNames = allNames.filter((n: string) => normalize(n) === n)
+
         const decodedArrWithENS = traverse(this.decodedArr).map((thing) => {
             if (!!thing && typeof thing === 'object' && !Array.isArray(thing)) {
                 for (const [key, val] of Object.entries(thing)) {
@@ -242,7 +246,11 @@ export class Augmenter {
     }
 
     private async getContractType(contractAddress: Address): Promise<ContractType> {
-        const contractType = await checkInterface(contractAddress, this.provider)
+        let contractType = await checkInterface(contractAddress, this.provider)
+
+        if (contractType === ContractType.OTHER) {
+            contractType = await getTypeFromABI(contractAddress, this.etherscan)
+        }
         return contractType
     }
     private async getContractTypes() {
