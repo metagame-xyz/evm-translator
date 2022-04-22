@@ -52,6 +52,7 @@ export enum ContractType {
 
 //  100% objective additional info (data taken from a blockchain)
 export type Decoded = {
+    txHash: string
     txType?: TX_TYPE
     contractType: ContractType
     contractMethod?: string | null
@@ -93,7 +94,7 @@ export type Interpretation = {
     nativeTokenSymbol?: string
     userName: string
     counterpartyName?: string // the opposite side of the tx, opposite of userName
-    extra?: Record<string, unknown>
+    extra: Record<string, any>
     reverted?: boolean
     gasPaid?: string
 }
@@ -124,6 +125,7 @@ export type Action =
     | 'claimed'
     | 'contributed'
     | 'redeemed'
+    | 'approved'
     | '______TODO______'
 
 export enum TokenType {

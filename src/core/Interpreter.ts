@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import contractInterpreters from './contractInterpreters'
 import contractDeployInterpreter from './genericInterpreters/ContractDeploy.json'
-import interpretGenericERC20 from './genericInterpreters/erc20'
-import interpretGenericERC721 from './genericInterpreters/erc721'
-import interpretGenericERC1155 from './genericInterpreters/erc1155'
+import interpretGenericToken from './genericInterpreters/token'
+import interpretGenericTransfer from './genericInterpreters/transfer'
 import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import {
@@ -124,43 +123,50 @@ class Interpreter {
             nativeTokenSymbol: this.chain.symbol,
             userName,
             gasPaid: gasUsed,
+            extra: {},
+        }
+
+        if (decodedData.reverted) {
+            interpretation.reverted = true
+            interpretation.exampleDescription = 'transaction reverted'
+            return interpretation
+            // TODO the description and extras should be different for reverted transactions
         }
 
         const interpretationMapping = this.contractSpecificInterpreters[toAddress]
         const methodSpecificMapping = interpretationMapping?.writeFunctions[method]
 
         // if there's no contract-specific mapping, try to use the fallback mapping
-        if (!interpretationMapping) {
-            if (decodedData.contractType === ContractType.ERC721) {
-                interpretGenericERC721(decodedData, interpretation, this.userAddress)
-            }
-            if (decodedData.contractType === ContractType.ERC1155) {
-                interpretGenericERC1155(decodedData, interpretation, this.userAddress)
-            }
-            if (decodedData.contractType === ContractType.ERC20) {
-                interpretGenericERC20(decodedData, interpretation, this.userAddress)
-            }
-        }
 
         if (decodedData.txType === TX_TYPE.CONTRACT_DEPLOY) {
             interpretation.action = 'deployed'
             interpretation.exampleDescription = contractDeployInterpreter.exampleDescription
 
-            if (decodedData.reverted) {
-                interpretation.reverted = true
-                // TODO the description and extras should be different for reverted transactions
+            interpretation.extra = {
+                ...interpretation.extra,
+                ...this.useKeywordMap(interactions, contractDeployInterpreter.keywords, '0x_DOESNT_EXIST'),
             }
-
-            interpretation.extra = this.useKeywordMap(
-                interactions,
-                contractDeployInterpreter.keywords,
-                '0x_DOESNT_EXIST',
-            )
 
             interpretation.exampleDescription = fillDescriptionTemplate(
                 contractDeployInterpreter.exampleDescriptionTemplate,
                 interpretation,
             )
+        } else if (decodedData.txType === TX_TYPE.TRANSFER) {
+            interpretGenericTransfer(decodedData, interpretation, this.userAddress)
+        } else if (!interpretationMapping) {
+            if (decodedData.contractType !== ContractType.OTHER) {
+                interpretGenericToken(decodedData, interpretation, this.userAddress)
+            }
+
+            // if (decodedData.contractType === ContractType.ERC721) {
+            //     interpretGenericERC721(decodedData, interpretation, this.userAddress)
+            // }
+            // if (decodedData.contractType === ContractType.ERC1155) {
+            //     interpretGenericERC1155(decodedData, interpretation, this.userAddress)
+            // }
+            // if (decodedData.contractType === ContractType.ERC20) {
+            //     interpretGenericERC20(decodedData, interpretation, this.userAddress)
+            // }
 
             // contract-specific interpretation
         } else if (interpretationMapping && methodSpecificMapping) {

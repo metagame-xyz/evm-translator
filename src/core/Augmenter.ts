@@ -4,7 +4,7 @@ import reverseRecords from 'ABIs/ReverseRecords.json'
 // import { normalize } from 'eth-ens-namehash'
 import { Contract } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
-import { Address, ContractType, Decoded, InProgressActivity, RawTxData, TX_TYPE } from 'interfaces'
+import { Address, ContractType, Decoded, InProgressActivity, RawTxData, TX_TYPE, TxHash } from 'interfaces'
 import { CovalentTxData } from 'interfaces/covalent'
 import traverse from 'traverse'
 import { isAddress } from 'utils'
@@ -85,6 +85,7 @@ export class Augmenter {
                 }
 
                 const transformedData = {
+                    txHash: txResponse.hash,
                     txType: txType,
                     nativeTokenValueSent: value == '0' ? '0' : formatUnits(value),
                     txIndex: txReceipt.transactionIndex,

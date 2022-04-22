@@ -6,6 +6,7 @@ import {
 import { BaseProvider, Formatter } from '@ethersproject/providers'
 import { Address, RawTxData, TxReceipt, TxResponse } from 'interfaces'
 import { CovalentTxData } from 'interfaces/covalent'
+import { validateAddress } from 'utils'
 import Covalent from 'utils/clients/Covalent'
 
 export default class RawDataFetcher {
@@ -90,14 +91,6 @@ export default class RawDataFetcher {
 //     }
 //     return txHash as TxHash
 // }
-
-const validateAddress = (address: string): Address => {
-    const validAddress = new RegExp(/^0x[a-fA-F0-9]{40}$/)
-    if (!validAddress.test(address)) {
-        throw new Error(`Invalid address: ${address}`)
-    }
-    return address as Address
-}
 
 // lowercase addresses b/c addresses have uppercase for the checksum, but aren't when they're in a topic
 function validateAndFormatTxData(txData: unvalidatedTransactionResponse): TxResponse

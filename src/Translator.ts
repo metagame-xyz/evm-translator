@@ -43,8 +43,8 @@ class Translator {
         if (this.config.chain === chains.polygon) {
             this.provider = new AlchemyProvider(chainId, this.config.ethersApiKeys.alchemy)
         } else {
-            // this.provider = new AlchemyProvider(chainId, this.config.ethersApiKeys.alchemy)
-            this.provider = getDefaultProvider(1, this.config.ethersApiKeys)
+            this.provider = new AlchemyProvider(chainId, this.config.ethersApiKeys.alchemy)
+            // this.provider = getDefaultProvider(1, this.config.ethersApiKeys)
         }
 
         this.covalent = new Covalent(this.config.covalentApiKey, chainId)

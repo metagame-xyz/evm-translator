@@ -1,6 +1,6 @@
 import collect from 'collect.js'
 import { BigNumber } from 'ethers'
-import { Chain, Chains, Interpretation } from 'interfaces'
+import { Address, Chain, Chains, Interpretation } from 'interfaces'
 import traverse from 'traverse'
 
 const ethereum: Chain = {
@@ -119,4 +119,25 @@ export function fillDescriptionTemplate(template: string, interpretation: Interp
         }
     }
     return template
+}
+
+export function ensure<T>(argument: T | undefined | null, message = 'This value was promised to be there.'): T {
+    if (argument === undefined || argument === null) {
+        throw new TypeError(message)
+    }
+
+    return argument
+}
+
+const validAddress = new RegExp(/^0x[a-fA-F0-9]{40}$/)
+
+export const validateAddress = (address: string): Address => {
+    if (!validAddress.test(address)) {
+        throw new Error(`Invalid address: ${address}`)
+    }
+    return address as Address
+}
+
+export const shortenName = (username: string): string => {
+    return validAddress.test(username) ? username.slice(0, 6) : username
 }
