@@ -19,7 +19,7 @@ import {
     TX_TYPE,
 } from 'interfaces'
 import { InterpreterMap } from 'interfaces/contractInterpreter'
-import { fillDescriptionTemplate } from 'utils'
+import { fillDescriptionTemplate, shortenNamesInString } from 'utils'
 
 function deepCopy(obj: any) {
     return JSON.parse(JSON.stringify(obj))
@@ -124,6 +124,7 @@ class Interpreter {
             userName,
             gasPaid: gasUsed,
             extra: {},
+            exampleDescription: 'no example description defined',
         }
 
         if (decodedData.reverted) {
@@ -188,6 +189,7 @@ class Interpreter {
             )
         }
 
+        interpretation.exampleDescription = shortenNamesInString(interpretation.exampleDescription)
         return interpretation
     }
 

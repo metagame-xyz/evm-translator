@@ -13,6 +13,7 @@ export type Chain = {
     symbol: string
     testnet: boolean
     blockExplorerUrl: string
+    wethAdress: Address
 }
 
 export type Chains = Record<string, Chain>
@@ -47,6 +48,7 @@ export enum ContractType {
     ERC20 = 'ERC20',
     ERC721 = 'ERC721',
     ERC1155 = 'ERC1155',
+    WETH = 'WETH',
     OTHER = 'OTHER',
 }
 
@@ -86,7 +88,7 @@ export type InteractionEvent = { event: string; logIndex: number; value?: string
 export type Interpretation = {
     contractName?: string | null
     action?: Action
-    exampleDescription?: string
+    exampleDescription: string
     tokensSent: Token[] // usually just one token
     tokensReceived: Token[] // usually just one token
     nativeTokenValueSent?: string
@@ -126,6 +128,8 @@ export type Action =
     | 'contributed'
     | 'redeemed'
     | 'approved'
+    | 'revoked'
+    | 'got airdropped'
     | '______TODO______'
 
 export enum TokenType {

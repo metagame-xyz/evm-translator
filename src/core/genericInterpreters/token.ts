@@ -28,7 +28,7 @@ type TokenVars = {
     approvedENS: string
 }
 
-type EIP = Exclude<TokenType, 'LPToken' | 'unknown'>
+type EIP = Exclude<ContractType, 'OTHER'>
 
 const vars: Record<EIP, TokenVars> = {
     ERC1155: {
@@ -76,10 +76,38 @@ const vars: Record<EIP, TokenVars> = {
         approved: '_approved',
         approvedENS: '_approvedENS',
     },
+    WETH: {
+        type: TokenType.ERC20,
+        transfer: 'Transfer',
+        approval: 'Approval',
+        to: 'to',
+        toENS: 'toENS',
+        from: 'from',
+        fromENS: 'fromENS',
+        owner: '_owner',
+        ownerENS: '_ownerENS',
+        operator: '_operator',
+        operatorENS: '_operatorENS',
+        approved: '_approved',
+        approvedENS: '_approvedENS',
+    },
 }
 
-function isMintEvent(t: TokenVars, event: any, userAddress: Address) {
-    return event.event === t.transfer && event[t.from] === blackholeAddress && event[t.to] === userAddress
+function isMintEvent(t: TokenVars, event: any, userAddress: Address, fromAddress: Address) {
+    return (
+        event.event === t.transfer &&
+        event[t.from] === blackholeAddress &&
+        event[t.to] === userAddress &&
+        userAddress === fromAddress // user needs to have initiated the mint
+    )
+}
+function isAirdropEvent(t: TokenVars, event: any, userAddress: Address, fromAddress: Address) {
+    return (
+        event.event === t.transfer &&
+        event[t.from] === blackholeAddress &&
+        event[t.to] === userAddress &&
+        userAddress !== fromAddress // user needs to have initiated the mint
+    )
 }
 
 function isSendEvent(t: TokenVars, event: any, userAddress: Address) {
@@ -94,14 +122,17 @@ function isApprovalEvent(t: TokenVars, event: any, userAddress: Address) {
     return event.event === t.approval && event[t.owner] === userAddress && event[t.approved] == true
 }
 
-function getAction(t: TokenVars, events: InteractionEvent[], userAddress: Address): Action {
-    const isMint = events.find((e) => isMintEvent(t, e, userAddress))
+function getAction(t: TokenVars, events: InteractionEvent[], userAddress: Address, fromAddress: Address): Action {
+    const isMint = events.find((e) => isMintEvent(t, e, userAddress, fromAddress))
+    const isAirdrop = events.find((e) => isAirdropEvent(t, e, userAddress, fromAddress))
     const isSend = events.find((e) => isSendEvent(t, e, userAddress))
     const isReceive = events.find((e) => isReceiveEvent(t, e, userAddress))
     const isApproved = events.find((e) => isApprovalEvent(t, e, userAddress))
 
     if (isMint) {
         return 'minted'
+    } else if (isAirdrop) {
+        return 'got airdropped'
     } else if (isSend) {
         return 'sent'
     } else if (isReceive) {
@@ -116,6 +147,7 @@ function getAction(t: TokenVars, events: InteractionEvent[], userAddress: Addres
 function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Interpretation): Token {
     switch (interpretation.action) {
         case 'minted':
+        case 'got airdropped':
         case 'received':
             return interpretation.tokensReceived[0]
         case 'sent':
@@ -163,6 +195,7 @@ function addCounterpartyNames(
     interpretation: Interpretation,
     tokenEvents: InteractionEvent[],
     userAddress: Address,
+    fromAddress: Address,
 ) {
     let counterpartyNames: string[] = []
 
@@ -181,6 +214,9 @@ function addCounterpartyNames(
             counterpartyNames = tokenEvents
                 .filter((e) => isApprovalEvent(t, e, userAddress))
                 .map((e) => e[t.operatorENS] || (e[t.operator] as string))
+            break
+        case 'got airdropped':
+            counterpartyNames = [fromAddress]
             break
         default:
             break
@@ -211,12 +247,13 @@ function addExampleDescription(interpretation: Interpretation, token: Token) {
 
     switch (action) {
         case 'minted': {
-            const tokenCount = i.tokensReceived.filter((t) => t.address === token.address).length
+            tokenCount = i.tokensReceived.filter((t) => t.address === token.address).length
             counterpartyName = ' ' + tokenName
             direction = ' from'
             break
         }
         case 'received':
+        case 'got airdropped':
             tokenCount = i.tokensReceived.length
             direction = ' from'
             break
@@ -238,26 +275,28 @@ function addExampleDescription(interpretation: Interpretation, token: Token) {
 }
 
 function interpretGenericToken(decodedData: Decoded, interpretation: Interpretation, userAddress: Address) {
-    if (decodedData.contractType === ContractType.OTHER) {
+    const { fromAddress, toAddress, interactions, contractType } = decodedData
+
+    if (contractType === ContractType.OTHER) {
         throw new Error('Token type not supported')
     }
-    const t = vars[decodedData.contractType]
+    const t = vars[contractType]
 
-    console.log('generic erc721 hash: ', decodedData.txHash)
-    console.log(decodedData)
-    console.log(decodedData.interactions.map((i) => console.log(i.events)))
-    console.log(interpretation)
+    // console.log('generic erc721 hash: ', decodedData.txHash)
+    // console.log(decodedData)
+    // console.log(decodedData.interactions.map((i) => console.log(i.events)))
+    // console.log(interpretation)
     const tokenContractInteraction = ensure(
-        decodedData.interactions.find((interaction) => interaction.contractAddress === decodedData.toAddress),
+        interactions.find((interaction) => interaction.contractAddress === toAddress),
     )
     const tokenEvents = tokenContractInteraction?.events || []
 
-    interpretation.action = getAction(t, tokenEvents, userAddress)
+    interpretation.action = getAction(t, tokenEvents, userAddress, fromAddress)
 
     const token = getTokenInfo(tokenContractInteraction, interpretation)
 
     addUserName(t, interpretation, tokenEvents, userAddress)
-    addCounterpartyNames(t, interpretation, tokenEvents, userAddress)
+    addCounterpartyNames(t, interpretation, tokenEvents, userAddress, fromAddress)
     addExampleDescription(interpretation, token)
 }
 

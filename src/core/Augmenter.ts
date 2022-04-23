@@ -4,10 +4,10 @@ import reverseRecords from 'ABIs/ReverseRecords.json'
 // import { normalize } from 'eth-ens-namehash'
 import { Contract } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
-import { Address, ContractType, Decoded, InProgressActivity, RawTxData, TX_TYPE, TxHash } from 'interfaces'
+import { Address, ContractType, Decoded, InProgressActivity, RawTxData, TX_TYPE } from 'interfaces'
 import { CovalentTxData } from 'interfaces/covalent'
 import traverse from 'traverse'
-import { isAddress } from 'utils'
+import { getChainById, isAddress } from 'utils'
 import checkInterface from 'utils/checkInterface'
 import Covalent from 'utils/clients/Covalent'
 import Etherscan from 'utils/clients/Etherscan'
@@ -247,6 +247,12 @@ export class Augmenter {
     }
 
     private async getContractType(contractAddress: Address): Promise<ContractType> {
+        const chain = getChainById(this.provider.network.chainId)
+
+        if ((contractAddress == chain.wethAdress)) {
+            return ContractType.WETH
+        }
+        
         let contractType = await checkInterface(contractAddress, this.provider)
 
         if (contractType === ContractType.OTHER) {

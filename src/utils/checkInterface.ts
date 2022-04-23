@@ -6,7 +6,6 @@ import { ERC20InterfaceId, ERC721InterfaceId, ERC1155InterfaceId } from 'utils/c
 async function checkInterface(contractAddress: Address, provider: BaseProvider): Promise<ContractType> {
     try {
         const contract = new Contract(contractAddress, supportsInterfaceABI, provider)
-
         if (await contract.supportsInterface(ERC721InterfaceId)) {
             return ContractType.ERC721
         } else if (await contract.supportsInterface(ERC1155InterfaceId)) {

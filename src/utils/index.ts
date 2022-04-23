@@ -10,6 +10,7 @@ const ethereum: Chain = {
     symbol: 'ETH',
     testnet: false,
     blockExplorerUrl: 'https://etherscan.io/',
+    wethAdress: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
 }
 
 const polygon: Chain = {
@@ -19,11 +20,20 @@ const polygon: Chain = {
     symbol: 'MATIC',
     testnet: false,
     blockExplorerUrl: 'https://polygonscan.com/',
+    wethAdress: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
 }
 
 export const chains: Chains = {
     ethereum,
     polygon,
+}
+
+export const getChainById = (id: number): Chain => {
+    const chain = collect(chains).first((chain) => chain.id === id)
+    if (!chain) {
+        throw new Error(`Chain with id ${id} not found`)
+    }
+    return chain
 }
 
 export const isAddress = (address: string): boolean => {
@@ -140,4 +150,10 @@ export const validateAddress = (address: string): Address => {
 
 export const shortenName = (username: string): string => {
     return validAddress.test(username) ? username.slice(0, 6) : username
+}
+
+export const shortenNamesInString = (string: string): string => {
+    return string.replace(/0x[a-fA-F0-9]{40}/g, (username) => {
+        return shortenName(username)
+    })
 }
