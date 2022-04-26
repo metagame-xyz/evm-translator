@@ -23,8 +23,8 @@ type TokenVars = {
     fromENS: '_fromENS' | 'fromENS'
     owner: string
     ownerENS: string
-    operator: string
-    operatorENS: string
+    operator: '_operator'
+    operatorENS: '_operatorENS'
     approved: string
     approvedENS: string
 }
@@ -150,16 +150,18 @@ function getAction(t: TokenVars, events: InteractionEvent[], userAddress: Addres
 }
 
 function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Interpretation): Token {
-    switch (interpretation.action) {
+    const { action, tokensReceived, tokensSent } = interpretation
+
+    switch (action) {
         case 'minted':
         case 'got airdropped':
         case 'received':
-            return interpretation.tokensReceived[0]
+            return tokensReceived[0]
         case 'sent':
-            return interpretation.tokensSent[0]
+            return tokensSent[0]
         case 'approved': {
             return {
-                type: TokenType.ERC721,
+                type: TokenType.ERC721, // TODO this is a hack for now, we should add tokenType to each interaction
                 name: tokenContractInteraction?.contractName,
                 symbol: tokenContractInteraction?.contractSymbol,
                 address: tokenContractInteraction?.contractAddress,
@@ -213,12 +215,12 @@ function addCounterpartyNames(
         case 'sent':
             counterpartyNames = tokenEvents
                 .filter((e) => isSendEvent(t, e, userAddress))
-                .map((e) => e[t.toENS] || (e[t.to] as string)) as string[]
+                .map((e) => e[t.toENS] || (e[t.to] as string))
             break
         case 'approved':
             counterpartyNames = tokenEvents
                 .filter((e) => isApprovalEvent(t, e, userAddress))
-                .map((e) => e[t.operatorENS] || (e[t.operator] as string)) as string[]
+                .map((e) => e[t.operatorENS] || (e[t.operator] as string))
             break
         case 'got airdropped':
             counterpartyNames = [fromAddress]
@@ -237,12 +239,17 @@ function addCounterpartyNames(
 }
 
 function addExampleDescription(interpretation: Interpretation, token: Token) {
+    const { tokensReceived, tokensSent } = interpretation
     let exampleDescription = ''
     const i = interpretation
     const { userName, action } = i
     const { name: tokenName } = token
+
+    const receivedSingle = tokensReceived.length === 1
+    const sentSingle = tokensSent.length === 1
+
     const symbol = token.symbol ? ' ' + token.symbol : ' ???'
-    const tokenId = token.tokenId ? ' #' + token.tokenId : ''
+    let tokenId = token.tokenId ? ' #' + token.tokenId : ''
     const amount = token.amount ? ' ' + token.amount : ''
 
     let tokenCount: any = 0
@@ -252,6 +259,7 @@ function addExampleDescription(interpretation: Interpretation, token: Token) {
 
     switch (action) {
         case 'minted': {
+            tokenId = receivedSingle ? tokenId : ''
             tokenCount = i.tokensReceived.filter((t) => t.address === token.address).length
             counterpartyName = ' ' + tokenName
             direction = ' from'
@@ -259,10 +267,12 @@ function addExampleDescription(interpretation: Interpretation, token: Token) {
         }
         case 'received':
         case 'got airdropped':
+            tokenId = receivedSingle ? tokenId : ''
             tokenCount = i.tokensReceived.length
             direction = ' from'
             break
         case 'sent':
+            tokenId = sentSingle ? tokenId : ''
             tokenCount = i.tokensSent.length
             direction = ' to'
             break

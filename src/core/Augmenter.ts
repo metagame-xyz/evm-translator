@@ -4,7 +4,7 @@ import reverseRecords from 'ABIs/ReverseRecords.json'
 // import { normalize } from 'eth-ens-namehash'
 import { Contract } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
-import { Address, ContractType, Decoded, InProgressActivity, RawTxData, TX_TYPE } from 'interfaces'
+import { Address, Chain, ContractType, Decoded, InProgressActivity, RawTxData, TX_TYPE } from 'interfaces'
 import { CovalentTxData } from 'interfaces/covalent'
 import traverse from 'traverse'
 import { getChainById, isAddress } from 'utils'
@@ -27,6 +27,7 @@ export class Augmenter {
     covalent: Covalent
     etherscan: Etherscan
     formatter = new Formatter()
+    chain: Chain
 
     inProgressActivity!: InProgressActivity
     rawTxDataArr!: RawTxData[]
@@ -42,6 +43,7 @@ export class Augmenter {
         this.provider = provider
         this.covalent = covalent
         this.etherscan = etherscan
+        this.chain = getChainById(this.provider.network.chainId)
     }
 
     async decode(rawTxDataArr: RawTxData[], covalentTxDataArr: CovalentTxData[] = []): Promise<Decoded[]> {
@@ -88,6 +90,7 @@ export class Augmenter {
                     txHash: txResponse.hash,
                     txType: txType,
                     nativeTokenValueSent: value == '0' ? '0' : formatUnits(value),
+                    nativeTokenSymbol: this.chain.symbol,
                     txIndex: txReceipt.transactionIndex,
                     reverted: txReceipt.status == 0,
                     gasUsed: txReceipt.gasUsed.toString(),
@@ -247,9 +250,7 @@ export class Augmenter {
     }
 
     private async getContractType(contractAddress: Address): Promise<ContractType> {
-        const chain = getChainById(this.provider.network.chainId)
-
-        if (contractAddress == chain.wethAddress) {
+        if (contractAddress == this.chain.wethAddress) {
             return ContractType.WETH
         }
 

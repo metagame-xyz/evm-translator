@@ -1,14 +1,34 @@
-import { Action, Address, Decoded, Interpretation } from 'interfaces'
+import { Action, Address, Decoded, InteractionEvent, Interpretation } from 'interfaces'
+import { ensure } from 'utils'
+
+function isSafeReceivedEvent(event: InteractionEvent, userAddress: Address) {
+    return event.event === 'SafeReceived' && event.sender === userAddress
+}
 
 function interpretGenericTransfer(decodedData: Decoded, interpretation: Interpretation, userAddress: Address) {
-    const action: Action = decodedData.fromAddress === userAddress ? 'sent' : 'received'
+    const { fromAddress, toAddress, interactions } = decodedData
+    const sending = fromAddress === userAddress
 
-    const counterpartyName =
-        decodedData.fromAddress === userAddress
-            ? decodedData.toENS || decodedData.toAddress?.slice(0, 6)
-            : decodedData.fromENS || decodedData.fromAddress.slice(0, 6)
+    const action: Action = sending ? 'sent' : 'received'
+    const direction = sending ? 'to' : 'from'
 
-    const exampleDescription = `${interpretation.userName} ${action} ${counterpartyName} ${decodedData.nativeTokenValueSent} ${decodedData.nativeTokenSymbol}`
+    const tokenContractInteraction = ensure(
+        interactions.find((interaction) => interaction.contractAddress === toAddress),
+    )
+    const tokenEvents = tokenContractInteraction?.events || []
+
+    const isSafeReceived = tokenEvents.find((e) => isSafeReceivedEvent(e, userAddress))
+
+    let counterpartyName = null
+    if (isSafeReceived && sending) {
+        counterpartyName = `Gnosis Safe ${decodedData.toENS || toAddress?.slice(0, 6)}`
+    } else if (sending) {
+        counterpartyName = decodedData.toENS || toAddress?.slice(0, 6)
+    } else {
+        counterpartyName = decodedData.fromENS || fromAddress.slice(0, 6)
+    }
+
+    const exampleDescription = `${interpretation.userName} ${action} ${decodedData.nativeTokenValueSent} ${decodedData.nativeTokenSymbol} ${direction} ${counterpartyName}`
 
     interpretation.action = action
     interpretation.exampleDescription = exampleDescription
