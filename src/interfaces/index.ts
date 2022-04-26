@@ -13,7 +13,7 @@ export type Chain = {
     symbol: string
     testnet: boolean
     blockExplorerUrl: string
-    wethAdress: Address
+    wethAddress: Address
 }
 
 export type Chains = Record<string, Chain>
@@ -82,7 +82,32 @@ export type Interaction = {
     events: Array<InteractionEvent>
 }
 
-export type InteractionEvent = { event: string; logIndex: number; value?: string } & Record<string, string>
+export type InteractionEvent = {
+    event: string
+    logIndex: number
+    value?: string
+    from?: string
+    _from?: string
+    fromENS?: string
+    _fromENS?: string
+    to?: string
+    _to?: string
+    toENS?: string
+    _toENS?: string
+    _owner?: string
+    _ownerENS?: string
+    _operator?: string
+    _operatorENS?: string
+    _approved?: string
+    _approvedENS?: string
+    _value?: string
+    tokenId?: string
+    _tokenId?: string
+    _amount?: string
+    _amounts?: string[]
+    _ids?: string[]
+    _id?: string
+} & Record<string, string | string[]>
 
 // Generally objective additional info (data hardcoded by humans)
 export type Interpretation = {

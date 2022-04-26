@@ -1,3 +1,33 @@
+import { Address } from 'eth-ens-namehash'
+import { Action, Decoded, Interpretation } from 'interfaces'
+
+function isAirdrop(interpretation: Interpretation, userAddress: Address, fromAddress: Address) {
+    if (interpretation.tokensReceived.length > 0 && userAddress !== fromAddress) {
+        return true
+    }
+}
+
+function getAction(interpretation: Interpretation, userAddress: Address, fromAddress: Address): Action {
+    if (isAirdrop(interpretation, userAddress, fromAddress)) {
+        return 'got airdropped'
+    }
+
+    return '______TODO______'
+}
+
+function lastFallback(decodedData: Decoded, interpretation: Interpretation, userAddress: Address) {
+    const { fromAddress } = decodedData
+
+    interpretation.action = getAction(interpretation, userAddress, fromAddress)
+
+    if (interpretation.action === 'got airdropped') {
+        interpretation.counterpartyName = fromAddress
+        interpretation.exampleDescription = `${interpretation.userName} ${interpretation.action} ${interpretation.tokensReceived[0].symbol} from ${interpretation.counterpartyName}`
+    }
+}
+
+export default lastFallback
+
 /**
 0xe8e0b0e5a46a21beef5b8d73753a306f737aa932e30614ec3c416e8d6effe878
 "traded weth for car"

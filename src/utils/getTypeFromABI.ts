@@ -39,7 +39,7 @@ async function getTypeFromABI(contractAddress: Address, etherscan: Etherscan): P
         }
         return ContractType.OTHER
     } catch (e) {
-        console.log(e)
+        console.log('getTypeFromABI', e)
         return ContractType.OTHER
     }
 }

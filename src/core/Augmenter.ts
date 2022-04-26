@@ -38,8 +38,8 @@ export class Augmenter {
     fnSigCache: Record<string, string> = {}
     ensCache: Record<Address, string> = {}
 
-    constructor(provder: BaseProvider, covalent: Covalent, etherscan: Etherscan) {
-        this.provider = provder
+    constructor(provider: BaseProvider, covalent: Covalent, etherscan: Etherscan) {
+        this.provider = provider
         this.covalent = covalent
         this.etherscan = etherscan
     }
@@ -80,7 +80,7 @@ export class Augmenter {
                 } else if (txResponse.data == '0x') {
                     txType = TX_TYPE.TRANSFER
                 } else {
-                    // TODO txReciept.contractAddress is the address of the contract created, add it
+                    // TODO txReceipt.contractAddress is the address of the contract created, add it
                     txType = TX_TYPE.CONTRACT_INTERACTION
                 }
 
@@ -249,10 +249,10 @@ export class Augmenter {
     private async getContractType(contractAddress: Address): Promise<ContractType> {
         const chain = getChainById(this.provider.network.chainId)
 
-        if ((contractAddress == chain.wethAdress)) {
+        if (contractAddress == chain.wethAddress) {
             return ContractType.WETH
         }
-        
+
         let contractType = await checkInterface(contractAddress, this.provider)
 
         if (contractType === ContractType.OTHER) {

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import contractInterpreters from './contractInterpreters'
 import contractDeployInterpreter from './genericInterpreters/ContractDeploy.json'
+import lastFallback from './genericInterpreters/lastFallback'
 import interpretGenericToken from './genericInterpreters/token'
 import interpretGenericTransfer from './genericInterpreters/transfer'
 import { BigNumber } from 'ethers'
@@ -46,23 +47,6 @@ const TopLevelInteractionKeys = ['contractName', 'contractSymbol', 'contractAddr
 function isTopLevel(key: string) {
     return TopLevelInteractionKeys.includes(key)
 }
-
-// const getHardcodedContractInterpreters = (): any[] => {
-//     let files: any[] = []
-//     glob('**/contractInterpreters/*.json', (err, data) => {
-//         console.log('ANYthing')
-//         if (err) {
-//             console.log('glob error:', err)
-//         }
-//         console.log('data', data)
-//         const unique = data.slice(0, data.length / 2)
-//         const filesNames = unique.map((item) => './' + item.split('/').slice(-2).join('/'))
-//         console.log('filesNames', filesNames)
-//         files = filesNames.map((fileName) => require(fileName)) as any[]
-//         console.log('files', files[0])
-//     })
-//     return files
-// }
 
 class Interpreter {
     contractSpecificInterpreters: ContractInterpretersMap = {}
@@ -118,7 +102,7 @@ class Interpreter {
         // not contract-specific
         const interpretation: Interpretation = {
             nativeTokenValueSent: decodedData.nativeTokenValueSent,
-            tokensReceived: this.getTokensReiceived(interactions, this.userAddress),
+            tokensReceived: this.getTokensReceived(interactions, this.userAddress),
             tokensSent: this.getTokensSent(interactions, this.userAddress),
             nativeTokenSymbol: this.chain.symbol,
             userName,
@@ -154,25 +138,10 @@ class Interpreter {
             )
         } else if (decodedData.txType === TX_TYPE.TRANSFER) {
             interpretGenericTransfer(decodedData, interpretation, this.userAddress)
-        } else if (!interpretationMapping) {
-            if (decodedData.contractType !== ContractType.OTHER) {
-                interpretGenericToken(decodedData, interpretation, this.userAddress)
-            }
-
-            // if (decodedData.contractType === ContractType.ERC721) {
-            //     interpretGenericERC721(decodedData, interpretation, this.userAddress)
-            // }
-            // if (decodedData.contractType === ContractType.ERC1155) {
-            //     interpretGenericERC1155(decodedData, interpretation, this.userAddress)
-            // }
-            // if (decodedData.contractType === ContractType.ERC20) {
-            //     interpretGenericERC20(decodedData, interpretation, this.userAddress)
-            // }
-
             // contract-specific interpretation
         } else if (interpretationMapping && methodSpecificMapping) {
             console.log('contract-specific interpretation', interpretationMapping.contractName, method)
-            // some of these will be arribtrary keys
+            // some of these will be arbitrary keys
             interpretation.contractName = interpretationMapping.contractName
             interpretation.action = methodSpecificMapping.action
             interpretation.exampleDescription = methodSpecificMapping.exampleDescription
@@ -187,8 +156,14 @@ class Interpreter {
                 interpretationMapping.writeFunctions[method].exampleDescriptionTemplate,
                 interpretation,
             )
+        } else {
+            console.log('contract type', decodedData.contractType)
+            if (decodedData.contractType !== ContractType.OTHER) {
+                interpretGenericToken(decodedData, interpretation, this.userAddress)
+            } else {
+                lastFallback(decodedData, interpretation, this.userAddress)
+            }
         }
-
         interpretation.exampleDescription = shortenNamesInString(interpretation.exampleDescription)
         return interpretation
     }
@@ -327,10 +302,19 @@ class Interpreter {
                 delete flattenedInteraction.events
 
                 for (const event of interaction.events) {
-                    // flattenedInteraction.event = event.event
-                    // flattenedInteraction.logIndex = event.logIndex
-                    flattenedInteraction = { ...flattenedInteraction, ...event }
-                    flattenedInteractions.push(flattenedInteraction)
+                    if (event._amounts) {
+                        // ERC1155 you can batchTransfer multiple tokens, each w their own amount, in 1 event
+                        for (const [index, amount] of event._amounts.entries()) {
+                            let newInteraction = deepCopy(flattenedInteraction)
+                            newInteraction._id = event._ids ? event._ids[index] : null
+                            newInteraction._amount = amount
+                            newInteraction = { ...newInteraction, ...event }
+                            flattenedInteractions.push(newInteraction)
+                        }
+                    } else {
+                        flattenedInteraction = { ...flattenedInteraction, ...event }
+                        flattenedInteractions.push(flattenedInteraction)
+                    }
                 }
                 // console.log('flattenedInteraction', flattenedInteraction)
             }
@@ -359,7 +343,7 @@ class Interpreter {
         return tokens
     }
 
-    private getTokensReiceived(interactions: Interaction[], userAddress: Address): Token[] {
+    private getTokensReceived(interactions: Interaction[], userAddress: Address): Token[] {
         return this.getTokens(interactions, userAddress, 'to')
     }
 

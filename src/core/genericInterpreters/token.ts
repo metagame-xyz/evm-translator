@@ -15,11 +15,12 @@ import { blackholeAddress } from 'utils/constants'
 type TokenVars = {
     type: TokenType
     transfer: string
+    transferBatch: string | null
     approval: string
     to: string
-    toENS: string
+    toENS: '_toENS' | 'toENS'
     from: string
-    fromENS: string
+    fromENS: '_fromENS' | 'fromENS'
     owner: string
     ownerENS: string
     operator: string
@@ -34,6 +35,7 @@ const vars: Record<EIP, TokenVars> = {
     ERC1155: {
         type: TokenType.ERC1155,
         transfer: 'TransferSingle',
+        transferBatch: 'TransferBatch',
         approval: 'ApprovalForAll',
         to: '_to',
         toENS: '_toENS',
@@ -49,6 +51,7 @@ const vars: Record<EIP, TokenVars> = {
     ERC721: {
         type: TokenType.ERC721,
         transfer: 'Transfer',
+        transferBatch: null,
         approval: 'ApprovalForAll',
         to: 'to',
         toENS: 'toENS',
@@ -64,6 +67,7 @@ const vars: Record<EIP, TokenVars> = {
     ERC20: {
         type: TokenType.ERC20,
         transfer: 'Transfer',
+        transferBatch: null,
         approval: 'Approval',
         to: 'to',
         toENS: 'toENS',
@@ -79,6 +83,7 @@ const vars: Record<EIP, TokenVars> = {
     WETH: {
         type: TokenType.ERC20,
         transfer: 'Transfer',
+        transferBatch: null,
         approval: 'Approval',
         to: 'to',
         toENS: 'toENS',
@@ -103,7 +108,7 @@ function isMintEvent(t: TokenVars, event: any, userAddress: Address, fromAddress
 }
 function isAirdropEvent(t: TokenVars, event: any, userAddress: Address, fromAddress: Address) {
     return (
-        event.event === t.transfer &&
+        (event.event === t.transfer || event.event === t.transferBatch) &&
         event[t.from] === blackholeAddress &&
         event[t.to] === userAddress &&
         userAddress !== fromAddress // user needs to have initiated the mint
@@ -111,7 +116,7 @@ function isAirdropEvent(t: TokenVars, event: any, userAddress: Address, fromAddr
 }
 
 function isSendEvent(t: TokenVars, event: any, userAddress: Address) {
-    return event.event === t.transfer && event[t.from] === userAddress
+    return (event.event === t.transfer || event.event === t.transferBatch) && event[t.from] === userAddress
 }
 
 function isReceiveEvent(t: TokenVars, event: any, userAddress: Address) {
@@ -208,12 +213,12 @@ function addCounterpartyNames(
         case 'sent':
             counterpartyNames = tokenEvents
                 .filter((e) => isSendEvent(t, e, userAddress))
-                .map((e) => e[t.toENS] || (e[t.to] as string))
+                .map((e) => e[t.toENS] || (e[t.to] as string)) as string[]
             break
         case 'approved':
             counterpartyNames = tokenEvents
                 .filter((e) => isApprovalEvent(t, e, userAddress))
-                .map((e) => e[t.operatorENS] || (e[t.operator] as string))
+                .map((e) => e[t.operatorENS] || (e[t.operator] as string)) as string[]
             break
         case 'got airdropped':
             counterpartyNames = [fromAddress]
