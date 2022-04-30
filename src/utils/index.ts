@@ -143,9 +143,14 @@ const validAddress = new RegExp(/^0x[a-fA-F0-9]{40}$/)
 
 export const validateAddress = (address: string): Address => {
     if (!validAddress.test(address)) {
-        throw new Error(`Invalid address: ${address}`)
+        throw new Error(`Invalid EVM address: ${address}`)
     }
     return address as Address
+}
+
+export const validateAndNormalizeAddress = (address: string): Address => {
+    const normalizedAddress = address.toLowerCase()
+    return validateAddress(normalizedAddress)
 }
 
 export const shortenName = (username: string): string => {

@@ -132,8 +132,7 @@ export type Decoded = {
     fromENS?: string | null
     toENS?: string | null
     interactions: Array<Interaction>
-    nativeTokenValueSent?: string
-    nativeTokenValueReceived?: string // so hard to get this
+    nativeTokenValueSent: string
     nativeTokenSymbol: string
     txIndex?: number
     fromAddress: Address

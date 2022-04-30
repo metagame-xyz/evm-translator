@@ -20,7 +20,7 @@ import {
     TxType,
 } from 'interfaces'
 import { InterpreterMap } from 'interfaces/contractInterpreter'
-import { fillDescriptionTemplate, shortenNamesInString } from 'utils'
+import { fillDescriptionTemplate, shortenNamesInString, validateAndNormalizeAddress } from 'utils'
 
 function deepCopy<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj))
@@ -55,8 +55,8 @@ class Interpreter {
     userAddress: Address
     chain: Chain
 
-    constructor(userAddress: Address, chain: Chain) {
-        this.userAddress = userAddress
+    constructor(userAddress: string, chain: Chain) {
+        this.userAddress = validateAndNormalizeAddress(userAddress)
         this.chain = chain
 
         for (const [address, map] of Object.entries(contractInterpreters)) {
@@ -85,6 +85,8 @@ class Interpreter {
         const toAddress = rawTxData.txReceipt.to
         const fromAddress = rawTxData.txReceipt.from
 
+        const { nativeTokenValueSent } = decodedData
+
         const gasUsed = formatEther(
             BigNumber.from(decodedData.gasUsed).mul(BigNumber.from(decodedData.effectiveGasPrice)),
         )
@@ -102,7 +104,13 @@ class Interpreter {
 
         // not contract-specific
         const interpretation: Interpretation = {
-            nativeTokenValueSent: decodedData.nativeTokenValueSent,
+            nativeTokenValueSent: this.getNativeTokenValueSent(
+                interactions,
+                nativeTokenValueSent,
+                fromAddress,
+                this.userAddress,
+            ).toString(),
+            nativeTokenValueReceived: this.getNativeTokenValueReceived(interactions, this.userAddress).toString(),
             tokensReceived: this.getTokensReceived(interactions, this.userAddress),
             tokensSent: this.getTokensSent(interactions, this.userAddress),
             nativeTokenSymbol: this.chain.symbol,
@@ -167,6 +175,41 @@ class Interpreter {
         }
         interpretation.exampleDescription = shortenNamesInString(interpretation.exampleDescription)
         return interpretation
+    }
+    getNativeTokenValueSent(
+        interactions: Interaction[],
+        nativeTokenValueSent: string | undefined,
+        fromAddress: Address,
+        userAddress: Address,
+    ): number {
+        const nativeTokenTransfers = []
+
+        if (fromAddress === userAddress) {
+            return Number(formatEther(nativeTokenValueSent || 0))
+        }
+
+        for (const interaction of interactions) {
+            for (const event of interaction.events) {
+                if (event.nativeTokenTransfer && event.params.from === userAddress) {
+                    nativeTokenTransfers.push(event)
+                }
+            }
+        }
+
+        return nativeTokenTransfers.reduce((acc, event) => acc + Number(formatEther(event.params.value || 0)), 0)
+    }
+    getNativeTokenValueReceived(interactions: Interaction[], userAddress: string): number {
+        const nativeTokenTransfers = []
+
+        for (const interaction of interactions) {
+            for (const event of interaction.events) {
+                if (event.nativeTokenTransfer && event.params.to === userAddress) {
+                    nativeTokenTransfers.push(event)
+                }
+            }
+        }
+
+        return nativeTokenTransfers.reduce((acc, event) => acc + Number(formatEther(event.params.value || 0)), 0)
     }
 
     private findValue(

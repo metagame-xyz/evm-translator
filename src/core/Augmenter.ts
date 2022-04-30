@@ -2,7 +2,7 @@ import { transformCovalentEvents } from './transformCovalentLogs'
 import { BaseProvider, Formatter } from '@ethersproject/providers'
 import reverseRecords from 'ABIs/ReverseRecords.json'
 // import { normalize } from 'eth-ens-namehash'
-import { Contract } from 'ethers'
+import { BigNumber, Contract } from 'ethers'
 import { formatEther, formatUnits } from 'ethers/lib/utils'
 import {
     Address,
@@ -166,7 +166,7 @@ export class Augmenter {
                 params: {
                     from: action.from,
                     to: action.to,
-                    value: formatEther(action.value),
+                    value: action.value.toString(),
                 },
             } as InteractionEvent
         }
