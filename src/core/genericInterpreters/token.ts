@@ -98,33 +98,35 @@ const vars: Record<EIP, TokenVars> = {
     },
 }
 
-function isMintEvent(t: TokenVars, event: any, userAddress: Address, fromAddress: Address) {
+function isMintEvent(t: TokenVars, event: InteractionEvent, userAddress: Address, fromAddress: Address) {
     return (
-        event.event === t.transfer &&
-        event[t.from] === blackholeAddress &&
-        event[t.to] === userAddress &&
+        event.eventName === t.transfer &&
+        event.params[t.from] === blackholeAddress &&
+        event.params[t.to] === userAddress &&
         userAddress === fromAddress // user needs to have initiated the mint
     )
 }
-function isAirdropEvent(t: TokenVars, event: any, userAddress: Address, fromAddress: Address) {
+function isAirdropEvent(t: TokenVars, event: InteractionEvent, userAddress: Address, fromAddress: Address) {
     return (
-        (event.event === t.transfer || event.event === t.transferBatch) &&
-        event[t.from] === blackholeAddress &&
-        event[t.to] === userAddress &&
+        (event.eventName === t.transfer || event.eventName === t.transferBatch) &&
+        event.params[t.from] === blackholeAddress &&
+        event.params[t.to] === userAddress &&
         userAddress !== fromAddress // user needs to have initiated the mint
     )
 }
 
-function isSendEvent(t: TokenVars, event: any, userAddress: Address) {
-    return (event.event === t.transfer || event.event === t.transferBatch) && event[t.from] === userAddress
+function isSendEvent(t: TokenVars, event: InteractionEvent, userAddress: Address) {
+    return (
+        (event.eventName === t.transfer || event.eventName === t.transferBatch) && event.params[t.from] === userAddress
+    )
 }
 
-function isReceiveEvent(t: TokenVars, event: any, userAddress: Address) {
-    return event.event === t.transfer && event[t.to] === userAddress
+function isReceiveEvent(t: TokenVars, event: InteractionEvent, userAddress: Address) {
+    return event.eventName === t.transfer && event.params[t.to] === userAddress
 }
 
-function isApprovalEvent(t: TokenVars, event: any, userAddress: Address) {
-    return event.event === t.approval && event[t.owner] === userAddress && event[t.approved] == true
+function isApprovalEvent(t: TokenVars, event: InteractionEvent, userAddress: Address) {
+    return event.eventName === t.approval && event.params[t.owner] === userAddress && event.params[t.approved] == true
 }
 
 function getAction(t: TokenVars, events: InteractionEvent[], userAddress: Address, fromAddress: Address): Action {
@@ -189,7 +191,7 @@ function addUserName(
         case 'received':
             userName = tokenEvents
                 .filter((e) => isReceiveEvent(t, e, userAddress))
-                .map((e) => e[t.toENS] || (e[t.to] as string))[0]
+                .map((e) => e.params[t.toENS] || (e.params[t.to] as string))[0]
             break
         default:
             break
@@ -210,17 +212,17 @@ function addCounterpartyNames(
         case 'received':
             counterpartyNames = tokenEvents
                 .filter((e) => isReceiveEvent(t, e, userAddress))
-                .map((e) => e[t.fromENS] || (e[t.from] as string))
+                .map((e) => e.params[t.fromENS] || (e.params[t.from] as string))
             break
         case 'sent':
             counterpartyNames = tokenEvents
                 .filter((e) => isSendEvent(t, e, userAddress))
-                .map((e) => e[t.toENS] || (e[t.to] as string))
+                .map((e) => e.params[t.toENS] || (e.params[t.to] as string))
             break
         case 'approved':
             counterpartyNames = tokenEvents
                 .filter((e) => isApprovalEvent(t, e, userAddress))
-                .map((e) => e[t.operatorENS] || (e[t.operator] as string))
+                .map((e) => e.params[t.operatorENS] || (e.params[t.operator] as string))
             break
         case 'got airdropped':
             counterpartyNames = [fromAddress]

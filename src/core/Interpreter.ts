@@ -22,7 +22,7 @@ import {
 import { InterpreterMap } from 'interfaces/contractInterpreter'
 import { fillDescriptionTemplate, shortenNamesInString } from 'utils'
 
-function deepCopy(obj: any) {
+function deepCopy<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj))
 }
 
@@ -43,10 +43,11 @@ type KeyMapping = {
     array?: boolean
 }
 
-const TopLevelInteractionKeys = ['contractName', 'contractSymbol', 'contractAddress', 'logIndex']
-function isTopLevel(key: string) {
-    return TopLevelInteractionKeys.includes(key)
+function includes<T extends U, U>(collection: ReadonlyArray<T>, element: U): element is T {
+    return collection.includes(element as T)
 }
+
+const topLevelInteractionKeys = ['contractName', 'contractSymbol', 'contractAddress'] as const
 
 class Interpreter {
     contractSpecificInterpreters: ContractInterpretersMap = {}
@@ -189,8 +190,10 @@ class Interpreter {
 
             // filter out by events that don't have the keys we want
             for (const interaction of filteredInteractions) {
-                if (!isTopLevel(key)) {
-                    interaction.events = interaction.events.filter((d) => d[key] === valueToFind)
+                if (!includes(topLevelInteractionKeys, key)) {
+                    interaction.events = interaction.events.filter(
+                        (d) => d.params[key] === valueToFind || d.eventName === valueToFind,
+                    )
                 }
             }
 
@@ -198,8 +201,8 @@ class Interpreter {
             filteredInteractions = filteredInteractions.filter((i) => i.events.length > 0)
 
             // filter out interactions by top level key
-            if (isTopLevel(key)) {
-                filteredInteractions = filteredInteractions.filter((i) => (i as any)[key] === valueToFind)
+            if (includes(topLevelInteractionKeys, key)) {
+                filteredInteractions = filteredInteractions.filter((i) => i[key] === valueToFind)
             }
         }
 
@@ -208,7 +211,7 @@ class Interpreter {
         if (!array) {
             const interaction = filteredInteractions[index]
             const prefix = keyMapping.prefix || ''
-            const str = (interaction as any)?.[keyMapping.key] || interaction?.events[index]?.[keyMapping.key]
+            const str = (interaction as any)?.[keyMapping.key] || interaction?.events[index]?.params[keyMapping.key]
             const postfix = keyMapping.postfix || ''
             value = str ? prefix + str + postfix : keyMapping.defaultValue
         } else {
@@ -216,23 +219,24 @@ class Interpreter {
             const prefix = keyMapping.prefix || ''
             const postfix = keyMapping.postfix || ''
 
+            // I dont think anything but params will ever use this array feature, so we only support params here for now
+
             // if the key is in the interaction-level, just loop through those
-            if ((filteredInteractions[0] as any)?.[keyMapping.key]) {
-                for (const interaction of filteredInteractions) {
-                    const str = (interaction as any)?.[keyMapping.key]
+            // if ((filteredInteractions[0] as any)?.[keyMapping.key]) {
+            //     for (const interaction of filteredInteractions) {
+            //         const str = (interaction as any)?.[keyMapping.key]
+            //         const fullStr = str ? prefix + str + postfix : keyMapping.defaultValue
+            //         value.push(fullStr)
+            //     }
+            // } else {
+            for (const interaction of filteredInteractions) {
+                for (const event of interaction.events) {
+                    const str = event.params[keyMapping.key]
                     const fullStr = str ? prefix + str + postfix : keyMapping.defaultValue
                     value.push(fullStr)
                 }
-                // if the key is in the event-level, we need to loop through the events in each interaction
-            } else {
-                for (const interaction of filteredInteractions) {
-                    for (const event of interaction.events) {
-                        const str = event[keyMapping.key]
-                        const fullStr = str ? prefix + str + postfix : keyMapping.defaultValue
-                        value.push(fullStr)
-                    }
-                }
             }
+            //}
         }
 
         return value
@@ -250,7 +254,7 @@ class Interpreter {
 
         for (const interaction of filteredInteractions) {
             // filter non-transfer events
-            interaction.events = interaction.events.filter((d) => transferEvents.includes(d.event))
+            interaction.events = interaction.events.filter((d) => transferEvents.includes(d.eventName))
             // filter out events that aren't to/from the user in the right direction
             interaction.events = interaction.events.filter((d) => toOrFromUser(d, direction, userAddress))
         }
@@ -259,7 +263,7 @@ class Interpreter {
         filteredInteractions = filteredInteractions.filter(
             (i) =>
                 i.events.filter(
-                    (d) => transferEvents.includes(d.event), // filters out all non transfer events
+                    (d) => transferEvents.includes(d.eventName), // filters out all non transfer events
                 ).length > 0, // filters out interactions that don't have any events objects left
         )
 
@@ -271,16 +275,16 @@ class Interpreter {
             let tokenType = TokenType.DEFAULT
 
             // LP Token
-            if (LPTokenSymbols.includes(interaction.contractSymbol)) {
+            if (interaction.contractSymbol && LPTokenSymbols.includes(interaction.contractSymbol)) {
                 tokenType = TokenType.LPToken
                 // ERC-1155
-            } else if (interaction._amount || interaction._amounts) {
+            } else if (interaction.params._amount || interaction.params._amounts) {
                 tokenType = TokenType.ERC1155
                 // ERC-721
-            } else if (interaction.tokenId) {
+            } else if (interaction.params.tokenId) {
                 tokenType = TokenType.ERC721
                 // ERC-20
-            } else if (Number(interaction.value) > 0) {
+            } else if (Number(interaction.params.value) > 0) {
                 tokenType = TokenType.ERC20
             }
 
@@ -289,7 +293,7 @@ class Interpreter {
 
         function toOrFromUser(event: InteractionEvent, direction: 'to' | 'from', userAddress: Address) {
             const directionArr = direction === 'to' ? toKeys : fromKeys
-            return directionArr.filter((key) => event[key] === userAddress).length > 0
+            return directionArr.filter((key) => event.params[key] === userAddress).length > 0
         }
 
         // each transfer event can have a token in it. for example, minting multiple NFTs
@@ -298,16 +302,17 @@ class Interpreter {
 
             let flattenedInteraction: FlattenedInteraction
             for (const interaction of interactions) {
-                flattenedInteraction = deepCopy(interaction) as FlattenedInteraction
-                delete flattenedInteraction.events
+                const copiedInteraction = deepCopy(interaction) as any
+                delete copiedInteraction.events
+                flattenedInteraction = copiedInteraction
 
                 for (const event of interaction.events) {
-                    if (event._amounts) {
+                    if (event.params._amounts) {
                         // ERC1155 you can batchTransfer multiple tokens, each w their own amount, in 1 event
-                        for (const [index, amount] of event._amounts.entries()) {
+                        for (const [index, amount] of event.params._amounts.entries()) {
                             let newInteraction = deepCopy(flattenedInteraction)
-                            newInteraction._id = event._ids ? event._ids[index] : null
-                            newInteraction._amount = amount
+                            newInteraction.params._id = event.params._ids ? event.params._ids[index] : null
+                            newInteraction.params._amount = amount
                             newInteraction = { ...newInteraction, ...event }
                             flattenedInteractions.push(newInteraction)
                         }
@@ -325,8 +330,8 @@ class Interpreter {
         tokens = flattenedInteractions.map((i) => {
             const tokenType = getTokenType(i)
 
-            const amount = tokenType === TokenType.ERC1155 ? i._amount : i.value
-            const tokenId = (tokenType === TokenType.ERC1155 ? i._id : i.tokenId)?.toString()
+            const amount = tokenType === TokenType.ERC1155 ? i.params._amount : i.params.value
+            const tokenId = (tokenType === TokenType.ERC1155 ? i.params._id : i.params.tokenId)?.toString()
 
             const token: Token = {
                 type: tokenType,

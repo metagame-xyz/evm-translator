@@ -117,7 +117,7 @@
                 "NFT": {
                     "key": "contract",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "an unknown NFT"
@@ -125,7 +125,7 @@
                 "tokenId": {
                     "key": "tokenId",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "prefix": "#",

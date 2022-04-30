@@ -17,7 +17,7 @@ type Event = {
 }
 
 // covalent returns 'value:null' for ERC721's instead of decoding the param as tokenId
-function covalentERC721Shim(events: Record<string, any>, event: CovalentLogEvent) {
+function covalentERC721Shim(events: Record<string, any>, event: CovalentLogEvent): Record<string, any> {
     // only transfer events, other contract-related events might break this
     if (event.decoded.name !== 'Transfer') {
         return events
@@ -79,7 +79,7 @@ export function transformCovalentEvents(tx: CovalentTxData): Array<Interaction> 
                 },
             ]
         })
-        .map((events) => {
+        .map((events): Interaction => {
             const event = events[0] as Event
 
             return {
@@ -87,9 +87,11 @@ export function transformCovalentEvents(tx: CovalentTxData): Array<Interaction> 
                 contractSymbol: event.contractSymbol,
                 contractAddress: event.contractAddress,
                 events: events.map((event: Event) => ({
-                    event: event.name,
+                    eventName: event.name,
                     logIndex: event.logIndex,
-                    ...event.events,
+                    params: {
+                        ...event.events,
+                    },
                 })),
             }
         })

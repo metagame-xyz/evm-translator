@@ -1,8 +1,7 @@
 import { Action, Address, Decoded, InteractionEvent, Interpretation } from 'interfaces'
-import { ensure } from 'utils'
 
 function isSafeReceivedEvent(event: InteractionEvent, userAddress: Address) {
-    return event.event === 'SafeReceived' && event.sender === userAddress
+    return event.eventName === 'SafeReceived' && event.params.sender === userAddress
 }
 
 function interpretGenericTransfer(decodedData: Decoded, interpretation: Interpretation, userAddress: Address) {

@@ -146,16 +146,20 @@ export type Decoded = {
 
 export type Interaction = {
     contractName: string
-    contractSymbol: string
+    contractSymbol: string | null
     contractAddress: string
     events: InteractionEvent[]
 }
 
 export type InteractionEvent = {
     /** The name of the function that was called */
-    event: string
+    eventName: string
     nativeTokenTransfer?: true
     logIndex: number
+    params: InteractionEventParams
+}
+
+export type InteractionEventParams = {
     value?: string
     from?: string
     _from?: string
@@ -177,7 +181,7 @@ export type InteractionEvent = {
     _amount?: string
     _amounts?: string[]
     _ids?: string[]
-    _id?: string
+    _id?: string | null
     [key: string]: string | string[] | undefined | null | number | boolean
 }
 
@@ -239,8 +243,8 @@ export enum TokenType {
 }
 export type Token = {
     type: TokenType
-    name: string
-    symbol: string
+    name: string | null
+    symbol: string | null
     address: string
     amount?: string
     token0?: Token

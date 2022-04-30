@@ -160,12 +160,14 @@ export class Augmenter {
         function traceLogToEvent(nativeTokenTransfer: TraceLog): InteractionEvent {
             const { action } = nativeTokenTransfer
             return {
-                event: 'NativeTokenTransfer',
+                eventName: 'NativeTokenTransfer',
                 nativeTokenTransfer: true,
-                from: action.from,
-                to: action.to,
-                value: formatEther(action.value),
                 logIndex: 0,
+                params: {
+                    from: action.from,
+                    to: action.to,
+                    value: formatEther(action.value),
+                },
             } as InteractionEvent
         }
 

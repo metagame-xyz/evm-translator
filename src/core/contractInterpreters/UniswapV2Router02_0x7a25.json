@@ -57,7 +57,7 @@
                 "token_0": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "from": "{userAddress}"
                     },
                     "defaultValue": "unknown"
@@ -65,7 +65,7 @@
                 "token_1": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "from": "{userAddress}"
                     },
                     "index": 1,
@@ -81,7 +81,7 @@
                 "token_0": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "from": "{userAddress}"
                     },
                     "defaultValue": "unknown"
@@ -96,7 +96,7 @@
                 "token_0": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "unknown"
@@ -104,7 +104,7 @@
                 "token_1": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "index": 1,
@@ -120,7 +120,7 @@
                 "token_0": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "unknown"
@@ -129,7 +129,7 @@
                     "key": "value",
                     "filters": {
                         "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{contractAddress}"
                     },
                     "defaultValue": "an unknown amount of"
@@ -144,7 +144,7 @@
                 "token_0": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "unknown"
@@ -153,7 +153,7 @@
                     "key": "value",
                     "filters": {
                         "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{contractAddress}"
                     },
                     "defaultValue": "an unknown amount of"
@@ -168,7 +168,7 @@
                 "token_0": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "unknown"
@@ -177,7 +177,7 @@
                     "key": "value",
                     "filters": {
                         "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{contractAddress}"
                     },
                     "defaultValue": "an unknown amount of"
@@ -192,7 +192,7 @@
                 "token_0": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "unknown"
@@ -201,7 +201,7 @@
                     "key": "value",
                     "filters": {
                         "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{contractAddress}"
                     },
                     "defaultValue": "an unknown amount of"
@@ -216,7 +216,7 @@
                 "token_0": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "unknown"
@@ -224,7 +224,7 @@
                 "token_1": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "index": 1,
@@ -240,7 +240,7 @@
                 "tokenName": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "an unknown token"
@@ -248,7 +248,7 @@
                 "tokenAmount": {
                     "key": "value",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "an unknown amount"
@@ -263,7 +263,7 @@
                 "tokenName": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "an unknown token"
@@ -271,7 +271,7 @@
                 "tokenAmount": {
                     "key": "value",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "an unknown amount"
@@ -286,7 +286,7 @@
                 "tokenName": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "an unknown token"
@@ -294,7 +294,7 @@
                 "tokenAmount": {
                     "key": "value",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "an unknown amount"
@@ -309,7 +309,7 @@
                 "tokenName": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "from": "{userAddress}"
                     },
                     "defaultValue": "an unknown token"
@@ -317,7 +317,7 @@
                 "tokenAmount": {
                     "key": "value",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "from": "{userAddress}"
                     },
                     "defaultValue": "an unknown amount"
@@ -326,7 +326,7 @@
                     "key": "value",
                     "filters": {
                         "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{contractAddress}"
                     },
                     "defaultValue": "an unknown amount of"
@@ -341,7 +341,7 @@
                 "tokenName": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "from": "{userAddress}"
                     },
                     "defaultValue": "an unknown token"
@@ -349,7 +349,7 @@
                 "tokenAmount": {
                     "key": "value",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "from": "{userAddress}"
                     },
                     "defaultValue": "an unknown amount"
@@ -358,7 +358,7 @@
                     "key": "value",
                     "filters": {
                         "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{contractAddress}"
                     },
                     "defaultValue": "an unknown amount of"
@@ -373,7 +373,7 @@
                 "tokenName0": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "from": "{userAddress}"
                     },
                     "defaultValue": "an unknown token"
@@ -381,7 +381,7 @@
                 "tokenAmount0": {
                     "key": "value",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "from": "{userAddress}"
                     },
                     "defaultValue": "an unknown amount"
@@ -389,7 +389,7 @@
                 "tokenName1": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "an unknown token"
@@ -397,7 +397,7 @@
                 "tokenAmount1": {
                     "key": "value",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "an unknown amount"
@@ -412,7 +412,7 @@
                 "tokenName0": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "from": "{userAddress}"
                     },
                     "defaultValue": "an unknown token"
@@ -420,7 +420,7 @@
                 "tokenAmount0": {
                     "key": "value",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "from": "{userAddress}"
                     },
                     "defaultValue": "an unknown amount"
@@ -428,7 +428,7 @@
                 "tokenName1": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "an unknown token"
@@ -436,7 +436,7 @@
                 "tokenAmount1": {
                     "key": "value",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "an unknown amount"
@@ -451,7 +451,7 @@
                 "tokenName": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "from": "{userAddress}"
                     },
                     "defaultValue": "an unknown token"
@@ -459,7 +459,7 @@
                 "tokenAmount": {
                     "key": "value",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "from": "{userAddress}"
                     },
                     "defaultValue": "an unknown amount"
@@ -468,7 +468,7 @@
                     "key": "value",
                     "filters": {
                         "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{contractAddress}"
                     },
                     "defaultValue": "an unknown amount of"
@@ -483,7 +483,7 @@
                 "tokenName0": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "from": "{userAddress}"
                     },
                     "defaultValue": "an unknown token"
@@ -491,7 +491,7 @@
                 "tokenAmount0": {
                     "key": "value",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "from": "{userAddress}"
                     },
                     "defaultValue": "an unknown amount"
@@ -499,7 +499,7 @@
                 "tokenName1": {
                     "key": "contractSymbol",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "an unknown token"
@@ -507,7 +507,7 @@
                 "tokenAmount1": {
                     "key": "value",
                     "filters": {
-                        "event": "Transfer",
+                        "eventName": "Transfer",
                         "to": "{userAddress}"
                     },
                     "defaultValue": "an unknown amount"
