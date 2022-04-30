@@ -1,6 +1,6 @@
 import collect from 'collect.js'
 import { BigNumber } from 'ethers'
-import { Address, Chain, Chains, Interpretation } from 'interfaces'
+import { Address, Chain, Chains, Interaction, InteractionEvent, Interpretation } from 'interfaces'
 import traverse from 'traverse'
 
 const ethereum: Chain = {
@@ -161,4 +161,18 @@ export const shortenNamesInString = (string: string): string => {
     return string.replace(/0x[a-fA-F0-9]{40}/g, (username) => {
         return shortenName(username)
     })
+}
+
+export const getNativeTokenValueEvents = (interactions: Interaction[]): InteractionEvent[] => {
+    const nativeTokenEvents = []
+
+    for (const interaction of interactions) {
+        for (const event of interaction.events) {
+            if (event.nativeTokenTransfer) {
+                nativeTokenEvents.push(event)
+            }
+        }
+    }
+
+    return nativeTokenEvents
 }

@@ -21,7 +21,12 @@ import {
     TxType,
 } from 'interfaces'
 import { InterpreterMap } from 'interfaces/contractInterpreter'
-import { fillDescriptionTemplate, shortenNamesInString, validateAndNormalizeAddress } from 'utils'
+import {
+    fillDescriptionTemplate,
+    getNativeTokenValueEvents,
+    shortenNamesInString,
+    validateAndNormalizeAddress,
+} from 'utils'
 
 function deepCopy<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj))
@@ -183,34 +188,16 @@ class Interpreter {
         fromAddress: Address,
         userAddress: Address,
     ): number {
-        const nativeTokenTransfers = []
+        if (fromAddress === userAddress) return Number(formatEther(nativeTokenValueSent || 0))
 
-        if (fromAddress === userAddress) {
-            return Number(formatEther(nativeTokenValueSent || 0))
-        }
-
-        for (const interaction of interactions) {
-            for (const event of interaction.events) {
-                if (event.nativeTokenTransfer && event.params.from === userAddress) {
-                    nativeTokenTransfers.push(event)
-                }
-            }
-        }
-
-        return nativeTokenTransfers.reduce((acc, event) => acc + Number(formatEther(event.params.value || 0)), 0)
+        const nativeTokenEvents = getNativeTokenValueEvents(interactions)
+        const nativeTokenEventsReceived = nativeTokenEvents.filter((event) => event.params.from === userAddress)
+        return nativeTokenEventsReceived.reduce((acc, event) => acc + Number(formatEther(event.params.value || 0)), 0)
     }
     getNativeTokenValueReceived(interactions: Interaction[], userAddress: string): number {
-        const nativeTokenTransfers = []
-
-        for (const interaction of interactions) {
-            for (const event of interaction.events) {
-                if (event.nativeTokenTransfer && event.params.to === userAddress) {
-                    nativeTokenTransfers.push(event)
-                }
-            }
-        }
-
-        return nativeTokenTransfers.reduce((acc, event) => acc + Number(formatEther(event.params.value || 0)), 0)
+        const nativeTokenEvents = getNativeTokenValueEvents(interactions)
+        const nativeTokenEventsReceived = nativeTokenEvents.filter((event) => event.params.to === userAddress)
+        return nativeTokenEventsReceived.reduce((acc, event) => acc + Number(formatEther(event.params.value || 0)), 0)
     }
 
     private findValue(

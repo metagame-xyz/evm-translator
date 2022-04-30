@@ -1,15 +1,23 @@
 import { Address } from 'eth-ens-namehash'
 import { Action, Decoded, Interpretation } from 'interfaces'
 
-function isAirdrop(interpretation: Interpretation, userAddress: Address, fromAddress: Address) {
+function isAirdrop(interpretation: Interpretation, userAddress: Address, fromAddress: Address): boolean {
     if (interpretation.tokensReceived.length > 0 && userAddress !== fromAddress) {
         return true
+    } else {
+        return false
     }
+}
+
+function isReceived(interpretation: Interpretation): boolean {
+    return !!interpretation.nativeTokenValueReceived
 }
 
 function getAction(interpretation: Interpretation, userAddress: Address, fromAddress: Address): Action {
     if (isAirdrop(interpretation, userAddress, fromAddress)) {
         return Action.gotAirdropped
+    } else if (isReceived(interpretation)) {
+        return Action.received
     }
 
     return Action.______TODO______
@@ -17,12 +25,16 @@ function getAction(interpretation: Interpretation, userAddress: Address, fromAdd
 
 function lastFallback(decodedData: Decoded, interpretation: Interpretation, userAddress: Address) {
     const { fromAddress } = decodedData
+    const { nativeTokenValueReceived, nativeTokenSymbol } = interpretation
 
     interpretation.action = getAction(interpretation, userAddress, fromAddress)
 
     if (interpretation.action === 'got airdropped') {
         interpretation.counterpartyName = fromAddress
         interpretation.exampleDescription = `${interpretation.userName} ${interpretation.action} ${interpretation.tokensReceived[0].symbol} from ${interpretation.counterpartyName}`
+    } else if (interpretation.action === 'received') {
+        interpretation.counterpartyName = fromAddress
+        interpretation.exampleDescription = `${interpretation.userName} ${interpretation.action} ${nativeTokenValueReceived} ${nativeTokenSymbol} from ${interpretation.counterpartyName}`
     }
 }
 
