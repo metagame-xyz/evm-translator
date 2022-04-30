@@ -9,10 +9,10 @@ function isAirdrop(interpretation: Interpretation, userAddress: Address, fromAdd
 
 function getAction(interpretation: Interpretation, userAddress: Address, fromAddress: Address): Action {
     if (isAirdrop(interpretation, userAddress, fromAddress)) {
-        return 'got airdropped'
+        return Action.gotAirdropped
     }
 
-    return '______TODO______'
+    return Action.______TODO______
 }
 
 function lastFallback(decodedData: Decoded, interpretation: Interpretation, userAddress: Address) {

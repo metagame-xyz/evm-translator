@@ -1,6 +1,6 @@
 import Etherscan, { SourceCodeObject } from './clients/Etherscan'
 import { keccak256, toUtf8Bytes } from 'ethers/lib/utils'
-import { Address } from 'interfaces'
+import { Action, Address } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered, ABIStringMap } from 'interfaces/abi'
 import { InterpreterMap } from 'interfaces/contractInterpreter'
 
@@ -46,7 +46,7 @@ export default class InterepterTemplateGenerator {
 
         writeFunctionsArr.forEach((writeFunction) => {
             interpreterMap.writeFunctions[writeFunction] = {
-                action: '______TODO______',
+                action: Action.______TODO______,
                 exampleDescriptionTemplate: '______TODO______',
                 exampleDescription: '______TODO______',
                 keywords: {

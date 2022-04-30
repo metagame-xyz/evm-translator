@@ -7,6 +7,7 @@ import interpretGenericTransfer from './genericInterpreters/transfer'
 import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import {
+    Action,
     Address,
     Chain,
     ContractType,
@@ -118,10 +119,10 @@ class Interpreter {
             gasPaid: gasUsed,
             extra: {},
             exampleDescription: 'no example description defined',
+            reverted: !!decodedData.reverted,
         }
 
-        if (decodedData.reverted) {
-            interpretation.reverted = true
+        if (interpretation.reverted) {
             interpretation.exampleDescription = 'transaction reverted'
             return interpretation
             // TODO the description and extras should be different for reverted transactions
@@ -133,7 +134,7 @@ class Interpreter {
         // if there's no contract-specific mapping, try to use the fallback mapping
 
         if (decodedData.txType === TxType.CONTRACT_DEPLOY) {
-            interpretation.action = 'deployed'
+            interpretation.action = Action.deployed
             interpretation.exampleDescription = contractDeployInterpreter.exampleDescription
 
             interpretation.extra = {

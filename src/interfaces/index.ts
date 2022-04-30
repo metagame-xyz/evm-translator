@@ -122,7 +122,7 @@ export type Decoded = {
     /** The transaction's unique hash */
     txHash: string
     /** The one of three types the transaction can be. TODO switch to required*/
-    txType?: TxType
+    txType: TxType
     /** The type of contract. An ERC-xx, WETH, or  */
     contractType: ContractType
     /** the name of the function that initiated the transaction. If not decoded, null  */
@@ -187,6 +187,11 @@ export type InteractionEventParams = {
 export type UnknownKey = Omit<string, keyof InteractionEvent>
 
 // Generally objective additional info (data hardcoded by humans)
+
+/**
+ * Each address that was part of a transaction has its own interpretation of the transaction.
+ * native tokens and gas number are denominated in their native token (ex: eth, not wei)
+ */
 export type Interpretation = {
     contractName?: string | null
     action?: Action
@@ -199,8 +204,8 @@ export type Interpretation = {
     userName: string
     counterpartyName?: string // the opposite side of the tx, opposite of userName
     extra: Record<string, any>
-    reverted?: boolean
-    gasPaid?: string
+    reverted: boolean
+    gasPaid: string
 }
 
 export type ActivityData = {
@@ -209,31 +214,32 @@ export type ActivityData = {
     interpretedData: Interpretation
 }
 
-export type Action =
-    | 'received'
-    | 'sent'
-    | 'minted'
-    | 'burned'
-    | 'transferred'
-    | 'deployed'
-    | 'executed'
-    | 'bought'
-    | 'sold'
-    | 'swapped'
-    | 'canceled'
-    | 'transferred ownership'
-    | 'received ownership'
-    | 'added liquidity'
-    | 'removed liquidity'
-    | 'claimed'
-    | 'contributed'
-    | 'redeemed'
-    | 'approved'
-    | 'revoked'
-    | 'got airdropped'
-    | '______TODO______'
+export const enum Action {
+    received = 'received',
+    sent = 'sent',
+    minted = 'minted',
+    burned = 'burned',
+    transferred = 'transferred',
+    deployed = 'deployed',
+    executed = 'executed',
+    bought = 'bought',
+    sold = 'sold',
+    swapped = 'swapped',
+    canceled = 'canceled',
+    transferredOwnership = 'transferred ownership',
+    receivedOwnership = 'received ownership',
+    addedLiquidity = 'added liquidity',
+    removedLiquidity = 'removed liquidity',
+    claimed = 'claimed',
+    contributed = 'contributed',
+    redeemed = 'redeemed',
+    approved = 'approved',
+    revoked = 'revoked',
+    gotAirdropped = 'got airdropped',
+    ______TODO______ = '______TODO______',
+}
 
-export enum TokenType {
+export const enum TokenType {
     ERC20 = 'ERC20',
     ERC721 = 'ERC721',
     ERC1155 = 'ERC1155',

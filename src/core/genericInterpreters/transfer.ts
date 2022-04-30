@@ -8,7 +8,7 @@ function interpretGenericTransfer(decodedData: Decoded, interpretation: Interpre
     const { fromAddress, toAddress, interactions } = decodedData
     const sending = fromAddress === userAddress
 
-    const action: Action = sending ? 'sent' : 'received'
+    const action: Action = sending ? Action.sent : Action.received
     const direction = sending ? 'to' : 'from'
 
     const tokenContractInteraction = interactions.find((interaction) => interaction.contractAddress === toAddress)

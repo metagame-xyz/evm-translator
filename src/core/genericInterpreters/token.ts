@@ -137,18 +137,18 @@ function getAction(t: TokenVars, events: InteractionEvent[], userAddress: Addres
     const isApproved = events.find((e) => isApprovalEvent(t, e, userAddress))
 
     if (isMint) {
-        return 'minted'
+        return Action.minted
     } else if (isAirdrop) {
-        return 'got airdropped'
+        return Action.gotAirdropped
     } else if (isSend) {
-        return 'sent'
+        return Action.sent
     } else if (isReceive) {
-        return 'received'
+        return Action.received
     } else if (isApproved) {
-        return 'approved'
+        return Action.approved
     }
 
-    return '______TODO______'
+    return Action.______TODO______
 }
 
 function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Interpretation): Token {
@@ -260,25 +260,25 @@ function addExampleDescription(interpretation: Interpretation, token: Token) {
     let direction = ''
 
     switch (action) {
-        case 'minted': {
+        case Action.minted: {
             tokenId = receivedSingle ? tokenId : ''
             tokenCount = i.tokensReceived.filter((t) => t.address === token.address).length
             counterpartyName = ' ' + tokenName
             direction = ' from'
             break
         }
-        case 'received':
-        case 'got airdropped':
+        case Action.received:
+        case Action.gotAirdropped:
             tokenId = receivedSingle ? tokenId : ''
             tokenCount = i.tokensReceived.length
             direction = ' from'
             break
-        case 'sent':
+        case Action.sent:
             tokenId = sentSingle ? tokenId : ''
             tokenCount = i.tokensSent.length
             direction = ' to'
             break
-        case 'approved':
+        case Action.approved:
             direction = ' to be managed by'
             break
         default:

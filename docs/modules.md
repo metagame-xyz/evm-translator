@@ -6,13 +6,13 @@
 
 ### Enumerations
 
+- [Action](enums/Action.md)
 - [ContractType](enums/ContractType.md)
 - [TokenType](enums/TokenType.md)
 - [TxType](enums/TxType.md)
 
 ### Type aliases
 
-- [Action](modules.md#action)
 - [ActivityData](modules.md#activitydata)
 - [Address](modules.md#address)
 - [Chain](modules.md#chain)
@@ -22,6 +22,7 @@
 - [InProgressActivity](modules.md#inprogressactivity)
 - [Interaction](modules.md#interaction)
 - [InteractionEvent](modules.md#interactionevent)
+- [InteractionEventParams](modules.md#interactioneventparams)
 - [Interpretation](modules.md#interpretation)
 - [RawLogEvent](modules.md#rawlogevent)
 - [RawTxData](modules.md#rawtxdata)
@@ -35,16 +36,6 @@
 - [UnvalidatedTraceLogAction](modules.md#unvalidatedtracelogaction)
 
 ## Type aliases
-
-### Action
-
-Ƭ **Action**: ``"received"`` \| ``"sent"`` \| ``"minted"`` \| ``"burned"`` \| ``"transferred"`` \| ``"deployed"`` \| ``"executed"`` \| ``"bought"`` \| ``"sold"`` \| ``"swapped"`` \| ``"canceled"`` \| ``"transferred ownership"`` \| ``"received ownership"`` \| ``"added liquidity"`` \| ``"removed liquidity"`` \| ``"claimed"`` \| ``"contributed"`` \| ``"redeemed"`` \| ``"approved"`` \| ``"revoked"`` \| ``"got airdropped"`` \| ``"______TODO______"``
-
-#### Defined in
-
-[index.ts:209](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L209)
-
-___
 
 ### ActivityData
 
@@ -60,7 +51,7 @@ ___
 
 #### Defined in
 
-[index.ts:203](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L203)
+[index.ts:211](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L211)
 
 ___
 
@@ -72,7 +63,7 @@ ___
 
 #### Defined in
 
-[index.ts:9](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L9)
+[index.ts:9](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L9)
 
 ___
 
@@ -94,7 +85,7 @@ ___
 
 #### Defined in
 
-[index.ts:13](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L13)
+[index.ts:13](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L13)
 
 ___
 
@@ -106,7 +97,7 @@ Map of EVM chain names to an object with Chain metadata
 
 #### Defined in
 
-[index.ts:31](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L31)
+[index.ts:31](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L31)
 
 ___
 
@@ -127,8 +118,7 @@ ___
 | `gasUsed?` | `string` | - |
 | `interactions` | [`Interaction`](modules.md#interaction)[] | - |
 | `nativeTokenSymbol` | `string` | - |
-| `nativeTokenValueReceived?` | `string` | - |
-| `nativeTokenValueSent?` | `string` | - |
+| `nativeTokenValueSent` | `string` | - |
 | `officialContractName?` | `string` \| ``null`` | - |
 | `reverted?` | `boolean` | - |
 | `timestamp?` | `string` | - |
@@ -136,11 +126,11 @@ ___
 | `toENS?` | `string` \| ``null`` | - |
 | `txHash` | `string` | The transaction's unique hash |
 | `txIndex?` | `number` | - |
-| `txType?` | [`TxType`](enums/TxType.md) | The one of three types the transaction can be. TODO switch to required |
+| `txType` | [`TxType`](enums/TxType.md) | The one of three types the transaction can be. TODO switch to required |
 
 #### Defined in
 
-[index.ts:121](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L121)
+[index.ts:121](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L121)
 
 ___
 
@@ -161,7 +151,7 @@ ___
 
 #### Defined in
 
-[index.ts:252](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L252)
+[index.ts:261](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L261)
 
 ___
 
@@ -178,7 +168,7 @@ ___
 
 #### Defined in
 
-[index.ts:100](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L100)
+[index.ts:100](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L100)
 
 ___
 
@@ -192,22 +182,72 @@ ___
 | :------ | :------ |
 | `contractAddress` | `string` |
 | `contractName` | `string` |
-| `contractSymbol` | `string` |
+| `contractSymbol` | `string` \| ``null`` |
 | `events` | [`InteractionEvent`](modules.md#interactionevent)[] |
 
 #### Defined in
 
-[index.ts:147](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L147)
+[index.ts:146](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L146)
 
 ___
 
 ### InteractionEvent
 
-Ƭ **InteractionEvent**: { `_amount?`: `string` ; `_amounts?`: `string`[] ; `_approved?`: `string` ; `_approvedENS?`: `string` ; `_from?`: `string` ; `_fromENS?`: `string` ; `_id?`: `string` ; `_ids?`: `string`[] ; `_operator?`: `string` ; `_operatorENS?`: `string` ; `_owner?`: `string` ; `_ownerENS?`: `string` ; `_to?`: `string` ; `_toENS?`: `string` ; `_tokenId?`: `string` ; `_value?`: `string` ; `event`: `string` ; `from?`: `string` ; `fromENS?`: `string` ; `logIndex`: `number` ; `nativeTokenTransfer?`: ``true`` ; `to?`: `string` ; `toENS?`: `string` ; `tokenId?`: `string` ; `value?`: `string`  } & `Record`<`string`, `string` \| `string`[]\>
+Ƭ **InteractionEvent**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `eventName` | `string` | The name of the function that was called |
+| `logIndex` | `number` | - |
+| `nativeTokenTransfer?` | ``true`` | - |
+| `params` | [`InteractionEventParams`](modules.md#interactioneventparams) | - |
 
 #### Defined in
 
-[index.ts:154](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L154)
+[index.ts:153](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L153)
+
+___
+
+### InteractionEventParams
+
+Ƭ **InteractionEventParams**: `Object`
+
+#### Index signature
+
+▪ [key: `string`]: `string` \| `string`[] \| `undefined` \| ``null`` \| `number` \| `boolean`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `_amount?` | `string` |
+| `_amounts?` | `string`[] |
+| `_approved?` | `string` |
+| `_approvedENS?` | `string` |
+| `_from?` | `string` |
+| `_fromENS?` | `string` |
+| `_id?` | `string` \| ``null`` |
+| `_ids?` | `string`[] |
+| `_operator?` | `string` |
+| `_operatorENS?` | `string` |
+| `_owner?` | `string` |
+| `_ownerENS?` | `string` |
+| `_to?` | `string` |
+| `_toENS?` | `string` |
+| `_tokenId?` | `string` |
+| `_value?` | `string` |
+| `from?` | `string` |
+| `fromENS?` | `string` |
+| `to?` | `string` |
+| `toENS?` | `string` |
+| `tokenId?` | `string` |
+| `value?` | `string` |
+
+#### Defined in
+
+[index.ts:161](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L161)
 
 ___
 
@@ -215,27 +255,30 @@ ___
 
 Ƭ **Interpretation**: `Object`
 
+Each address that was part of a transaction has its own interpretation of the transaction.
+native tokens and gas number are denominated in their native token (ex: eth, not wei)
+
 #### Type declaration
 
 | Name | Type |
 | :------ | :------ |
-| `action?` | [`Action`](modules.md#action) |
+| `action?` | [`Action`](enums/Action.md) |
 | `contractName?` | `string` \| ``null`` |
 | `counterpartyName?` | `string` |
 | `exampleDescription` | `string` |
 | `extra` | `Record`<`string`, `any`\> |
-| `gasPaid?` | `string` |
+| `gasPaid` | `string` |
 | `nativeTokenSymbol?` | `string` |
 | `nativeTokenValueReceived?` | `string` |
 | `nativeTokenValueSent?` | `string` |
-| `reverted?` | `boolean` |
+| `reverted` | `boolean` |
 | `tokensReceived` | [`Token`](modules.md#token)[] |
 | `tokensSent` | [`Token`](modules.md#token)[] |
 | `userName` | `string` |
 
 #### Defined in
 
-[index.ts:187](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L187)
+[index.ts:195](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L195)
 
 ___
 
@@ -254,7 +297,7 @@ ___
 
 #### Defined in
 
-[index.ts:105](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L105)
+[index.ts:105](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L105)
 
 ___
 
@@ -272,7 +315,7 @@ ___
 
 #### Defined in
 
-[index.ts:94](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L94)
+[index.ts:94](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L94)
 
 ___
 
@@ -286,9 +329,9 @@ ___
 | :------ | :------ |
 | `address` | `string` |
 | `amount?` | `string` |
-| `name` | `string` |
+| `name` | `string` \| ``null`` |
 | `pair?` | `string` |
-| `symbol` | `string` |
+| `symbol` | `string` \| ``null`` |
 | `token0?` | [`Token`](modules.md#token) |
 | `token1?` | [`Token`](modules.md#token) |
 | `tokenId?` | `string` |
@@ -296,7 +339,7 @@ ___
 
 #### Defined in
 
-[index.ts:240](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L240)
+[index.ts:249](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L249)
 
 ___
 
@@ -322,7 +365,7 @@ ___
 
 #### Defined in
 
-[index.ts:70](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L70)
+[index.ts:70](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L70)
 
 ___
 
@@ -343,7 +386,7 @@ ___
 
 #### Defined in
 
-[index.ts:85](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L85)
+[index.ts:85](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L85)
 
 ___
 
@@ -353,7 +396,7 @@ ___
 
 #### Defined in
 
-[index.ts:44](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L44)
+[index.ts:44](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L44)
 
 ___
 
@@ -363,7 +406,7 @@ ___
 
 #### Defined in
 
-[index.ts:43](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L43)
+[index.ts:43](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L43)
 
 ___
 
@@ -373,7 +416,7 @@ ___
 
 #### Defined in
 
-[index.ts:184](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L184)
+[index.ts:187](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L187)
 
 ___
 
@@ -399,7 +442,7 @@ ___
 
 #### Defined in
 
-[index.ts:46](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L46)
+[index.ts:46](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L46)
 
 ___
 
@@ -420,4 +463,4 @@ ___
 
 #### Defined in
 
-[index.ts:61](https://github.com/the-metagame/evm-translator/blob/65324cd/src/interfaces/index.ts#L61)
+[index.ts:61](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L61)
