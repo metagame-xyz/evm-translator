@@ -1,13 +1,5 @@
-import {
-    ActivityData,
-    Address,
-    Chain,
-    Decoded,
-    Interpretation,
-    ZenLedgerRowType as RowType,
-    TokenType,
-    ZenLedgerRow,
-} from 'interfaces'
+import { ActivityData, Address, Chain, Decoded, Interpretation, TokenType } from 'interfaces'
+import { ZenLedgerRowType as RowType, ZenLedgerRow } from 'interfaces/zenLedger'
 import { chains } from 'utils'
 
 class TaxFormatter {

@@ -3,8 +3,19 @@ import { BaseProvider, Formatter } from '@ethersproject/providers'
 import reverseRecords from 'ABIs/ReverseRecords.json'
 // import { normalize } from 'eth-ens-namehash'
 import { Contract } from 'ethers'
-import { formatUnits } from 'ethers/lib/utils'
-import { Address, Chain, ContractType, Decoded, InProgressActivity, RawTxData, TX_TYPE } from 'interfaces'
+import { formatEther, formatUnits } from 'ethers/lib/utils'
+import {
+    Address,
+    Chain,
+    ContractType,
+    Decoded,
+    InProgressActivity,
+    Interaction,
+    InteractionEvent,
+    RawTxData,
+    TraceLog,
+    TxType,
+} from 'interfaces'
 import { CovalentTxData } from 'interfaces/covalent'
 import traverse from 'traverse'
 import { getChainById, isAddress } from 'utils'
@@ -62,6 +73,7 @@ export class Augmenter {
         this.augmentTimestampWithCovalent()
         await this.augmentOfficialContractNames()
         this.augmentInteractionData()
+        this.addTraceLogsAsInteractions()
         if (this.provider.network.chainId == 1) {
             // only mainnet
             await this.augmentENSnames()
@@ -76,14 +88,14 @@ export class Augmenter {
                 const { txReceipt, txResponse } = rawTxData
                 const value = rawTxData.txResponse.value.toString()
 
-                let txType: TX_TYPE
+                let txType: TxType
                 if (!txReceipt.to) {
-                    txType = TX_TYPE.CONTRACT_DEPLOY
+                    txType = TxType.CONTRACT_DEPLOY
                 } else if (txResponse.data == '0x') {
-                    txType = TX_TYPE.TRANSFER
+                    txType = TxType.TRANSFER
                 } else {
                     // TODO txReceipt.contractAddress is the address of the contract created, add it
-                    txType = TX_TYPE.CONTRACT_INTERACTION
+                    txType = TxType.CONTRACT_INTERACTION
                 }
 
                 const transformedData = {
@@ -140,6 +152,49 @@ export class Augmenter {
         if (this.covalentDataArr.length) {
             this.covalentDataArr.forEach((covalentData, index) => {
                 this.decodedArr[index].interactions = transformCovalentEvents(covalentData)
+            })
+        }
+    }
+
+    private addTraceLogsAsInteractions() {
+        function traceLogToEvent(nativeTokenTransfer: TraceLog): InteractionEvent {
+            const { action } = nativeTokenTransfer
+            return {
+                event: 'NativeTokenTransfer',
+                nativeTokenTransfer: true,
+                from: action.from,
+                to: action.to,
+                value: formatEther(action.value),
+                logIndex: 0,
+            } as InteractionEvent
+        }
+
+        function nativeTokenTransfersOnly(traceLog: TraceLog[]): TraceLog[] {
+            return traceLog.filter((traceLog) => {
+                return traceLog.action.callType === 'call' && !traceLog.action.value.isZero()
+            })
+        }
+
+        function add(interactions: Interaction[], traceLogs: TraceLog[]): Interaction[] {
+            const nativeTokenTransfers = nativeTokenTransfersOnly(traceLogs)
+
+            for (const ntt of nativeTokenTransfers) {
+                const interaction = interactions.find(
+                    (i) => i.contractAddress == ntt.action.from || i.contractAddress == ntt.action.to,
+                )
+
+                // debugger
+                if (interaction) {
+                    interaction.events.push(traceLogToEvent(ntt))
+                }
+            }
+
+            return interactions
+        }
+
+        if (this.rawTxDataArr.length > 0) {
+            this.rawTxDataArr.forEach((rawTxData, index) => {
+                this.decodedArr[index].interactions = add(this.decodedArr[index].interactions, rawTxData.txTrace)
             })
         }
     }
@@ -237,7 +292,7 @@ export class Augmenter {
         const methodNames = await Promise.all(
             this.rawTxDataArr.map(async (rawTxData, index) => {
                 let methodName = null
-                if (this.decodedArr[index].txType !== TX_TYPE.TRANSFER) {
+                if (this.decodedArr[index].txType !== TxType.TRANSFER) {
                     methodName = await this.decodeMethodName(rawTxData)
                 }
                 return methodName
@@ -265,7 +320,7 @@ export class Augmenter {
         const contractTypes = await Promise.all(
             this.rawTxDataArr.map(async (rawTxData, index) => {
                 let contractType = ContractType.OTHER
-                if (this.decodedArr[index].txType == TX_TYPE.CONTRACT_INTERACTION) {
+                if (this.decodedArr[index].txType == TxType.CONTRACT_INTERACTION) {
                     contractType = await this.getContractType(rawTxData.txReceipt.to)
                 }
                 //     else if (this.decodedArr[index].txType == TX_TYPE.CONTRACT_DEPLOY) {

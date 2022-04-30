@@ -2,34 +2,99 @@ import {
     TransactionReceipt as unvalidatedTransactionReceipt,
     TransactionResponse as unvalidatedTransactionResponse,
 } from '@ethersproject/providers'
+import { BigNumber } from 'ethers'
 
 /* eslint-disable no-unused-vars */
+/** 40 char hexadecimal address. Can be an EOA, Contract, or Token address */
 export type Address = `0x${string}`
-export type TxHash = `0x${string}`
+
+// export type TxHash = `0x${string}`
+
 export type Chain = {
+    /** If this transaction is from an EVM-compatible chain. This it true for all, currently */
     EVM: boolean
+    /** The chain's id. ETH=1, MATIC=137 */
     id: number
+    /** The chain's colloquial name. Ethereum, Polygon */
     name: string
+    /** The chain's symbol. ETH, MATIC */
     symbol: string
+    /** If this chain is a testnet. */
     testnet: boolean
+    /** The block explorer URL for this chain. https://etherscan.io/ */
     blockExplorerUrl: string
+    /** The singleton contract address for the wrapped version of the native token. Need to change the variable name */
     wethAddress: Address
 }
 
+/** Map of EVM chain names to an object with Chain metadata */
 export type Chains = Record<string, Chain>
 
-export enum TX_TYPE {
+/** The types of transactions an EOA can initiate */
+export const enum TxType {
+    /** A transaction that sends a native token (ex: ETH) from one address to another */
     TRANSFER = 'native token transfer',
+    /** A transaction that deploys a new contract from an EOA (TODO: what about create2?)*/
     CONTRACT_DEPLOY = 'contract deploy',
+    /** A transaction that invokes a method on a contract from an EOA */
     CONTRACT_INTERACTION = 'contract interaction',
 }
 
 export type TxResponse = Omit<unvalidatedTransactionResponse, 'from' | 'to'> & { from: Address; creates: string }
 export type TxReceipt = Omit<unvalidatedTransactionReceipt, 'from' | 'to'> & { from: Address; to: Address }
 
+export type UnvalidatedTraceLog = {
+    action: UnvalidatedTraceLogAction
+    blockHash: string
+    blockNumber: number
+    result: {
+        gasUsed: string // hex
+        output: string // hex
+    }
+    subtraces: number
+    traceAddress: number[]
+    transactionHash: string
+    transactionPosition: number
+    type: string
+}
+
+export type UnvalidatedTraceLogAction = {
+    callType: string
+    from: Address
+    to: Address
+    gas: string //hex
+    input: string //hex
+    value: string //hex
+}
+
+export type TraceLog = {
+    action: TraceLogAction
+    blockHash: string
+    blockNumber: number
+    result: {
+        gasUsed: BigNumber // hex
+        output: string // hex
+    }
+    subtraces: number
+    traceAddress: number[]
+    transactionHash: string
+    transactionPosition: number
+    type: string
+}
+
+export type TraceLogAction = {
+    callType: string
+    from: Address
+    to: Address
+    gas: BigNumber //hex
+    input: string //hex
+    value: BigNumber //hex
+}
+
 export type RawTxData = {
     txResponse: TxResponse
     txReceipt: TxReceipt
+    txTrace: TraceLog[]
 }
 
 export type InProgressActivity = {
@@ -44,7 +109,7 @@ export type RawLogEvent = {
     logIndex: number
 }
 
-export enum ContractType {
+export const enum ContractType {
     ERC20 = 'ERC20',
     ERC721 = 'ERC721',
     ERC1155 = 'ERC1155',
@@ -54,9 +119,13 @@ export enum ContractType {
 
 //  100% objective additional info (data taken from a blockchain)
 export type Decoded = {
+    /** The transaction's unique hash */
     txHash: string
-    txType?: TX_TYPE
+    /** The one of three types the transaction can be. TODO switch to required*/
+    txType?: TxType
+    /** The type of contract. An ERC-xx, WETH, or  */
     contractType: ContractType
+    /** the name of the function that initiated the transaction. If not decoded, null  */
     contractMethod?: string | null
     contractName?: string
     officialContractName?: string | null
@@ -79,11 +148,13 @@ export type Interaction = {
     contractName: string
     contractSymbol: string
     contractAddress: string
-    events: Array<InteractionEvent>
+    events: InteractionEvent[]
 }
 
 export type InteractionEvent = {
+    /** The name of the function that was called */
     event: string
+    nativeTokenTransfer?: true
     logIndex: number
     value?: string
     from?: string
@@ -107,7 +178,10 @@ export type InteractionEvent = {
     _amounts?: string[]
     _ids?: string[]
     _id?: string
-} & Record<string, string | string[]>
+    [key: string]: string | string[] | undefined | null | number | boolean
+}
+
+export type UnknownKey = Omit<string, keyof InteractionEvent>
 
 // Generally objective additional info (data hardcoded by humans)
 export type Interpretation = {
@@ -130,7 +204,6 @@ export type ActivityData = {
     rawTxData: RawTxData
     decodedData: Decoded
     interpretedData: Interpretation
-    taxData?: ZenLedgerRow
 }
 
 export type Action =
@@ -184,64 +257,4 @@ export type EthersAPIKeys = {
         applicationId: string
         applicationSecretKey: string
     }
-}
-
-export type ZenLedgerRow = {
-    // ZenLedger required Columns
-    Timestamp: string
-    Type: ZenLedgerRowType | null
-    'In Amount': number | null
-    'In Currency': string | null
-    'Out Amount': number | null
-    'Out Currency': string | null
-    'Fee Amount': number
-    'Fee Currency': string
-    'Exchange (optional)': string | null
-    'US Based': 'yes' | 'no'
-
-    // Additional helpful columns
-    txHash: string
-    // network: string // 'ETH' | 'MATIC' | 'UNKNOWN'
-    // walletAddress: Address
-    // walletName: string
-    explorerUrl: string
-    userInitiated: 'true' | 'false'
-    method: string
-    contract: string
-    inType: TokenType | 'native' | null
-    outType: TokenType | 'native' | null
-    lpRelated: 'true' | 'false'
-    toAddress: Address | null
-    // reviewed: null
-}
-
-export enum ZenLedgerRowType {
-    buy = 'Buy',
-    sell = 'Sell',
-    trade = 'Trade',
-    // receive = 'receive',
-    // send = 'send',
-    // Initial_Coin_Offering = 'Initial Coin Offering',
-    // margin_trade = 'margin trade',
-    // staking = 'staking',
-    // fork = 'fork',
-    airdrop = 'Airdrop',
-    payment = 'Payment',
-    // mined = 'Mined',
-    gift_sent = 'Gift sent',
-    fee = 'Fee',
-    staking_reward = 'Staking reward',
-    // dividend_received = 'Dividend received',
-    interest_received = 'Interest received',
-    misc_reward = 'Misc reward',
-    // margin_gain = 'Margin gain',
-    // margin_loss = 'Margin loss',
-    lost = 'Lost',
-    stolen = 'Stolen',
-    nft_mint = 'Nft Mint',
-    donation_501c3 = 'Donation 501c3',
-    // staking_lockup = 'Staking Lockup',
-    // staking_return = 'Staking Return',
-    // nft_trade = 'Nft Trade',
-    // UNKNOWN_TX_TYPE = 'UNKNOWN TX TYPE',
 }

@@ -17,7 +17,7 @@ import {
     RawTxData,
     Token,
     TokenType,
-    TX_TYPE,
+    TxType,
 } from 'interfaces'
 import { InterpreterMap } from 'interfaces/contractInterpreter'
 import { fillDescriptionTemplate, shortenNamesInString } from 'utils'
@@ -123,7 +123,7 @@ class Interpreter {
 
         // if there's no contract-specific mapping, try to use the fallback mapping
 
-        if (decodedData.txType === TX_TYPE.CONTRACT_DEPLOY) {
+        if (decodedData.txType === TxType.CONTRACT_DEPLOY) {
             interpretation.action = 'deployed'
             interpretation.exampleDescription = contractDeployInterpreter.exampleDescription
 
@@ -136,7 +136,7 @@ class Interpreter {
                 contractDeployInterpreter.exampleDescriptionTemplate,
                 interpretation,
             )
-        } else if (decodedData.txType === TX_TYPE.TRANSFER) {
+        } else if (decodedData.txType === TxType.TRANSFER) {
             interpretGenericTransfer(decodedData, interpretation, this.userAddress)
             // contract-specific interpretation
         } else if (interpretationMapping && methodSpecificMapping) {

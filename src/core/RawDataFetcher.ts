@@ -3,20 +3,32 @@ import {
     TransactionReceipt as unvalidatedTransactionReceipt,
     TransactionResponse as unvalidatedTransactionResponse,
 } from '@ethersproject/abstract-provider'
-import { BaseProvider, Formatter } from '@ethersproject/providers'
-import { Address, RawTxData, TxReceipt, TxResponse } from 'interfaces'
+import { AlchemyProvider, Formatter } from '@ethersproject/providers'
+import { BigNumber } from 'ethers'
+import { formatEther } from 'ethers/lib/utils'
+import { Address, RawTxData, TraceLog, TxReceipt, TxResponse, UnvalidatedTraceLog } from 'interfaces'
 import { CovalentTxData } from 'interfaces/covalent'
 import { validateAddress } from 'utils'
 import Covalent from 'utils/clients/Covalent'
 
 export default class RawDataFetcher {
-    provider: BaseProvider
+    provider: AlchemyProvider
     covalent: Covalent
     formatter = new Formatter()
 
-    constructor(provider: BaseProvider, covalent: Covalent) {
+    constructor(provider: AlchemyProvider, covalent: Covalent) {
         this.provider = provider
         this.covalent = covalent
+    }
+
+    async getTxTrace(txHash: string): Promise<TraceLog[]> {
+        console.log('in trace')
+        const unvalidatedTrace = (await this.provider.send('trace_transaction', [txHash])) as UnvalidatedTraceLog[]
+        const traceLogs = validateTraceTxData(unvalidatedTrace)
+        console.log('tried tracing')
+        // console.log(traceLogs)
+
+        return traceLogs
     }
 
     async getTxResponse(txHash: string): Promise<TxResponse> {
@@ -27,7 +39,7 @@ export default class RawDataFetcher {
         return validatedAndFormattedTxResponse
     }
 
-    async getTxReciept(txHash: string): Promise<TxReceipt> {
+    async getTxReceipt(txHash: string): Promise<TxReceipt> {
         const txReceipt = await this.provider.getTransactionReceipt(txHash)
         // console.log('txReceipt:', txReceipt)
         const validatedAndFormattedTxReceipt = validateAndFormatTxData(txReceipt)
@@ -38,16 +50,23 @@ export default class RawDataFetcher {
     async getTxData(txHash: string): Promise<RawTxData> {
         let txResponse: TxResponse
         let txReceipt: TxReceipt
+        let txTrace: TraceLog[]
 
         try {
-            ;[txResponse, txReceipt] = await Promise.all([this.getTxResponse(txHash), this.getTxReciept(txHash)])
-            return {
-                txResponse,
-                txReceipt,
-            }
+            ;[txResponse, txReceipt, txTrace] = await Promise.all([
+                this.getTxResponse(txHash),
+                this.getTxReceipt(txHash),
+                this.getTxTrace(txHash),
+            ])
         } catch (e) {
             console.error('error in getTxData', e)
             throw e
+        }
+
+        return {
+            txResponse,
+            txReceipt,
+            txTrace,
         }
     }
 
@@ -113,6 +132,37 @@ function validateAndFormatTxData(
     }
 
     return txResponseFormatted
+}
+
+function validateTraceTxData(traceLogsArr: UnvalidatedTraceLog[]): TraceLog[] {
+    const traceLogsFormatted = [] as TraceLog[]
+
+    for (const tl of traceLogsArr) {
+        const { action: a, result: r } = tl
+
+        //skips contract creation, for now. There's no internal transactions, but this makes the data incomplete
+        if (a.to) {
+            const traceLogFormatted = {
+                ...tl,
+                action: {
+                    callType: a.callType,
+                    from: validateAddress(a.from),
+                    to: validateAddress(a.to),
+                    gas: BigNumber.from(a.gas),
+                    value: BigNumber.from(a.value),
+                    input: a.input,
+                },
+                result: {
+                    gasUsed: BigNumber.from(r.gasUsed),
+                    output: r.output,
+                },
+            } as TraceLog
+
+            traceLogsFormatted.push(traceLogFormatted)
+        }
+    }
+
+    return traceLogsFormatted
 }
 
 // function covalentToRawTxData(rawCovalentData: CovalentTxData): TxReceipt {

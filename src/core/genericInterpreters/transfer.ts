@@ -12,9 +12,7 @@ function interpretGenericTransfer(decodedData: Decoded, interpretation: Interpre
     const action: Action = sending ? 'sent' : 'received'
     const direction = sending ? 'to' : 'from'
 
-    const tokenContractInteraction = ensure(
-        interactions.find((interaction) => interaction.contractAddress === toAddress),
-    )
+    const tokenContractInteraction = interactions.find((interaction) => interaction.contractAddress === toAddress)
     const tokenEvents = tokenContractInteraction?.events || []
 
     const isSafeReceived = tokenEvents.find((e) => isSafeReceivedEvent(e, userAddress))

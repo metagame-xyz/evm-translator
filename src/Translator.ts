@@ -3,7 +3,8 @@ import { Augmenter } from 'core/Augmenter'
 import Interpreter from 'core/Interpreter'
 import RawDataFetcher from 'core/RawDataFetcher'
 import TaxFormatter from 'core/TaxFormatter'
-import { ActivityData, Address, Chain, EthersAPIKeys, ZenLedgerRow } from 'interfaces'
+import { ActivityData, Address, Chain, EthersAPIKeys } from 'interfaces'
+import { ActivityDataWthZenLedger, ZenLedgerRow } from 'interfaces/zenLedger'
 import { chains, cleanseDataInPlace } from 'utils'
 import Covalent from 'utils/clients/Covalent'
 import Etherscan from 'utils/clients/Etherscan'
@@ -27,7 +28,7 @@ export type TranslatorConfigWithDefaults = TranslatorConfig & { chain: Chain }
 class Translator {
     config: TranslatorConfigWithDefaults
 
-    provider: BaseProvider
+    provider: AlchemyProvider
     covalent: Covalent
     etherscan: Etherscan
 
@@ -101,10 +102,10 @@ class Translator {
         includeInitiatedTxs = true,
         includeNotInitiatedTxs = false,
         limit = 100,
-    ): Promise<ActivityData[]> {
+    ): Promise<ActivityData[] | ActivityDataWthZenLedger[]> {
         const address = addressUnclean.toLowerCase() as Address
 
-        console.log('adddress we made it', address)
+        console.log('address we made it', address)
 
         const { rawTxDataArr, covalentTxDataArr } = await this.rawDataFetcher.getTxDataWithCovalentByAddress(
             address,
@@ -155,7 +156,7 @@ class Translator {
             const rows = taxFormatter.format(allData)
 
             allData.forEach((element, index) => {
-                element.taxData = rows[index]
+                ;(element as ActivityDataWthZenLedger).taxData = rows[index]
             })
 
             return rows
