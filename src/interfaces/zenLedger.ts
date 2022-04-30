@@ -60,7 +60,6 @@ export enum ZenLedgerRowType {
     // UNKNOWN_TX_TYPE = 'UNKNOWN TX TYPE',
 }
 
-
 export type ActivityDataWthZenLedger = {
     rawTxData: RawTxData
     decodedData: Decoded
