@@ -10,7 +10,10 @@ const ethereum: Chain = {
     symbol: 'ETH',
     testnet: false,
     blockExplorerUrl: 'https://etherscan.io/',
-    wethAddress: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+    wethAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+    usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    usdtAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+    daiAddress: '0x6b175474e89094c44da98b954eedeac495271d0f',
 }
 
 const polygon: Chain = {
@@ -20,7 +23,10 @@ const polygon: Chain = {
     symbol: 'MATIC',
     testnet: false,
     blockExplorerUrl: 'https://polygonscan.com/',
-    wethAddress: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
+    wethAddress: '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619',
+    usdcAddress: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+    usdtAddress: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
+    daiAddress: '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063',
 }
 
 export const chains: Chains = {
@@ -34,6 +40,19 @@ export const getChainById = (id: number): Chain => {
         throw new Error(`Chain with id ${id} not found`)
     }
     return chain
+}
+
+export const getChainBySymbol = (symbol: string): Chain => {
+    const chain = collect(chains).first((chain) => chain.symbol === symbol)
+    if (!chain) {
+        throw new Error(`Chain with symbol ${symbol} not found`)
+    }
+    return chain
+}
+
+export const getStablecoinOrNativeWrappedAddressesBySymbol = (symbol: string): Address[] => {
+    const chain = getChainBySymbol(symbol)
+    return [chain.wethAddress, chain.usdcAddress, chain.usdtAddress, chain.daiAddress]
 }
 
 export const isAddress = (address: string): boolean => {

@@ -91,7 +91,7 @@ class Interpreter {
         const toAddress = rawTxData.txReceipt.to
         const fromAddress = rawTxData.txReceipt.from
 
-        const { nativeTokenValueSent } = decodedData
+        const { nativeTokenValueSent, txHash } = decodedData
 
         const gasUsed = formatEther(
             BigNumber.from(decodedData.gasUsed).mul(BigNumber.from(decodedData.effectiveGasPrice)),
@@ -110,6 +110,8 @@ class Interpreter {
 
         // not contract-specific
         const interpretation: Interpretation = {
+            txHash,
+            userAddress: this.userAddress,
             nativeTokenValueSent: this.getNativeTokenValueSent(
                 interactions,
                 nativeTokenValueSent,
@@ -152,7 +154,7 @@ class Interpreter {
                 interpretation,
             )
         } else if (decodedData.txType === TxType.TRANSFER) {
-            interpretGenericTransfer(decodedData, interpretation, this.userAddress)
+            interpretGenericTransfer(decodedData, interpretation)
             // contract-specific interpretation
         } else if (interpretationMapping && methodSpecificMapping) {
             console.log('contract-specific interpretation', interpretationMapping.contractName, method)
@@ -172,11 +174,10 @@ class Interpreter {
                 interpretation,
             )
         } else {
-            console.log('contract type', decodedData.contractType)
             if (decodedData.contractType !== ContractType.OTHER) {
-                interpretGenericToken(decodedData, interpretation, this.userAddress)
+                interpretGenericToken(decodedData, interpretation)
             } else {
-                lastFallback(decodedData, interpretation, this.userAddress)
+                lastFallback(decodedData, interpretation)
             }
         }
         interpretation.exampleDescription = shortenNamesInString(interpretation.exampleDescription)
@@ -368,7 +369,7 @@ class Interpreter {
                 type: tokenType,
                 name: i.contractName,
                 symbol: i.contractSymbol,
-                address: i.contractAddress,
+                address: validateAndNormalizeAddress(i.contractAddress),
             }
             amount ? (token.amount = amount) : null
             tokenId ? (token.tokenId = tokenId) : null

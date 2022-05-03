@@ -101,7 +101,7 @@ export class Augmenter {
                 const transformedData = {
                     txHash: txResponse.hash,
                     txType: txType,
-                    nativeTokenValueSent: value == '0' ? '0' : formatUnits(value),
+                    nativeTokenValueSent: value,
                     nativeTokenSymbol: this.chain.symbol,
                     txIndex: txReceipt.transactionIndex,
                     reverted: txReceipt.status == 0,
@@ -186,8 +186,18 @@ export class Augmenter {
                 )
 
                 // debugger
+                // usually it comes from one of the contracts that emitted other events
                 if (interaction) {
                     interaction.events.push(traceLogToEvent(ntt))
+
+                    // but sometimes... it doesn't, so we need to add that contract
+                } else {
+                    interactions.push({
+                        contractAddress: ntt.action.from,
+                        contractName: null,
+                        contractSymbol: null,
+                        events: [traceLogToEvent(ntt)],
+                    })
                 }
             }
 
@@ -312,7 +322,6 @@ export class Augmenter {
         }
 
         let contractType = await checkInterface(contractAddress, this.provider)
-
         if (contractType === ContractType.OTHER) {
             contractType = await getTypeFromABI(contractAddress, this.etherscan)
         }

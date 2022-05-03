@@ -25,6 +25,12 @@ export type Chain = {
     blockExplorerUrl: string
     /** The singleton contract address for the wrapped version of the native token. Need to change the variable name */
     wethAddress: Address
+    /** The singleton contract address for USDC */
+    usdcAddress: Address
+    /** The singleton contract address for USDT */
+    usdtAddress: Address
+    /** The singleton contract address for DAI */
+    daiAddress: Address
 }
 
 /** Map of EVM chain names to an object with Chain metadata */
@@ -132,7 +138,9 @@ export type Decoded = {
     fromENS?: string | null
     toENS?: string | null
     interactions: Array<Interaction>
+    /** The amount of native token (ex: ETH) sent denominated in wei */
     nativeTokenValueSent: string
+    /** The symbol for the native token. ex: ETH */
     nativeTokenSymbol: string
     txIndex?: number
     fromAddress: Address
@@ -144,9 +152,9 @@ export type Decoded = {
 }
 
 export type Interaction = {
-    contractName: string
+    contractName: string | null
     contractSymbol: string | null
-    contractAddress: string
+    contractAddress: Address
     events: InteractionEvent[]
 }
 
@@ -193,14 +201,16 @@ export type UnknownKey = Omit<string, keyof InteractionEvent>
  * native tokens and gas number are denominated in their native token (ex: eth, not wei)
  */
 export type Interpretation = {
+    txHash: string
+    userAddress: Address
     contractName?: string | null
     action?: Action
     exampleDescription: string
     tokensSent: Token[] // usually just one token
     tokensReceived: Token[] // usually just one token
-    nativeTokenValueSent?: string
-    nativeTokenValueReceived?: string
-    nativeTokenSymbol?: string
+    nativeTokenValueSent: string
+    nativeTokenValueReceived: string
+    nativeTokenSymbol: string
     userName: string
     counterpartyName?: string // the opposite side of the tx, opposite of userName
     extra: Record<string, any>
@@ -224,6 +234,8 @@ export const enum Action {
     executed = 'executed',
     bought = 'bought',
     sold = 'sold',
+    /** Trading one non-native, non-stablecoin token for another */
+    traded = 'traded',
     swapped = 'swapped',
     canceled = 'canceled',
     transferredOwnership = 'transferred ownership',
@@ -250,7 +262,7 @@ export type Token = {
     type: TokenType
     name: string | null
     symbol: string | null
-    address: string
+    address: Address
     amount?: string
     token0?: Token
     token1?: Token

@@ -175,7 +175,7 @@ function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Int
                 type: TokenType.DEFAULT,
                 name: '',
                 symbol: '',
-                address: '',
+                address: '0x',
             }
     }
 }
@@ -291,7 +291,9 @@ function addExampleDescription(interpretation: Interpretation, token: Token) {
     interpretation.exampleDescription = exampleDescription
 }
 
-function interpretGenericToken(decodedData: Decoded, interpretation: Interpretation, userAddress: Address) {
+function interpretGenericToken(decodedData: Decoded, interpretation: Interpretation) {
+    console.log('interpretGenericToken:', interpretation.txHash)
+    const { userAddress } = interpretation
     const { fromAddress, toAddress, interactions, contractType } = decodedData
 
     if (contractType === ContractType.OTHER) {

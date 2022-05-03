@@ -3,6 +3,7 @@ import { ethers } from 'ethers'
 import { BigNumber } from 'ethers'
 import { Interaction } from 'interfaces'
 import { CovalentLogEvent, CovalentTxData } from 'interfaces/covalent'
+import { validateAndNormalizeAddress } from 'utils'
 
 // import { PrismaClient } from '@prisma/client'
 // const prisma = new PrismaClient()
@@ -85,7 +86,7 @@ export function transformCovalentEvents(tx: CovalentTxData): Array<Interaction> 
             return {
                 contractName: event.contractName,
                 contractSymbol: event.contractSymbol,
-                contractAddress: event.contractAddress,
+                contractAddress: validateAndNormalizeAddress(event.contractAddress),
                 events: events.map((event: Event) => ({
                     eventName: event.name,
                     logIndex: event.logIndex,

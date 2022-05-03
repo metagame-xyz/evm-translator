@@ -1,5 +1,34 @@
-import { Address } from 'eth-ens-namehash'
-import { Action, Decoded, Interpretation } from 'interfaces'
+import { Action, Address, Decoded, Interpretation } from 'interfaces'
+import { getStablecoinOrNativeWrappedAddressesBySymbol } from 'utils'
+
+function sentBaseToken(interpretation: Interpretation): boolean {
+    const { nativeTokenSymbol, nativeTokenValueSent } = interpretation
+    const currency = getStablecoinOrNativeWrappedAddressesBySymbol(nativeTokenSymbol)
+
+    return !!interpretation.tokensSent.find(
+        (token) => currency.includes(token.address) || Number(nativeTokenValueSent) > 0,
+    )
+}
+
+function receivedBaseToken(interpretation: Interpretation): boolean {
+    const { nativeTokenSymbol, nativeTokenValueReceived } = interpretation
+    const currency = getStablecoinOrNativeWrappedAddressesBySymbol(nativeTokenSymbol)
+
+    console.log('value received', Number(nativeTokenValueReceived))
+
+    return !!(
+        interpretation.tokensReceived.find((token) => currency.includes(token.address)) ||
+        Number(nativeTokenValueReceived) > 0
+    )
+}
+
+function sentOtherToken(interpretation: Interpretation): boolean {
+    return interpretation.tokensSent.length > 0 && !sentBaseToken(interpretation)
+}
+
+function receivedOtherToken(interpretation: Interpretation): boolean {
+    return interpretation.tokensReceived.length > 0 && !receivedBaseToken(interpretation)
+}
 
 function isAirdrop(interpretation: Interpretation, userAddress: Address, fromAddress: Address): boolean {
     if (interpretation.tokensReceived.length > 0 && userAddress !== fromAddress) {
@@ -9,32 +38,110 @@ function isAirdrop(interpretation: Interpretation, userAddress: Address, fromAdd
     }
 }
 
+function isClaimed(interpretation: Interpretation, userAddress: Address, fromAddress: Address): boolean {
+    return isReceived(interpretation) && userAddress === fromAddress
+}
+
 function isReceived(interpretation: Interpretation): boolean {
-    return !!interpretation.nativeTokenValueReceived
+    return (
+        (receivedBaseToken(interpretation) || receivedOtherToken(interpretation)) &&
+        !sentBaseToken(interpretation) &&
+        !sentOtherToken(interpretation)
+    )
+}
+
+function isSent(interpretation: Interpretation): boolean {
+    return (
+        (sentBaseToken(interpretation) || sentOtherToken(interpretation)) &&
+        !receivedBaseToken(interpretation) &&
+        !receivedOtherToken(interpretation)
+    )
+}
+
+function isBought(interpretation: Interpretation): boolean {
+    // TODO: sent usdc received eth/weth
+    return sentBaseToken(interpretation) && receivedOtherToken(interpretation)
+}
+
+function isSold(interpretation: Interpretation): boolean {
+    // TODO sent ETH/weth received usdc/usdt/dai
+    return sentOtherToken(interpretation) && receivedBaseToken(interpretation)
+}
+
+function isTraded(interpretation: Interpretation): boolean {
+    return sentOtherToken(interpretation) && receivedOtherToken(interpretation)
+}
+
+function isSwapped(interpretation: Interpretation): boolean {
+    // not true for eth/weth <--> usdc/usdt/dai, only true between themselves
+    return sentBaseToken(interpretation) && receivedBaseToken(interpretation)
 }
 
 function getAction(interpretation: Interpretation, userAddress: Address, fromAddress: Address): Action {
+    // Order matters here, some are sub/super sets of others
+
     if (isAirdrop(interpretation, userAddress, fromAddress)) {
         return Action.gotAirdropped
+    } else if (isClaimed(interpretation, userAddress, fromAddress)) {
+        return Action.claimed
     } else if (isReceived(interpretation)) {
         return Action.received
+    } else if (isSent(interpretation)) {
+        return Action.sent
+    } else if (isBought(interpretation)) {
+        return Action.bought
+    } else if (isSold(interpretation)) {
+        return Action.sold
+    } else if (isTraded(interpretation)) {
+        return Action.traded
+    } else if (isSwapped(interpretation)) {
+        return Action.swapped
     }
 
     return Action.______TODO______
 }
 
-function lastFallback(decodedData: Decoded, interpretation: Interpretation, userAddress: Address) {
-    const { fromAddress } = decodedData
-    const { nativeTokenValueReceived, nativeTokenSymbol } = interpretation
+function lastFallback(decodedData: Decoded, interpretation: Interpretation) {
+    const { fromAddress, toAddress } = decodedData
+    const {
+        nativeTokenValueReceived,
+        nativeTokenValueSent,
+        nativeTokenSymbol,
+        userAddress,
+        tokensReceived,
+        tokensSent,
+    } = interpretation
 
     interpretation.action = getAction(interpretation, userAddress, fromAddress)
 
-    if (interpretation.action === 'got airdropped') {
+    const valueSent =
+        Number(nativeTokenValueSent) > 0 ? nativeTokenValueSent : tokensSent[0]?.amount || `#${tokensSent[0]?.tokenId}`
+
+    const symbolSent = tokensSent[0]?.symbol || nativeTokenSymbol
+
+    const valueReceived =
+        Number(nativeTokenValueReceived) > 0
+            ? nativeTokenValueReceived
+            : tokensReceived[0]?.amount || `#${tokensReceived[0]?.tokenId}`
+
+    const symbolReceived = tokensReceived[0]?.symbol || nativeTokenSymbol
+
+    if (interpretation.action === Action.gotAirdropped) {
         interpretation.counterpartyName = fromAddress
         interpretation.exampleDescription = `${interpretation.userName} ${interpretation.action} ${interpretation.tokensReceived[0].symbol} from ${interpretation.counterpartyName}`
-    } else if (interpretation.action === 'received') {
-        interpretation.counterpartyName = fromAddress
-        interpretation.exampleDescription = `${interpretation.userName} ${interpretation.action} ${nativeTokenValueReceived} ${nativeTokenSymbol} from ${interpretation.counterpartyName}`
+    } else if (
+        interpretation.action === Action.received ||
+        interpretation.action === Action.bought ||
+        interpretation.action === Action.claimed
+    ) {
+        interpretation.counterpartyName = toAddress
+        interpretation.exampleDescription = `${interpretation.userName} ${interpretation.action} ${valueReceived} ${symbolReceived} from ${interpretation.counterpartyName}`
+    } else if (interpretation.action === Action.sold || interpretation.action === Action.sent) {
+        interpretation.counterpartyName = toAddress
+        interpretation.exampleDescription = `${interpretation.userName} ${interpretation.action} ${valueSent} ${symbolSent} to ${interpretation.counterpartyName}`
+    } else if (interpretation.action === Action.traded) {
+        interpretation.counterpartyName = toAddress
+        interpretation.exampleDescription = `${interpretation.userName} ${interpretation.action} ${valueSent} ${symbolSent} for ${valueReceived} ${symbolReceived} with ${interpretation.counterpartyName}`
     }
 }
 

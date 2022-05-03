@@ -4,8 +4,9 @@ function isSafeReceivedEvent(event: InteractionEvent, userAddress: Address) {
     return event.eventName === 'SafeReceived' && event.params.sender === userAddress
 }
 
-function interpretGenericTransfer(decodedData: Decoded, interpretation: Interpretation, userAddress: Address) {
+function interpretGenericTransfer(decodedData: Decoded, interpretation: Interpretation) {
     const { fromAddress, toAddress, interactions } = decodedData
+    const { userAddress } = interpretation
     const sending = fromAddress === userAddress
 
     const action: Action = sending ? Action.sent : Action.received
