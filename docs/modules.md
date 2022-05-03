@@ -51,7 +51,7 @@
 
 #### Defined in
 
-[index.ts:211](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L211)
+[index.ts:221](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L221)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[index.ts:9](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L9)
+[index.ts:9](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L9)
 
 ___
 
@@ -77,15 +77,18 @@ ___
 | :------ | :------ | :------ |
 | `EVM` | `boolean` | If this transaction is from an EVM-compatible chain. This it true for all, currently |
 | `blockExplorerUrl` | `string` | The block explorer URL for this chain. https://etherscan.io/ |
+| `daiAddress` | [`Address`](modules.md#address) | The singleton contract address for DAI |
 | `id` | `number` | The chain's id. ETH=1, MATIC=137 |
 | `name` | `string` | The chain's colloquial name. Ethereum, Polygon |
 | `symbol` | `string` | The chain's symbol. ETH, MATIC |
 | `testnet` | `boolean` | If this chain is a testnet. |
+| `usdcAddress` | [`Address`](modules.md#address) | The singleton contract address for USDC |
+| `usdtAddress` | [`Address`](modules.md#address) | The singleton contract address for USDT |
 | `wethAddress` | [`Address`](modules.md#address) | The singleton contract address for the wrapped version of the native token. Need to change the variable name |
 
 #### Defined in
 
-[index.ts:13](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L13)
+[index.ts:13](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L13)
 
 ___
 
@@ -97,7 +100,7 @@ Map of EVM chain names to an object with Chain metadata
 
 #### Defined in
 
-[index.ts:31](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L31)
+[index.ts:37](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L37)
 
 ___
 
@@ -117,8 +120,8 @@ ___
 | `fromENS?` | `string` \| ``null`` | - |
 | `gasUsed?` | `string` | - |
 | `interactions` | [`Interaction`](modules.md#interaction)[] | - |
-| `nativeTokenSymbol` | `string` | - |
-| `nativeTokenValueSent` | `string` | - |
+| `nativeTokenSymbol` | `string` | The symbol for the native token. ex: ETH |
+| `nativeTokenValueSent` | `string` | The amount of native token (ex: ETH) sent denominated in wei |
 | `officialContractName?` | `string` \| ``null`` | - |
 | `reverted?` | `boolean` | - |
 | `timestamp?` | `string` | - |
@@ -130,7 +133,7 @@ ___
 
 #### Defined in
 
-[index.ts:121](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L121)
+[index.ts:127](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L127)
 
 ___
 
@@ -151,7 +154,7 @@ ___
 
 #### Defined in
 
-[index.ts:261](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L261)
+[index.ts:273](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L273)
 
 ___
 
@@ -168,7 +171,7 @@ ___
 
 #### Defined in
 
-[index.ts:100](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L100)
+[index.ts:106](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L106)
 
 ___
 
@@ -180,14 +183,14 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `contractAddress` | `string` |
-| `contractName` | `string` |
+| `contractAddress` | [`Address`](modules.md#address) |
+| `contractName` | `string` \| ``null`` |
 | `contractSymbol` | `string` \| ``null`` |
 | `events` | [`InteractionEvent`](modules.md#interactionevent)[] |
 
 #### Defined in
 
-[index.ts:146](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L146)
+[index.ts:154](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L154)
 
 ___
 
@@ -206,7 +209,7 @@ ___
 
 #### Defined in
 
-[index.ts:153](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L153)
+[index.ts:161](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L161)
 
 ___
 
@@ -247,7 +250,7 @@ ___
 
 #### Defined in
 
-[index.ts:161](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L161)
+[index.ts:169](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L169)
 
 ___
 
@@ -268,17 +271,19 @@ native tokens and gas number are denominated in their native token (ex: eth, not
 | `exampleDescription` | `string` |
 | `extra` | `Record`<`string`, `any`\> |
 | `gasPaid` | `string` |
-| `nativeTokenSymbol?` | `string` |
-| `nativeTokenValueReceived?` | `string` |
-| `nativeTokenValueSent?` | `string` |
+| `nativeTokenSymbol` | `string` |
+| `nativeTokenValueReceived` | `string` |
+| `nativeTokenValueSent` | `string` |
 | `reverted` | `boolean` |
 | `tokensReceived` | [`Token`](modules.md#token)[] |
 | `tokensSent` | [`Token`](modules.md#token)[] |
+| `txHash` | `string` |
+| `userAddress` | [`Address`](modules.md#address) |
 | `userName` | `string` |
 
 #### Defined in
 
-[index.ts:195](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L195)
+[index.ts:203](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L203)
 
 ___
 
@@ -297,7 +302,7 @@ ___
 
 #### Defined in
 
-[index.ts:105](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L105)
+[index.ts:111](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L111)
 
 ___
 
@@ -315,7 +320,7 @@ ___
 
 #### Defined in
 
-[index.ts:94](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L94)
+[index.ts:100](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L100)
 
 ___
 
@@ -327,7 +332,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `address` | `string` |
+| `address` | [`Address`](modules.md#address) |
 | `amount?` | `string` |
 | `name` | `string` \| ``null`` |
 | `pair?` | `string` |
@@ -339,7 +344,7 @@ ___
 
 #### Defined in
 
-[index.ts:249](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L249)
+[index.ts:261](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L261)
 
 ___
 
@@ -365,7 +370,7 @@ ___
 
 #### Defined in
 
-[index.ts:70](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L70)
+[index.ts:76](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L76)
 
 ___
 
@@ -386,7 +391,7 @@ ___
 
 #### Defined in
 
-[index.ts:85](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L85)
+[index.ts:91](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L91)
 
 ___
 
@@ -396,7 +401,7 @@ ___
 
 #### Defined in
 
-[index.ts:44](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L44)
+[index.ts:50](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L50)
 
 ___
 
@@ -406,7 +411,7 @@ ___
 
 #### Defined in
 
-[index.ts:43](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L43)
+[index.ts:49](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L49)
 
 ___
 
@@ -416,7 +421,7 @@ ___
 
 #### Defined in
 
-[index.ts:187](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L187)
+[index.ts:195](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L195)
 
 ___
 
@@ -442,7 +447,7 @@ ___
 
 #### Defined in
 
-[index.ts:46](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L46)
+[index.ts:52](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L52)
 
 ___
 
@@ -463,4 +468,4 @@ ___
 
 #### Defined in
 
-[index.ts:61](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L61)
+[index.ts:67](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L67)

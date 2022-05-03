@@ -236,6 +236,7 @@ export const enum Action {
     sold = 'sold',
     /** Trading one non-native, non-stablecoin token for another */
     traded = 'traded',
+    /** Trading one stablecoin for another, or native token for the wrapped version (but not actually wrapping it using the wrapping contract itself) */
     swapped = 'swapped',
     canceled = 'canceled',
     transferredOwnership = 'transferred ownership',

@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[index.ts:247](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L247)
+[index.ts:259](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L259)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[index.ts:245](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L245)
+[index.ts:257](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L257)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[index.ts:243](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L243)
+[index.ts:255](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L255)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[index.ts:244](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L244)
+[index.ts:256](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L256)
 
 ___
 
@@ -60,4 +60,4 @@ ___
 
 #### Defined in
 
-[index.ts:246](https://github.com/the-metagame/evm-translator/blob/918e8cb/src/interfaces/index.ts#L246)
+[index.ts:258](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L258)
