@@ -1,5 +1,5 @@
 import { AlchemyProvider, BaseProvider, getDefaultProvider, JsonRpcProvider } from '@ethersproject/providers'
-import { Address, Chain, ContractType, Decoded, RawTxData } from 'interfaces'
+import { Address, Chain, ContractType, Decoded, Interpretation, RawTxData } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import { getChainById, getChainBySymbol, validateAndNormalizeAddress } from 'utils'
 
@@ -10,6 +10,8 @@ type TranslatorConfig = {
     etherscanAPIKey?: string
     userAddress?: string
 }
+
+type NamesAndSymbolsMap = Record<Address, { name: string | null; symbol: string | null }>
 
 const defaultConfig: TranslatorConfig = {
     chain: getChainBySymbol('ETH'),
@@ -50,12 +52,12 @@ class Translator {
         this.userAddress = validateAndNormalizeAddress(userAddress)
     }
 
-    /** Gets the txResponse, txReceipt, txTrace from a node. Archive node needed */
+    // Gets the txResponse, txReceipt, txTrace from a node. Archive node needed
     async getRawTxData(txHash: string): Promise<RawTxData> {
         throw new Error('Not implemented')
     }
 
-    /** Could rely on Etherscan, but they have a max of 10k records */
+    // Could rely on Etherscan, but they have a max of 10k records
     // async getAllTxHashesForAddress(address: string): Promise<string[]> {
     //     throw new Error('Not implemented')
     // }
@@ -66,7 +68,8 @@ class Translator {
 
     /**********************************************/
     /**** USING TX AND CONTRACT ADDRESSES  ********/
-
+    /****  Data used to decode & augment   ********/
+    /**********************************************/
     async getABIsForContracts(contractAddresses: string[]): Promise<Record<Address, ABI_ItemUnfiltered[]>> {
         throw new Error('Not implemented')
     }
@@ -75,12 +78,26 @@ class Translator {
         throw new Error('Not implemented')
     }
 
-    async getNamesAndSymbols(
-        contractAddresses: string[],
-    ): Promise<Record<Address, { name: string | null; symbol: string | null }>> {
+    async getNamesAndSymbols(contractAddresses: string[]): Promise<NamesAndSymbolsMap> {
         throw new Error('Not implemented')
     }
 
+    async getEnsForAddresses(addresses: string[]): Promise<Record<Address, string>> {
+        throw new Error('Not implemented')
+    }
+
+    async getOfficialNamesForContracts(contractAddresses: string[]): Promise<Record<Address, string>> {
+        throw new Error('Not implemented')
+    }
+
+    // We should store this in a contracts table just so we can see this data more easily
+    getContractType(address: string, abi: ABI_Item[]): Promise<ContractType> {
+        throw new Error('Not implemented')
+    }
+
+    getContractTypes(contractToAbiMap: Record<Address, ABI_Item[]>): Promise<Record<Address, ContractType>> {
+        throw new Error('Not implemented')
+    }
     // ... might not even needs this, oops
     filterABIs(unfilteredABIs: Record<string, ABI_ItemUnfiltered[]>): Record<Address, ABI_Item[]> {
         const filteredABIs: Record<Address, ABI_Item[]> = {}
@@ -94,10 +111,9 @@ class Translator {
         return filteredABIs
     }
 
-    async getNamesForContracts(contractAddresses: string[]): Promise<any[]> {
-        throw new Error('Not implemented')
-    }
-
+    /**********************************************/
+    /******      DECODING / AUGMENTING     ********/
+    /**********************************************/
     decodeTxData(rawTxData: RawTxData, ABIs: Record<Address, ABI_Item[]>): Decoded {
         throw new Error('Not implemented')
     }
@@ -106,9 +122,56 @@ class Translator {
         throw new Error('Not implemented')
     }
 
-    /** We should store this in a contracts table just so we can see this data more easily */
-    getContractType(address: string, abi: ABI_Item[]): Promise<ContractType> {
+    augmentDecodedData(
+        decodedData: Decoded,
+        ens: Record<Address, string>,
+        namesAndSymbolsMap: NamesAndSymbolsMap,
+        officialContractNamesMap: Record<Address, string>,
+        contractTypesMap: Record<Address, ContractType>,
+    ): Decoded {
         throw new Error('Not implemented')
+    }
+
+    //This is a subset of augmentDecodedData
+    // addEnsToDecodedData(decoded: Decoded, ens: Record<Address, string>): Decoded {
+    //     throw new Error('Not implemented')
+    // }
+
+    /**********************************************/
+    /******          INTERPRETING          ********/
+    /**********************************************/
+
+    interpretDecodedTx(decoded: Decoded, userAddress: Address | null = null): Interpretation {
+        throw new Error('Not implemented')
+    }
+
+    // If we do this after we've created the example description, we'll have to figure out how to parse any addresses we've turned into a shorter name or onoma name
+    // addEnsToInterpretedData(ens: Record<Address, string>): Interpretation {
+    //     throw new Error('Not implemented')
+    // }
+
+    async interpretTx(txHash: string, userAddress: Address | null = null): Promise<Interpretation> {
+        const rawTxData = await this.getRawTxData(txHash)
+        const addresses = this.getContractAddressesFromRawTxData(rawTxData)
+        const unfilteredAbiMap = await this.getABIsForContracts(addresses)
+        const AbiMap = this.filterABIs(unfilteredAbiMap)
+        const ENSs = await this.getEnsForAddresses(addresses)
+        const nameAndSymbols = await this.getNamesAndSymbols(addresses)
+        const officialContractNames = await this.getOfficialNamesForContracts(addresses)
+        const contractTypesMap = await this.getContractTypes(AbiMap)
+
+        const decoded = this.decodeTxData(rawTxData, AbiMap)
+        const decodedWithAugmentation = this.augmentDecodedData(
+            decoded,
+            ENSs,
+            nameAndSymbols,
+            officialContractNames,
+            contractTypesMap,
+        )
+
+        const interpretation = this.interpretDecodedTx(decodedWithAugmentation, userAddress)
+
+        return interpretation
     }
 }
 
