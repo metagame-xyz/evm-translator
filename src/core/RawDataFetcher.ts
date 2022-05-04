@@ -5,18 +5,25 @@ import {
 } from '@ethersproject/abstract-provider'
 import { AlchemyProvider, Formatter } from '@ethersproject/providers'
 import { BigNumber } from 'ethers'
-import { formatEther } from 'ethers/lib/utils'
-import { Address, RawTxData, TraceLog, TxReceipt, TxResponse, UnvalidatedTraceLog } from 'interfaces'
+import {
+    Address,
+    RawTxData,
+    RawTxDataWithoutTrace,
+    TraceLog,
+    TxReceipt,
+    TxResponse,
+    UnvalidatedTraceLog,
+} from 'interfaces'
 import { CovalentTxData } from 'interfaces/covalent'
 import { validateAddress } from 'utils'
 import Covalent from 'utils/clients/Covalent'
 
 export default class RawDataFetcher {
     provider: AlchemyProvider
-    covalent: Covalent
+    covalent: Covalent | null
     formatter = new Formatter()
 
-    constructor(provider: AlchemyProvider, covalent: Covalent) {
+    constructor(provider: AlchemyProvider, covalent: Covalent | null = null) {
         this.provider = provider
         this.covalent = covalent
     }
@@ -70,12 +77,32 @@ export default class RawDataFetcher {
         }
     }
 
+    async getTxDataWithoutTrace(txHash: string): Promise<RawTxDataWithoutTrace> {
+        let txResponse: TxResponse
+        let txReceipt: TxReceipt
+
+        try {
+            ;[txResponse, txReceipt] = await Promise.all([this.getTxResponse(txHash), this.getTxReceipt(txHash)])
+        } catch (e) {
+            console.error('error in getTxData', e)
+            throw e
+        }
+
+        return {
+            txResponse,
+            txReceipt,
+        }
+    }
+
     async getTxDataWithCovalentByAddress(
         address: Address,
         includedInitiatedTxs: boolean,
         includedNotInitiatedTxs: boolean,
         limit: number,
     ): Promise<{ rawTxDataArr: RawTxData[]; covalentTxDataArr: CovalentTxData[] }> {
+        if (!this.covalent) {
+            throw new Error('no covalent client')
+        }
         const allCovalentTxDataArr = await this.covalent.getTransactionsFor(address, limit)
 
         const covalentTxDataArr = allCovalentTxDataArr.filter((tx) => {

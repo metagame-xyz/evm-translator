@@ -60,6 +60,23 @@ export default class Etherscan {
         return JSON.parse(response.result)
     }
 
+    async getABIs(contractAddresses: Address[]): Promise<Record<Address, ABI_ItemUnfiltered[]>> {
+        const ABIMap: Record<Address, ABI_ItemUnfiltered[]> = {}
+        try {
+            await Promise.all(
+                contractAddresses.map(async (contractAddress) => {
+                    const abi = await this.getABI(contractAddress)
+                    ABIMap[contractAddress] = abi
+                }),
+            )
+        } catch (e) {
+            console.error(e)
+            throw new Error(`Etherscan API error: ${e}`)
+        }
+
+        return ABIMap
+    }
+
     async getSourceCode(contractAddress: Address): Promise<SourceCodeObject> {
         const params = {
             module: 'contract',

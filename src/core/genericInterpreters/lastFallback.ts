@@ -39,7 +39,12 @@ function isAirdrop(interpretation: Interpretation, userAddress: Address, fromAdd
 }
 
 function isClaimed(interpretation: Interpretation, userAddress: Address, fromAddress: Address): boolean {
-    return isReceived(interpretation) && userAddress === fromAddress
+    return (
+        isReceived(interpretation) &&
+        userAddress === fromAddress &&
+        !sentBaseToken(interpretation) &&
+        !sentOtherToken(interpretation)
+    )
 }
 
 function isReceived(interpretation: Interpretation): boolean {
@@ -79,6 +84,11 @@ function isSwapped(interpretation: Interpretation): boolean {
 
 function getAction(interpretation: Interpretation, userAddress: Address, fromAddress: Address): Action {
     // Order matters here, some are sub/super sets of others
+
+    const isSentBaseToken = sentBaseToken(interpretation)
+    const isSentOtherToken = sentOtherToken(interpretation)
+    const isReceivedBaseToken = receivedBaseToken(interpretation)
+    const isReceivedOtherToken = receivedOtherToken(interpretation)
 
     if (isAirdrop(interpretation, userAddress, fromAddress)) {
         return Action.gotAirdropped

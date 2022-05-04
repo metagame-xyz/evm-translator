@@ -29,7 +29,7 @@ type TokenVars = {
     approvedENS: string
 }
 
-type EIP = Exclude<ContractType, 'OTHER'>
+type EIP = Exclude<ContractType, 'OTHER' | 'Gnosis Safe'>
 
 const vars: Record<EIP, TokenVars> = {
     ERC1155: {
@@ -296,7 +296,7 @@ function interpretGenericToken(decodedData: Decoded, interpretation: Interpretat
     const { userAddress } = interpretation
     const { fromAddress, toAddress, interactions, contractType } = decodedData
 
-    if (contractType === ContractType.OTHER) {
+    if (contractType === ContractType.OTHER || contractType === ContractType.GNOSIS) {
         throw new Error('Token type not supported')
     }
     const t = vars[contractType]

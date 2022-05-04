@@ -4,7 +4,7 @@ import { Action, Address } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered, ABIStringMap } from 'interfaces/abi'
 import { InterpreterMap } from 'interfaces/contractInterpreter'
 
-export default class InterepterTemplateGenerator {
+export default class InterpreterTemplateGenerator {
     etherscan: Etherscan
 
     constructor(etherscanApiKey: string) {

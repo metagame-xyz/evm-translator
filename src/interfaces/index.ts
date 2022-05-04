@@ -103,6 +103,11 @@ export type RawTxData = {
     txTrace: TraceLog[]
 }
 
+export type RawTxDataWithoutTrace = {
+    txResponse: TxResponse
+    txReceipt: TxReceipt
+}
+
 export type InProgressActivity = {
     rawTxData?: RawTxData
     decoded?: Decoded
@@ -120,6 +125,7 @@ export const enum ContractType {
     ERC721 = 'ERC721',
     ERC1155 = 'ERC1155',
     WETH = 'WETH',
+    GNOSIS = 'Gnosis Safe',
     OTHER = 'OTHER',
 }
 
