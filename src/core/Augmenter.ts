@@ -133,8 +133,8 @@ export class Augmenter {
         }
     }
 
+    // TODO need to get it from contract JSON, ABI, and/or TinTin too, instead of Covalent
     private augmentOfficialContractNames() {
-        // can get it from contract JSON, maybe ABI, and/or TinTin too
         if (this.covalentDataArr.length) {
             this.covalentDataArr.forEach((covalentData, index) => {
                 this.decodedArr[index].officialContractName = covalentData.to_address_label || null

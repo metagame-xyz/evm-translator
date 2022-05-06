@@ -9,6 +9,7 @@
 - [ERC1155](ContractType.md#erc1155)
 - [ERC20](ContractType.md#erc20)
 - [ERC721](ContractType.md#erc721)
+- [GNOSIS](ContractType.md#gnosis)
 - [OTHER](ContractType.md#other)
 - [WETH](ContractType.md#weth)
 
@@ -20,7 +21,7 @@
 
 #### Defined in
 
-[index.ts:121](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L121)
+[index.ts:126](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L126)
 
 ___
 
@@ -30,7 +31,7 @@ ___
 
 #### Defined in
 
-[index.ts:119](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L119)
+[index.ts:124](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L124)
 
 ___
 
@@ -40,7 +41,17 @@ ___
 
 #### Defined in
 
-[index.ts:120](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L120)
+[index.ts:125](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L125)
+
+___
+
+### GNOSIS
+
+• **GNOSIS** = `"Gnosis Safe"`
+
+#### Defined in
+
+[index.ts:128](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L128)
 
 ___
 
@@ -50,7 +61,7 @@ ___
 
 #### Defined in
 
-[index.ts:123](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L123)
+[index.ts:129](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L129)
 
 ___
 
@@ -60,4 +71,4 @@ ___
 
 #### Defined in
 
-[index.ts:122](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L122)
+[index.ts:127](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L127)

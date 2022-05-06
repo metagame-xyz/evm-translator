@@ -26,6 +26,7 @@
 - [Interpretation](modules.md#interpretation)
 - [RawLogEvent](modules.md#rawlogevent)
 - [RawTxData](modules.md#rawtxdata)
+- [RawTxDataWithoutTrace](modules.md#rawtxdatawithouttrace)
 - [Token](modules.md#token)
 - [TraceLog](modules.md#tracelog)
 - [TraceLogAction](modules.md#tracelogaction)
@@ -51,7 +52,7 @@
 
 #### Defined in
 
-[index.ts:221](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L221)
+[index.ts:227](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L227)
 
 ___
 
@@ -63,7 +64,7 @@ ___
 
 #### Defined in
 
-[index.ts:9](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L9)
+[index.ts:9](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L9)
 
 ___
 
@@ -88,7 +89,7 @@ ___
 
 #### Defined in
 
-[index.ts:13](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L13)
+[index.ts:13](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L13)
 
 ___
 
@@ -100,7 +101,7 @@ Map of EVM chain names to an object with Chain metadata
 
 #### Defined in
 
-[index.ts:37](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L37)
+[index.ts:37](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L37)
 
 ___
 
@@ -133,7 +134,7 @@ ___
 
 #### Defined in
 
-[index.ts:127](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L127)
+[index.ts:133](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L133)
 
 ___
 
@@ -154,7 +155,7 @@ ___
 
 #### Defined in
 
-[index.ts:273](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L273)
+[index.ts:280](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L280)
 
 ___
 
@@ -171,7 +172,7 @@ ___
 
 #### Defined in
 
-[index.ts:106](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L106)
+[index.ts:111](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L111)
 
 ___
 
@@ -190,7 +191,7 @@ ___
 
 #### Defined in
 
-[index.ts:154](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L154)
+[index.ts:160](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L160)
 
 ___
 
@@ -209,7 +210,7 @@ ___
 
 #### Defined in
 
-[index.ts:161](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L161)
+[index.ts:167](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L167)
 
 ___
 
@@ -250,7 +251,7 @@ ___
 
 #### Defined in
 
-[index.ts:169](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L169)
+[index.ts:175](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L175)
 
 ___
 
@@ -283,7 +284,7 @@ native tokens and gas number are denominated in their native token (ex: eth, not
 
 #### Defined in
 
-[index.ts:203](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L203)
+[index.ts:209](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L209)
 
 ___
 
@@ -302,7 +303,7 @@ ___
 
 #### Defined in
 
-[index.ts:111](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L111)
+[index.ts:116](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L116)
 
 ___
 
@@ -320,7 +321,24 @@ ___
 
 #### Defined in
 
-[index.ts:100](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L100)
+[index.ts:100](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L100)
+
+___
+
+### RawTxDataWithoutTrace
+
+Ƭ **RawTxDataWithoutTrace**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `txReceipt` | [`TxReceipt`](modules.md#txreceipt) |
+| `txResponse` | [`TxResponse`](modules.md#txresponse) |
+
+#### Defined in
+
+[index.ts:106](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L106)
 
 ___
 
@@ -344,7 +362,7 @@ ___
 
 #### Defined in
 
-[index.ts:261](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L261)
+[index.ts:268](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L268)
 
 ___
 
@@ -370,7 +388,7 @@ ___
 
 #### Defined in
 
-[index.ts:76](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L76)
+[index.ts:76](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L76)
 
 ___
 
@@ -391,7 +409,7 @@ ___
 
 #### Defined in
 
-[index.ts:91](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L91)
+[index.ts:91](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L91)
 
 ___
 
@@ -401,7 +419,7 @@ ___
 
 #### Defined in
 
-[index.ts:50](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L50)
+[index.ts:50](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L50)
 
 ___
 
@@ -411,7 +429,7 @@ ___
 
 #### Defined in
 
-[index.ts:49](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L49)
+[index.ts:49](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L49)
 
 ___
 
@@ -421,7 +439,7 @@ ___
 
 #### Defined in
 
-[index.ts:195](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L195)
+[index.ts:201](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L201)
 
 ___
 
@@ -447,7 +465,7 @@ ___
 
 #### Defined in
 
-[index.ts:52](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L52)
+[index.ts:52](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L52)
 
 ___
 
@@ -468,4 +486,4 @@ ___
 
 #### Defined in
 
-[index.ts:67](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L67)
+[index.ts:67](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L67)

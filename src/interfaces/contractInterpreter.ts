@@ -1,28 +1,43 @@
 import { Action, Address } from 'interfaces'
 
-export type KeywordMap = {
-    key: string
-    filters: {
-        [key: string]: string
-    }
-    defaultValue: string
-    index?: number
+export type InterpreterMap = {
+    /** The address of the contract this map is for */
+    contractAddress: Address
+    /** We're getting rid of this */
+    methods: Record<string, string[]>
+    /** The official name of the contract as defined in the source code */
+    contractOfficialName: string
+    /** A sensible name that will explain what this contract is for */
+    contractName: string
+    /** The interpretation for a tx when it is initiated by calling the given write method */
+    writeFunctions: Record<string, MethodMap>
 }
 
 export type MethodMap = {
+    /** The action the tx will be categorized as when this method is the initiator of tx */
     action: Action
+    /** The template for the example description using both global keywords and method-specific keywords */
     exampleDescriptionTemplate: string
+    /** An example of what the description will look like */
     exampleDescription: string
+    /** Keywords to pull out of the decoded events to be used in the example description and stored in the `extra` object of the interpretation */
     keywords: Record<string, KeywordMap>
 }
 
-export type InterpreterMap = {
-    contractAddress: Address
-    methods: Record<string, string[]>
-    contractOfficialName: string
-    contractName: string
-    writeFunctions: Record<string, MethodMap>
+export type KeywordMap = {
+    /** The key we're looking for to pull out the value  */
+    key: string
+    /** Filters to narrow down to the event(s) that will have the key:value we're looking for */
+    filters: {
+        [key: string]: string
+    }
+    /** The default value if we cant find a matching event or if the value is null */
+    defaultValue: string
+    /** If there are multiple events that match the filters, which event in the array to use. The default is 0 */
+    index?: number
 }
+
+
 
 export type DeployInterpreterMap = {
     exampleDescriptionTemplate: string

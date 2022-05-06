@@ -22,7 +22,7 @@ A transaction that deploys a new contract from an EOA (TODO: what about create2?
 
 #### Defined in
 
-[index.ts:44](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L44)
+[index.ts:44](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L44)
 
 ___
 
@@ -34,7 +34,7 @@ A transaction that invokes a method on a contract from an EOA
 
 #### Defined in
 
-[index.ts:46](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L46)
+[index.ts:46](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L46)
 
 ___
 
@@ -46,4 +46,4 @@ A transaction that sends a native token (ex: ETH) from one address to another
 
 #### Defined in
 
-[index.ts:42](https://github.com/the-metagame/evm-translator/blob/4776416/src/interfaces/index.ts#L42)
+[index.ts:42](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L42)
