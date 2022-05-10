@@ -15,7 +15,7 @@ import {
 } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import { EVMTransaction } from 'interfaces/s3'
-import { getChainBySymbol, getKeys, validateAndNormalizeAddress } from 'utils'
+import { filterABIs, getChainBySymbol, getKeys, validateAndNormalizeAddress } from 'utils'
 import Etherscan from 'utils/clients/Etherscan'
 
 export type TranslatorConfigTwo = {
@@ -136,7 +136,7 @@ class Translator2 {
     async getNameAndSymbol(
         address: string,
         contractType: ContractType,
-    ): Promise<{ tokenName: string | null; tokenSymbol: string | null }> {
+    ): Promise<{ tokenName: string | null; tokenSymbol: string | null; contractName: string | null }> {
         return this.augmenter.getNameAndSymbol(address, contractType)
     }
 
@@ -160,27 +160,7 @@ class Translator2 {
         contractToAbiMap: Record<Address, ABI_ItemUnfiltered[]>,
         contractToOfficialNameMap: Record<Address, string | null>,
     ): Promise<ContractData[]> {
-        const contractDataArr: ContractData[] = []
-        const filteredABIs = this.filterABIs(contractToAbiMap)
-
-        getKeys(contractToAbiMap).forEach(async (address) => {
-            const abi = contractToAbiMap[address]
-            const contractType = await this.getContractType(address, filteredABIs[address])
-            const { tokenName, tokenSymbol } = await this.getNameAndSymbol(address, contractType)
-            // const contractName = await this.getContractName(address)
-            const contractData: ContractData = {
-                address,
-                type: contractType,
-                tokenName,
-                tokenSymbol,
-                abi,
-                contractName: null,
-                contractOfficialName: contractToOfficialNameMap[address],
-            }
-            contractDataArr.push(contractData)
-        })
-
-        return contractDataArr
+        return this.augmenter.getContractsData(contractToAbiMap, contractToOfficialNameMap)
     }
 
     // We should store this in a contracts table just so we can see this data more easily
@@ -192,22 +172,15 @@ class Translator2 {
         throw new Error('Not implemented')
     }
     // ... might not even needs this, oops
-    filterABIs(unfilteredABIs: Record<string, ABI_ItemUnfiltered[]>): Record<Address, ABI_Item[]> {
-        const filteredABIs: Record<Address, ABI_Item[]> = {}
-
-        for (const [addressStr, unfilteredABI] of Object.entries(unfilteredABIs)) {
-            const address = validateAndNormalizeAddress(addressStr)
-            const abi = unfilteredABI.filter(({ type }) => type === 'function' || type === 'event') as ABI_Item[]
-            filteredABIs[address] = abi
-        }
-
-        return filteredABIs
-    }
 
     /**********************************************/
     /******      DECODING / AUGMENTING     ********/
     /**********************************************/
-    decodeTxData(rawTxData: RawTxData | RawTxDataWithoutTrace, ABIs: Record<Address, ABI_Item[]>): any {
+    decodeTxData(
+        rawTxData: RawTxData | RawTxDataWithoutTrace,
+        ABIs: Record<Address, ABI_Item[]>,
+        contractDataArr: ContractData[],
+    ): any {
         const allABIs = []
         for (const abis of Object.values(ABIs)) {
             allABIs.push(...abis)
@@ -218,16 +191,24 @@ class Translator2 {
         const { logs } = txReceipt
 
         // TODO logs that don't get decoded dont show up as 'null' or 'undefined', which will throw off mapping the logIndex to the decoded log
-        const decodedLogs = abiDecoder.decodeLogs(rawTxData.txReceipt.logs)
-        console.log('decodedLogs', decodedLogs)
+
+        const decodedLogs: Omit<DecodedLog, 'logIndex'>[] = abiDecoder.decodeLogs(rawTxData.txReceipt.logs)
         const decodedData = abiDecoder.decodeMethod(rawTxData.txResponse.data)
 
         const augmentedDecodedLogs = decodedLogs.map((log, index) => {
-            log.logIndex = logs[index].logIndex
-            return log
+            const decodedLog = {
+                ...log,
+                logIndex: logs[index].logIndex,
+                address: validateAndNormalizeAddress(log.address),
+            }
+            return decodedLog
         }) as DecodedLog[]
 
-        const transformedDecodedLogs = transformDecodedLogs(rawTxData.txReceipt.logs, augmentedDecodedLogs)
+        const transformedDecodedLogs = transformDecodedLogs(
+            rawTxData.txReceipt.logs,
+            augmentedDecodedLogs,
+            contractDataArr,
+        )
 
         return { decodedLogs, decodedData, transformedDecodedLogs }
     }
@@ -268,13 +249,13 @@ class Translator2 {
         const rawTxData = await this.getRawTxData(txHash)
         const addresses = this.getContractAddressesFromRawTxData(rawTxData)
         const unfilteredAbiMap = await this.getABIsForContracts(addresses)
-        const AbiMap = this.filterABIs(unfilteredAbiMap)
+        const AbiMap = filterABIs(unfilteredAbiMap)
         const ENSs = await this.getEnsForAddresses(addresses)
         const nameAndSymbols = await this.getNamesAndSymbols(addresses)
         const officialContractNames = await this.getOfficialNamesForContracts(addresses)
         const contractTypesMap = await this.getContractTypes(AbiMap)
 
-        const decoded = this.decodeTxData(rawTxData, AbiMap)
+        const decoded = this.decodeTxData(rawTxData, AbiMap, [])
         const decodedWithAugmentation = this.augmentDecodedData(
             decoded,
             ENSs,

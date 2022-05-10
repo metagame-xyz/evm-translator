@@ -2,14 +2,14 @@ import { Log } from '@ethersproject/providers'
 import collect from 'collect.js'
 import { ethers } from 'ethers'
 import { BigNumber } from 'ethers'
-import { Interaction, TxReceipt } from 'interfaces'
+import { ContractData, Interaction, TxReceipt } from 'interfaces'
 import { validateAndNormalizeAddress } from 'utils'
 
 // import { PrismaClient } from '@prisma/client'
 // const prisma = new PrismaClient()
 
 type Event = {
-    contractName: string
+    contractName: string | null
     contractSymbol: string | null
     contractAddress: string
     name: string
@@ -40,7 +40,11 @@ export type DecodedDataAndLogs = {
     decodedLogs: DecodedLog[]
 }
 
-export function transformDecodedLogs(rawLogs: Log[], decodedLogs: DecodedLog[]): Array<Interaction> {
+export function transformDecodedLogs(
+    rawLogs: Log[],
+    decodedLogs: DecodedLog[],
+    contractDataArr: ContractData[],
+): Array<Interaction> {
     // tx.log_events.forEach((event) => {
     //     console.log('decoded', event)
     //     event.decoded.params.forEach((param) => {
@@ -54,7 +58,6 @@ export function transformDecodedLogs(rawLogs: Log[], decodedLogs: DecodedLog[]):
         .reject((log) => !log)
         .mapToGroups((log: DecodedLog): [string, Event] => {
             // console.log('params', event.decoded.params)
-            console.log('log', log)
             const events = Object.fromEntries(
                 log.events?.map((param) => [
                     param.name,
@@ -74,11 +77,13 @@ export function transformDecodedLogs(rawLogs: Log[], decodedLogs: DecodedLog[]):
             // console.log('event', event)
             // console.log('detials', details)
 
+            const contractData = contractDataArr.find((contractData) => contractData.address === log.address)
+
             return [
                 log.address,
                 {
-                    contractName: 'fake name',
-                    contractSymbol: 'fake name',
+                    contractName: contractData?.contractName || null,
+                    contractSymbol: contractData?.tokenSymbol || null,
                     contractAddress: log.address,
                     name: log.name,
                     logIndex: log.logIndex,

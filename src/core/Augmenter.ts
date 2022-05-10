@@ -7,6 +7,7 @@ import { formatEther, formatUnits } from 'ethers/lib/utils'
 import {
     Address,
     Chain,
+    ContractData,
     ContractType,
     Decoded,
     InProgressActivity,
@@ -19,7 +20,7 @@ import {
 import { ABI_ItemUnfiltered } from 'interfaces/abi'
 import { CovalentTxData } from 'interfaces/covalent'
 import traverse from 'traverse'
-import { getChainById, isAddress } from 'utils'
+import { filterABIs, getChainById, getKeys, isAddress } from 'utils'
 import tokenABIMap from 'utils/ABIs'
 import checkInterface from 'utils/checkInterface'
 import Covalent from 'utils/clients/Covalent'
@@ -291,7 +292,7 @@ export class Augmenter {
     async getNameAndSymbol(
         address: string,
         contractType: ContractType,
-    ): Promise<{ tokenName: string | null; tokenSymbol: string | null }> {
+    ): Promise<{ tokenName: string | null; tokenSymbol: string | null; contractName: string | null }> {
         const abi = tokenABIMap[contractType]
         const contract = new Contract(address, abi, this.provider)
 
@@ -300,13 +301,19 @@ export class Augmenter {
 
         const results = await Promise.allSettled([namePromise, symbolPromise])
 
-        const tokenName = results[0].status === 'fulfilled' ? results[0].value : null
+        const contractName = results[0].status === 'fulfilled' ? results[0].value : null
         const tokenSymbol = results[1].status === 'fulfilled' ? results[1].value : null
+        let tokenName = null
 
-        console.log(`${address} name: ${tokenName}`)
-        console.log(`${address} symbol: ${tokenSymbol}`)
+        if (
+            contractType === ContractType.ERC20 ||
+            contractType === ContractType.ERC721 ||
+            contractType === ContractType.ERC1155
+        ) {
+            tokenName = contractName
+        }
 
-        return { tokenName, tokenSymbol }
+        return { tokenName, tokenSymbol, contractName }
     }
 
     private async decodeMethodName(rawTxData: RawTxData): Promise<string> {
@@ -369,5 +376,33 @@ export class Augmenter {
         contractTypes.forEach((contractType, index) => {
             this.decodedArr[index].contractType = contractType
         })
+    }
+
+    async getContractsData(
+        contractToAbiMap: Record<Address, ABI_ItemUnfiltered[]>,
+        contractToOfficialNameMap: Record<Address, string | null>,
+    ): Promise<ContractData[]> {
+        const contractDataArr: ContractData[] = []
+        const filteredABIs = filterABIs(contractToAbiMap)
+
+        await Promise.all(
+            getKeys(contractToAbiMap).map(async (address) => {
+                const abi = contractToAbiMap[address]
+                const contractType = await this.getContractType(address, filteredABIs[address])
+                const { tokenName, tokenSymbol, contractName } = await this.getNameAndSymbol(address, contractType)
+                // const contractName = await this.getContractName(address)
+                const contractData: ContractData = {
+                    address,
+                    type: contractType,
+                    tokenName,
+                    tokenSymbol,
+                    abi,
+                    contractName,
+                    contractOfficialName: contractToOfficialNameMap[address],
+                }
+                contractDataArr.push(contractData)
+            }),
+        )
+        return contractDataArr
     }
 }
