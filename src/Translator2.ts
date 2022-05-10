@@ -4,6 +4,7 @@ import RawDataFetcher from 'core/RawDataFetcher'
 import { DecodedDataAndLogs, DecodedLog, transformDecodedLogs } from 'core/transformDecodedLogs'
 import { Address, Chain, ContractType, Decoded, Interpretation, RawTxData, RawTxDataWithoutTrace } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
+import { EVMTransaction } from 'interfaces/s3'
 import { getChainBySymbol, validateAndNormalizeAddress } from 'utils'
 import Etherscan from 'utils/clients/Etherscan'
 
@@ -70,6 +71,10 @@ class Translator2 {
 
     async getRawTxDataWithoutTrace(txHash: string): Promise<RawTxDataWithoutTrace> {
         return this.rawDataFetcher.getTxDataWithoutTrace(txHash)
+    }
+
+    getRawDataFromS3Data(tx: EVMTransaction): RawTxDataWithoutTrace {
+        return this.rawDataFetcher.getTxDataFromS3Tx(tx)
     }
 
     // Could rely on Etherscan, but they have a max of 10k records

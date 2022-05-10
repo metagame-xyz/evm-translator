@@ -15,6 +15,7 @@ import {
     UnvalidatedTraceLog,
 } from 'interfaces'
 import { CovalentTxData } from 'interfaces/covalent'
+import { EVMTransaction, EVMTransactionReceipt, FullEVMBlock } from 'interfaces/s3'
 import { validateAddress } from 'utils'
 import Covalent from 'utils/clients/Covalent'
 
@@ -33,7 +34,7 @@ export default class RawDataFetcher {
         const unvalidatedTrace = (await this.provider.send('trace_transaction', [txHash])) as UnvalidatedTraceLog[]
         const traceLogs = validateTraceTxData(unvalidatedTrace)
         console.log('tried tracing')
-        // console.log(traceLogs)
+        console.log(traceLogs)
 
         return traceLogs
     }
@@ -74,6 +75,20 @@ export default class RawDataFetcher {
             txResponse,
             txReceipt,
             txTrace,
+        }
+    }
+
+    getTxDataFromS3Tx(tx: EVMTransaction): RawTxDataWithoutTrace {
+        const unvalidatedTxReceipt = tx.transactionReceipt
+        unvalidatedTxReceipt.from = tx.from
+        unvalidatedTxReceipt.to = tx.to
+        const txReceipt = validateAndFormatTxData(unvalidatedTxReceipt)
+        const formattedTxResponse = this.formatter.transactionResponse(tx)
+        const txResponse = validateAndFormatTxData(formattedTxResponse)
+
+        return {
+            txResponse,
+            txReceipt,
         }
     }
 
@@ -141,8 +156,10 @@ export default class RawDataFetcher {
 // lowercase addresses b/c addresses have uppercase for the checksum, but aren't when they're in a topic
 function validateAndFormatTxData(txData: unvalidatedTransactionResponse): TxResponse
 function validateAndFormatTxData(txData: unvalidatedTransactionReceipt): TxReceipt
+function validateAndFormatTxData(txData: EVMTransactionReceipt): TxReceipt
+function validateAndFormatTxData(txData: EVMTransaction): TxResponse
 function validateAndFormatTxData(
-    txData: unvalidatedTransactionResponse | unvalidatedTransactionReceipt,
+    txData: unvalidatedTransactionResponse | unvalidatedTransactionReceipt | EVMTransaction | EVMTransactionReceipt,
 ): TxResponse | TxReceipt {
     const txResponseFormatted = {} as any
 
@@ -153,7 +170,8 @@ function validateAndFormatTxData(
             const address = val.toLowerCase()
             const validatedAddress = validateAddress(address)
             txResponseFormatted[key] = validatedAddress
-        } else {
+            // in EVMTransaction
+        } else if (key !== 'transactionReceipt' && key !== 'trace') {
             txResponseFormatted[key] = val
         }
     }

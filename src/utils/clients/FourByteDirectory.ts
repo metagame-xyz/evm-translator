@@ -13,11 +13,18 @@ async function getMethodSignature(hexSignature: string): Promise<string> {
         console.log('4byte rate limiter engaged. tokens remaining:', remaining)
     }
 
-    const method = await axios
-        .get('https://www.4byte.directory/api/v1/signatures', { params: { hex_signature: hexSignature } })
-        .then(({ data: { results } }) => results[results.length - 1]?.text_signature?.split('(')?.[0])
+    try {
+        const method = await axios
+            .get('https://www.4byte.directory/api/v1/signatures', { params: { hex_signature: hexSignature } })
+            .then(({ data: { results } }) => results[results.length - 1]?.text_signature?.split('(')?.[0])
 
-    return method
+        return method
+    } catch (err) {
+        console.log('err', err)
+        return ''
+    }
+
+    // return method
 }
 
 const fourByteDirectory = {

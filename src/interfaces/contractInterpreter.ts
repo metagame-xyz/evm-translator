@@ -37,8 +37,6 @@ export type KeywordMap = {
     index?: number
 }
 
-
-
 export type DeployInterpreterMap = {
     exampleDescriptionTemplate: string
     exampleDescription: string
