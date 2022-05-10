@@ -1,11 +1,21 @@
 import { AlchemyProvider, JsonRpcProvider } from '@ethersproject/providers'
 import abiDecoder from 'abi-decoder'
+import { Augmenter } from 'core/Augmenter'
 import RawDataFetcher from 'core/RawDataFetcher'
 import { DecodedDataAndLogs, DecodedLog, transformDecodedLogs } from 'core/transformDecodedLogs'
-import { Address, Chain, ContractType, Decoded, Interpretation, RawTxData, RawTxDataWithoutTrace } from 'interfaces'
+import {
+    Address,
+    Chain,
+    ContractData,
+    ContractType,
+    Decoded,
+    Interpretation,
+    RawTxData,
+    RawTxDataWithoutTrace,
+} from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import { EVMTransaction } from 'interfaces/s3'
-import { getChainBySymbol, validateAndNormalizeAddress } from 'utils'
+import { getChainBySymbol, getKeys, validateAndNormalizeAddress } from 'utils'
 import Etherscan from 'utils/clients/Etherscan'
 
 export type TranslatorConfigTwo = {
@@ -31,6 +41,7 @@ class Translator2 {
     rawDataFetcher: RawDataFetcher
     etherscan: Etherscan
     userAddress: Address | null
+    augmenter: Augmenter
 
     constructor(config: TranslatorConfigTwo) {
         this.chain = config.chain
@@ -41,6 +52,7 @@ class Translator2 {
         this.provider = this.getProvider()
         this.etherscan = new Etherscan(this.etherscanAPIKey)
         this.rawDataFetcher = new RawDataFetcher(this.provider)
+        this.augmenter = new Augmenter(this.provider, null, this.etherscan)
     }
 
     private getProvider(): AlchemyProvider {
@@ -77,8 +89,6 @@ class Translator2 {
         return this.rawDataFetcher.getTxDataFromS3Tx(tx)
     }
 
-    
-
     // Could rely on Etherscan, but they have a max of 10k records
     // async getAllTxHashesForAddress(address: string): Promise<string[]> {
     //     throw new Error('Not implemented')
@@ -107,7 +117,23 @@ class Translator2 {
         return abiMap
     }
 
-    async getNameAndSymbol(address: string): Promise<{ name: string; symbol: string }> {
+    // TODO get the names
+    async getABIsAndNamesForContracts(
+        contractAddresses: string[],
+    ): Promise<[Record<Address, ABI_ItemUnfiltered[]>, Record<Address, string | null>]> {
+        const addresses = contractAddresses.map((a) => validateAndNormalizeAddress(a))
+        const abiMap = await this.etherscan.getABIs(addresses)
+
+        const nameMap: Record<Address, string | null> = {}
+
+        getKeys(abiMap).forEach((address) => {
+            nameMap[address] = null
+        })
+
+        return [abiMap, nameMap]
+    }
+
+    async getNameAndSymbol(address: string): Promise<{ tokenName: string | null; tokenSymbol: string | null }> {
         throw new Error('Not implemented')
     }
 
@@ -123,9 +149,40 @@ class Translator2 {
         throw new Error('Not implemented')
     }
 
-    // We should store this in a contracts table just so we can see this data more easily
-    getContractType(address: string, abi: ABI_Item[]): Promise<ContractType> {
+    async getContractName(address: string): Promise<string | null> {
         throw new Error('Not implemented')
+    }
+
+    async getContractsData(
+        contractToAbiMap: Record<Address, ABI_ItemUnfiltered[]>,
+        contractToOfficialNameMap: Record<Address, string | null>,
+    ): Promise<ContractData[]> {
+        const contractDataArr: ContractData[] = []
+        const filteredABIs = this.filterABIs(contractToAbiMap)
+
+        getKeys(contractToAbiMap).forEach(async (address) => {
+            const abi = contractToAbiMap[address]
+            const contractType = await this.getContractType(address, filteredABIs[address])
+            const { tokenName, tokenSymbol } = await this.getNameAndSymbol(address)
+            // const contractName = await this.getContractName(address)
+            const contractData: ContractData = {
+                address,
+                type: contractType,
+                tokenName,
+                tokenSymbol,
+                abi,
+                contractName: null,
+                contractOfficialName: contractToOfficialNameMap[address],
+            }
+            contractDataArr.push(contractData)
+        })
+
+        return contractDataArr
+    }
+
+    // We should store this in a contracts table just so we can see this data more easily
+    getContractType(address: Address, abi: ABI_Item[]): Promise<ContractType> {
+        return this.augmenter.getContractType(address, abi)
     }
 
     getContractTypes(contractToAbiMap: Record<Address, ABI_Item[]>): Promise<Record<Address, ContractType>> {

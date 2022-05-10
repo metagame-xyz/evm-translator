@@ -16,6 +16,7 @@ import {
     TraceLog,
     TxType,
 } from 'interfaces'
+import { ABI_ItemUnfiltered } from 'interfaces/abi'
 import { CovalentTxData } from 'interfaces/covalent'
 import traverse from 'traverse'
 import { getChainById, isAddress } from 'utils'
@@ -35,7 +36,7 @@ export type DecoderConfig = {
 
 export class Augmenter {
     provider: BaseProvider
-    covalent: Covalent
+    covalent: Covalent | null
     etherscan: Etherscan
     formatter = new Formatter()
     chain: Chain
@@ -50,7 +51,7 @@ export class Augmenter {
     fnSigCache: Record<string, string> = {}
     ensCache: Record<Address, string> = {}
 
-    constructor(provider: BaseProvider, covalent: Covalent, etherscan: Etherscan) {
+    constructor(provider: BaseProvider, covalent: Covalent | null, etherscan: Etherscan) {
         this.provider = provider
         this.covalent = covalent
         this.etherscan = etherscan
@@ -126,6 +127,8 @@ export class Augmenter {
     private async getCovalentData(): Promise<void> {
         if (this.rawTxDataArr.length > 1) {
             throw new Error('Not implemented. This only happens if you already got raw data via Covalent')
+        } else if (!this.covalent) {
+            throw new Error('Covalent not initialized')
         } else {
             const covalentResponse = await this.covalent.getTransactionFor(this.rawTxDataArr[0].txResponse.hash)
             const covalentData = covalentResponse.items[0]
@@ -316,14 +319,14 @@ export class Augmenter {
         })
     }
 
-    private async getContractType(contractAddress: Address): Promise<ContractType> {
+    async getContractType(contractAddress: Address, abiArr: ABI_ItemUnfiltered[] | null = null): Promise<ContractType> {
         if (contractAddress == this.chain.wethAddress) {
             return ContractType.WETH
         }
 
         let contractType = await checkInterface(contractAddress, this.provider)
         if (contractType === ContractType.OTHER) {
-            contractType = await getTypeFromABI(contractAddress, this.etherscan)
+            contractType = await getTypeFromABI(contractAddress, this.etherscan, abiArr)
         }
         return contractType
     }

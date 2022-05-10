@@ -1,3 +1,4 @@
+import { ABI_ItemUnfiltered } from './abi'
 import {
     TransactionReceipt as unvalidatedTransactionReceipt,
     TransactionResponse as unvalidatedTransactionResponse,
@@ -118,6 +119,16 @@ export type RawLogEvent = {
     topics: string[]
     data: string
     logIndex: number
+}
+
+export type ContractData = {
+    address: Address
+    type: ContractType
+    tokenName: string | null
+    tokenSymbol: string | null
+    contractName: string | null
+    contractOfficialName: string | null
+    abi: ABI_ItemUnfiltered[]
 }
 
 export const enum ContractType {

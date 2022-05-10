@@ -3,9 +3,13 @@ import collect from 'collect.js'
 import { Address, ContractType } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 
-async function getTypeFromABI(contractAddress: Address, etherscan: Etherscan): Promise<ContractType> {
+async function getTypeFromABI(
+    contractAddress: Address,
+    etherscan: Etherscan,
+    abiArr: ABI_ItemUnfiltered[] | null = null,
+): Promise<ContractType> {
     try {
-        const unfilteredAbi: ABI_ItemUnfiltered[] = await etherscan.getABI(contractAddress)
+        const unfilteredAbi: ABI_ItemUnfiltered[] = abiArr || (await etherscan.getABI(contractAddress))
 
         const abi = unfilteredAbi.filter(({ type }) => type === 'function' || type === 'event') as ABI_Item[]
 

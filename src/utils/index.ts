@@ -195,3 +195,5 @@ export const getNativeTokenValueEvents = (interactions: Interaction[]): Interact
 
     return nativeTokenEvents
 }
+
+export const getKeys = <T>(obj: T) => Object.keys(obj) as Array<keyof T>
