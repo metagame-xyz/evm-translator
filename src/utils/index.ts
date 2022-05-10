@@ -73,7 +73,7 @@ export const cleanseDataInPlace = (data: any): void => {
 }
 
 const fetchOptions = {
-    body: null,
+    body: undefined,
 }
 
 export class FetcherError extends Error {

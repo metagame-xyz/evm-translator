@@ -133,8 +133,11 @@ class Translator2 {
         return [abiMap, nameMap]
     }
 
-    async getNameAndSymbol(address: string): Promise<{ tokenName: string | null; tokenSymbol: string | null }> {
-        throw new Error('Not implemented')
+    async getNameAndSymbol(
+        address: string,
+        contractType: ContractType,
+    ): Promise<{ tokenName: string | null; tokenSymbol: string | null }> {
+        return this.augmenter.getNameAndSymbol(address, contractType)
     }
 
     async getNamesAndSymbols(contractAddresses: string[]): Promise<NamesAndSymbolsMap> {
@@ -163,7 +166,7 @@ class Translator2 {
         getKeys(contractToAbiMap).forEach(async (address) => {
             const abi = contractToAbiMap[address]
             const contractType = await this.getContractType(address, filteredABIs[address])
-            const { tokenName, tokenSymbol } = await this.getNameAndSymbol(address)
+            const { tokenName, tokenSymbol } = await this.getNameAndSymbol(address, contractType)
             // const contractName = await this.getContractName(address)
             const contractData: ContractData = {
                 address,

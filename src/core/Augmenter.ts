@@ -20,6 +20,7 @@ import { ABI_ItemUnfiltered } from 'interfaces/abi'
 import { CovalentTxData } from 'interfaces/covalent'
 import traverse from 'traverse'
 import { getChainById, isAddress } from 'utils'
+import tokenABIMap from 'utils/ABIs'
 import checkInterface from 'utils/checkInterface'
 import Covalent from 'utils/clients/Covalent'
 import Etherscan from 'utils/clients/Etherscan'
@@ -285,6 +286,27 @@ export class Augmenter {
         })
 
         this.decodedArr = decodedArrWithENS
+    }
+
+    async getNameAndSymbol(
+        address: string,
+        contractType: ContractType,
+    ): Promise<{ tokenName: string | null; tokenSymbol: string | null }> {
+        const abi = tokenABIMap[contractType]
+        const contract = new Contract(address, abi, this.provider)
+
+        const namePromise = contract.name()
+        const symbolPromise = contract.symbol()
+
+        const results = await Promise.allSettled([namePromise, symbolPromise])
+
+        const tokenName = results[0].status === 'fulfilled' ? results[0].value : null
+        const tokenSymbol = results[1].status === 'fulfilled' ? results[1].value : null
+
+        console.log(`${address} name: ${tokenName}`)
+        console.log(`${address} symbol: ${tokenSymbol}`)
+
+        return { tokenName, tokenSymbol }
     }
 
     private async decodeMethodName(rawTxData: RawTxData): Promise<string> {
