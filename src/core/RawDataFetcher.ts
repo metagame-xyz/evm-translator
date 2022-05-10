@@ -15,7 +15,12 @@ import {
     UnvalidatedTraceLog,
 } from 'interfaces'
 import { CovalentTxData } from 'interfaces/covalent'
-import { EVMTransaction, EVMTransactionReceipt, FullEVMBlock } from 'interfaces/s3'
+import {
+    EVMTransaction,
+    EVMTransactionReceipt,
+    EVMTransactionReceiptStringified,
+    EVMTransactionStringified,
+} from 'interfaces/s3'
 import { validateAddress } from 'utils'
 import Covalent from 'utils/clients/Covalent'
 
@@ -79,11 +84,9 @@ export default class RawDataFetcher {
     }
 
     getTxDataFromS3Tx(tx: EVMTransaction): RawTxDataWithoutTrace {
-        const unvalidatedTxReceipt = tx.transactionReceipt
-        unvalidatedTxReceipt.from = tx.from
-        unvalidatedTxReceipt.to = tx.to
-        const txReceipt = validateAndFormatTxData(unvalidatedTxReceipt)
-        const formattedTxResponse = this.formatter.transactionResponse(tx)
+        const txDataStringified = numbersToStrings(tx)
+        const txReceipt = validateAndFormatTxData(txDataStringified.transactionReceipt)
+        const formattedTxResponse = this.formatter.transactionResponse(txDataStringified)
         const txResponse = validateAndFormatTxData(formattedTxResponse)
 
         return {
@@ -153,13 +156,54 @@ export default class RawDataFetcher {
 //     return txHash as TxHash
 // }
 
+function numbersToStrings(txData: EVMTransaction): EVMTransactionStringified {
+    const receiptWithNumbers = txData.transactionReceipt
+    const receipt: EVMTransactionReceiptStringified = {
+        transactionHash: receiptWithNumbers.transactionHash,
+        transactionIndex: receiptWithNumbers.transactionIndex,
+        blockHash: receiptWithNumbers.blockHash,
+        blockNumber: receiptWithNumbers.blockNumber,
+        cumulativeGasUsed: receiptWithNumbers.cumulativeGasUsed.toString(),
+        gasUsed: receiptWithNumbers.gasUsed.toString(),
+        contractAddress: receiptWithNumbers.contractAddress,
+        logs: receiptWithNumbers.logs,
+        logsBloom: receiptWithNumbers.logsBloom,
+        root: receiptWithNumbers.root,
+        status: receiptWithNumbers.status,
+        to: txData.to,
+        from: txData.from,
+    }
+
+    const txDataStringified: EVMTransactionStringified = {
+        hash: txData.hash,
+        nonce: txData.nonce,
+        blockHash: txData.blockHash,
+        blockNumber: txData.blockNumber,
+        transactionIndex: txData.transactionIndex,
+        from: txData.from,
+        to: txData.to,
+        value: txData.value.toString(),
+        gas: txData.gas.toString(),
+        gasPrice: txData.gasPrice.toString(),
+        input: txData.input,
+        transactionReceipt: receipt,
+        trace: txData.trace,
+    }
+
+    return txDataStringified
+}
+
 // lowercase addresses b/c addresses have uppercase for the checksum, but aren't when they're in a topic
 function validateAndFormatTxData(txData: unvalidatedTransactionResponse): TxResponse
 function validateAndFormatTxData(txData: unvalidatedTransactionReceipt): TxReceipt
-function validateAndFormatTxData(txData: EVMTransactionReceipt): TxReceipt
-function validateAndFormatTxData(txData: EVMTransaction): TxResponse
+function validateAndFormatTxData(txData: EVMTransactionReceiptStringified): TxReceipt
+function validateAndFormatTxData(txData: EVMTransactionStringified): TxResponse
 function validateAndFormatTxData(
-    txData: unvalidatedTransactionResponse | unvalidatedTransactionReceipt | EVMTransaction | EVMTransactionReceipt,
+    txData:
+        | unvalidatedTransactionResponse
+        | unvalidatedTransactionReceipt
+        | EVMTransactionStringified
+        | EVMTransactionReceiptStringified,
 ): TxResponse | TxReceipt {
     const txResponseFormatted = {} as any
 
@@ -171,6 +215,8 @@ function validateAndFormatTxData(
             const validatedAddress = validateAddress(address)
             txResponseFormatted[key] = validatedAddress
             // in EVMTransaction
+        } else if (typeof val === 'number') {
+            txResponseFormatted[key] = val.toString()
         } else if (key !== 'transactionReceipt' && key !== 'trace') {
             txResponseFormatted[key] = val
         }

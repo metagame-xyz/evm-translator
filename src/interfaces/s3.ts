@@ -35,6 +35,22 @@ export type EVMTransaction = {
     trace: any
 }
 
+export type EVMTransactionStringified = {
+    hash: string
+    nonce: number
+    blockHash: string
+    blockNumber: number
+    transactionIndex: number
+    from: string
+    to: string
+    value: string
+    gas: string
+    gasPrice: string
+    input: string
+    transactionReceipt: EVMTransactionReceiptStringified
+    trace: any
+}
+
 export type EVMTransactionReceipt = {
     transactionHash: string
     transactionIndex: number
@@ -42,6 +58,21 @@ export type EVMTransactionReceipt = {
     blockNumber: number
     cumulativeGasUsed: number
     gasUsed: number
+    contractAddress: string
+    logs: EVMLog[]
+    logsBloom: string
+    root: string
+    status: string
+    to?: string
+    from?: string
+}
+export type EVMTransactionReceiptStringified = {
+    transactionHash: string
+    transactionIndex: number
+    blockHash: string
+    blockNumber: number
+    cumulativeGasUsed: string
+    gasUsed: string
     contractAddress: string
     logs: EVMLog[]
     logsBloom: string

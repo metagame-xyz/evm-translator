@@ -77,6 +77,8 @@ class Translator2 {
         return this.rawDataFetcher.getTxDataFromS3Tx(tx)
     }
 
+    
+
     // Could rely on Etherscan, but they have a max of 10k records
     // async getAllTxHashesForAddress(address: string): Promise<string[]> {
     //     throw new Error('Not implemented')
@@ -155,7 +157,9 @@ class Translator2 {
         const { txReceipt } = rawTxData
         const { logs } = txReceipt
 
+        // TODO logs that don't get decoded dont show up as 'null' or 'undefined', which will throw off mapping the logIndex to the decoded log
         const decodedLogs = abiDecoder.decodeLogs(rawTxData.txReceipt.logs)
+        console.log('decodedLogs', decodedLogs)
         const decodedData = abiDecoder.decodeMethod(rawTxData.txResponse.data)
 
         const augmentedDecodedLogs = decodedLogs.map((log, index) => {

@@ -52,6 +52,12 @@ export default class Etherscan {
 
         const response = await fetcher(this.createUrl(params))
 
+        console.log(response)
+
+        if (response.result == 'Contract source code not verified') {
+            return []
+        }
+
         if (response.status !== '1') {
             throw new Error(`Etherscan API error: ${response.result}`)
             return []
