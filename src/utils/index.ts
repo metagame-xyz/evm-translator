@@ -1,6 +1,7 @@
 import collect from 'collect.js'
 import { BigNumber } from 'ethers'
 import { Address, Chain, Chains, Interaction, InteractionEvent, Interpretation } from 'interfaces'
+import fetch, { Response } from 'node-fetch'
 import traverse from 'traverse'
 
 const ethereum: Chain = {

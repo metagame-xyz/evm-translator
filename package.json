@@ -46,6 +46,7 @@
         "eth-ens-namehash": "^2.0.8",
         "ethers": "^5.6.2",
         "limiter": "^2.1.0",
+        "node-fetch": "^3.2.4",
         "require-context": "^1.1.0",
         "traverse": "^0.6.6"
     },
