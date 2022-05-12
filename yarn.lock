@@ -4532,7 +4532,7 @@ walker@^1.0.7:
   dependencies:
     makeerror "1.0.12"
 
-web3-eth-abi@^1.2.1, web3-eth-abi@^1.7.3:
+web3-eth-abi@^1.2.1:
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/web3-eth-abi/-/web3-eth-abi-1.7.3.tgz#2a1123c7252c37100eecd0b1fb2fb2c51366071f"
   integrity sha512-ZlD8DrJro0ocnbZViZpAoMX44x5aYAb73u2tMq557rMmpiluZNnhcCYF/NnVMy6UIkn7SF/qEA45GXA1ne6Tnw==
@@ -4540,7 +4540,7 @@ web3-eth-abi@^1.2.1, web3-eth-abi@^1.7.3:
     "@ethersproject/abi" "5.0.7"
     web3-utils "1.7.3"
 
-web3-utils@1.7.3, web3-utils@^1.2.1, web3-utils@^1.7.3:
+web3-utils@1.7.3, web3-utils@^1.2.1:
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.7.3.tgz#b214d05f124530d8694ad364509ac454d05f207c"
   integrity sha512-g6nQgvb/bUpVUIxJE+ezVN+rYwYmlFyMvMIRSuqpi1dk6ApDD00YNArrk7sPcZnjvxOJ76813Xs2vIN2rgh4lg==

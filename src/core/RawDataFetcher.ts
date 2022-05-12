@@ -34,7 +34,7 @@ export default class RawDataFetcher {
         const unvalidatedTrace = (await this.provider.send('trace_transaction', [txHash])) as UnvalidatedTraceLog[]
         const traceLogs = validateTraceTxData(unvalidatedTrace)
         console.log('tried tracing')
-        console.log(traceLogs)
+        console.log('trace logs', traceLogs)
 
         return traceLogs
     }

@@ -1,7 +1,7 @@
 import { transformCovalentEvents } from './transformCovalentLogs'
 import { transformDecodedData, transformDecodedLogs } from './transformDecodedLogs'
 import { BaseProvider, Formatter } from '@ethersproject/providers'
-import abiDecoder from 'abi-decoder'
+// import abiDecoder from 'abi-decoder'
 import { Contract } from 'ethers'
 import {
     Address,
@@ -23,7 +23,7 @@ import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import { CovalentTxData } from 'interfaces/covalent'
 import traverse from 'traverse'
 import { filterABIs, getChainById, getEntries, getKeys, isAddress, validateAndNormalizeAddress } from 'utils'
-// import abiDecoder from 'utils/abi-decoder'
+import abiDecoder from 'utils/abi-decoder'
 import tokenABIMap from 'utils/ABIs'
 import reverseRecordsABI from 'utils/ABIs/ReverseRecords.json'
 import checkInterface from 'utils/checkInterface'
@@ -155,7 +155,7 @@ export class Augmenter {
             txType = TxType.CONTRACT_INTERACTION
         }
 
-        console.log('contractDataMap', contractDataMap)
+        // console.log('contractDataMap', contractDataMap)
 
         const transformedData: Decoded = {
             txHash: txResponse.hash,
@@ -548,7 +548,7 @@ export class Augmenter {
                     contractOfficialName: contractToOfficialNameMap[address],
                 }
 
-                console.log('contractData', contractData)
+                // console.log('contractData', contractData)
                 contractDataMap[address] = contractData
             }),
         )
