@@ -1,32 +1,37 @@
 import { transformCovalentEvents } from './transformCovalentLogs'
+import { transformDecodedData, transformDecodedLogs } from './transformDecodedLogs'
 import { BaseProvider, Formatter } from '@ethersproject/providers'
-import reverseRecords from 'ABIs/ReverseRecords.json'
-// import { normalize } from 'eth-ens-namehash'
-import { BigNumber, Contract } from 'ethers'
-import { formatEther, formatUnits } from 'ethers/lib/utils'
+import abiDecoder from 'abi-decoder'
+import { Contract } from 'ethers'
 import {
     Address,
     Chain,
     ContractData,
     ContractType,
     Decoded,
+    DecodedCallData,
     InProgressActivity,
     Interaction,
     InteractionEvent,
+    RawDecodedLog,
     RawTxData,
+    RawTxDataWithoutTrace,
     TraceLog,
     TxType,
 } from 'interfaces'
-import { ABI_ItemUnfiltered } from 'interfaces/abi'
+import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import { CovalentTxData } from 'interfaces/covalent'
 import traverse from 'traverse'
-import { filterABIs, getChainById, getKeys, isAddress } from 'utils'
+import { filterABIs, getChainById, getEntries, getKeys, isAddress, validateAndNormalizeAddress } from 'utils'
+// import abiDecoder from 'utils/abi-decoder'
 import tokenABIMap from 'utils/ABIs'
+import reverseRecordsABI from 'utils/ABIs/ReverseRecords.json'
 import checkInterface from 'utils/checkInterface'
 import Covalent from 'utils/clients/Covalent'
 import Etherscan from 'utils/clients/Etherscan'
 import fourByteDirectory from 'utils/clients/FourByteDirectory'
 import { REVERSE_RECORDS_CONTRACT_ADDRESS } from 'utils/constants'
+import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 import getTypeFromABI from 'utils/getTypeFromABI'
 
 export type DecoderConfig = {
@@ -40,6 +45,9 @@ export class Augmenter {
     provider: BaseProvider
     covalent: Covalent | null
     etherscan: Etherscan
+
+    databaseInterface: DatabaseInterface
+
     formatter = new Formatter()
     chain: Chain
 
@@ -53,10 +61,17 @@ export class Augmenter {
     fnSigCache: Record<string, string> = {}
     ensCache: Record<Address, string> = {}
 
-    constructor(provider: BaseProvider, covalent: Covalent | null, etherscan: Etherscan) {
+    constructor(
+        provider: BaseProvider,
+        covalent: Covalent | null,
+        etherscan: Etherscan,
+        databaseInterface: DatabaseInterface = new NullDatabaseInterface(),
+    ) {
         this.provider = provider
         this.covalent = covalent
         this.etherscan = etherscan
+        this.databaseInterface = databaseInterface
+
         this.chain = getChainById(this.provider.network.chainId)
     }
 
@@ -79,10 +94,96 @@ export class Augmenter {
         this.addTraceLogsAsInteractions()
         if (this.provider.network.chainId == 1) {
             // only mainnet
-            await this.augmentENSnames()
+            await this.augmentENSNamesArr()
         }
 
         return this.decodedArr
+    }
+
+    decodeTxData(
+        rawTxData: RawTxData | RawTxDataWithoutTrace,
+        ABIs: Record<Address, ABI_Item[]>,
+        contractDataMap: Record<Address, ContractData>,
+    ): { decodedLogs: Interaction[]; decodedCallData: DecodedCallData } {
+        const allABIs = []
+        for (const abis of Object.values(ABIs)) {
+            allABIs.push(...abis)
+        }
+        abiDecoder.addABI(allABIs)
+
+        const { txReceipt } = rawTxData
+        const { logs } = txReceipt
+
+        // TODO logs that don't get decoded dont show up as 'null' or 'undefined', which will throw off mapping the logIndex to the decoded log
+
+        const rawDecodedLogs = abiDecoder.decodeLogs(rawTxData.txReceipt.logs)
+        const rawDecodedCallData = abiDecoder.decodeMethod(rawTxData.txResponse.data) || { name: null, params: [] }
+
+        const augmentedDecodedLogs = rawDecodedLogs.map((log, index) => {
+            const decodedLog = {
+                ...log,
+                logIndex: logs[index].logIndex,
+                address: validateAndNormalizeAddress(log.address),
+                decoded: true,
+            }
+            return decodedLog
+        }) as RawDecodedLog[]
+
+        const decodedLogs = transformDecodedLogs(rawTxData.txReceipt.logs, augmentedDecodedLogs, contractDataMap)
+        const decodedCallData = transformDecodedData(rawDecodedCallData)
+
+        return { decodedLogs, decodedCallData }
+    }
+
+    augmentDecodedData(
+        decodedLogs: Interaction[],
+        decodedCallData: DecodedCallData,
+        ensMap: Record<Address, string>,
+        contractDataMap: Record<Address, ContractData>,
+        rawTxData: RawTxData | RawTxDataWithoutTrace,
+    ): Decoded {
+        const { txReceipt, txResponse } = rawTxData
+        const value = rawTxData.txResponse.value.toString()
+
+        let txType: TxType
+        if (!txReceipt.to) {
+            txType = TxType.CONTRACT_DEPLOY
+        } else if (txResponse.data == '0x') {
+            txType = TxType.TRANSFER
+        } else {
+            // TODO txReceipt.contractAddress is the address of the contract created, add it
+            txType = TxType.CONTRACT_INTERACTION
+        }
+
+        console.log('contractDataMap', contractDataMap)
+
+        const transformedData: Decoded = {
+            txHash: txResponse.hash,
+            txType: txType,
+            fromAddress: txReceipt.from,
+            toAddress: txReceipt.to,
+            officialContractName: contractDataMap[txReceipt.to].contractOfficialName,
+            contractName: contractDataMap[txReceipt.to].contractName,
+            contractType: contractDataMap[txReceipt.to].type,
+            contractMethod: decodedCallData.name,
+            contractMethodArguments: decodedCallData.params,
+            nativeTokenValueSent: value,
+            nativeTokenSymbol: this.chain.symbol,
+            interactions: decodedLogs,
+            effectiveGasPrice: txReceipt.effectiveGasPrice?.toString() || txResponse.gasPrice?.toString() || null,
+            gasUsed: txReceipt.gasUsed.toString(),
+            timestamp: txReceipt.timestamp,
+            txIndex: txReceipt.transactionIndex,
+            reverted: txReceipt.status == 0, // will return true if status==undefined
+            fromENS: null,
+            toENS: null,
+        }
+
+        // TODO augment with trace logs
+
+        const transformedDataWithENS = this.augmentENSNames(transformedData, ensMap)
+
+        return transformedDataWithENS
     }
 
     private createDecodedArr() {
@@ -101,7 +202,7 @@ export class Augmenter {
                     txType = TxType.CONTRACT_INTERACTION
                 }
 
-                const transformedData = {
+                const transformedData: Decoded = {
                     txHash: txResponse.hash,
                     txType: txType,
                     nativeTokenValueSent: value,
@@ -109,11 +210,19 @@ export class Augmenter {
                     txIndex: txReceipt.transactionIndex,
                     reverted: txReceipt.status == 0,
                     gasUsed: txReceipt.gasUsed.toString(),
-                    effectiveGasPrice: txReceipt.effectiveGasPrice?.toString() || txResponse?.gasPrice?.toString(),
+                    effectiveGasPrice:
+                        txReceipt.effectiveGasPrice?.toString() || txResponse?.gasPrice?.toString() || null,
                     fromAddress: txReceipt.from,
                     toAddress: txReceipt.to,
                     interactions: [],
+                    contractMethod: null,
+                    contractMethodArguments: {},
                     contractType: ContractType.OTHER,
+                    officialContractName: null,
+                    contractName: null,
+                    timestamp: txReceipt.timestamp,
+                    fromENS: null,
+                    toENS: null,
                 }
 
                 return transformedData
@@ -149,7 +258,7 @@ export class Augmenter {
 
     private augmentTimestampWithCovalent() {
         this.covalentDataArr.forEach((covalentData, index) => {
-            this.decodedArr[index].timestamp = covalentData.block_signed_at
+            this.decodedArr[index].timestamp = Number(covalentData.block_signed_at)
         })
     }
     private augmentInteractionData() {
@@ -216,30 +325,15 @@ export class Augmenter {
         }
     }
 
-    private async augmentENSnames(): Promise<void> {
-        const ReverseRecords = new Contract(REVERSE_RECORDS_CONTRACT_ADDRESS, reverseRecords.abi, this.provider)
+    async getENSNames(addresses: Address[]): Promise<Record<Address, string>> {
+        const reverseRecords = new Contract(REVERSE_RECORDS_CONTRACT_ADDRESS, reverseRecordsABI, this.provider)
 
-        async function getNames(addresses: string[]): Promise<string[]> {
-            const allDirtyNames = (await ReverseRecords.getNames(addresses)) as string[]
-            // remove illegal chars
-            const allNames = allDirtyNames.map((name) => {
-                return name.replace(/([^\w\s+*:;,.()/\\]+)/gi, '¿')
-            })
-            return allNames
-        }
+        const allDirtyNames = (await reverseRecords.getNames(addresses)) as string[]
 
-        const allAddresses: string[] = []
-
-        traverse(this.decodedArr).forEach(function (value: any) {
-            if (isAddress(value)) {
-                allAddresses.push(value)
-            }
+        // remove illegal chars
+        const names = allDirtyNames.map((name) => {
+            return name.replace(/([^\w\s+*:;,.()/\\]+)/gi, '¿')
         })
-
-        // filter out duplicates
-        const addresses = [...new Set(allAddresses)]
-
-        const names = await getNames(addresses)
 
         let addressToNameMap: Record<string, string> = {}
 
@@ -267,19 +361,53 @@ export class Augmenter {
         // filter out addresses:names with no names (most of them lol)
         addressToNameMap = Object.fromEntries(Object.entries(addressToNameMap).filter(([, v]) => v != ''))
 
-        // "normalize", whatever that means. ENS told me too. prob not needed after the regex
-        // const validNames = allNames.filter((n: string) => normalize(n) === n)
+        return addressToNameMap
+    }
+
+    augmentENSNames(decoded: Decoded, ensMap: Record<Address, string>): Decoded {
+        const decodedWithENS = traverse(decoded).map((thing) => {
+            if (!!thing && typeof thing === 'object' && !Array.isArray(thing)) {
+                for (const [key, val] of Object.entries(thing)) {
+                    if (ensMap[val as Address]) {
+                        if (key == 'toAddress') {
+                            thing.toENS = ensMap[val as Address]
+                        } else if (key == 'fromAddress') {
+                            thing.fromENS = ensMap[val as Address]
+                        } else {
+                            thing[key + 'ENS'] = ensMap[val as Address]
+                        }
+                    }
+                }
+            }
+        })
+
+        return decodedWithENS
+    }
+
+    private async augmentENSNamesArr(): Promise<void> {
+        const allAddresses: Address[] = []
+
+        traverse(this.decodedArr).forEach(function (value: string) {
+            if (isAddress(value)) {
+                allAddresses.push(validateAndNormalizeAddress(value))
+            }
+        })
+
+        // filter out duplicates
+        const addresses = [...new Set(allAddresses)]
+
+        const addressToNameMap = await this.getENSNames(addresses)
 
         const decodedArrWithENS = traverse(this.decodedArr).map((thing) => {
             if (!!thing && typeof thing === 'object' && !Array.isArray(thing)) {
                 for (const [key, val] of Object.entries(thing)) {
-                    if (addressToNameMap[val as string]) {
+                    if (addressToNameMap[val as Address]) {
                         if (key == 'toAddress') {
-                            thing.toENS = addressToNameMap[val as string]
+                            thing.toENS = addressToNameMap[val as Address]
                         } else if (key == 'fromAddress') {
-                            thing.fromENS = addressToNameMap[val as string]
+                            thing.fromENS = addressToNameMap[val as Address]
                         } else {
-                            thing[key + 'ENS'] = addressToNameMap[val as string]
+                            thing[key + 'ENS'] = addressToNameMap[val as Address]
                         }
                     }
                 }
@@ -381,15 +509,34 @@ export class Augmenter {
     async getContractsData(
         contractToAbiMap: Record<Address, ABI_ItemUnfiltered[]>,
         contractToOfficialNameMap: Record<Address, string | null>,
-    ): Promise<ContractData[]> {
-        const contractDataArr: ContractData[] = []
+    ): Promise<Record<Address, ContractData>> {
+        const contractDataMap: Record<Address, ContractData> = {}
         const filteredABIs = filterABIs(contractToAbiMap)
 
+        const addresses = getKeys(contractToAbiMap)
+
+        const contractDataMapFromDB = await this.databaseInterface.getContractDataForManyContracts(addresses)
+
         await Promise.all(
-            getKeys(contractToAbiMap).map(async (address) => {
+            addresses.map(async (address) => {
                 const abi = contractToAbiMap[address]
-                const contractType = await this.getContractType(address, filteredABIs[address])
-                const { tokenName, tokenSymbol, contractName } = await this.getNameAndSymbol(address, contractType)
+                const contractType =
+                    contractDataMapFromDB[address]?.type || (await this.getContractType(address, filteredABIs[address]))
+
+                let tokenName = null
+                let tokenSymbol = null
+                let contractName = null
+
+                if (contractDataMapFromDB[address]) {
+                    tokenName = contractDataMapFromDB[address]?.tokenName || null
+                    tokenSymbol = contractDataMapFromDB[address]?.tokenSymbol || null
+                    contractName = contractDataMapFromDB[address]?.contractName || null
+                }
+
+                // warning, we might assign contactName from somewhere else in the future, so it might not be null here even when we thought it would be, which means we might still need to get token symbol/name but we end up skipping it
+                if (!contractName) {
+                    ;({ tokenName, tokenSymbol, contractName } = await this.getNameAndSymbol(address, contractType))
+                }
                 // const contractName = await this.getContractName(address)
                 const contractData: ContractData = {
                     address,
@@ -400,9 +547,64 @@ export class Augmenter {
                     contractName,
                     contractOfficialName: contractToOfficialNameMap[address],
                 }
-                contractDataArr.push(contractData)
+
+                console.log('contractData', contractData)
+                contractDataMap[address] = contractData
             }),
         )
-        return contractDataArr
+        return contractDataMap
+    }
+
+    // TODO get the names
+    async getABIsAndNamesForContracts(
+        contractAddresses: Address[],
+    ): Promise<[Record<Address, ABI_ItemUnfiltered[]>, Record<Address, string | null>]> {
+        const addresses = contractAddresses.map((a) => validateAndNormalizeAddress(a))
+
+        const contractDataMap = await this.databaseInterface.getContractDataForManyContracts(addresses)
+
+        const addressesWithMissingABIs = getKeys(contractDataMap).filter((address) => !contractDataMap[address]?.abi)
+
+        const abiMapFromEtherscan = await this.etherscan.getABIs(addressesWithMissingABIs)
+
+        const AbiMapFromDB = getEntries(contractDataMap).reduce((acc, [address, contractData]) => {
+            acc[address] = contractData?.abi || null
+            return acc
+        }, {} as Record<Address, ABI_ItemUnfiltered[]>)
+
+        const abiMap = { ...AbiMapFromDB, ...abiMapFromEtherscan }
+
+        const nameMapFromDB = getEntries(contractDataMap).reduce((acc, [address, contractData]) => {
+            acc[address] = contractData?.contractOfficialName || null
+            return acc
+        }, {} as Record<Address, string>)
+
+        const nameMapFromEtherscan: Record<Address, string | null> = {}
+
+        const nameMap = { ...nameMapFromDB, ...nameMapFromEtherscan }
+
+        return [abiMap, nameMap]
+    }
+
+    static getAllAddresses(
+        decodedLogs: Interaction[],
+        decodedCallData: DecodedCallData,
+        contractAddresses: Address[],
+    ): Address[] {
+        const addresses: Address[] = []
+
+        traverse(decodedLogs).forEach(function (value: string) {
+            if (isAddress(value)) {
+                addresses.push(validateAndNormalizeAddress(value))
+            }
+        })
+
+        traverse(decodedCallData).forEach(function (value: string) {
+            if (isAddress(value)) {
+                addresses.push(validateAndNormalizeAddress(value))
+            }
+        })
+
+        return [...new Set([...addresses, ...contractAddresses])]
     }
 }

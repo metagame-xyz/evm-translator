@@ -200,6 +200,8 @@ export const getNativeTokenValueEvents = (interactions: Interaction[]): Interact
 
 export const getKeys = <T>(obj: T) => Object.keys(obj) as Array<keyof T>
 
+export const getEntries = <T>(obj: T) => Object.entries(obj) as Array<[keyof T, any]>
+
 export function filterABIs(unfilteredABIs: Record<string, ABI_ItemUnfiltered[]>): Record<Address, ABI_Item[]> {
     const filteredABIs: Record<Address, ABI_Item[]> = {}
 

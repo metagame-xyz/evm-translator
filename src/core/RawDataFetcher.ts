@@ -15,13 +15,8 @@ import {
     UnvalidatedTraceLog,
 } from 'interfaces'
 import { CovalentTxData } from 'interfaces/covalent'
-import {
-    EVMTransaction,
-    EVMTransactionReceipt,
-    EVMTransactionReceiptStringified,
-    EVMTransactionStringified,
-} from 'interfaces/s3'
-import { validateAddress } from 'utils'
+import { EVMTransaction, EVMTransactionReceiptStringified, EVMTransactionStringified } from 'interfaces/s3'
+import { validateAddress, validateAndNormalizeAddress } from 'utils'
 import Covalent from 'utils/clients/Covalent'
 
 export default class RawDataFetcher {
@@ -83,9 +78,9 @@ export default class RawDataFetcher {
         }
     }
 
-    getTxDataFromS3Tx(tx: EVMTransaction): RawTxDataWithoutTrace {
+    getTxDataFromS3Tx(tx: EVMTransaction, timestamp: number): RawTxDataWithoutTrace {
         const txDataStringified = numbersToStrings(tx)
-        const txReceipt = validateAndFormatTxData(txDataStringified.transactionReceipt)
+        const txReceipt = validateAndFormatTxData(txDataStringified.transactionReceipt, timestamp)
         const formattedTxResponse = this.formatter.transactionResponse(txDataStringified)
         const txResponse = validateAndFormatTxData(formattedTxResponse)
 
@@ -95,6 +90,7 @@ export default class RawDataFetcher {
         }
     }
 
+    // TODO should we get the timestamp somehow here too?
     async getTxDataWithoutTrace(txHash: string): Promise<RawTxDataWithoutTrace> {
         let txResponse: TxResponse
         let txReceipt: TxReceipt
@@ -146,6 +142,18 @@ export default class RawDataFetcher {
             covalentTxDataArr,
         }
     }
+
+    static getContractAddressesFromRawTxData(rawTxData: RawTxData | RawTxDataWithoutTrace): Address[] {
+        const { txReceipt } = rawTxData
+        const addresses: Address[] = []
+        addresses.push(validateAndNormalizeAddress(txReceipt.to))
+
+        txReceipt.logs.forEach(({ address }) => {
+            addresses.push(validateAndNormalizeAddress(address))
+        })
+
+        return [...new Set(addresses)]
+    }
 }
 
 // const validateTxHash = (txHash: string): TxHash => {
@@ -196,7 +204,7 @@ function numbersToStrings(txData: EVMTransaction): EVMTransactionStringified {
 // lowercase addresses b/c addresses have uppercase for the checksum, but aren't when they're in a topic
 function validateAndFormatTxData(txData: unvalidatedTransactionResponse): TxResponse
 function validateAndFormatTxData(txData: unvalidatedTransactionReceipt): TxReceipt
-function validateAndFormatTxData(txData: EVMTransactionReceiptStringified): TxReceipt
+function validateAndFormatTxData(txData: EVMTransactionReceiptStringified, timestamp: number | null): TxReceipt
 function validateAndFormatTxData(txData: EVMTransactionStringified): TxResponse
 function validateAndFormatTxData(
     txData:
@@ -204,6 +212,7 @@ function validateAndFormatTxData(
         | unvalidatedTransactionReceipt
         | EVMTransactionStringified
         | EVMTransactionReceiptStringified,
+    timestamp: number | null = null,
 ): TxResponse | TxReceipt {
     const txResponseFormatted = {} as any
 
@@ -220,6 +229,10 @@ function validateAndFormatTxData(
         } else if (key !== 'transactionReceipt' && key !== 'trace') {
             txResponseFormatted[key] = val
         }
+    }
+
+    if (timestamp) {
+        txResponseFormatted.timestamp = timestamp
     }
 
     return txResponseFormatted

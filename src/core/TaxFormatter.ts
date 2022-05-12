@@ -126,7 +126,7 @@ class TaxFormatter {
             'In Currency': inCurrency,
             'Out Amount': outAmount,
             'Out Currency': outCurrency,
-            Timestamp: decodedData.timestamp || 'UNKNOWN TIMESTAMP',
+            Timestamp: decodedData.timestamp || 0,
             'Fee Amount': userInitiated ? Number(interpretedData.gasPaid) : 0,
             'Fee Currency': interpretedData.nativeTokenSymbol || 'UNKNOWN',
             'Exchange (optional)': 'Metamask',

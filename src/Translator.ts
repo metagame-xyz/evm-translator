@@ -81,9 +81,9 @@ class Translator {
           */
             // const userAddress =
             const addressForContext = userAddress || rawTxData.txResponse.from
-            const interpreter = new Interpreter(addressForContext, this.config.chain)
+            const interpreter = new Interpreter(this.config.chain, addressForContext)
 
-            const interpretedData = interpreter.interpretSingleTx(rawTxData, decodedDataArr[0])
+            const interpretedData = interpreter.interpretSingleTx(decodedDataArr[0])
 
             // return rawCovalentData
 
@@ -116,9 +116,9 @@ class Translator {
 
         const decodedDataArr = await this.augmenter.decode(rawTxDataArr, covalentTxDataArr)
 
-        const interpreter = new Interpreter(address, this.config.chain)
+        const interpreter = new Interpreter(this.config.chain, address)
 
-        const interpretedDataArr = interpreter.interpret(rawTxDataArr, decodedDataArr)
+        const interpretedDataArr = interpreter.interpret(decodedDataArr)
 
         const allData: ActivityData[] = []
 

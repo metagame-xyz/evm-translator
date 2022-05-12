@@ -15,7 +15,6 @@ import {
     Interaction,
     InteractionEvent,
     Interpretation,
-    RawTxData,
     Token,
     TokenType,
     TxType,
@@ -58,38 +57,40 @@ const topLevelInteractionKeys = ['contractName', 'contractSymbol', 'contractAddr
 class Interpreter {
     contractSpecificInterpreters: ContractInterpretersMap = {}
     // fallbackInterpreters: Array<Inspector> = []
-    userAddress: Address
+    userAddress: Address | null
     chain: Chain
 
-    constructor(userAddress: string, chain: Chain) {
-        this.userAddress = validateAndNormalizeAddress(userAddress)
+    constructor(chain: Chain, userAddress: string | null = null) {
         this.chain = chain
+        this.userAddress = (userAddress && validateAndNormalizeAddress(userAddress)) || null
 
         for (const [address, map] of Object.entries(contractInterpreters)) {
             this.contractSpecificInterpreters[address as Address] = map as InterpreterMap
         }
     }
 
-    public interpret(rawTxDataArr: RawTxData[], decodedDataArr: Decoded[]): Interpretation[] {
+    updateUserAddress(userAddress: string) {
+        this.userAddress = validateAndNormalizeAddress(userAddress)
+    }
+
+    updateChain(chain: Chain) {
+        this.chain = chain
+    }
+
+    public interpret(decodedDataArr: Decoded[]): Interpretation[] {
         const interpretations: Interpretation[] = []
 
-        for (let i = 0; i < rawTxDataArr.length; i++) {
-            const rawTxData = rawTxDataArr[i]
+        for (let i = 0; i < decodedDataArr.length; i++) {
             const decodedData = decodedDataArr[i]
-
-            const interpretation = this.interpretSingleTx(rawTxData, decodedData)
+            const interpretation = this.interpretSingleTx(decodedData)
             interpretations.push(interpretation)
         }
 
         return interpretations
     }
 
-    public interpretSingleTx(rawTxData: RawTxData, decodedData: Decoded): Interpretation {
-        const method = decodedData.contractMethod!
-        const interactions = decodedData.interactions!
-
-        const toAddress = rawTxData.txReceipt.to
-        const fromAddress = rawTxData.txReceipt.from
+    public interpretSingleTx(decodedData: Decoded, userAddressFromInput: Address | null = null): Interpretation {
+        const { contractMethod, interactions, fromAddress, toAddress } = decodedData
 
         const { nativeTokenValueSent, txHash } = decodedData
 
@@ -97,12 +98,14 @@ class Interpreter {
             BigNumber.from(decodedData.gasUsed).mul(BigNumber.from(decodedData.effectiveGasPrice)),
         )
 
-        let userName = this.userAddress.substring(0, 6)
+        const userAddress = userAddressFromInput || this.userAddress || fromAddress
 
-        if (fromAddress === this.userAddress) {
+        let userName = userAddress.substring(0, 6)
+
+        if (fromAddress === userAddress) {
             userName = decodedData.fromENS || userName
         }
-        if (toAddress === this.userAddress) {
+        if (toAddress === userAddress) {
             userName = decodedData.toENS || userName
         }
 
@@ -111,22 +114,25 @@ class Interpreter {
         // not contract-specific
         const interpretation: Interpretation = {
             txHash,
-            userAddress: this.userAddress,
+            userAddress,
+            action: Action.unknown,
             nativeTokenValueSent: this.getNativeTokenValueSent(
                 interactions,
                 nativeTokenValueSent,
                 fromAddress,
-                this.userAddress,
+                userAddress,
             ).toString(),
-            nativeTokenValueReceived: this.getNativeTokenValueReceived(interactions, this.userAddress).toString(),
-            tokensReceived: this.getTokensReceived(interactions, this.userAddress),
-            tokensSent: this.getTokensSent(interactions, this.userAddress),
+            nativeTokenValueReceived: this.getNativeTokenValueReceived(interactions, userAddress).toString(),
+            tokensReceived: this.getTokensReceived(interactions, userAddress),
+            tokensSent: this.getTokensSent(interactions, userAddress),
             nativeTokenSymbol: this.chain.symbol,
             userName,
             gasPaid: gasUsed,
             extra: {},
             exampleDescription: 'no example description defined',
-            reverted: !!decodedData.reverted,
+            reverted: decodedData.reverted ? true : null,
+            contractName: null,
+            counterpartyName: null,
         }
 
         if (interpretation.reverted) {
@@ -135,8 +141,8 @@ class Interpreter {
             // TODO the description and extras should be different for reverted transactions
         }
 
-        const interpretationMapping = this.contractSpecificInterpreters[toAddress]
-        const methodSpecificMapping = interpretationMapping?.writeFunctions[method]
+        const interpretationMapping = (toAddress && this.contractSpecificInterpreters[toAddress]) || null
+        const methodSpecificMapping = (contractMethod && interpretationMapping?.writeFunctions[contractMethod]) || null
 
         // if there's no contract-specific mapping, try to use the fallback mapping
 
@@ -146,7 +152,7 @@ class Interpreter {
 
             interpretation.extra = {
                 ...interpretation.extra,
-                ...this.useKeywordMap(interactions, contractDeployInterpreter.keywords, '0x_DOESNT_EXIST'),
+                ...this.useKeywordMap(interactions, contractDeployInterpreter.keywords, '0x_DOESNT_EXIST', userAddress),
             }
 
             interpretation.exampleDescription = fillDescriptionTemplate(
@@ -156,8 +162,8 @@ class Interpreter {
         } else if (decodedData.txType === TxType.TRANSFER) {
             interpretGenericTransfer(decodedData, interpretation)
             // contract-specific interpretation
-        } else if (interpretationMapping && methodSpecificMapping) {
-            console.log('contract-specific interpretation', interpretationMapping.contractName, method)
+        } else if (interpretationMapping && methodSpecificMapping && contractMethod && toAddress) {
+            console.log('contract-specific interpretation', interpretationMapping.contractName, contractMethod)
             // some of these will be arbitrary keys
             interpretation.contractName = interpretationMapping.contractName
             interpretation.action = methodSpecificMapping.action
@@ -167,10 +173,15 @@ class Interpreter {
                 interpretation.reverted = true
                 // TODO the description and extras should be different for reverted transactions
             }
-            interpretation.extra = this.useKeywordMap(interactions, methodSpecificMapping.keywords, toAddress)
+            interpretation.extra = this.useKeywordMap(
+                interactions,
+                methodSpecificMapping.keywords,
+                toAddress,
+                userAddress,
+            )
 
             interpretation.exampleDescription = fillDescriptionTemplate(
-                interpretationMapping.writeFunctions[method].exampleDescriptionTemplate,
+                interpretationMapping.writeFunctions[contractMethod].exampleDescriptionTemplate,
                 interpretation,
             )
         } else {
@@ -286,7 +297,7 @@ class Interpreter {
 
         for (const interaction of filteredInteractions) {
             // filter non-transfer events
-            interaction.events = interaction.events.filter((d) => transferEvents.includes(d.eventName))
+            interaction.events = interaction.events.filter((d) => transferEvents.includes(d.eventName || ''))
             // filter out events that aren't to/from the user in the right direction
             interaction.events = interaction.events.filter((d) => toOrFromUser(d, direction, userAddress))
         }
@@ -295,7 +306,7 @@ class Interpreter {
         filteredInteractions = filteredInteractions.filter(
             (i) =>
                 i.events.filter(
-                    (d) => transferEvents.includes(d.eventName), // filters out all non transfer events
+                    (d) => transferEvents.includes(d.eventName || ''), // filters out all non transfer events
                 ).length > 0, // filters out interactions that don't have any events objects left
         )
 
@@ -392,6 +403,7 @@ class Interpreter {
         interactions: Interaction[],
         keywordsMap: Record<string, KeyMapping>,
         contractAddress: Address,
+        userAddress: Address,
     ): Record<string, string | string[]> {
         const keyValueMap: Record<string, string | string[]> = {}
 
@@ -404,7 +416,7 @@ class Interpreter {
 
                 // some data requires searching for it
             } else if (typeof value === 'object') {
-                keyValueMap[key] = this.findValue(interactions, value, this.userAddress, contractAddress)
+                keyValueMap[key] = this.findValue(interactions, value, userAddress, contractAddress)
 
                 if (Array.isArray(keyValueMap[key])) {
                     keyValueMap[`${key}Count`] = keyValueMap[key].length.toString()

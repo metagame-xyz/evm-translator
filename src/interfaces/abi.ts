@@ -1,8 +1,21 @@
+import { AbiInput, AbiItem } from 'web3-utils'
+
 export type ABIStringMap = {
     constructor: string
     event: string[]
     writeFunction: string[]
     readFunction: string[]
+}
+
+export type ABI_Type = 'constructor' | 'event' | 'function' | 'fallback' | 'receive' | 'error'
+
+export type ABI_Row = {
+    name: string
+    type: ABI_Type
+    hashableSignature: string
+    fullSignature: string
+    hexSignature: string
+    fullABI: string
 }
 
 export type ABI_ItemUnfiltered = ABI_Function | ABI_Event | ABI_Constructor | ABI_Fallbacks | ABI_Error
@@ -51,10 +64,18 @@ export type ABI_FunctionInput = {
     name: string
     internalType: string
     type: string
+    components?: {
+        name: string
+        type: string
+    }[]
 }
 export type ABI_EventInput = {
     name: string
     internalType: string
     type: string
     indexed: boolean
+    components?: {
+        name: string
+        type: string
+    }[]
 }

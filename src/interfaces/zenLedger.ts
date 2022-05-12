@@ -2,7 +2,7 @@ import { Address, Decoded, Interpretation, RawTxData, TokenType } from 'interfac
 
 export type ZenLedgerRow = {
     // ZenLedger required Columns
-    Timestamp: string
+    Timestamp: number
     Type: ZenLedgerRowType | null
     'In Amount': number | null
     'In Currency': string | null

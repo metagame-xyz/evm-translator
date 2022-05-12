@@ -1,8 +1,17 @@
 import { Log } from '@ethersproject/providers'
 import collect from 'collect.js'
+import { Address } from 'eth-ens-namehash'
 import { ethers } from 'ethers'
 import { BigNumber } from 'ethers'
-import { ContractData, Interaction, TxReceipt } from 'interfaces'
+import {
+    ContractData,
+    DecodedCallData,
+    Interaction,
+    MostTypes,
+    RawDecodedCallData,
+    RawDecodedLog,
+    TxReceipt,
+} from 'interfaces'
 import { validateAndNormalizeAddress } from 'utils'
 
 // import { PrismaClient } from '@prisma/client'
@@ -12,38 +21,15 @@ type Event = {
     contractName: string | null
     contractSymbol: string | null
     contractAddress: string
-    name: string
+    name: string | null
     logIndex: number
     events: Record<string, unknown>
 }
 
-export type DecodedLog = {
-    name: string
-    address: string
-    logIndex: number
-    events: {
-        name: string
-        type: string
-        value: string | string[]
-    }[]
-}
-
-export type DecodedDataAndLogs = {
-    decodedData: {
-        name: string
-        params: {
-            name: string
-            type: string
-            value: string | number | boolean | null | string[]
-        }[]
-    }
-    decodedLogs: DecodedLog[]
-}
-
 export function transformDecodedLogs(
     rawLogs: Log[],
-    decodedLogs: DecodedLog[],
-    contractDataArr: ContractData[],
+    decodedLogs: RawDecodedLog[],
+    contractDataMap: Record<Address, ContractData>,
 ): Array<Interaction> {
     // tx.log_events.forEach((event) => {
     //     console.log('decoded', event)
@@ -56,7 +42,7 @@ export function transformDecodedLogs(
         // .reject((event) => !event.sender_name)
 
         .reject((log) => !log)
-        .mapToGroups((log: DecodedLog): [string, Event] => {
+        .mapToGroups((log: RawDecodedLog): [string, Event] => {
             // console.log('params', event.decoded.params)
             const events = Object.fromEntries(
                 log.events?.map((param) => [
@@ -77,7 +63,7 @@ export function transformDecodedLogs(
             // console.log('event', event)
             // console.log('detials', details)
 
-            const contractData = contractDataArr.find((contractData) => contractData.address === log.address)
+            const contractData = contractDataMap[log.address as Address]
 
             return [
                 log.address,
@@ -126,4 +112,18 @@ export function transformDecodedLogs(
     // correctContractName(contractData?.contract),
 
     return interactions.values().toArray()
+}
+
+export function transformDecodedData(rawDecodedCallData: RawDecodedCallData): DecodedCallData {
+    const params: Record<string, MostTypes> = {}
+
+    console.log(rawDecodedCallData)
+    rawDecodedCallData.params.forEach((param) => {
+        params[param.name] = param.value
+    })
+
+    return {
+        name: rawDecodedCallData.name,
+        params,
+    }
 }

@@ -48,7 +48,9 @@
         "limiter": "^2.1.0",
         "node-fetch": "2.6.6",
         "require-context": "^1.1.0",
-        "traverse": "^0.6.6"
+        "traverse": "^0.6.6",
+        "web3-eth-abi": "^1.7.3",
+        "web3-utils": "^1.7.3"
     },
     "devDependencies": {
         "@trivago/prettier-plugin-sort-imports": "^3.2.0",

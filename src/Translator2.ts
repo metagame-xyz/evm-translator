@@ -1,22 +1,24 @@
-import { AlchemyProvider, JsonRpcProvider } from '@ethersproject/providers'
-import abiDecoder from 'abi-decoder'
+import { AlchemyProvider } from '@ethersproject/providers'
 import { Augmenter } from 'core/Augmenter'
+import Interpreter from 'core/Interpreter'
 import RawDataFetcher from 'core/RawDataFetcher'
-import { DecodedDataAndLogs, DecodedLog, transformDecodedLogs } from 'core/transformDecodedLogs'
 import {
     Address,
     Chain,
     ContractData,
     ContractType,
     Decoded,
+    DecodedCallData,
+    Interaction,
     Interpretation,
     RawTxData,
     RawTxDataWithoutTrace,
 } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import { EVMTransaction } from 'interfaces/s3'
-import { filterABIs, getChainBySymbol, getKeys, validateAndNormalizeAddress } from 'utils'
+import { filterABIs, validateAndNormalizeAddress } from 'utils'
 import Etherscan from 'utils/clients/Etherscan'
+import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 
 export type TranslatorConfigTwo = {
     chain: Chain
@@ -24,6 +26,7 @@ export type TranslatorConfigTwo = {
     alchemyProjectId: string
     etherscanAPIKey: string
     userAddress?: string
+    databaseInterface?: DatabaseInterface
 }
 
 export type NamesAndSymbolsMap = Record<Address, { name: string | null; symbol: string | null }>
@@ -42,6 +45,8 @@ class Translator2 {
     etherscan: Etherscan
     userAddress: Address | null
     augmenter: Augmenter
+    interpreter: Interpreter
+    databaseInterface: DatabaseInterface
 
     constructor(config: TranslatorConfigTwo) {
         this.chain = config.chain
@@ -51,8 +56,11 @@ class Translator2 {
         this.userAddress = config.userAddress ? validateAndNormalizeAddress(config.userAddress) : null
         this.provider = this.getProvider()
         this.etherscan = new Etherscan(this.etherscanAPIKey)
+        this.databaseInterface = config.databaseInterface || new NullDatabaseInterface()
+
         this.rawDataFetcher = new RawDataFetcher(this.provider)
-        this.augmenter = new Augmenter(this.provider, null, this.etherscan)
+        this.augmenter = new Augmenter(this.provider, null, this.etherscan, this.databaseInterface)
+        this.interpreter = new Interpreter(config.chain)
     }
 
     private getProvider(): AlchemyProvider {
@@ -85,8 +93,8 @@ class Translator2 {
         return this.rawDataFetcher.getTxDataWithoutTrace(txHash)
     }
 
-    getRawDataFromS3Data(tx: EVMTransaction): RawTxDataWithoutTrace {
-        return this.rawDataFetcher.getTxDataFromS3Tx(tx)
+    getRawDataFromS3Data(tx: EVMTransaction, timestamp: number): RawTxDataWithoutTrace {
+        return this.rawDataFetcher.getTxDataFromS3Tx(tx, timestamp)
     }
 
     // Could rely on Etherscan, but they have a max of 10k records
@@ -95,42 +103,25 @@ class Translator2 {
     // }
 
     getContractAddressesFromRawTxData(rawTxData: RawTxData | RawTxDataWithoutTrace): Address[] {
-        const { txReceipt } = rawTxData
-        const addresses: Address[] = []
-        addresses.push(validateAndNormalizeAddress(txReceipt.to))
+        return RawDataFetcher.getContractAddressesFromRawTxData(rawTxData)
+    }
 
-        txReceipt.logs.forEach(({ address }) => {
-            addresses.push(validateAndNormalizeAddress(address))
-        })
-
-        return [...new Set(addresses)]
+    getAllAddresses(
+        decodedLogs: Interaction[],
+        decodedCallData: DecodedCallData,
+        contractAddresses: Address[],
+    ): Address[] {
+        return Augmenter.getAllAddresses(decodedLogs, decodedCallData, contractAddresses)
     }
 
     /**********************************************/
     /**** USING TX AND CONTRACT ADDRESSES  ********/
     /****  Data used to decode & augment   ********/
     /**********************************************/
-    async getABIsForContracts(contractAddresses: string[]): Promise<Record<Address, ABI_ItemUnfiltered[]>> {
-        const addresses = contractAddresses.map((a) => validateAndNormalizeAddress(a))
-        const abiMap = await this.etherscan.getABIs(addresses)
-
-        return abiMap
-    }
-
-    // TODO get the names
     async getABIsAndNamesForContracts(
-        contractAddresses: string[],
+        contractAddresses: Address[],
     ): Promise<[Record<Address, ABI_ItemUnfiltered[]>, Record<Address, string | null>]> {
-        const addresses = contractAddresses.map((a) => validateAndNormalizeAddress(a))
-        const abiMap = await this.etherscan.getABIs(addresses)
-
-        const nameMap: Record<Address, string | null> = {}
-
-        getKeys(abiMap).forEach((address) => {
-            nameMap[address] = null
-        })
-
-        return [abiMap, nameMap]
+        return this.augmenter.getABIsAndNamesForContracts(contractAddresses)
     }
 
     async getNameAndSymbol(
@@ -140,12 +131,8 @@ class Translator2 {
         return this.augmenter.getNameAndSymbol(address, contractType)
     }
 
-    async getNamesAndSymbols(contractAddresses: string[]): Promise<NamesAndSymbolsMap> {
-        throw new Error('Not implemented')
-    }
-
-    async getEnsForAddresses(addresses: string[]): Promise<Record<Address, string>> {
-        throw new Error('Not implemented')
+    async getENSNames(addresses: Address[]): Promise<Record<Address, string>> {
+        return this.augmenter.getENSNames(addresses)
     }
 
     async getOfficialNamesForContracts(contractAddresses: string[]): Promise<Record<Address, string>> {
@@ -159,7 +146,7 @@ class Translator2 {
     async getContractsData(
         contractToAbiMap: Record<Address, ABI_ItemUnfiltered[]>,
         contractToOfficialNameMap: Record<Address, string | null>,
-    ): Promise<ContractData[]> {
+    ): Promise<Record<Address, ContractData>> {
         return this.augmenter.getContractsData(contractToAbiMap, contractToOfficialNameMap)
     }
 
@@ -171,46 +158,15 @@ class Translator2 {
     getContractTypes(contractToAbiMap: Record<Address, ABI_Item[]>): Promise<Record<Address, ContractType>> {
         throw new Error('Not implemented')
     }
-    // ... might not even needs this, oops
-
     /**********************************************/
     /******      DECODING / AUGMENTING     ********/
     /**********************************************/
     decodeTxData(
         rawTxData: RawTxData | RawTxDataWithoutTrace,
         ABIs: Record<Address, ABI_Item[]>,
-        contractDataArr: ContractData[],
-    ): any {
-        const allABIs = []
-        for (const abis of Object.values(ABIs)) {
-            allABIs.push(...abis)
-        }
-        abiDecoder.addABI(allABIs)
-
-        const { txReceipt } = rawTxData
-        const { logs } = txReceipt
-
-        // TODO logs that don't get decoded dont show up as 'null' or 'undefined', which will throw off mapping the logIndex to the decoded log
-
-        const decodedLogs: Omit<DecodedLog, 'logIndex'>[] = abiDecoder.decodeLogs(rawTxData.txReceipt.logs)
-        const decodedData = abiDecoder.decodeMethod(rawTxData.txResponse.data)
-
-        const augmentedDecodedLogs = decodedLogs.map((log, index) => {
-            const decodedLog = {
-                ...log,
-                logIndex: logs[index].logIndex,
-                address: validateAndNormalizeAddress(log.address),
-            }
-            return decodedLog
-        }) as DecodedLog[]
-
-        const transformedDecodedLogs = transformDecodedLogs(
-            rawTxData.txReceipt.logs,
-            augmentedDecodedLogs,
-            contractDataArr,
-        )
-
-        return { decodedLogs, decodedData, transformedDecodedLogs }
+        contractDataMap: Record<Address, ContractData>,
+    ): { decodedLogs: Interaction[]; decodedCallData: DecodedCallData } {
+        return this.augmenter.decodeTxData(rawTxData, ABIs, contractDataMap)
     }
 
     decodeTxDataArr(rawTxDataArr: RawTxData[], ABIs: Record<Address, ABI_Item[]>[]): Decoded[] {
@@ -218,13 +174,13 @@ class Translator2 {
     }
 
     augmentDecodedData(
-        decodedData: Decoded,
-        ens: Record<Address, string>,
-        namesAndSymbolsMap: NamesAndSymbolsMap,
-        officialContractNamesMap: Record<Address, string>,
-        contractTypesMap: Record<Address, ContractType>,
+        decodedLogs: Interaction[],
+        decodedCallData: DecodedCallData,
+        ensMap: Record<Address, string>,
+        contractDataMap: Record<Address, ContractData>,
+        rawTxData: RawTxData | RawTxDataWithoutTrace,
     ): Decoded {
-        throw new Error('Not implemented')
+        return this.augmenter.augmentDecodedData(decodedLogs, decodedCallData, ensMap, contractDataMap, rawTxData)
     }
 
     //This is a subset of augmentDecodedData
@@ -237,7 +193,7 @@ class Translator2 {
     /**********************************************/
 
     interpretDecodedTx(decoded: Decoded, userAddress: Address | null = null): Interpretation {
-        throw new Error('Not implemented')
+        return this.interpreter.interpretSingleTx(decoded, userAddress)
     }
 
     // If we do this after we've created the example description, we'll have to figure out how to parse any addresses we've turned into a shorter name or onoma name
@@ -248,20 +204,18 @@ class Translator2 {
     async interpretTx(txHash: string, userAddress: Address | null = null): Promise<Interpretation> {
         const rawTxData = await this.getRawTxData(txHash)
         const addresses = this.getContractAddressesFromRawTxData(rawTxData)
-        const unfilteredAbiMap = await this.getABIsForContracts(addresses)
+        const [unfilteredAbiMap, officialContractNamesMap] = await this.getABIsAndNamesForContracts(addresses)
         const AbiMap = filterABIs(unfilteredAbiMap)
-        const ENSs = await this.getEnsForAddresses(addresses)
-        const nameAndSymbols = await this.getNamesAndSymbols(addresses)
-        const officialContractNames = await this.getOfficialNamesForContracts(addresses)
-        const contractTypesMap = await this.getContractTypes(AbiMap)
+        const ensMap = await this.getENSNames(addresses)
+        const contractDataMap = await this.getContractsData(AbiMap, officialContractNamesMap)
 
-        const decoded = this.decodeTxData(rawTxData, AbiMap, [])
+        const { decodedLogs, decodedCallData } = this.decodeTxData(rawTxData, AbiMap, contractDataMap)
         const decodedWithAugmentation = this.augmentDecodedData(
-            decoded,
-            ENSs,
-            nameAndSymbols,
-            officialContractNames,
-            contractTypesMap,
+            decodedLogs,
+            decodedCallData,
+            ensMap,
+            contractDataMap,
+            rawTxData,
         )
 
         const interpretation = this.interpretDecodedTx(decodedWithAugmentation, userAddress)
