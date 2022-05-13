@@ -1,5 +1,3 @@
-import { AbiInput, AbiItem } from 'web3-utils'
-
 export type ABIStringMap = {
     constructor: string
     event: string[]

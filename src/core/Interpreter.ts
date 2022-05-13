@@ -92,7 +92,7 @@ class Interpreter {
     public interpretSingleTx(decodedData: Decoded, userAddressFromInput: Address | null = null): Interpretation {
         const { contractMethod, interactions, fromAddress, toAddress } = decodedData
 
-        const { nativeTokenValueSent, txHash } = decodedData
+        const { nativeValueSent, txHash } = decodedData
 
         const gasUsed = formatEther(
             BigNumber.from(decodedData.gasUsed).mul(BigNumber.from(decodedData.effectiveGasPrice)),
@@ -116,13 +116,13 @@ class Interpreter {
             txHash,
             userAddress,
             action: Action.unknown,
-            nativeTokenValueSent: this.getNativeTokenValueSent(
+            nativeValueSent: this.getNativeTokenValueSent(
                 interactions,
-                nativeTokenValueSent,
+                nativeValueSent,
                 fromAddress,
                 userAddress,
             ).toString(),
-            nativeTokenValueReceived: this.getNativeTokenValueReceived(interactions, userAddress).toString(),
+            nativeValueReceived: this.getNativeTokenValueReceived(interactions, userAddress).toString(),
             tokensReceived: this.getTokensReceived(interactions, userAddress),
             tokensSent: this.getTokensSent(interactions, userAddress),
             nativeTokenSymbol: this.chain.symbol,
@@ -196,11 +196,11 @@ class Interpreter {
     }
     getNativeTokenValueSent(
         interactions: Interaction[],
-        nativeTokenValueSent: string | undefined,
+        nativeValueSent: string | undefined,
         fromAddress: Address,
         userAddress: Address,
     ): number {
-        if (fromAddress === userAddress) return Number(formatEther(nativeTokenValueSent || 0))
+        if (fromAddress === userAddress) return Number(formatEther(nativeValueSent || 0))
 
         const nativeTokenEvents = getNativeTokenValueEvents(interactions)
         const nativeTokenEventsReceived = nativeTokenEvents.filter((event) => event.params.from === userAddress)

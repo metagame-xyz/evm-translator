@@ -27,7 +27,6 @@ type Event = {
 }
 
 export function transformDecodedLogs(
-    rawLogs: Log[],
     decodedLogs: RawDecodedLog[],
     contractDataMap: Record<Address, ContractData>,
 ): Array<Interaction> {

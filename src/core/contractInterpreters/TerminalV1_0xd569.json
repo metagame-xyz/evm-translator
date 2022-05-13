@@ -115,7 +115,7 @@
                     "defaultValue": "an unknown"
                 }
             },
-            "exampleDescriptionTemplate": "{userName} {action} {nativeTokenValueSent} ETH to {project} {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {nativeValueSent} ETH to {project} {contractName}",
             "exampleDescription": "brenner.eth contributed 0.12 ETH  to the ConstitutionDAO Juicebox"
         },
         "printPreminedTickets": {

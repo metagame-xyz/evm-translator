@@ -234,7 +234,7 @@
         },
         "swapETHForExactTokens": {
             "action": "bought",
-            "exampleDescriptionTemplate": "{userName} {action} {nativeTokenValueSent} {nativeTokenSymbol} of {tokenName} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {nativeValueSent} {nativeTokenSymbol} of {tokenName} on {contractName}",
             "exampleDescription": "0x4f1a9 bought 0.01 ETH of SUPER on Uniswap V2",
             "keywords": {
                 "tokenName": {
@@ -257,7 +257,7 @@
         },
         "swapExactETHForTokens": {
             "action": "bought",
-            "exampleDescriptionTemplate": "{userName} {action} {nativeTokenValueSent} {nativeTokenSymbol} of {tokenName} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {nativeValueSent} {nativeTokenSymbol} of {tokenName} on {contractName}",
             "exampleDescription": "0x4f1a9 bought 0.01 ETH of SUPER on Uniswap V2",
             "keywords": {
                 "tokenName": {
@@ -280,7 +280,7 @@
         },
         "swapExactETHForTokensSupportingFeeOnTransferTokens": {
             "action": "bought",
-            "exampleDescriptionTemplate": "{userName} {action} {nativeTokenValueSent} {nativeTokenSymbol} of {tokenName} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {nativeValueSent} {nativeTokenSymbol} of {tokenName} on {contractName}",
             "exampleDescription": "0x4f1a9 bought 0.01 ETH of SUPER on Uniswap V2",
             "keywords": {
                 "tokenName": {

@@ -1,7 +1,8 @@
 import { Log } from '@ethersproject/providers'
-import ethers, { BigNumber, utils } from 'ethers'
-import { DecodedCallData, RawDecodedCallData, RawDecodedLog, RawDecodedLogEvent } from 'interfaces'
-import { ABI_Event, ABI_EventInput, ABI_FunctionInput, ABI_Item } from 'interfaces/abi'
+import { BigNumber, utils } from 'ethers'
+import { RawDecodedCallData, RawDecodedLog, RawDecodedLogEvent } from 'interfaces'
+import { ABI_Event, ABI_Item } from 'interfaces/abi'
+import { validateAndNormalizeAddress } from 'utils'
 import ABICoder from 'utils/web3-abi-coder'
 
 function hash(data: string): string {
@@ -216,7 +217,7 @@ function _decodeLogs(logs: Log[]): RawDecodedLog[] {
                 return {
                     name: method.name,
                     events: decodedParams,
-                    address: logItem.address,
+                    address: validateAndNormalizeAddress(logItem.address),
                     logIndex: logItem.logIndex,
                     decoded: true,
                 } as RawDecodedLog
@@ -224,7 +225,7 @@ function _decodeLogs(logs: Log[]): RawDecodedLog[] {
                 return {
                     name: null,
                     events: [],
-                    address: logItem.address,
+                    address: validateAndNormalizeAddress(logItem.address),
                     logIndex: logItem.logIndex,
                     decoded: false,
                 } as RawDecodedLog

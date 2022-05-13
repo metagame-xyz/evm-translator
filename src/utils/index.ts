@@ -189,7 +189,7 @@ export const getNativeTokenValueEvents = (interactions: Interaction[]): Interact
 
     for (const interaction of interactions) {
         for (const event of interaction.events) {
-            if (event.nativeTokenTransfer) {
+            if (event.nativeTransfer) {
                 nativeTokenEvents.push(event)
             }
         }

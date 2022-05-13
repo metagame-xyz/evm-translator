@@ -161,7 +161,7 @@ export type Decoded = {
     toENS: string | null
     interactions: Array<Interaction>
     /** The amount of native token (ex: ETH) sent denominated in wei */
-    nativeTokenValueSent: string
+    nativeValueSent: string
     /** The symbol for the native token. ex: ETH */
     nativeTokenSymbol: string
     txIndex: number
@@ -183,8 +183,8 @@ export type Interaction = {
 export type InteractionEvent = {
     /** The name of the function that was called */
     eventName: string | null
-    nativeTokenTransfer?: true
-    logIndex: number
+    nativeTransfer?: true
+    logIndex: number | null
     params: InteractionEventParams
 }
 
@@ -230,8 +230,8 @@ export type Interpretation = {
     exampleDescription: string
     tokensSent: Token[] // usually just one token
     tokensReceived: Token[] // usually just one token
-    nativeTokenValueSent: string
-    nativeTokenValueReceived: string
+    nativeValueSent: string
+    nativeValueReceived: string
     nativeTokenSymbol: string
     userName: string
     counterpartyName: string | null // the opposite side of the tx, opposite of userName

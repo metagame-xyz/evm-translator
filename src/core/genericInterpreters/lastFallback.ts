@@ -2,23 +2,21 @@ import { Action, Address, Decoded, Interpretation } from 'interfaces'
 import { getStablecoinOrNativeWrappedAddressesBySymbol } from 'utils'
 
 function sentBaseToken(interpretation: Interpretation): boolean {
-    const { nativeTokenSymbol, nativeTokenValueSent } = interpretation
+    const { nativeTokenSymbol, nativeValueSent } = interpretation
     const currency = getStablecoinOrNativeWrappedAddressesBySymbol(nativeTokenSymbol)
 
-    return !!interpretation.tokensSent.find(
-        (token) => currency.includes(token.address) || Number(nativeTokenValueSent) > 0,
-    )
+    return !!interpretation.tokensSent.find((token) => currency.includes(token.address) || Number(nativeValueSent) > 0)
 }
 
 function receivedBaseToken(interpretation: Interpretation): boolean {
-    const { nativeTokenSymbol, nativeTokenValueReceived } = interpretation
+    const { nativeTokenSymbol, nativeValueReceived } = interpretation
     const currency = getStablecoinOrNativeWrappedAddressesBySymbol(nativeTokenSymbol)
 
-    console.log('value received', Number(nativeTokenValueReceived))
+    console.log('value received', Number(nativeValueReceived))
 
     return !!(
         interpretation.tokensReceived.find((token) => currency.includes(token.address)) ||
-        Number(nativeTokenValueReceived) > 0
+        Number(nativeValueReceived) > 0
     )
 }
 
@@ -113,25 +111,19 @@ function getAction(interpretation: Interpretation, userAddress: Address, fromAdd
 
 function lastFallback(decodedData: Decoded, interpretation: Interpretation) {
     const { fromAddress, toAddress } = decodedData
-    const {
-        nativeTokenValueReceived,
-        nativeTokenValueSent,
-        nativeTokenSymbol,
-        userAddress,
-        tokensReceived,
-        tokensSent,
-    } = interpretation
+    const { nativeValueReceived, nativeValueSent, nativeTokenSymbol, userAddress, tokensReceived, tokensSent } =
+        interpretation
 
     interpretation.action = getAction(interpretation, userAddress, fromAddress)
 
     const valueSent =
-        Number(nativeTokenValueSent) > 0 ? nativeTokenValueSent : tokensSent[0]?.amount || `#${tokensSent[0]?.tokenId}`
+        Number(nativeValueSent) > 0 ? nativeValueSent : tokensSent[0]?.amount || `#${tokensSent[0]?.tokenId}`
 
     const symbolSent = tokensSent[0]?.symbol || nativeTokenSymbol
 
     const valueReceived =
-        Number(nativeTokenValueReceived) > 0
-            ? nativeTokenValueReceived
+        Number(nativeValueReceived) > 0
+            ? nativeValueReceived
             : tokensReceived[0]?.amount || `#${tokensReceived[0]?.tokenId}`
 
     const symbolReceived = tokensReceived[0]?.symbol || nativeTokenSymbol
@@ -162,7 +154,7 @@ export default lastFallback
 "traded weth for car"
 
 {
-"nativeTokenValueSent":"0"
+"nativeValueSent":"0"
 "tokensReceived":[
 0:{
 "type":"ERC721"

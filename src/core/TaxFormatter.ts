@@ -36,8 +36,8 @@ class TaxFormatter {
 
             const receivedSomething = data.tokensReceived.length > 0 // dont know how to get if you received eth
             const receivedNothing = data.tokensReceived.length === 0 // dont know how to get if you received eth
-            const sentSomething = data.tokensSent.length > 0 || Number(data.nativeTokenValueSent) > 0
-            const sentNothing = data.tokensSent.length === 0 && Number(data.nativeTokenValueSent) === 0
+            const sentSomething = data.tokensSent.length > 0 || Number(data.nativeValueSent) > 0
+            const sentNothing = data.tokensSent.length === 0 && Number(data.nativeValueSent) === 0
 
             if (receivedNothing && sentNothing) {
                 rowType = RowType.fee
@@ -94,14 +94,14 @@ class TaxFormatter {
                 }
                 // TODO 1155
             }
-            if (userInitiated && direction === 'out' && Number(data.nativeTokenValueSent) > 0) {
-                amount = Number(data.nativeTokenValueSent)
+            if (userInitiated && direction === 'out' && Number(data.nativeValueSent) > 0) {
+                amount = Number(data.nativeValueSent)
                 currency = data.nativeTokenSymbol || 'unknown native token'
                 type = 'native'
             }
 
-            if (!userInitiated && direction === 'in' && Number(data.nativeTokenValueSent) > 0) {
-                amount = Number(data.nativeTokenValueSent)
+            if (!userInitiated && direction === 'in' && Number(data.nativeValueSent) > 0) {
+                amount = Number(data.nativeValueSent)
                 currency = data.nativeTokenSymbol || 'unknown native token'
                 type = 'native'
             }

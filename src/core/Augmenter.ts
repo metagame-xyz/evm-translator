@@ -13,7 +13,6 @@ import {
     InProgressActivity,
     Interaction,
     InteractionEvent,
-    RawDecodedLog,
     RawTxData,
     RawTxDataWithoutTrace,
     TraceLog,
@@ -111,25 +110,14 @@ export class Augmenter {
         }
         abiDecoder.addABI(allABIs)
 
-        const { txReceipt } = rawTxData
-        const { logs } = txReceipt
+        const { logs } = rawTxData.txReceipt
 
         // TODO logs that don't get decoded dont show up as 'null' or 'undefined', which will throw off mapping the logIndex to the decoded log
 
-        const rawDecodedLogs = abiDecoder.decodeLogs(rawTxData.txReceipt.logs)
+        const rawDecodedLogs = abiDecoder.decodeLogs(logs)
         const rawDecodedCallData = abiDecoder.decodeMethod(rawTxData.txResponse.data) || { name: null, params: [] }
 
-        const augmentedDecodedLogs = rawDecodedLogs.map((log, index) => {
-            const decodedLog = {
-                ...log,
-                logIndex: logs[index].logIndex,
-                address: validateAndNormalizeAddress(log.address),
-                decoded: true,
-            }
-            return decodedLog
-        }) as RawDecodedLog[]
-
-        const decodedLogs = transformDecodedLogs(rawTxData.txReceipt.logs, augmentedDecodedLogs, contractDataMap)
+        const decodedLogs = transformDecodedLogs(rawDecodedLogs, contractDataMap)
         const decodedCallData = transformDecodedData(rawDecodedCallData)
 
         return { decodedLogs, decodedCallData }
@@ -155,7 +143,8 @@ export class Augmenter {
             txType = TxType.CONTRACT_INTERACTION
         }
 
-        // console.log('contractDataMap', contractDataMap)
+        const interactions =
+            'txTrace' in rawTxData ? Augmenter.augmentTraceLogs(decodedLogs, rawTxData.txTrace) : decodedLogs
 
         const transformedData: Decoded = {
             txHash: txResponse.hash,
@@ -167,9 +156,9 @@ export class Augmenter {
             contractType: contractDataMap[txReceipt.to].type,
             contractMethod: decodedCallData.name,
             contractMethodArguments: decodedCallData.params,
-            nativeTokenValueSent: value,
+            nativeValueSent: value,
             nativeTokenSymbol: this.chain.symbol,
-            interactions: decodedLogs,
+            interactions,
             effectiveGasPrice: txReceipt.effectiveGasPrice?.toString() || txResponse.gasPrice?.toString() || null,
             gasUsed: txReceipt.gasUsed.toString(),
             timestamp: txReceipt.timestamp,
@@ -179,11 +168,9 @@ export class Augmenter {
             toENS: null,
         }
 
-        // TODO augment with trace logs
+        const transformedAugmentedData = Augmenter.augmentENSNames(transformedData, ensMap)
 
-        const transformedDataWithENS = this.augmentENSNames(transformedData, ensMap)
-
-        return transformedDataWithENS
+        return transformedAugmentedData
     }
 
     private createDecodedArr() {
@@ -205,7 +192,7 @@ export class Augmenter {
                 const transformedData: Decoded = {
                     txHash: txResponse.hash,
                     txType: txType,
-                    nativeTokenValueSent: value,
+                    nativeValueSent: value,
                     nativeTokenSymbol: this.chain.symbol,
                     txIndex: txReceipt.transactionIndex,
                     reverted: txReceipt.status == 0,
@@ -270,11 +257,56 @@ export class Augmenter {
         }
     }
 
+    static augmentTraceLogs(interactionsWithoutNativeTransfers: Interaction[], traceLogs: TraceLog[]): Interaction[] {
+        const interactions = [...interactionsWithoutNativeTransfers]
+
+        function traceLogToEvent(nativeTokenTransfer: TraceLog): InteractionEvent {
+            const { action } = nativeTokenTransfer
+            return {
+                eventName: 'NativeTransfer',
+                nativeTokenTransfer: true,
+                logIndex: null,
+                params: {
+                    from: action.from,
+                    to: action.to,
+                    value: action.value.toString(),
+                },
+            } as InteractionEvent
+        }
+
+        const nativeTransfers = traceLogs.filter((traceLog) => {
+            return traceLog.action.callType === 'call' && !traceLog.action.value.isZero()
+        })
+
+        for (const nt of nativeTransfers) {
+            const interaction = interactions.find(
+                (i) => i.contractAddress == nt.action.from || i.contractAddress == nt.action.to,
+            )
+
+            // debugger
+            // usually it comes from one of the contracts that emitted other events
+            if (interaction) {
+                interaction.events.push(traceLogToEvent(nt))
+
+                // but sometimes... it doesn't, so we need to add that contract
+            } else {
+                interactions.push({
+                    contractAddress: nt.action.from,
+                    contractName: null,
+                    contractSymbol: null,
+                    events: [traceLogToEvent(nt)],
+                })
+            }
+        }
+
+        return interactions
+    }
+
     private addTraceLogsAsInteractions() {
         function traceLogToEvent(nativeTokenTransfer: TraceLog): InteractionEvent {
             const { action } = nativeTokenTransfer
             return {
-                eventName: 'NativeTokenTransfer',
+                eventName: 'NativeTransfer',
                 nativeTokenTransfer: true,
                 logIndex: 0,
                 params: {
@@ -364,7 +396,7 @@ export class Augmenter {
         return addressToNameMap
     }
 
-    augmentENSNames(decoded: Decoded, ensMap: Record<Address, string>): Decoded {
+    static augmentENSNames(decoded: Decoded, ensMap: Record<Address, string>): Decoded {
         const decodedWithENS = traverse(decoded).map((thing) => {
             if (!!thing && typeof thing === 'object' && !Array.isArray(thing)) {
                 for (const [key, val] of Object.entries(thing)) {

@@ -6,7 +6,7 @@ function isSafeReceivedEvent(event: InteractionEvent, userAddress: Address) {
 
 function interpretGenericTransfer(decodedData: Decoded, interpretation: Interpretation) {
     const { fromAddress, toAddress, interactions } = decodedData
-    const { userAddress, nativeTokenValueSent, nativeTokenSymbol, userName } = interpretation
+    const { userAddress, nativeValueSent, nativeTokenSymbol, userName } = interpretation
     const sending = fromAddress === userAddress
 
     const action: Action = sending ? Action.sent : Action.received
@@ -26,7 +26,7 @@ function interpretGenericTransfer(decodedData: Decoded, interpretation: Interpre
         counterpartyName = decodedData.fromENS || fromAddress.slice(0, 6)
     }
 
-    const exampleDescription = `${userName} ${action} ${nativeTokenValueSent} ${nativeTokenSymbol} ${direction} ${counterpartyName}`
+    const exampleDescription = `${userName} ${action} ${nativeValueSent} ${nativeTokenSymbol} ${direction} ${counterpartyName}`
 
     interpretation.action = action
     interpretation.exampleDescription = exampleDescription

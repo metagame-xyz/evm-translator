@@ -132,7 +132,7 @@
                     "defaultValue": "???"
                 }
             },
-            "exampleDescriptionTemplate": "{userName} {action} {NFT} {tokenId} on {contractName} for {nativeTokenValueSent} ETH",
+            "exampleDescriptionTemplate": "{userName} {action} {NFT} {tokenId} on {contractName} for {nativeValueSent} ETH",
             "exampleDescription": "brenner.eth bought Blitmap #1115 on OpenSea for 0.01 ETH"
         },
         "transferOwnership": {
