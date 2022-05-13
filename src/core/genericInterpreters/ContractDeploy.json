@@ -1,5 +1,5 @@
 {
-    "exampleDescriptionTemplate": "{userName} {action} {deployedContractName} ({deployedContractSymbol}) for {gasPaid} {nativeTokenSymbol}",
+    "exampleDescriptionTemplate": "{userName} {action} {deployedContractName} ({deployedContractSymbol}) for {gasPaid} {chainSymbol}",
     "exampleDescription": "dev.brenner.eth deployed contract Birthblock (BBLOCK) for 0.45 ETH",
     "keywords": {
         "deployedContractName": {

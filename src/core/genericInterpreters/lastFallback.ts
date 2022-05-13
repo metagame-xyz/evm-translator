@@ -2,15 +2,15 @@ import { Action, Address, Decoded, Interpretation } from 'interfaces'
 import { getStablecoinOrNativeWrappedAddressesBySymbol } from 'utils'
 
 function sentBaseToken(interpretation: Interpretation): boolean {
-    const { nativeTokenSymbol, nativeValueSent } = interpretation
-    const currency = getStablecoinOrNativeWrappedAddressesBySymbol(nativeTokenSymbol)
+    const { chainSymbol, nativeValueSent } = interpretation
+    const currency = getStablecoinOrNativeWrappedAddressesBySymbol(chainSymbol)
 
     return !!interpretation.tokensSent.find((token) => currency.includes(token.address) || Number(nativeValueSent) > 0)
 }
 
 function receivedBaseToken(interpretation: Interpretation): boolean {
-    const { nativeTokenSymbol, nativeValueReceived } = interpretation
-    const currency = getStablecoinOrNativeWrappedAddressesBySymbol(nativeTokenSymbol)
+    const { chainSymbol, nativeValueReceived } = interpretation
+    const currency = getStablecoinOrNativeWrappedAddressesBySymbol(chainSymbol)
 
     console.log('value received', Number(nativeValueReceived))
 
@@ -111,7 +111,7 @@ function getAction(interpretation: Interpretation, userAddress: Address, fromAdd
 
 function lastFallback(decodedData: Decoded, interpretation: Interpretation) {
     const { fromAddress, toAddress } = decodedData
-    const { nativeValueReceived, nativeValueSent, nativeTokenSymbol, userAddress, tokensReceived, tokensSent } =
+    const { nativeValueReceived, nativeValueSent, chainSymbol, userAddress, tokensReceived, tokensSent } =
         interpretation
 
     interpretation.action = getAction(interpretation, userAddress, fromAddress)
@@ -119,14 +119,14 @@ function lastFallback(decodedData: Decoded, interpretation: Interpretation) {
     const valueSent =
         Number(nativeValueSent) > 0 ? nativeValueSent : tokensSent[0]?.amount || `#${tokensSent[0]?.tokenId}`
 
-    const symbolSent = tokensSent[0]?.symbol || nativeTokenSymbol
+    const symbolSent = tokensSent[0]?.symbol || chainSymbol
 
     const valueReceived =
         Number(nativeValueReceived) > 0
             ? nativeValueReceived
             : tokensReceived[0]?.amount || `#${tokensReceived[0]?.tokenId}`
 
-    const symbolReceived = tokensReceived[0]?.symbol || nativeTokenSymbol
+    const symbolReceived = tokensReceived[0]?.symbol || chainSymbol
 
     if (interpretation.action === Action.gotAirdropped) {
         interpretation.counterpartyName = fromAddress
@@ -173,7 +173,7 @@ export default lastFallback
 "amount":"0.369"
 }
 ]
-"nativeTokenSymbol":"ETH"
+"chainSymbol":"ETH"
 "userName":"brenner.eth"
 "gasPaid":"0.010657716082272324"
 "extra":{}

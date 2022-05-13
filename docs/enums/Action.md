@@ -29,6 +29,7 @@
 - [traded](Action.md#traded)
 - [transferred](Action.md#transferred)
 - [transferredOwnership](Action.md#transferredownership)
+- [unknown](Action.md#unknown)
 
 ## Enumeration members
 
@@ -38,7 +39,7 @@
 
 #### Defined in
 
-[index.ts:258](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L258)
+[index.ts:281](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L281)
 
 ___
 
@@ -48,7 +49,7 @@ ___
 
 #### Defined in
 
-[index.ts:250](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L250)
+[index.ts:273](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L273)
 
 ___
 
@@ -58,7 +59,7 @@ ___
 
 #### Defined in
 
-[index.ts:255](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L255)
+[index.ts:278](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L278)
 
 ___
 
@@ -68,7 +69,7 @@ ___
 
 #### Defined in
 
-[index.ts:241](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L241)
+[index.ts:264](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L264)
 
 ___
 
@@ -78,7 +79,7 @@ ___
 
 #### Defined in
 
-[index.ts:237](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L237)
+[index.ts:260](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L260)
 
 ___
 
@@ -88,7 +89,7 @@ ___
 
 #### Defined in
 
-[index.ts:247](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L247)
+[index.ts:270](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L270)
 
 ___
 
@@ -98,7 +99,7 @@ ___
 
 #### Defined in
 
-[index.ts:252](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L252)
+[index.ts:275](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L275)
 
 ___
 
@@ -108,7 +109,7 @@ ___
 
 #### Defined in
 
-[index.ts:253](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L253)
+[index.ts:276](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L276)
 
 ___
 
@@ -118,7 +119,7 @@ ___
 
 #### Defined in
 
-[index.ts:239](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L239)
+[index.ts:262](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L262)
 
 ___
 
@@ -128,7 +129,7 @@ ___
 
 #### Defined in
 
-[index.ts:240](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L240)
+[index.ts:263](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L263)
 
 ___
 
@@ -138,7 +139,7 @@ ___
 
 #### Defined in
 
-[index.ts:257](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L257)
+[index.ts:280](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L280)
 
 ___
 
@@ -148,7 +149,7 @@ ___
 
 #### Defined in
 
-[index.ts:236](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L236)
+[index.ts:259](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L259)
 
 ___
 
@@ -158,7 +159,7 @@ ___
 
 #### Defined in
 
-[index.ts:234](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L234)
+[index.ts:257](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L257)
 
 ___
 
@@ -168,7 +169,7 @@ ___
 
 #### Defined in
 
-[index.ts:249](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L249)
+[index.ts:272](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L272)
 
 ___
 
@@ -178,7 +179,7 @@ ___
 
 #### Defined in
 
-[index.ts:254](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L254)
+[index.ts:277](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L277)
 
 ___
 
@@ -188,7 +189,7 @@ ___
 
 #### Defined in
 
-[index.ts:251](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L251)
+[index.ts:274](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L274)
 
 ___
 
@@ -198,7 +199,7 @@ ___
 
 #### Defined in
 
-[index.ts:256](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L256)
+[index.ts:279](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L279)
 
 ___
 
@@ -208,7 +209,7 @@ ___
 
 #### Defined in
 
-[index.ts:235](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L235)
+[index.ts:258](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L258)
 
 ___
 
@@ -218,7 +219,7 @@ ___
 
 #### Defined in
 
-[index.ts:242](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L242)
+[index.ts:265](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L265)
 
 ___
 
@@ -230,7 +231,7 @@ Trading one stablecoin for another, or native token for the wrapped version (but
 
 #### Defined in
 
-[index.ts:246](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L246)
+[index.ts:269](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L269)
 
 ___
 
@@ -242,7 +243,7 @@ Trading one non-native, non-stablecoin token for another
 
 #### Defined in
 
-[index.ts:244](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L244)
+[index.ts:267](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L267)
 
 ___
 
@@ -252,7 +253,7 @@ ___
 
 #### Defined in
 
-[index.ts:238](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L238)
+[index.ts:261](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L261)
 
 ___
 
@@ -262,4 +263,14 @@ ___
 
 #### Defined in
 
-[index.ts:248](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L248)
+[index.ts:271](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L271)
+
+___
+
+### unknown
+
+• **unknown** = `"unknown"`
+
+#### Defined in
+
+[index.ts:256](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L256)

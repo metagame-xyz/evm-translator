@@ -19,7 +19,7 @@ export type Decoded = {
     // interactions: Array<Interaction>
     nativeValueSent?: string
     nativeValueReceived?: string // so hard to get this
-    nativeTokenSymbol: string
+    chainSymbol: string
     txIndex?: number
     fromAddress: Address
     toAddress?: Address

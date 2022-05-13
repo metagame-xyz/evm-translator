@@ -73,7 +73,7 @@ An example of an Interpreter Map
                     "defaultValue": "unknown"
                 }
             },
-            "exampleDescriptionTemplate": "{userName} {action} to the {token_0}-{nativeTokenSymbol} {contractName} pool",
+            "exampleDescriptionTemplate": "{userName} {action} to the {token_0}-{chainSymbol} {contractName} pool",
             "exampleDescription": "0xf1a9 added liquidity to the ACYC-ETH Uniswap V2 pool"
         }
     }
@@ -87,7 +87,7 @@ This is an example of the decoded event logs when the `addLiquidity` function ge
     "txHash": "0x0e6388e80a6023cfc8e7b9fb2ff94e3bf5d34cdc8bb348d124e2385e29d5bcf8",
     "txType": "contract interaction",
     "nativeValueSent": "0",
-    "nativeTokenSymbol": "ETH",
+    "chainSymbol": "ETH",
     "txIndex": 191,
     "reverted": false,
     "gasUsed": "142824",
@@ -190,7 +190,7 @@ When the above map is applied to above decoded event logs, this is the interpret
     "exampleDescription": "0xf1a9 added liquidity to the SUPER-WETH Uniswap V2 pool",
     "nativeValueSent": "0",
     "nativeValueReceived": "0",
-    "nativeTokenSymbol": "ETH",
+    "chainSymbol": "ETH",
     "tokensReceived": [
         {
             "type": "LPToken",

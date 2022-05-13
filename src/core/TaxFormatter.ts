@@ -96,13 +96,13 @@ class TaxFormatter {
             }
             if (userInitiated && direction === 'out' && Number(data.nativeValueSent) > 0) {
                 amount = Number(data.nativeValueSent)
-                currency = data.nativeTokenSymbol || 'unknown native token'
+                currency = data.chainSymbol || 'unknown native token'
                 type = 'native'
             }
 
             if (!userInitiated && direction === 'in' && Number(data.nativeValueSent) > 0) {
                 amount = Number(data.nativeValueSent)
-                currency = data.nativeTokenSymbol || 'unknown native token'
+                currency = data.chainSymbol || 'unknown native token'
                 type = 'native'
             }
 
@@ -128,11 +128,11 @@ class TaxFormatter {
             'Out Currency': outCurrency,
             Timestamp: decodedData.timestamp || 0,
             'Fee Amount': userInitiated ? Number(interpretedData.gasPaid) : 0,
-            'Fee Currency': interpretedData.nativeTokenSymbol || 'UNKNOWN',
+            'Fee Currency': interpretedData.chainSymbol || 'UNKNOWN',
             'Exchange (optional)': 'Metamask',
             'US Based': 'yes',
             txHash: rawTxData.txReceipt.transactionHash,
-            // network: interpretedData.nativeTokenSymbol || 'UNKNOWN',
+            // network: interpretedData.chainSymbol || 'UNKNOWN',
             // walletAddress: this.walletAddress,
             // walletName: this.walletName,
             // Todo this doesn't take into account when one of them is ETH

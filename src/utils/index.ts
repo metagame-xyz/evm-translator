@@ -1,6 +1,6 @@
 import collect from 'collect.js'
 import { BigNumber } from 'ethers'
-import { Address, Chain, Chains, Interaction, InteractionEvent, Interpretation } from 'interfaces'
+import { Address, Chain, Chains, ChainSymbol, Interaction, InteractionEvent, Interpretation } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import fetch, { Response } from 'node-fetch'
 import traverse from 'traverse'
@@ -9,7 +9,7 @@ const ethereum: Chain = {
     EVM: true,
     id: 1,
     name: 'Ethereum',
-    symbol: 'ETH',
+    symbol: ChainSymbol.ETH,
     testnet: false,
     blockExplorerUrl: 'https://etherscan.io/',
     wethAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -22,7 +22,7 @@ const polygon: Chain = {
     EVM: true,
     id: 137,
     name: 'Polygon',
-    symbol: 'MATIC',
+    symbol: ChainSymbol.MATIC,
     testnet: false,
     blockExplorerUrl: 'https://polygonscan.com/',
     wethAddress: '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619',

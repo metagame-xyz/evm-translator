@@ -75,7 +75,7 @@
         },
         "addLiquidityETH": {
             "action": "added liquidity",
-            "exampleDescriptionTemplate": "{userName} {action} to the {token_0}-{nativeTokenSymbol} {contractName} pool",
+            "exampleDescriptionTemplate": "{userName} {action} to the {token_0}-{chainSymbol} {contractName} pool",
             "exampleDescription": "0xf1a9 added liquidity to the ACYC-ETH Uniswap V2 pool",
             "keywords": {
                 "token_0": {
@@ -114,7 +114,7 @@
         },
         "removeLiquidityETH": {
             "action": "removed liquidity",
-            "exampleDescriptionTemplate": "{userName} {action} from the {token_0}-{nativeTokenSymbol} {contractName} pool",
+            "exampleDescriptionTemplate": "{userName} {action} from the {token_0}-{chainSymbol} {contractName} pool",
             "exampleDescription": "0xf1a9 removed liquidity from the ACYC-ETH Uniswap V2 pool",
             "keywords": {
                 "token_0": {
@@ -138,7 +138,7 @@
         },
         "removeLiquidityETHSupportingFeeOnTransferTokens": {
             "action": "removed liquidity",
-            "exampleDescriptionTemplate": "{userName} {action} from the {token_0}-{nativeTokenSymbol} {contractName} pool",
+            "exampleDescriptionTemplate": "{userName} {action} from the {token_0}-{chainSymbol} {contractName} pool",
             "exampleDescription": "0xf1a9 removed liquidity from the ACYC-ETH Uniswap V2 pool",
             "keywords": {
                 "token_0": {
@@ -162,7 +162,7 @@
         },
         "removeLiquidityETHWithPermit": {
             "action": "removed liquidity",
-            "exampleDescriptionTemplate": "{userName} {action} from the {token_0}-{nativeTokenSymbol} {contractName} pool",
+            "exampleDescriptionTemplate": "{userName} {action} from the {token_0}-{chainSymbol} {contractName} pool",
             "exampleDescription": "0xf1a9 removed liquidity from the ACYC-ETH Uniswap V2 pool",
             "keywords": {
                 "token_0": {
@@ -186,7 +186,7 @@
         },
         "removeLiquidityETHWithPermitSupportingFeeOnTransferTokens": {
             "action": "removed liquidity",
-            "exampleDescriptionTemplate": "{userName} {action} from the {token_0}-{nativeTokenSymbol} {contractName} pool",
+            "exampleDescriptionTemplate": "{userName} {action} from the {token_0}-{chainSymbol} {contractName} pool",
             "exampleDescription": "0xf1a9 removed liquidity from the ACYC-ETH Uniswap V2 pool",
             "keywords": {
                 "token_0": {
@@ -234,7 +234,7 @@
         },
         "swapETHForExactTokens": {
             "action": "bought",
-            "exampleDescriptionTemplate": "{userName} {action} {nativeValueSent} {nativeTokenSymbol} of {tokenName} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {nativeValueSent} {chainSymbol} of {tokenName} on {contractName}",
             "exampleDescription": "0x4f1a9 bought 0.01 ETH of SUPER on Uniswap V2",
             "keywords": {
                 "tokenName": {
@@ -257,7 +257,7 @@
         },
         "swapExactETHForTokens": {
             "action": "bought",
-            "exampleDescriptionTemplate": "{userName} {action} {nativeValueSent} {nativeTokenSymbol} of {tokenName} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {nativeValueSent} {chainSymbol} of {tokenName} on {contractName}",
             "exampleDescription": "0x4f1a9 bought 0.01 ETH of SUPER on Uniswap V2",
             "keywords": {
                 "tokenName": {
@@ -280,7 +280,7 @@
         },
         "swapExactETHForTokensSupportingFeeOnTransferTokens": {
             "action": "bought",
-            "exampleDescriptionTemplate": "{userName} {action} {nativeValueSent} {nativeTokenSymbol} of {tokenName} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {nativeValueSent} {chainSymbol} of {tokenName} on {contractName}",
             "exampleDescription": "0x4f1a9 bought 0.01 ETH of SUPER on Uniswap V2",
             "keywords": {
                 "tokenName": {
@@ -303,7 +303,7 @@
         },
         "swapExactTokensForETH": {
             "action": "sold",
-            "exampleDescriptionTemplate": "{userName} {action} {ethValueReceived} {nativeTokenSymbol} of {tokenName} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {ethValueReceived} {chainSymbol} of {tokenName} on {contractName}",
             "exampleDescription": "0x4f1a9 sold 0.01 ETH of SUPER on Uniswap V2",
             "keywords": {
                 "tokenName": {
@@ -335,7 +335,7 @@
         },
         "swapExactTokensForETHSupportingFeeOnTransferTokens": {
             "action": "sold",
-            "exampleDescriptionTemplate": "{userName} {action} {ethValueReceived} {nativeTokenSymbol} of {tokenName} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {ethValueReceived} {chainSymbol} of {tokenName} on {contractName}",
             "exampleDescription": "0x4f1a9 sold 0.01 ETH of SUPER on Uniswap V2",
             "keywords": {
                 "tokenName": {
@@ -445,7 +445,7 @@
         },
         "swapTokensForExactETH": {
             "action": "sold",
-            "exampleDescriptionTemplate": "{userName} {action} {ethValueReceived} {nativeTokenSymbol} of {tokenName} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {ethValueReceived} {chainSymbol} of {tokenName} on {contractName}",
             "exampleDescription": "0x4f1a9 sold 0.01 ETH of SUPER on Uniswap V2",
             "keywords": {
                 "tokenName": {

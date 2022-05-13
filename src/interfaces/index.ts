@@ -11,6 +11,11 @@ export type Address = `0x${string}`
 
 // export type TxHash = `0x${string}`
 
+export const enum ChainSymbol {
+    ETH = 'ETH',
+    MATIC = 'MATIC',
+}
+
 export type Chain = {
     /** If this transaction is from an EVM-compatible chain. This it true for all, currently */
     EVM: boolean
@@ -19,7 +24,7 @@ export type Chain = {
     /** The chain's colloquial name. Ethereum, Polygon */
     name: string
     /** The chain's symbol. ETH, MATIC */
-    symbol: string
+    symbol: ChainSymbol
     /** If this chain is a testnet. */
     testnet: boolean
     /** The block explorer URL for this chain. https://etherscan.io/ */
@@ -163,7 +168,7 @@ export type Decoded = {
     /** The amount of native token (ex: ETH) sent denominated in wei */
     nativeValueSent: string
     /** The symbol for the native token. ex: ETH */
-    nativeTokenSymbol: string
+    chainSymbol: string
     txIndex: number
     fromAddress: Address
     toAddress: Address | null
@@ -232,7 +237,7 @@ export type Interpretation = {
     tokensReceived: Token[] // usually just one token
     nativeValueSent: string
     nativeValueReceived: string
-    nativeTokenSymbol: string
+    chainSymbol: ChainSymbol
     userName: string
     counterpartyName: string | null // the opposite side of the tx, opposite of userName
     extra: Record<string, any>

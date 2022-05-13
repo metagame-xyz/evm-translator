@@ -157,7 +157,7 @@ export class Augmenter {
             contractMethod: decodedCallData.name,
             contractMethodArguments: decodedCallData.params,
             nativeValueSent: value,
-            nativeTokenSymbol: this.chain.symbol,
+            chainSymbol: this.chain.symbol,
             interactions,
             effectiveGasPrice: txReceipt.effectiveGasPrice?.toString() || txResponse.gasPrice?.toString() || null,
             gasUsed: txReceipt.gasUsed.toString(),
@@ -193,7 +193,7 @@ export class Augmenter {
                     txHash: txResponse.hash,
                     txType: txType,
                     nativeValueSent: value,
-                    nativeTokenSymbol: this.chain.symbol,
+                    chainSymbol: this.chain.symbol,
                     txIndex: txReceipt.transactionIndex,
                     reverted: txReceipt.status == 0,
                     gasUsed: txReceipt.gasUsed.toString(),
@@ -260,11 +260,11 @@ export class Augmenter {
     static augmentTraceLogs(interactionsWithoutNativeTransfers: Interaction[], traceLogs: TraceLog[]): Interaction[] {
         const interactions = [...interactionsWithoutNativeTransfers]
 
-        function traceLogToEvent(nativeTokenTransfer: TraceLog): InteractionEvent {
-            const { action } = nativeTokenTransfer
+        function traceLogToEvent(nativeTransfer: TraceLog): InteractionEvent {
+            const { action } = nativeTransfer
             return {
                 eventName: 'NativeTransfer',
-                nativeTokenTransfer: true,
+                nativeTransfer: true,
                 logIndex: null,
                 params: {
                     from: action.from,
@@ -303,11 +303,11 @@ export class Augmenter {
     }
 
     private addTraceLogsAsInteractions() {
-        function traceLogToEvent(nativeTokenTransfer: TraceLog): InteractionEvent {
-            const { action } = nativeTokenTransfer
+        function traceLogToEvent(nativeTransfer: TraceLog): InteractionEvent {
+            const { action } = nativeTransfer
             return {
                 eventName: 'NativeTransfer',
-                nativeTokenTransfer: true,
+                nativeTransfer: true,
                 logIndex: 0,
                 params: {
                     from: action.from,
@@ -317,16 +317,16 @@ export class Augmenter {
             } as InteractionEvent
         }
 
-        function nativeTokenTransfersOnly(traceLog: TraceLog[]): TraceLog[] {
+        function nativeTransfersOnly(traceLog: TraceLog[]): TraceLog[] {
             return traceLog.filter((traceLog) => {
                 return traceLog.action.callType === 'call' && !traceLog.action.value.isZero()
             })
         }
 
         function add(interactions: Interaction[], traceLogs: TraceLog[]): Interaction[] {
-            const nativeTokenTransfers = nativeTokenTransfersOnly(traceLogs)
+            const nativeTransfers = nativeTransfersOnly(traceLogs)
 
-            for (const ntt of nativeTokenTransfers) {
+            for (const ntt of nativeTransfers) {
                 const interaction = interactions.find(
                     (i) => i.contractAddress == ntt.action.from || i.contractAddress == ntt.action.to,
                 )

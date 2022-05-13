@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[index.ts:266](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L266)
+[index.ts:289](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L289)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[index.ts:264](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L264)
+[index.ts:287](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L287)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[index.ts:262](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L262)
+[index.ts:285](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L285)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[index.ts:263](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L263)
+[index.ts:286](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L286)
 
 ___
 
@@ -60,4 +60,4 @@ ___
 
 #### Defined in
 
-[index.ts:265](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L265)
+[index.ts:288](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L288)

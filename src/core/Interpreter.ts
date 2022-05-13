@@ -125,7 +125,7 @@ class Interpreter {
             nativeValueReceived: this.getNativeTokenValueReceived(interactions, userAddress).toString(),
             tokensReceived: this.getTokensReceived(interactions, userAddress),
             tokensSent: this.getTokensSent(interactions, userAddress),
-            nativeTokenSymbol: this.chain.symbol,
+            chainSymbol: this.chain.symbol,
             userName,
             gasPaid: gasUsed,
             extra: {},
