@@ -100,7 +100,7 @@ export default class ABICoder {
             decodedValue = decodedValue === '0x' && !isStringObject && !isStringType ? null : decodedValue
             returnValue[i] = decodedValue
 
-            // WARNING: don't think we need this for our uses, it was causing the object to have more keys than we expected, so we commented it out. 
+            // WARNING: don't think we need this for our uses, it was causing the object to have more keys than we expected, so we commented it out.
             // if ((typeof output === 'function' || (!!output && typeof output === 'object')) && output.name) {
             //     returnValue[output.name] = decodedValue
             // }
