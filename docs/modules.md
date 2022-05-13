@@ -6,35 +6,35 @@
 
 ### Enumerations
 
-- [Action](enums/Action.md)
-- [ContractType](enums/ContractType.md)
-- [TokenType](enums/TokenType.md)
-- [TxType](enums/TxType.md)
+-   [Action](enums/Action.md)
+-   [ContractType](enums/ContractType.md)
+-   [TokenType](enums/TokenType.md)
+-   [TxType](enums/TxType.md)
 
 ### Type aliases
 
-- [ActivityData](modules.md#activitydata)
-- [Address](modules.md#address)
-- [Chain](modules.md#chain)
-- [Chains](modules.md#chains)
-- [Decoded](modules.md#decoded)
-- [EthersAPIKeys](modules.md#ethersapikeys)
-- [InProgressActivity](modules.md#inprogressactivity)
-- [Interaction](modules.md#interaction)
-- [InteractionEvent](modules.md#interactionevent)
-- [InteractionEventParams](modules.md#interactioneventparams)
-- [Interpretation](modules.md#interpretation)
-- [RawLogEvent](modules.md#rawlogevent)
-- [RawTxData](modules.md#rawtxdata)
-- [RawTxDataWithoutTrace](modules.md#rawtxdatawithouttrace)
-- [Token](modules.md#token)
-- [TraceLog](modules.md#tracelog)
-- [TraceLogAction](modules.md#tracelogaction)
-- [TxReceipt](modules.md#txreceipt)
-- [TxResponse](modules.md#txresponse)
-- [UnknownKey](modules.md#unknownkey)
-- [UnvalidatedTraceLog](modules.md#unvalidatedtracelog)
-- [UnvalidatedTraceLogAction](modules.md#unvalidatedtracelogaction)
+-   [ActivityData](modules.md#activitydata)
+-   [Address](modules.md#address)
+-   [Chain](modules.md#chain)
+-   [Chains](modules.md#chains)
+-   [Decoded](modules.md#decoded)
+-   [EthersAPIKeys](modules.md#ethersapikeys)
+-   [InProgressActivity](modules.md#inprogressactivity)
+-   [Interaction](modules.md#interaction)
+-   [InteractionEvent](modules.md#interactionevent)
+-   [InteractionEventParams](modules.md#interactioneventparams)
+-   [Interpretation](modules.md#interpretation)
+-   [RawLogEvent](modules.md#rawlogevent)
+-   [RawTxData](modules.md#rawtxdata)
+-   [RawTxDataWithoutTrace](modules.md#rawtxdatawithouttrace)
+-   [Token](modules.md#token)
+-   [TraceLog](modules.md#tracelog)
+-   [TraceLogAction](modules.md#tracelogaction)
+-   [TxReceipt](modules.md#txreceipt)
+-   [TxResponse](modules.md#txresponse)
+-   [UnknownKey](modules.md#unknownkey)
+-   [UnvalidatedTraceLog](modules.md#unvalidatedtracelog)
+-   [UnvalidatedTraceLogAction](modules.md#unvalidatedtracelogaction)
 
 ## Type aliases
 
@@ -44,17 +44,17 @@
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `decodedData` | [`Decoded`](modules.md#decoded) |
+| Name              | Type                                          |
+| :---------------- | :-------------------------------------------- |
+| `decodedData`     | [`Decoded`](modules.md#decoded)               |
 | `interpretedData` | [`Interpretation`](modules.md#interpretation) |
-| `rawTxData` | [`RawTxData`](modules.md#rawtxdata) |
+| `rawTxData`       | [`RawTxData`](modules.md#rawtxdata)           |
 
 #### Defined in
 
 [index.ts:227](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L227)
 
-___
+---
 
 ### Address
 
@@ -66,7 +66,7 @@ ___
 
 [index.ts:9](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L9)
 
-___
+---
 
 ### Chain
 
@@ -74,24 +74,24 @@ ___
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `EVM` | `boolean` | If this transaction is from an EVM-compatible chain. This it true for all, currently |
-| `blockExplorerUrl` | `string` | The block explorer URL for this chain. https://etherscan.io/ |
-| `daiAddress` | [`Address`](modules.md#address) | The singleton contract address for DAI |
-| `id` | `number` | The chain's id. ETH=1, MATIC=137 |
-| `name` | `string` | The chain's colloquial name. Ethereum, Polygon |
-| `symbol` | `string` | The chain's symbol. ETH, MATIC |
-| `testnet` | `boolean` | If this chain is a testnet. |
-| `usdcAddress` | [`Address`](modules.md#address) | The singleton contract address for USDC |
-| `usdtAddress` | [`Address`](modules.md#address) | The singleton contract address for USDT |
-| `wethAddress` | [`Address`](modules.md#address) | The singleton contract address for the wrapped version of the native token. Need to change the variable name |
+| Name               | Type                            | Description                                                                                                  |
+| :----------------- | :------------------------------ | :----------------------------------------------------------------------------------------------------------- |
+| `EVM`              | `boolean`                       | If this transaction is from an EVM-compatible chain. This it true for all, currently                         |
+| `blockExplorerUrl` | `string`                        | The block explorer URL for this chain. https://etherscan.io/                                                 |
+| `daiAddress`       | [`Address`](modules.md#address) | The singleton contract address for DAI                                                                       |
+| `id`               | `number`                        | The chain's id. ETH=1, MATIC=137                                                                             |
+| `name`             | `string`                        | The chain's colloquial name. Ethereum, Polygon                                                               |
+| `symbol`           | `string`                        | The chain's symbol. ETH, MATIC                                                                               |
+| `testnet`          | `boolean`                       | If this chain is a testnet.                                                                                  |
+| `usdcAddress`      | [`Address`](modules.md#address) | The singleton contract address for USDC                                                                      |
+| `usdtAddress`      | [`Address`](modules.md#address) | The singleton contract address for USDT                                                                      |
+| `wethAddress`      | [`Address`](modules.md#address) | The singleton contract address for the wrapped version of the native token. Need to change the variable name |
 
 #### Defined in
 
 [index.ts:13](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L13)
 
-___
+---
 
 ### Chains
 
@@ -103,7 +103,7 @@ Map of EVM chain names to an object with Chain metadata
 
 [index.ts:37](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L37)
 
-___
+---
 
 ### Decoded
 
@@ -111,32 +111,32 @@ ___
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `contractMethod?` | `string` \| ``null`` | the name of the function that initiated the transaction. If not decoded, null |
-| `contractName?` | `string` | - |
-| `contractType` | [`ContractType`](enums/ContractType.md) | The type of contract. An ERC-xx, WETH, or |
-| `effectiveGasPrice?` | `string` | - |
-| `fromAddress` | [`Address`](modules.md#address) | - |
-| `fromENS?` | `string` \| ``null`` | - |
-| `gasUsed?` | `string` | - |
-| `interactions` | [`Interaction`](modules.md#interaction)[] | - |
-| `nativeTokenSymbol` | `string` | The symbol for the native token. ex: ETH |
-| `nativeTokenValueSent` | `string` | The amount of native token (ex: ETH) sent denominated in wei |
-| `officialContractName?` | `string` \| ``null`` | - |
-| `reverted?` | `boolean` | - |
-| `timestamp?` | `string` | - |
-| `toAddress?` | [`Address`](modules.md#address) | - |
-| `toENS?` | `string` \| ``null`` | - |
-| `txHash` | `string` | The transaction's unique hash |
-| `txIndex?` | `number` | - |
-| `txType` | [`TxType`](enums/TxType.md) | The one of three types the transaction can be. TODO switch to required |
+| Name                    | Type                                      | Description                                                                   |
+| :---------------------- | :---------------------------------------- | :---------------------------------------------------------------------------- |
+| `contractMethod?`       | `string` \| `null`                        | the name of the function that initiated the transaction. If not decoded, null |
+| `contractName?`         | `string`                                  | -                                                                             |
+| `contractType`          | [`ContractType`](enums/ContractType.md)   | The type of contract. An ERC-xx, WETH, or                                     |
+| `effectiveGasPrice?`    | `string`                                  | -                                                                             |
+| `fromAddress`           | [`Address`](modules.md#address)           | -                                                                             |
+| `fromENS?`              | `string` \| `null`                        | -                                                                             |
+| `gasUsed?`              | `string`                                  | -                                                                             |
+| `interactions`          | [`Interaction`](modules.md#interaction)[] | -                                                                             |
+| `nativeTokenSymbol`     | `string`                                  | The symbol for the native token. ex: ETH                                      |
+| `nativeValueSent`       | `string`                                  | The amount of native token (ex: ETH) sent denominated in wei                  |
+| `officialContractName?` | `string` \| `null`                        | -                                                                             |
+| `reverted?`             | `boolean`                                 | -                                                                             |
+| `timestamp?`            | `string`                                  | -                                                                             |
+| `toAddress?`            | [`Address`](modules.md#address)           | -                                                                             |
+| `toENS?`                | `string` \| `null`                        | -                                                                             |
+| `txHash`                | `string`                                  | The transaction's unique hash                                                 |
+| `txIndex?`              | `number`                                  | -                                                                             |
+| `txType`                | [`TxType`](enums/TxType.md)               | The one of three types the transaction can be. TODO switch to required        |
 
 #### Defined in
 
 [index.ts:133](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L133)
 
-___
+---
 
 ### EthersAPIKeys
 
@@ -144,20 +144,20 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `alchemy` | `string` |
-| `etherscan` | `string` |
-| `infura` | `string` |
-| `pocket` | { `applicationId`: `string` ; `applicationSecretKey`: `string`  } |
-| `pocket.applicationId` | `string` |
-| `pocket.applicationSecretKey` | `string` |
+| Name                          | Type                                                             |
+| :---------------------------- | :--------------------------------------------------------------- |
+| `alchemy`                     | `string`                                                         |
+| `etherscan`                   | `string`                                                         |
+| `infura`                      | `string`                                                         |
+| `pocket`                      | { `applicationId`: `string` ; `applicationSecretKey`: `string` } |
+| `pocket.applicationId`        | `string`                                                         |
+| `pocket.applicationSecretKey` | `string`                                                         |
 
 #### Defined in
 
 [index.ts:280](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L280)
 
-___
+---
 
 ### InProgressActivity
 
@@ -165,16 +165,16 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `decoded?` | [`Decoded`](modules.md#decoded) |
+| Name         | Type                                |
+| :----------- | :---------------------------------- |
+| `decoded?`   | [`Decoded`](modules.md#decoded)     |
 | `rawTxData?` | [`RawTxData`](modules.md#rawtxdata) |
 
 #### Defined in
 
 [index.ts:111](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L111)
 
-___
+---
 
 ### Interaction
 
@@ -182,18 +182,18 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `contractAddress` | [`Address`](modules.md#address) |
-| `contractName` | `string` \| ``null`` |
-| `contractSymbol` | `string` \| ``null`` |
-| `events` | [`InteractionEvent`](modules.md#interactionevent)[] |
+| Name              | Type                                                |
+| :---------------- | :-------------------------------------------------- |
+| `contractAddress` | [`Address`](modules.md#address)                     |
+| `contractName`    | `string` \| `null`                                  |
+| `contractSymbol`  | `string` \| `null`                                  |
+| `events`          | [`InteractionEvent`](modules.md#interactionevent)[] |
 
 #### Defined in
 
 [index.ts:160](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L160)
 
-___
+---
 
 ### InteractionEvent
 
@@ -201,18 +201,18 @@ ___
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `eventName` | `string` | The name of the function that was called |
-| `logIndex` | `number` | - |
-| `nativeTokenTransfer?` | ``true`` | - |
-| `params` | [`InteractionEventParams`](modules.md#interactioneventparams) | - |
+| Name              | Type                                                          | Description                              |
+| :---------------- | :------------------------------------------------------------ | :--------------------------------------- |
+| `eventName`       | `string`                                                      | The name of the function that was called |
+| `logIndex`        | `number`                                                      | -                                        |
+| `nativeTransfer?` | `true`                                                        | -                                        |
+| `params`          | [`InteractionEventParams`](modules.md#interactioneventparams) | -                                        |
 
 #### Defined in
 
 [index.ts:167](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L167)
 
-___
+---
 
 ### InteractionEventParams
 
@@ -220,40 +220,40 @@ ___
 
 #### Index signature
 
-▪ [key: `string`]: `string` \| `string`[] \| `undefined` \| ``null`` \| `number` \| `boolean`
+▪ [key: `string`]: `string` \| `string`[] \| `undefined` \| `null` \| `number` \| `boolean`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `_amount?` | `string` |
-| `_amounts?` | `string`[] |
-| `_approved?` | `string` |
-| `_approvedENS?` | `string` |
-| `_from?` | `string` |
-| `_fromENS?` | `string` |
-| `_id?` | `string` \| ``null`` |
-| `_ids?` | `string`[] |
-| `_operator?` | `string` |
-| `_operatorENS?` | `string` |
-| `_owner?` | `string` |
-| `_ownerENS?` | `string` |
-| `_to?` | `string` |
-| `_toENS?` | `string` |
-| `_tokenId?` | `string` |
-| `_value?` | `string` |
-| `from?` | `string` |
-| `fromENS?` | `string` |
-| `to?` | `string` |
-| `toENS?` | `string` |
-| `tokenId?` | `string` |
-| `value?` | `string` |
+| Name            | Type               |
+| :-------------- | :----------------- |
+| `_amount?`      | `string`           |
+| `_amounts?`     | `string`[]         |
+| `_approved?`    | `string`           |
+| `_approvedENS?` | `string`           |
+| `_from?`        | `string`           |
+| `_fromENS?`     | `string`           |
+| `_id?`          | `string` \| `null` |
+| `_ids?`         | `string`[]         |
+| `_operator?`    | `string`           |
+| `_operatorENS?` | `string`           |
+| `_owner?`       | `string`           |
+| `_ownerENS?`    | `string`           |
+| `_to?`          | `string`           |
+| `_toENS?`       | `string`           |
+| `_tokenId?`     | `string`           |
+| `_value?`       | `string`           |
+| `from?`         | `string`           |
+| `fromENS?`      | `string`           |
+| `to?`           | `string`           |
+| `toENS?`        | `string`           |
+| `tokenId?`      | `string`           |
+| `value?`        | `string`           |
 
 #### Defined in
 
 [index.ts:175](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L175)
 
-___
+---
 
 ### Interpretation
 
@@ -264,29 +264,29 @@ native tokens and gas number are denominated in their native token (ex: eth, not
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `action?` | [`Action`](enums/Action.md) |
-| `contractName?` | `string` \| ``null`` |
-| `counterpartyName?` | `string` |
-| `exampleDescription` | `string` |
-| `extra` | `Record`<`string`, `any`\> |
-| `gasPaid` | `string` |
-| `nativeTokenSymbol` | `string` |
-| `nativeTokenValueReceived` | `string` |
-| `nativeTokenValueSent` | `string` |
-| `reverted` | `boolean` |
-| `tokensReceived` | [`Token`](modules.md#token)[] |
-| `tokensSent` | [`Token`](modules.md#token)[] |
-| `txHash` | `string` |
-| `userAddress` | [`Address`](modules.md#address) |
-| `userName` | `string` |
+| Name                  | Type                            |
+| :-------------------- | :------------------------------ |
+| `action?`             | [`Action`](enums/Action.md)     |
+| `contractName?`       | `string` \| `null`              |
+| `counterpartyName?`   | `string`                        |
+| `exampleDescription`  | `string`                        |
+| `extra`               | `Record`<`string`, `any`\>      |
+| `gasPaid`             | `string`                        |
+| `nativeTokenSymbol`   | `string`                        |
+| `nativeValueReceived` | `string`                        |
+| `nativeValueSent`     | `string`                        |
+| `reverted`            | `boolean`                       |
+| `tokensReceived`      | [`Token`](modules.md#token)[]   |
+| `tokensSent`          | [`Token`](modules.md#token)[]   |
+| `txHash`              | `string`                        |
+| `userAddress`         | [`Address`](modules.md#address) |
+| `userName`            | `string`                        |
 
 #### Defined in
 
 [index.ts:209](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L209)
 
-___
+---
 
 ### RawLogEvent
 
@@ -294,18 +294,18 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `address` | [`Address`](modules.md#address) |
-| `data` | `string` |
-| `logIndex` | `number` |
-| `topics` | `string`[] |
+| Name       | Type                            |
+| :--------- | :------------------------------ |
+| `address`  | [`Address`](modules.md#address) |
+| `data`     | `string`                        |
+| `logIndex` | `number`                        |
+| `topics`   | `string`[]                      |
 
 #### Defined in
 
 [index.ts:116](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L116)
 
-___
+---
 
 ### RawTxData
 
@@ -313,17 +313,17 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `txReceipt` | [`TxReceipt`](modules.md#txreceipt) |
+| Name         | Type                                  |
+| :----------- | :------------------------------------ |
+| `txReceipt`  | [`TxReceipt`](modules.md#txreceipt)   |
 | `txResponse` | [`TxResponse`](modules.md#txresponse) |
-| `txTrace` | [`TraceLog`](modules.md#tracelog)[] |
+| `txTrace`    | [`TraceLog`](modules.md#tracelog)[]   |
 
 #### Defined in
 
 [index.ts:100](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L100)
 
-___
+---
 
 ### RawTxDataWithoutTrace
 
@@ -331,16 +331,16 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `txReceipt` | [`TxReceipt`](modules.md#txreceipt) |
+| Name         | Type                                  |
+| :----------- | :------------------------------------ |
+| `txReceipt`  | [`TxReceipt`](modules.md#txreceipt)   |
 | `txResponse` | [`TxResponse`](modules.md#txresponse) |
 
 #### Defined in
 
 [index.ts:106](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L106)
 
-___
+---
 
 ### Token
 
@@ -348,23 +348,23 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `address` | [`Address`](modules.md#address) |
-| `amount?` | `string` |
-| `name` | `string` \| ``null`` |
-| `pair?` | `string` |
-| `symbol` | `string` \| ``null`` |
-| `token0?` | [`Token`](modules.md#token) |
-| `token1?` | [`Token`](modules.md#token) |
-| `tokenId?` | `string` |
-| `type` | [`TokenType`](enums/TokenType.md) |
+| Name       | Type                              |
+| :--------- | :-------------------------------- |
+| `address`  | [`Address`](modules.md#address)   |
+| `amount?`  | `string`                          |
+| `name`     | `string` \| `null`                |
+| `pair?`    | `string`                          |
+| `symbol`   | `string` \| `null`                |
+| `token0?`  | [`Token`](modules.md#token)       |
+| `token1?`  | [`Token`](modules.md#token)       |
+| `tokenId?` | `string`                          |
+| `type`     | [`TokenType`](enums/TokenType.md) |
 
 #### Defined in
 
 [index.ts:268](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L268)
 
-___
+---
 
 ### TraceLog
 
@@ -372,25 +372,25 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `action` | [`TraceLogAction`](modules.md#tracelogaction) |
-| `blockHash` | `string` |
-| `blockNumber` | `number` |
-| `result` | { `gasUsed`: `BigNumber` ; `output`: `string`  } |
-| `result.gasUsed` | `BigNumber` |
-| `result.output` | `string` |
-| `subtraces` | `number` |
-| `traceAddress` | `number`[] |
-| `transactionHash` | `string` |
-| `transactionPosition` | `number` |
-| `type` | `string` |
+| Name                  | Type                                            |
+| :-------------------- | :---------------------------------------------- |
+| `action`              | [`TraceLogAction`](modules.md#tracelogaction)   |
+| `blockHash`           | `string`                                        |
+| `blockNumber`         | `number`                                        |
+| `result`              | { `gasUsed`: `BigNumber` ; `output`: `string` } |
+| `result.gasUsed`      | `BigNumber`                                     |
+| `result.output`       | `string`                                        |
+| `subtraces`           | `number`                                        |
+| `traceAddress`        | `number`[]                                      |
+| `transactionHash`     | `string`                                        |
+| `transactionPosition` | `number`                                        |
+| `type`                | `string`                                        |
 
 #### Defined in
 
 [index.ts:76](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L76)
 
-___
+---
 
 ### TraceLogAction
 
@@ -398,40 +398,40 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `callType` | `string` |
-| `from` | [`Address`](modules.md#address) |
-| `gas` | `BigNumber` |
-| `input` | `string` |
-| `to` | [`Address`](modules.md#address) |
-| `value` | `BigNumber` |
+| Name       | Type                            |
+| :--------- | :------------------------------ |
+| `callType` | `string`                        |
+| `from`     | [`Address`](modules.md#address) |
+| `gas`      | `BigNumber`                     |
+| `input`    | `string`                        |
+| `to`       | [`Address`](modules.md#address) |
+| `value`    | `BigNumber`                     |
 
 #### Defined in
 
 [index.ts:91](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L91)
 
-___
+---
 
 ### TxReceipt
 
-Ƭ **TxReceipt**: `Omit`<`unvalidatedTransactionReceipt`, ``"from"`` \| ``"to"``\> & { `from`: [`Address`](modules.md#address) ; `to`: [`Address`](modules.md#address)  }
+Ƭ **TxReceipt**: `Omit`<`unvalidatedTransactionReceipt`, `"from"` \| `"to"`\> & { `from`: [`Address`](modules.md#address) ; `to`: [`Address`](modules.md#address) }
 
 #### Defined in
 
 [index.ts:50](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L50)
 
-___
+---
 
 ### TxResponse
 
-Ƭ **TxResponse**: `Omit`<`unvalidatedTransactionResponse`, ``"from"`` \| ``"to"``\> & { `creates`: `string` ; `from`: [`Address`](modules.md#address)  }
+Ƭ **TxResponse**: `Omit`<`unvalidatedTransactionResponse`, `"from"` \| `"to"`\> & { `creates`: `string` ; `from`: [`Address`](modules.md#address) }
 
 #### Defined in
 
 [index.ts:49](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L49)
 
-___
+---
 
 ### UnknownKey
 
@@ -441,7 +441,7 @@ ___
 
 [index.ts:201](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L201)
 
-___
+---
 
 ### UnvalidatedTraceLog
 
@@ -449,25 +449,25 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `action` | [`UnvalidatedTraceLogAction`](modules.md#unvalidatedtracelogaction) |
-| `blockHash` | `string` |
-| `blockNumber` | `number` |
-| `result` | { `gasUsed`: `string` ; `output`: `string`  } |
-| `result.gasUsed` | `string` |
-| `result.output` | `string` |
-| `subtraces` | `number` |
-| `traceAddress` | `number`[] |
-| `transactionHash` | `string` |
-| `transactionPosition` | `number` |
-| `type` | `string` |
+| Name                  | Type                                                                |
+| :-------------------- | :------------------------------------------------------------------ |
+| `action`              | [`UnvalidatedTraceLogAction`](modules.md#unvalidatedtracelogaction) |
+| `blockHash`           | `string`                                                            |
+| `blockNumber`         | `number`                                                            |
+| `result`              | { `gasUsed`: `string` ; `output`: `string` }                        |
+| `result.gasUsed`      | `string`                                                            |
+| `result.output`       | `string`                                                            |
+| `subtraces`           | `number`                                                            |
+| `traceAddress`        | `number`[]                                                          |
+| `transactionHash`     | `string`                                                            |
+| `transactionPosition` | `number`                                                            |
+| `type`                | `string`                                                            |
 
 #### Defined in
 
 [index.ts:52](https://github.com/the-metagame/evm-translator/blob/8c2ed25/src/interfaces/index.ts#L52)
 
-___
+---
 
 ### UnvalidatedTraceLogAction
 
@@ -475,14 +475,14 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `callType` | `string` |
-| `from` | [`Address`](modules.md#address) |
-| `gas` | `string` |
-| `input` | `string` |
-| `to` | [`Address`](modules.md#address) |
-| `value` | `string` |
+| Name       | Type                            |
+| :--------- | :------------------------------ |
+| `callType` | `string`                        |
+| `from`     | [`Address`](modules.md#address) |
+| `gas`      | `string`                        |
+| `input`    | `string`                        |
+| `to`       | [`Address`](modules.md#address) |
+| `value`    | `string`                        |
 
 #### Defined in
 

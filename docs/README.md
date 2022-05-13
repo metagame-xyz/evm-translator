@@ -86,7 +86,7 @@ This is an example of the decoded event logs when the `addLiquidity` function ge
 {
     "txHash": "0x0e6388e80a6023cfc8e7b9fb2ff94e3bf5d34cdc8bb348d124e2385e29d5bcf8",
     "txType": "contract interaction",
-    "nativeTokenValueSent": "0",
+    "nativeValueSent": "0",
     "nativeTokenSymbol": "ETH",
     "txIndex": 191,
     "reverted": false,
@@ -188,8 +188,8 @@ When the above map is applied to above decoded event logs, this is the interpret
     "contractOfficialName": "UniswapV2Router02",
     "action": "added liquidity",
     "exampleDescription": "0xf1a9 added liquidity to the SUPER-WETH Uniswap V2 pool",
-    "nativeTokenValueSent": "0",
-    "nativeTokenValueReceived": "0",
+    "nativeValueSent": "0",
+    "nativeValueReceived": "0",
     "nativeTokenSymbol": "ETH",
     "tokensReceived": [
         {
