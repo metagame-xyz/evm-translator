@@ -1,35 +1,12 @@
-import { Log } from '@ethersproject/providers'
 import collect from 'collect.js'
 import { Address } from 'eth-ens-namehash'
-import { ethers } from 'ethers'
-import { BigNumber } from 'ethers'
-import {
-    ContractData,
-    DecodedCallData,
-    Interaction,
-    MostTypes,
-    RawDecodedCallData,
-    RawDecodedLog,
-    TxReceipt,
-} from 'interfaces'
+import { ContractData, DecodedCallData, Interaction, MostTypes, RawDecodedCallData, RawDecodedLog } from 'interfaces'
 import { validateAndNormalizeAddress } from 'utils'
-
-// import { PrismaClient } from '@prisma/client'
-// const prisma = new PrismaClient()
-
-type Event = {
-    contractName: string | null
-    contractSymbol: string | null
-    contractAddress: string
-    name: string | null
-    logIndex: number
-    events: Record<string, unknown>
-}
 
 export function transformDecodedLogs(
     decodedLogs: RawDecodedLog[],
     contractDataMap: Record<Address, ContractData>,
-): Array<Interaction> {
+): Interaction[] {
     // tx.log_events.forEach((event) => {
     //     console.log('decoded', event)
     //     event.decoded.params.forEach((param) => {
@@ -41,7 +18,7 @@ export function transformDecodedLogs(
         // .reject((event) => !event.sender_name)
 
         .reject((log) => !log)
-        .mapToGroups((log: RawDecodedLog): [string, Event] => {
+        .mapToGroups((log: RawDecodedLog): [Address, Interaction] => {
             // console.log('params', event.decoded.params)
             const events = Object.fromEntries(
                 log.events?.map((param) => [
@@ -51,64 +28,32 @@ export function transformDecodedLogs(
                 ]) ?? [],
             )
 
-            // console.log('details', events)
-
-            // if (events.value && log.sender_contract_decimals)
-            //     events.value = ethers.utils
-            //         .formatUnits(events.value, log.sender_contract_decimals)
-            //         .replace(/\.0$/, '')
-
-            // events = covalentERC721Shim(events, log)
-            // console.log('event', event)
-            // console.log('detials', details)
-
-            const contractData = contractDataMap[log.address as Address]
+            const address = validateAndNormalizeAddress(log.address)
+            const contractData = contractDataMap[validateAndNormalizeAddress(address)]
 
             return [
-                log.address,
+                address,
                 {
                     contractName: contractData?.contractName || null,
                     contractSymbol: contractData?.tokenSymbol || null,
-                    contractAddress: log.address,
-                    name: log.name,
-                    logIndex: log.logIndex,
-                    events,
+                    contractAddress: validateAndNormalizeAddress(address),
+                    events: [
+                        {
+                            eventName: log.name,
+                            logIndex: log.logIndex,
+                            params: events,
+                            ...(!log.decoded && { decoded: log.decoded }),
+                        },
+                    ],
                 },
             ]
         })
-        .map((events): Interaction => {
-            const event = events[0] as Event
-
+        .map((interactions: Interaction[]): Interaction => {
             return {
-                contractName: event.contractName,
-                contractSymbol: event.contractSymbol,
-                contractAddress: validateAndNormalizeAddress(event.contractAddress),
-                events: events.map((event: Event) => ({
-                    eventName: event.name,
-                    logIndex: event.logIndex,
-                    params: {
-                        ...event.events,
-                    },
-                })),
+                ...interactions[0],
+                events: interactions.map((i: Interaction) => i.events).flat(),
             }
         })
-
-    // const contractData = interactions.get(tx.to_address)
-
-    // if (contractData?.contract) {
-    //     prisma.contract.createMany({
-    //         data: [
-    //             {
-    //                 address: contractData.contract_address.toLowerCase(),
-    //                 name: contractData.contract,
-    //                 chainId: config.chainId,
-    //             },
-    //         ],
-    //         skipDuplicates: true,
-    //     })
-    // }
-
-    // correctContractName(contractData?.contract),
 
     return interactions.values().toArray()
 }

@@ -20,24 +20,21 @@ const state: State = {
     savedABIs: [],
     methodIDs: {},
 }
-
-function _getABIs() {
+export function getABIs() {
     return state.savedABIs
 }
-
-function _typeToString(input: any) {
+export function typeToString(input: any) {
     if (input.type === 'tuple' && input.components) {
-        return '(' + input.components?.map(_typeToString).join(',') + ')'
+        return '(' + input.components?.map(typeToString).join(',') + ')'
     }
     return input.type
 }
-
-function _addABI(abiArray: ABI_Item[]) {
+export function addABI(abiArray: ABI_Item[]) {
     if (Array.isArray(abiArray)) {
         // Iterate new abi to generate method id"s
         abiArray.map(function (abi) {
             if (abi.name) {
-                const signature = hash(abi.name + '(' + abi.inputs.map(_typeToString).join(',') + ')') as string
+                const signature = hash(abi.name + '(' + abi.inputs.map(typeToString).join(',') + ')') as string
                 if (abi.type === 'event') {
                     state.methodIDs[signature.slice(2)] = abi
                 } else {
@@ -51,8 +48,7 @@ function _addABI(abiArray: ABI_Item[]) {
         throw new Error('Expected ABI array, got ' + typeof abiArray)
     }
 }
-
-function _removeABI(abiArray: ABI_Item[]) {
+export function removeABI(abiArray: ABI_Item[]) {
     if (Array.isArray(abiArray)) {
         // Iterate new abi to generate method id"s
         abiArray.map(function (abi) {
@@ -82,12 +78,10 @@ function _removeABI(abiArray: ABI_Item[]) {
         throw new Error('Expected ABI array, got ' + typeof abiArray)
     }
 }
-
-function _getMethodIDs() {
+export function getMethodIDs() {
     return state.methodIDs
 }
-
-function _decodeMethod(data: string): RawDecodedCallData {
+export function decodeMethod(data: string): RawDecodedCallData {
     const methodID = data.slice(2, 10)
     const abiItem = state.methodIDs[methodID]
     if (abiItem) {
@@ -142,8 +136,7 @@ function _decodeMethod(data: string): RawDecodedCallData {
         }
     }
 }
-
-function _decodeLogs(logs: Log[]): RawDecodedLog[] {
+export function decodeLogs(logs: Log[]): RawDecodedLog[] {
     return logs
         .filter((log) => log.topics.length > 0)
         .map((logItem) => {
@@ -231,13 +224,4 @@ function _decodeLogs(logs: Log[]): RawDecodedLog[] {
                 } as RawDecodedLog
             }
         })
-}
-
-export default {
-    getABIs: _getABIs,
-    addABI: _addABI,
-    getMethodIDs: _getMethodIDs,
-    decodeMethod: _decodeMethod,
-    decodeLogs: _decodeLogs,
-    removeABI: _removeABI,
 }

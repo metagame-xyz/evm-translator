@@ -78,15 +78,17 @@ export default class RawDataFetcher {
         }
     }
 
-    getTxDataFromS3Tx(tx: EVMTransaction, timestamp: number): RawTxDataWithoutTrace {
+    getTxDataFromS3Tx(tx: EVMTransaction, timestamp: number): RawTxData {
         const txDataStringified = numbersToStrings(tx)
         const txReceipt = validateAndFormatTxData(txDataStringified.transactionReceipt, timestamp)
+        const txTrace = validateTraceTxData(txDataStringified.trace)
         const formattedTxResponse = this.formatter.transactionResponse(txDataStringified)
         const txResponse = validateAndFormatTxData(formattedTxResponse)
 
         return {
             txResponse,
             txReceipt,
+            txTrace,
         }
     }
 

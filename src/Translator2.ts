@@ -93,7 +93,7 @@ class Translator2 {
         return this.rawDataFetcher.getTxDataWithoutTrace(txHash)
     }
 
-    getRawDataFromS3Data(tx: EVMTransaction, timestamp: number): RawTxDataWithoutTrace {
+    getRawDataFromS3Data(tx: EVMTransaction, timestamp: number): RawTxData {
         return this.rawDataFetcher.getTxDataFromS3Tx(tx, timestamp)
     }
 

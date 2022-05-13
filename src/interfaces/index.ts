@@ -191,6 +191,7 @@ export type InteractionEvent = {
     nativeTransfer?: true
     logIndex: number | null
     params: InteractionEventParams
+    decoded?: boolean
 }
 
 export type InteractionEventParams = {

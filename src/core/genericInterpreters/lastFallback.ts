@@ -11,9 +11,6 @@ function sentBaseToken(interpretation: Interpretation): boolean {
 function receivedBaseToken(interpretation: Interpretation): boolean {
     const { chainSymbol, nativeValueReceived } = interpretation
     const currency = getStablecoinOrNativeWrappedAddressesBySymbol(chainSymbol)
-
-    console.log('value received', Number(nativeValueReceived))
-
     return !!(
         interpretation.tokensReceived.find((token) => currency.includes(token.address)) ||
         Number(nativeValueReceived) > 0
