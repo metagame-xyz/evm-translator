@@ -8,7 +8,7 @@
         "test": "jest --config jest.config.ts",
         "build": "tsc && tsc-alias",
         "dev": "concurrently --kill-others \"tsc -w\" \"tsc-alias -w\"",
-        "format": "prettier --write \"src/**/*.ts\"",
+        "format": "prettier --write \"src/**/*.ts\" \"docs/**/*.md\"" ,
         "lint": "eslint --ignore-path .eslintignore --ext .ts .",
         "check": "yarn run lint && yarn run format && yarn run test",
         "prepare": "yarn run build",

@@ -6,8 +6,8 @@
 
 ### Enumeration members
 
-- [ETH](ChainSymbol.md#eth)
-- [MATIC](ChainSymbol.md#matic)
+-   [ETH](ChainSymbol.md#eth)
+-   [MATIC](ChainSymbol.md#matic)
 
 ## Enumeration members
 
@@ -19,7 +19,7 @@
 
 [index.ts:15](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L15)
 
-___
+---
 
 ### MATIC
 

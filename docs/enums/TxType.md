@@ -8,15 +8,15 @@ The types of transactions an EOA can initiate
 
 ### Enumeration members
 
-- [CONTRACT\_DEPLOY](TxType.md#contract_deploy)
-- [CONTRACT\_INTERACTION](TxType.md#contract_interaction)
-- [TRANSFER](TxType.md#transfer)
+-   [CONTRACT_DEPLOY](TxType.md#contract_deploy)
+-   [CONTRACT_INTERACTION](TxType.md#contract_interaction)
+-   [TRANSFER](TxType.md#transfer)
 
 ## Enumeration members
 
-### CONTRACT\_DEPLOY
+### CONTRACT_DEPLOY
 
-• **CONTRACT\_DEPLOY** = `"contract deploy"`
+• **CONTRACT_DEPLOY** = `"contract deploy"`
 
 A transaction that deploys a new contract from an EOA (TODO: what about create2?)
 
@@ -24,11 +24,11 @@ A transaction that deploys a new contract from an EOA (TODO: what about create2?
 
 [index.ts:50](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L50)
 
-___
+---
 
-### CONTRACT\_INTERACTION
+### CONTRACT_INTERACTION
 
-• **CONTRACT\_INTERACTION** = `"contract interaction"`
+• **CONTRACT_INTERACTION** = `"contract interaction"`
 
 A transaction that invokes a method on a contract from an EOA
 
@@ -36,7 +36,7 @@ A transaction that invokes a method on a contract from an EOA
 
 [index.ts:52](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L52)
 
-___
+---
 
 ### TRANSFER
 

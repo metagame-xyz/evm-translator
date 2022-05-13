@@ -6,30 +6,30 @@
 
 ### Enumeration members
 
-- [\_\_\_\_\_\_TODO\_\_\_\_\_\_](Action.md#______todo______)
-- [addedLiquidity](Action.md#addedliquidity)
-- [approved](Action.md#approved)
-- [bought](Action.md#bought)
-- [burned](Action.md#burned)
-- [canceled](Action.md#canceled)
-- [claimed](Action.md#claimed)
-- [contributed](Action.md#contributed)
-- [deployed](Action.md#deployed)
-- [executed](Action.md#executed)
-- [gotAirdropped](Action.md#gotairdropped)
-- [minted](Action.md#minted)
-- [received](Action.md#received)
-- [receivedOwnership](Action.md#receivedownership)
-- [redeemed](Action.md#redeemed)
-- [removedLiquidity](Action.md#removedliquidity)
-- [revoked](Action.md#revoked)
-- [sent](Action.md#sent)
-- [sold](Action.md#sold)
-- [swapped](Action.md#swapped)
-- [traded](Action.md#traded)
-- [transferred](Action.md#transferred)
-- [transferredOwnership](Action.md#transferredownership)
-- [unknown](Action.md#unknown)
+-   [\_\_\_\_\_\_TODO\_\_\_\_\_\_](Action.md#______todo______)
+-   [addedLiquidity](Action.md#addedliquidity)
+-   [approved](Action.md#approved)
+-   [bought](Action.md#bought)
+-   [burned](Action.md#burned)
+-   [canceled](Action.md#canceled)
+-   [claimed](Action.md#claimed)
+-   [contributed](Action.md#contributed)
+-   [deployed](Action.md#deployed)
+-   [executed](Action.md#executed)
+-   [gotAirdropped](Action.md#gotairdropped)
+-   [minted](Action.md#minted)
+-   [received](Action.md#received)
+-   [receivedOwnership](Action.md#receivedownership)
+-   [redeemed](Action.md#redeemed)
+-   [removedLiquidity](Action.md#removedliquidity)
+-   [revoked](Action.md#revoked)
+-   [sent](Action.md#sent)
+-   [sold](Action.md#sold)
+-   [swapped](Action.md#swapped)
+-   [traded](Action.md#traded)
+-   [transferred](Action.md#transferred)
+-   [transferredOwnership](Action.md#transferredownership)
+-   [unknown](Action.md#unknown)
 
 ## Enumeration members
 
@@ -41,7 +41,7 @@
 
 [index.ts:281](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L281)
 
-___
+---
 
 ### addedLiquidity
 
@@ -51,7 +51,7 @@ ___
 
 [index.ts:273](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L273)
 
-___
+---
 
 ### approved
 
@@ -61,7 +61,7 @@ ___
 
 [index.ts:278](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L278)
 
-___
+---
 
 ### bought
 
@@ -71,7 +71,7 @@ ___
 
 [index.ts:264](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L264)
 
-___
+---
 
 ### burned
 
@@ -81,7 +81,7 @@ ___
 
 [index.ts:260](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L260)
 
-___
+---
 
 ### canceled
 
@@ -91,7 +91,7 @@ ___
 
 [index.ts:270](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L270)
 
-___
+---
 
 ### claimed
 
@@ -101,7 +101,7 @@ ___
 
 [index.ts:275](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L275)
 
-___
+---
 
 ### contributed
 
@@ -111,7 +111,7 @@ ___
 
 [index.ts:276](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L276)
 
-___
+---
 
 ### deployed
 
@@ -121,7 +121,7 @@ ___
 
 [index.ts:262](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L262)
 
-___
+---
 
 ### executed
 
@@ -131,7 +131,7 @@ ___
 
 [index.ts:263](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L263)
 
-___
+---
 
 ### gotAirdropped
 
@@ -141,7 +141,7 @@ ___
 
 [index.ts:280](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L280)
 
-___
+---
 
 ### minted
 
@@ -151,7 +151,7 @@ ___
 
 [index.ts:259](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L259)
 
-___
+---
 
 ### received
 
@@ -161,7 +161,7 @@ ___
 
 [index.ts:257](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L257)
 
-___
+---
 
 ### receivedOwnership
 
@@ -171,7 +171,7 @@ ___
 
 [index.ts:272](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L272)
 
-___
+---
 
 ### redeemed
 
@@ -181,7 +181,7 @@ ___
 
 [index.ts:277](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L277)
 
-___
+---
 
 ### removedLiquidity
 
@@ -191,7 +191,7 @@ ___
 
 [index.ts:274](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L274)
 
-___
+---
 
 ### revoked
 
@@ -201,7 +201,7 @@ ___
 
 [index.ts:279](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L279)
 
-___
+---
 
 ### sent
 
@@ -211,7 +211,7 @@ ___
 
 [index.ts:258](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L258)
 
-___
+---
 
 ### sold
 
@@ -221,7 +221,7 @@ ___
 
 [index.ts:265](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L265)
 
-___
+---
 
 ### swapped
 
@@ -233,7 +233,7 @@ Trading one stablecoin for another, or native token for the wrapped version (but
 
 [index.ts:269](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L269)
 
-___
+---
 
 ### traded
 
@@ -245,7 +245,7 @@ Trading one non-native, non-stablecoin token for another
 
 [index.ts:267](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L267)
 
-___
+---
 
 ### transferred
 
@@ -255,7 +255,7 @@ ___
 
 [index.ts:261](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L261)
 
-___
+---
 
 ### transferredOwnership
 
@@ -265,7 +265,7 @@ ___
 
 [index.ts:271](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L271)
 
-___
+---
 
 ### unknown
 

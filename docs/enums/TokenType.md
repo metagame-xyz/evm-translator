@@ -6,11 +6,11 @@
 
 ### Enumeration members
 
-- [DEFAULT](TokenType.md#default)
-- [ERC1155](TokenType.md#erc1155)
-- [ERC20](TokenType.md#erc20)
-- [ERC721](TokenType.md#erc721)
-- [LPToken](TokenType.md#lptoken)
+-   [DEFAULT](TokenType.md#default)
+-   [ERC1155](TokenType.md#erc1155)
+-   [ERC20](TokenType.md#erc20)
+-   [ERC721](TokenType.md#erc721)
+-   [LPToken](TokenType.md#lptoken)
 
 ## Enumeration members
 
@@ -22,7 +22,7 @@
 
 [index.ts:289](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L289)
 
-___
+---
 
 ### ERC1155
 
@@ -32,7 +32,7 @@ ___
 
 [index.ts:287](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L287)
 
-___
+---
 
 ### ERC20
 
@@ -42,7 +42,7 @@ ___
 
 [index.ts:285](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L285)
 
-___
+---
 
 ### ERC721
 
@@ -52,7 +52,7 @@ ___
 
 [index.ts:286](https://github.com/polyweave/evm-translator/blob/2d1be25/src/interfaces/index.ts#L286)
 
-___
+---
 
 ### LPToken
 
