@@ -4,19 +4,18 @@ import {
     TransactionResponse as unvalidatedTransactionResponse,
 } from '@ethersproject/abstract-provider'
 import { AlchemyProvider, Formatter } from '@ethersproject/providers'
-import { BigNumber } from 'ethers'
+import { CovalentTxData } from 'interfaces/covalent'
 import {
-    Address,
     RawTxData,
     RawTxDataWithoutTrace,
     TraceLog,
+    TraceLogZ,
     TxReceipt,
+    TxReceiptZ,
     TxResponse,
-    UnvalidatedTraceLog,
-} from 'interfaces'
-import { CovalentTxData } from 'interfaces/covalent'
+    TxResponseZ,
+} from 'interfaces/rawData'
 import { EVMTransaction, EVMTransactionReceiptStringified, EVMTransactionStringified } from 'interfaces/s3'
-import { validateAddress, validateAndNormalizeAddress } from 'utils'
 import Covalent from 'utils/clients/Covalent'
 
 export default class RawDataFetcher {
@@ -29,22 +28,28 @@ export default class RawDataFetcher {
         this.covalent = covalent
     }
 
-    async getTxTrace(txHash: string): Promise<TraceLog[]> {
-        console.log('in trace')
-        const unvalidatedTrace = (await this.provider.send('trace_transaction', [txHash])) as UnvalidatedTraceLog[]
-        const traceLogs = validateTraceTxData(unvalidatedTrace)
-        console.log('tried tracing')
-        console.log('trace logs', traceLogs)
+    static validateTxResponse(unvalidatedTxResponse: any): TxResponse {
+        const ethersFormatter = new Formatter()
+        const formatted = ethersFormatter.transactionResponse(unvalidatedTxResponse)
 
-        return traceLogs
+        return TxResponseZ.parse(formatted)
+    }
+
+    static validateTxReceipt(unvalidatedTxReceipt: any): TxReceipt {
+        return TxReceiptZ.parse(unvalidatedTxReceipt)
+    }
+
+    static validateTraceLogs(unvalidatedTraceLogs: any[]): TraceLog[] {
+        return unvalidatedTraceLogs.map((tl: any) => TraceLogZ.parse(tl))
     }
 
     async getTxResponse(txHash: string): Promise<TxResponse> {
         const unformatted = await this.provider.getTransaction(txHash)
-        // console.log('unformatted:', unformatted)
-        const txData = this.formatter.transactionResponse(unformatted)
-        const validatedAndFormattedTxResponse = validateAndFormatTxData(txData)
-        return validatedAndFormattedTxResponse
+        console.log('unformatted:', unformatted)
+        const unvalidated = this.formatter.transactionResponse(unformatted)
+        console.log('formatted', unvalidated)
+        const txResponse = RawDataFetcher.validateTxResponse(unvalidated)
+        return txResponse
     }
 
     async getTxReceipt(txHash: string): Promise<TxReceipt> {
@@ -54,6 +59,16 @@ export default class RawDataFetcher {
         return validatedAndFormattedTxReceipt
     }
 
+    async getTxTrace(txHash: string): Promise<TraceLog[]> {
+        console.log('in trace')
+        const unvalidatedTrace = await this.provider.send('trace_transaction', [txHash])
+
+        const traceLogs = RawDataFetcher.validateTraceLogs(unvalidatedTrace)
+        console.log('tried tracing')
+        // console.log('trace logs', traceLogs)
+
+        return traceLogs
+    }
     // could be parallelized, but each has a different dependency graph
     async getTxData(txHash: string): Promise<RawTxData> {
         let txResponse: TxResponse
@@ -81,7 +96,7 @@ export default class RawDataFetcher {
     getTxDataFromS3Tx(tx: EVMTransaction, timestamp: number): RawTxData {
         const txDataStringified = numbersToStrings(tx)
         const txReceipt = validateAndFormatTxData(txDataStringified.transactionReceipt, timestamp)
-        const txTrace = validateTraceTxData(txDataStringified.trace)
+        const txTrace = RawDataFetcher.validateTraceLogs(txDataStringified.trace)
         const formattedTxResponse = this.formatter.transactionResponse(txDataStringified)
         const txResponse = validateAndFormatTxData(formattedTxResponse)
 
@@ -111,7 +126,7 @@ export default class RawDataFetcher {
     }
 
     async getTxDataWithCovalentByAddress(
-        address: Address,
+        address: string,
         includedInitiatedTxs: boolean,
         includedNotInitiatedTxs: boolean,
         limit: number,
@@ -145,13 +160,15 @@ export default class RawDataFetcher {
         }
     }
 
-    static getContractAddressesFromRawTxData(rawTxData: RawTxData | RawTxDataWithoutTrace): Address[] {
+    static getContractAddressesFromRawTxData(rawTxData: RawTxData | RawTxDataWithoutTrace): string[] {
         const { txReceipt } = rawTxData
-        const addresses: Address[] = []
-        addresses.push(validateAndNormalizeAddress(txReceipt.to))
+        const addresses: string[] = []
+        if (txReceipt.to) {
+            addresses.push(txReceipt.to)
+        }
 
         txReceipt.logs.forEach(({ address }) => {
-            addresses.push(validateAndNormalizeAddress(address))
+            addresses.push(address)
         })
 
         return [...new Set(addresses)]
@@ -223,8 +240,7 @@ function validateAndFormatTxData(
     for (const [key, val] of Object.entries(txData)) {
         if (addressKeys.includes(key) && val) {
             const address = val.toLowerCase()
-            const validatedAddress = validateAddress(address)
-            txResponseFormatted[key] = validatedAddress
+            txResponseFormatted[key] = address
             // in EVMTransaction
         } else if (typeof val === 'number') {
             txResponseFormatted[key] = val.toString()
@@ -238,37 +254,6 @@ function validateAndFormatTxData(
     }
 
     return txResponseFormatted
-}
-
-function validateTraceTxData(traceLogsArr: UnvalidatedTraceLog[]): TraceLog[] {
-    const traceLogsFormatted = [] as TraceLog[]
-
-    for (const tl of traceLogsArr) {
-        const { action: a, result: r } = tl
-
-        //skips contract creation, for now. There's no internal transactions, but this makes the data incomplete
-        if (a.to) {
-            const traceLogFormatted = {
-                ...tl,
-                action: {
-                    callType: a.callType,
-                    from: validateAddress(a.from),
-                    to: validateAddress(a.to),
-                    gas: BigNumber.from(a.gas),
-                    value: BigNumber.from(a.value),
-                    input: a.input,
-                },
-                result: {
-                    gasUsed: BigNumber.from(r.gasUsed),
-                    output: r.output,
-                },
-            } as TraceLog
-
-            traceLogsFormatted.push(traceLogFormatted)
-        }
-    }
-
-    return traceLogsFormatted
 }
 
 // function covalentToRawTxData(rawCovalentData: CovalentTxData): TxReceipt {

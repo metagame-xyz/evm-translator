@@ -1,6 +1,5 @@
 import {
     Action,
-    Address,
     ContractType,
     Decoded,
     Interaction,
@@ -98,7 +97,7 @@ const vars: Record<EIP, TokenVars> = {
     },
 }
 
-function isMintEvent(t: TokenVars, event: InteractionEvent, userAddress: Address, fromAddress: Address) {
+function isMintEvent(t: TokenVars, event: InteractionEvent, userAddress: string, fromAddress: string) {
     return (
         event.eventName === t.transfer &&
         event.params[t.from] === blackholeAddress &&
@@ -106,7 +105,7 @@ function isMintEvent(t: TokenVars, event: InteractionEvent, userAddress: Address
         userAddress === fromAddress // user needs to have initiated the mint
     )
 }
-function isAirdropEvent(t: TokenVars, event: InteractionEvent, userAddress: Address, fromAddress: Address) {
+function isAirdropEvent(t: TokenVars, event: InteractionEvent, userAddress: string, fromAddress: string) {
     return (
         (event.eventName === t.transfer || event.eventName === t.transferBatch) &&
         event.params[t.from] === blackholeAddress &&
@@ -115,21 +114,21 @@ function isAirdropEvent(t: TokenVars, event: InteractionEvent, userAddress: Addr
     )
 }
 
-function isSendEvent(t: TokenVars, event: InteractionEvent, userAddress: Address) {
+function isSendEvent(t: TokenVars, event: InteractionEvent, userAddress: string) {
     return (
         (event.eventName === t.transfer || event.eventName === t.transferBatch) && event.params[t.from] === userAddress
     )
 }
 
-function isReceiveEvent(t: TokenVars, event: InteractionEvent, userAddress: Address) {
+function isReceiveEvent(t: TokenVars, event: InteractionEvent, userAddress: string) {
     return event.eventName === t.transfer && event.params[t.to] === userAddress
 }
 
-function isApprovalEvent(t: TokenVars, event: InteractionEvent, userAddress: Address) {
+function isApprovalEvent(t: TokenVars, event: InteractionEvent, userAddress: string) {
     return event.eventName === t.approval && event.params[t.owner] === userAddress && event.params[t.approved] == true
 }
 
-function getAction(t: TokenVars, events: InteractionEvent[], userAddress: Address, fromAddress: Address): Action {
+function getAction(t: TokenVars, events: InteractionEvent[], userAddress: string, fromAddress: string): Action {
     const isMint = events.find((e) => isMintEvent(t, e, userAddress, fromAddress))
     const isAirdrop = events.find((e) => isAirdropEvent(t, e, userAddress, fromAddress))
     const isSend = events.find((e) => isSendEvent(t, e, userAddress))
@@ -184,7 +183,7 @@ function addUserName(
     t: TokenVars,
     interpretation: Interpretation,
     tokenEvents: InteractionEvent[],
-    userAddress: Address,
+    userAddress: string,
 ) {
     let userName = interpretation.userName
     switch (interpretation.action) {
@@ -203,8 +202,8 @@ function addCounterpartyNames(
     t: TokenVars,
     interpretation: Interpretation,
     tokenEvents: InteractionEvent[],
-    userAddress: Address,
-    fromAddress: Address,
+    userAddress: string,
+    fromAddress: string,
 ) {
     let counterpartyNames: string[] = []
 

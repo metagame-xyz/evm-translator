@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Address, ContractData, Decoded, Interpretation } from 'interfaces'
+import { ContractData, Decoded, Interpretation } from 'interfaces'
 import { ABI_ItemUnfiltered, ABI_Row } from 'interfaces/abi'
 
 export abstract class DatabaseInterface {
@@ -8,15 +8,13 @@ export abstract class DatabaseInterface {
         this.connectionString = connectionString
     }
 
-    abstract getContractDataForContract(contractAddress: Address): Promise<ContractData | null>
-    abstract getContractDataForManyContracts(
-        contractAddresses: Address[],
-    ): Promise<Record<Address, ContractData | null>>
+    abstract getContractDataForContract(contractAddress: string): Promise<ContractData | null>
+    abstract getContractDataForManyContracts(contractAddresses: string[]): Promise<Record<string, ContractData | null>>
 
     abstract addOrUpdateContractData(contractData: ContractData): Promise<void>
     abstract addOrUpdateManyContractData(contractDataArr: ContractData[]): Promise<void>
     /** Contracts often don't have their full ABI shared, but we can infer it using a signature table when we see a contract using that ABI */
-    abstract AppendABIsToContractData(contractAddress: Address, abi: ABI_ItemUnfiltered[]): Promise<void>
+    abstract AppendABIsToContractData(contractAddress: string, abi: ABI_ItemUnfiltered[]): Promise<void>
 
     abstract addOrUpdateABI(abiArr: ABI_Row): Promise<void>
     abstract addOrUpdateABIs(abiArr: ABI_Row[]): Promise<void>
@@ -35,13 +33,13 @@ export abstract class DatabaseInterface {
     abstract addOrUpdateInterpretedData(interpretedData: Interpretation): Promise<void>
     abstract addOrUpdateManyInterpretedData(interpretedDataArr: Interpretation[]): Promise<void>
 
-    abstract getInterpretedData(txHash: string, userAddress: Address | null): Promise<Interpretation | null>
+    abstract getInterpretedData(txHash: string, userAddress: string | null): Promise<Interpretation | null>
     abstract getManyInterpretedData(
         txHashes: string[],
-        userAddress: Address | null,
+        userAddress: string | null,
     ): Promise<Array<Interpretation | null> | null>
     abstract getAllInterpretationsForTxHash(txHash: string): Promise<Interpretation[] | null>
-    abstract getAllInterpretationsForAddress(address: Address): Promise<Interpretation[] | null>
+    abstract getAllInterpretationsForAddress(address: string): Promise<Interpretation[] | null>
 }
 
 export class NullDatabaseInterface extends DatabaseInterface {
@@ -49,11 +47,11 @@ export class NullDatabaseInterface extends DatabaseInterface {
         super(connectionString)
     }
 
-    async getContractDataForContract(contractAddress: Address): Promise<ContractData | null> {
+    async getContractDataForContract(contractAddress: string): Promise<ContractData | null> {
         return Promise.resolve(null)
     }
-    async getContractDataForManyContracts(contractAddresses: Address[]): Promise<Record<Address, ContractData | null>> {
-        const obj: Record<Address, ContractData | null> = {}
+    async getContractDataForManyContracts(contractAddresses: string[]): Promise<Record<string, ContractData | null>> {
+        const obj: Record<string, ContractData | null> = {}
         for (let i = 0; i < contractAddresses.length; i++) {
             obj[contractAddresses[i]] = null
         }
@@ -67,7 +65,7 @@ export class NullDatabaseInterface extends DatabaseInterface {
         return Promise.resolve()
     }
     /** Contracts often don't have their full ABI shared, but we can infer it using a signature table when we see a contract using that ABI */
-    async AppendABIsToContractData(contractAddress: Address, abi: ABI_ItemUnfiltered[]): Promise<void> {
+    async AppendABIsToContractData(contractAddress: string, abi: ABI_ItemUnfiltered[]): Promise<void> {
         return Promise.resolve()
     }
 
@@ -110,13 +108,13 @@ export class NullDatabaseInterface extends DatabaseInterface {
         return Promise.resolve()
     }
 
-    async getInterpretedData(txHash: string, userAddress: Address | null): Promise<Interpretation | null> {
+    async getInterpretedData(txHash: string, userAddress: string | null): Promise<Interpretation | null> {
         return Promise.resolve(null)
     }
 
     async getManyInterpretedData(
         txHashes: string[],
-        userAddress: Address | null,
+        userAddress: string | null,
     ): Promise<Array<Interpretation | null> | null> {
         return Promise.resolve(null)
     }
@@ -124,7 +122,7 @@ export class NullDatabaseInterface extends DatabaseInterface {
     async getAllInterpretationsForTxHash(txHash: string): Promise<Interpretation[] | null> {
         return Promise.resolve(null)
     }
-    async getAllInterpretationsForAddress(address: Address): Promise<Interpretation[] | null> {
+    async getAllInterpretationsForAddress(address: string): Promise<Interpretation[] | null> {
         return Promise.resolve(null)
     }
 }

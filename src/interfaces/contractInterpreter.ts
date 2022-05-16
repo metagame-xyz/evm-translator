@@ -1,8 +1,8 @@
-import { Action, Address } from 'interfaces'
+import { Action } from 'interfaces'
 
 export type InterpreterMap = {
     /** The address of the contract this map is for */
-    contractAddress: Address
+    contractAddress: string
     /** We're getting rid of this */
     methods: Record<string, string[]>
     /** The official name of the contract as defined in the source code */

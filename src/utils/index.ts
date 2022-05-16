@@ -1,6 +1,6 @@
 import collect from 'collect.js'
 import { BigNumber } from 'ethers'
-import { Address, Chain, Chains, ChainSymbol, Interaction, InteractionEvent, Interpretation } from 'interfaces'
+import { Chain, Chains, ChainSymbol, Interaction, InteractionEvent, Interpretation } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import fetch, { Response } from 'node-fetch'
 import traverse from 'traverse'
@@ -52,7 +52,7 @@ export const getChainBySymbol = (symbol: string): Chain => {
     return chain
 }
 
-export const getStablecoinOrNativeWrappedAddressesBySymbol = (symbol: string): Address[] => {
+export const getStablecoinOrNativeWrappedAddressesBySymbol = (symbol: string): string[] => {
     const chain = getChainBySymbol(symbol)
     return [chain.wethAddress, chain.usdcAddress, chain.usdtAddress, chain.daiAddress]
 }
@@ -162,18 +162,6 @@ export function ensure<T>(argument: T | undefined | null, message = 'This value 
 
 const validAddress = new RegExp(/^0x[a-fA-F0-9]{40}$/)
 
-export const validateAddress = (address: string): Address => {
-    if (!validAddress.test(address)) {
-        throw new Error(`Invalid EVM address: ${address}`)
-    }
-    return address as Address
-}
-
-export const validateAndNormalizeAddress = (address: string): Address => {
-    const normalizedAddress = address.toLowerCase()
-    return validateAddress(normalizedAddress)
-}
-
 export const shortenName = (username: string): string => {
     return validAddress.test(username) ? username.slice(0, 6) : username
 }
@@ -202,11 +190,10 @@ export const getKeys = <T>(obj: T) => Object.keys(obj) as Array<keyof T>
 
 export const getEntries = <T>(obj: T) => Object.entries(obj) as Array<[keyof T, any]>
 
-export function filterABIs(unfilteredABIs: Record<string, ABI_ItemUnfiltered[]>): Record<Address, ABI_Item[]> {
-    const filteredABIs: Record<Address, ABI_Item[]> = {}
+export function filterABIs(unfilteredABIs: Record<string, ABI_ItemUnfiltered[]>): Record<string, ABI_Item[]> {
+    const filteredABIs: Record<string, ABI_Item[]> = {}
 
-    for (const [addressStr, unfilteredABI] of Object.entries(unfilteredABIs)) {
-        const address = validateAndNormalizeAddress(addressStr)
+    for (const [address, unfilteredABI] of Object.entries(unfilteredABIs)) {
         const abi = unfilteredABI.filter(({ type }) => type === 'function' || type === 'event') as ABI_Item[]
         filteredABIs[address] = abi
     }

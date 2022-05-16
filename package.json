@@ -47,7 +47,8 @@
         "limiter": "^2.1.0",
         "node-fetch": "2.6.6",
         "require-context": "^1.1.0",
-        "traverse": "^0.6.6"
+        "traverse": "^0.6.6",
+        "zod": "^3.16.0"
     },
     "devDependencies": {
         "@babel/core": "^7.17.10",

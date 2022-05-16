@@ -1,10 +1,10 @@
 import Etherscan from './clients/Etherscan'
 import collect from 'collect.js'
-import { Address, ContractType } from 'interfaces'
+import { ContractType } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 
 async function getTypeFromABI(
-    contractAddress: Address,
+    contractAddress: string,
     etherscan: Etherscan,
     abiArr: ABI_ItemUnfiltered[] | null = null,
 ): Promise<ContractType> {

@@ -8,7 +8,6 @@ import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import {
     Action,
-    Address,
     Chain,
     ContractType,
     Decoded,
@@ -20,18 +19,14 @@ import {
     TxType,
 } from 'interfaces'
 import { InterpreterMap } from 'interfaces/contractInterpreter'
-import {
-    fillDescriptionTemplate,
-    getNativeTokenValueEvents,
-    shortenNamesInString,
-    validateAndNormalizeAddress,
-} from 'utils'
+import { AddressZ } from 'interfaces/utils'
+import { fillDescriptionTemplate, getNativeTokenValueEvents, shortenNamesInString } from 'utils'
 
 function deepCopy<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj))
 }
 
-type ContractInterpretersMap = Record<Address, InterpreterMap>
+type ContractInterpretersMap = Record<string, InterpreterMap>
 
 type KeyMapping = {
     key: string
@@ -57,20 +52,20 @@ const topLevelInteractionKeys = ['contractName', 'contractSymbol', 'contractAddr
 class Interpreter {
     contractSpecificInterpreters: ContractInterpretersMap = {}
     // fallbackInterpreters: Array<Inspector> = []
-    userAddress: Address | null
+    userAddress: string | null
     chain: Chain
 
     constructor(chain: Chain, userAddress: string | null = null) {
         this.chain = chain
-        this.userAddress = (userAddress && validateAndNormalizeAddress(userAddress)) || null
+        this.userAddress = (userAddress && AddressZ.parse(userAddress)) || null
 
         for (const [address, map] of Object.entries(contractInterpreters)) {
-            this.contractSpecificInterpreters[address as Address] = map as InterpreterMap
+            this.contractSpecificInterpreters[address] = map as InterpreterMap
         }
     }
 
     updateUserAddress(userAddress: string) {
-        this.userAddress = validateAndNormalizeAddress(userAddress)
+        this.userAddress = AddressZ.parse(userAddress)
     }
 
     updateChain(chain: Chain) {
@@ -89,7 +84,7 @@ class Interpreter {
         return interpretations
     }
 
-    public interpretSingleTx(decodedData: Decoded, userAddressFromInput: Address | null = null): Interpretation {
+    public interpretSingleTx(decodedData: Decoded, userAddressFromInput: string | null = null): Interpretation {
         const { contractMethod, interactions, fromAddress, toAddress } = decodedData
 
         const { nativeValueSent, txHash } = decodedData
@@ -197,8 +192,8 @@ class Interpreter {
     getNativeTokenValueSent(
         interactions: Interaction[],
         nativeValueSent: string | undefined,
-        fromAddress: Address,
-        userAddress: Address,
+        fromAddress: string,
+        userAddress: string,
     ): number {
         if (fromAddress === userAddress) return Number(formatEther(nativeValueSent || 0))
 
@@ -215,8 +210,8 @@ class Interpreter {
     private findValue(
         interactions: Interaction[],
         keyMapping: KeyMapping,
-        userAddress: Address,
-        contractAddress: Address,
+        userAddress: string,
+        contractAddress: string,
     ): string | string[] {
         const filters = keyMapping.filters || {}
         const index = keyMapping.index || 0
@@ -285,7 +280,7 @@ class Interpreter {
         return value
     }
 
-    private getTokens(interactions: Interaction[], userAddress: Address, direction: 'to' | 'from'): Token[] {
+    private getTokens(interactions: Interaction[], userAddress: string, direction: 'to' | 'from'): Token[] {
         let tokens: Token[] = []
         type FlattenedInteraction = Omit<Interaction, 'events'> & InteractionEvent
 
@@ -334,7 +329,7 @@ class Interpreter {
             return tokenType
         }
 
-        function toOrFromUser(event: InteractionEvent, direction: 'to' | 'from', userAddress: Address) {
+        function toOrFromUser(event: InteractionEvent, direction: 'to' | 'from', userAddress: string) {
             const directionArr = direction === 'to' ? toKeys : fromKeys
             return directionArr.filter((key) => event.params[key] === userAddress).length > 0
         }
@@ -380,7 +375,7 @@ class Interpreter {
                 type: tokenType,
                 name: i.contractName,
                 symbol: i.contractSymbol,
-                address: validateAndNormalizeAddress(i.contractAddress),
+                address: AddressZ.parse(i.contractAddress),
             }
             amount ? (token.amount = amount) : null
             tokenId ? (token.tokenId = tokenId) : null
@@ -391,19 +386,19 @@ class Interpreter {
         return tokens
     }
 
-    private getTokensReceived(interactions: Interaction[], userAddress: Address): Token[] {
+    private getTokensReceived(interactions: Interaction[], userAddress: string): Token[] {
         return this.getTokens(interactions, userAddress, 'to')
     }
 
-    private getTokensSent(interactions: Interaction[], userAddress: Address): Token[] {
+    private getTokensSent(interactions: Interaction[], userAddress: string): Token[] {
         return this.getTokens(interactions, userAddress, 'from')
     }
 
     private useKeywordMap(
         interactions: Interaction[],
         keywordsMap: Record<string, KeyMapping>,
-        contractAddress: Address,
-        userAddress: Address,
+        contractAddress: string,
+        userAddress: string,
     ): Record<string, string | string[]> {
         const keyValueMap: Record<string, string | string[]> = {}
 

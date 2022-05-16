@@ -1,5 +1,4 @@
 import axios, { Axios } from 'axios'
-import { Address } from 'interfaces'
 import {
     CovalentTxData,
     GetBalancesResponse,
@@ -33,7 +32,7 @@ export default class Covalent {
     }
 
     // TODO pagination loop logic should live in here, with a txn count limit optional param
-    getTransactionsFor(address: Address, limit: number): Promise<CovalentTxData[]> {
+    getTransactionsFor(address: string, limit: number): Promise<CovalentTxData[]> {
         return this.client
             .get(`${this.chainId}/address/${address}/transactions_v2/`, {
                 params: {

@@ -1,4 +1,4 @@
-import { Action, Address, Decoded, Interpretation } from 'interfaces'
+import { Action, Decoded, Interpretation } from 'interfaces'
 import { getStablecoinOrNativeWrappedAddressesBySymbol } from 'utils'
 
 function sentBaseToken(interpretation: Interpretation): boolean {
@@ -25,7 +25,7 @@ function receivedOtherToken(interpretation: Interpretation): boolean {
     return interpretation.tokensReceived.length > 0 && !receivedBaseToken(interpretation)
 }
 
-function isAirdrop(interpretation: Interpretation, userAddress: Address, fromAddress: Address): boolean {
+function isAirdrop(interpretation: Interpretation, userAddress: string, fromAddress: string): boolean {
     if (interpretation.tokensReceived.length > 0 && userAddress !== fromAddress) {
         return true
     } else {
@@ -33,7 +33,7 @@ function isAirdrop(interpretation: Interpretation, userAddress: Address, fromAdd
     }
 }
 
-function isClaimed(interpretation: Interpretation, userAddress: Address, fromAddress: Address): boolean {
+function isClaimed(interpretation: Interpretation, userAddress: string, fromAddress: string): boolean {
     return (
         isReceived(interpretation) &&
         userAddress === fromAddress &&
@@ -77,13 +77,13 @@ function isSwapped(interpretation: Interpretation): boolean {
     return sentBaseToken(interpretation) && receivedBaseToken(interpretation)
 }
 
-function getAction(interpretation: Interpretation, userAddress: Address, fromAddress: Address): Action {
+function getAction(interpretation: Interpretation, userAddress: string, fromAddress: string): Action {
     // Order matters here, some are sub/super sets of others
 
-    const isSentBaseToken = sentBaseToken(interpretation)
-    const isSentOtherToken = sentOtherToken(interpretation)
-    const isReceivedBaseToken = receivedBaseToken(interpretation)
-    const isReceivedOtherToken = receivedOtherToken(interpretation)
+    // const isSentBaseToken = sentBaseToken(interpretation)
+    // const isSentOtherToken = sentOtherToken(interpretation)
+    // const isReceivedBaseToken = receivedBaseToken(interpretation)
+    // const isReceivedOtherToken = receivedOtherToken(interpretation)
 
     if (isAirdrop(interpretation, userAddress, fromAddress)) {
         return Action.gotAirdropped

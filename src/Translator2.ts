@@ -2,21 +2,12 @@ import { AlchemyProvider } from '@ethersproject/providers'
 import { Augmenter } from 'core/Augmenter'
 import Interpreter from 'core/Interpreter'
 import RawDataFetcher from 'core/RawDataFetcher'
-import {
-    Address,
-    Chain,
-    ContractData,
-    ContractType,
-    Decoded,
-    DecodedCallData,
-    Interaction,
-    Interpretation,
-    RawTxData,
-    RawTxDataWithoutTrace,
-} from 'interfaces'
+import { Chain, ContractData, ContractType, Decoded, DecodedCallData, Interaction, Interpretation } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
+import { RawTxData, RawTxDataWithoutTrace } from 'interfaces/RawData'
 import { EVMTransaction } from 'interfaces/s3'
-import { filterABIs, validateAndNormalizeAddress } from 'utils'
+import { AddressZ } from 'interfaces/utils'
+import { filterABIs } from 'utils'
 import Etherscan from 'utils/clients/Etherscan'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 
@@ -29,7 +20,7 @@ export type TranslatorConfigTwo = {
     databaseInterface?: DatabaseInterface
 }
 
-export type NamesAndSymbolsMap = Record<Address, { name: string | null; symbol: string | null }>
+export type NamesAndSymbolsMap = Record<string, { name: string | null; symbol: string | null }>
 
 // const defaultConfig: TranslatorConfigTwo = {
 //     chain: getChainBySymbol('ETH'),
@@ -43,7 +34,7 @@ class Translator2 {
     provider: AlchemyProvider
     rawDataFetcher: RawDataFetcher
     etherscan: Etherscan
-    userAddress: Address | null
+    userAddress: string | null
     augmenter: Augmenter
     interpreter: Interpreter
     databaseInterface: DatabaseInterface
@@ -53,7 +44,7 @@ class Translator2 {
         this.nodeUrl = config.nodeUrl || null
         this.alchemyProjectId = config.alchemyProjectId
         this.etherscanAPIKey = config.etherscanAPIKey
-        this.userAddress = config.userAddress ? validateAndNormalizeAddress(config.userAddress) : null
+        this.userAddress = config.userAddress ? AddressZ.parse(config.userAddress) : null
         this.provider = this.getProvider()
         this.etherscan = new Etherscan(this.etherscanAPIKey)
         this.databaseInterface = config.databaseInterface || new NullDatabaseInterface()
@@ -81,7 +72,7 @@ class Translator2 {
     /**** FROM WALLET ADDRESS OR TX HASH ONLY *****/
     /**********************************************/
     updateUserAddress(userAddress: string) {
-        this.userAddress = validateAndNormalizeAddress(userAddress)
+        this.userAddress = AddressZ.parse(userAddress)
     }
 
     // Gets the txResponse, txReceipt, txTrace from a node. Archive node needed
@@ -102,15 +93,15 @@ class Translator2 {
     //     throw new Error('Not implemented')
     // }
 
-    getContractAddressesFromRawTxData(rawTxData: RawTxData | RawTxDataWithoutTrace): Address[] {
+    getContractAddressesFromRawTxData(rawTxData: RawTxData | RawTxDataWithoutTrace): string[] {
         return RawDataFetcher.getContractAddressesFromRawTxData(rawTxData)
     }
 
     getAllAddresses(
         decodedLogs: Interaction[],
         decodedCallData: DecodedCallData,
-        contractAddresses: Address[],
-    ): Address[] {
+        contractAddresses: string[],
+    ): string[] {
         return Augmenter.getAllAddresses(decodedLogs, decodedCallData, contractAddresses)
     }
 
@@ -119,8 +110,8 @@ class Translator2 {
     /****  Data used to decode & augment   ********/
     /**********************************************/
     async getABIsAndNamesForContracts(
-        contractAddresses: Address[],
-    ): Promise<[Record<Address, ABI_ItemUnfiltered[]>, Record<Address, string | null>]> {
+        contractAddresses: string[],
+    ): Promise<[Record<string, ABI_ItemUnfiltered[]>, Record<string, string | null>]> {
         return this.augmenter.getABIsAndNamesForContracts(contractAddresses)
     }
 
@@ -131,11 +122,11 @@ class Translator2 {
         return this.augmenter.getNameAndSymbol(address, contractType)
     }
 
-    async getENSNames(addresses: Address[]): Promise<Record<Address, string>> {
+    async getENSNames(addresses: string[]): Promise<Record<string, string>> {
         return this.augmenter.getENSNames(addresses)
     }
 
-    async getOfficialNamesForContracts(contractAddresses: string[]): Promise<Record<Address, string>> {
+    async getOfficialNamesForContracts(contractAddresses: string[]): Promise<Record<string, string>> {
         throw new Error('Not implemented')
     }
 
@@ -144,18 +135,18 @@ class Translator2 {
     }
 
     async getContractsData(
-        contractToAbiMap: Record<Address, ABI_ItemUnfiltered[]>,
-        contractToOfficialNameMap: Record<Address, string | null>,
-    ): Promise<Record<Address, ContractData>> {
+        contractToAbiMap: Record<string, ABI_ItemUnfiltered[]>,
+        contractToOfficialNameMap: Record<string, string | null>,
+    ): Promise<Record<string, ContractData>> {
         return this.augmenter.getContractsData(contractToAbiMap, contractToOfficialNameMap)
     }
 
     // We should store this in a contracts table just so we can see this data more easily
-    getContractType(address: Address, abi: ABI_Item[]): Promise<ContractType> {
+    getContractType(address: string, abi: ABI_Item[]): Promise<ContractType> {
         return this.augmenter.getContractType(address, abi)
     }
 
-    getContractTypes(contractToAbiMap: Record<Address, ABI_Item[]>): Promise<Record<Address, ContractType>> {
+    getContractTypes(contractToAbiMap: Record<string, ABI_Item[]>): Promise<Record<string, ContractType>> {
         throw new Error('Not implemented')
     }
     /**********************************************/
@@ -163,28 +154,28 @@ class Translator2 {
     /**********************************************/
     decodeTxData(
         rawTxData: RawTxData | RawTxDataWithoutTrace,
-        ABIs: Record<Address, ABI_Item[]>,
-        contractDataMap: Record<Address, ContractData>,
+        ABIs: Record<string, ABI_Item[]>,
+        contractDataMap: Record<string, ContractData>,
     ): { decodedLogs: Interaction[]; decodedCallData: DecodedCallData } {
         return this.augmenter.decodeTxData(rawTxData, ABIs, contractDataMap)
     }
 
-    decodeTxDataArr(rawTxDataArr: RawTxData[], ABIs: Record<Address, ABI_Item[]>[]): Decoded[] {
+    decodeTxDataArr(rawTxDataArr: RawTxData[], ABIs: Record<string, ABI_Item[]>[]): Decoded[] {
         throw new Error('Not implemented')
     }
 
     augmentDecodedData(
         decodedLogs: Interaction[],
         decodedCallData: DecodedCallData,
-        ensMap: Record<Address, string>,
-        contractDataMap: Record<Address, ContractData>,
+        ensMap: Record<string, string>,
+        contractDataMap: Record<string, ContractData>,
         rawTxData: RawTxData | RawTxDataWithoutTrace,
     ): Decoded {
         return this.augmenter.augmentDecodedData(decodedLogs, decodedCallData, ensMap, contractDataMap, rawTxData)
     }
 
     //This is a subset of augmentDecodedData
-    // addEnsToDecodedData(decoded: Decoded, ens: Record<Address, string>): Decoded {
+    // addEnsToDecodedData(decoded: Decoded, ens: Record<string, string>): Decoded {
     //     throw new Error('Not implemented')
     // }
 
@@ -192,16 +183,16 @@ class Translator2 {
     /******          INTERPRETING          ********/
     /**********************************************/
 
-    interpretDecodedTx(decoded: Decoded, userAddress: Address | null = null): Interpretation {
+    interpretDecodedTx(decoded: Decoded, userAddress: string | null = null): Interpretation {
         return this.interpreter.interpretSingleTx(decoded, userAddress)
     }
 
     // If we do this after we've created the example description, we'll have to figure out how to parse any addresses we've turned into a shorter name or onoma name
-    // addEnsToInterpretedData(ens: Record<Address, string>): Interpretation {
+    // addEnsToInterpretedData(ens: Record<string, string>): Interpretation {
     //     throw new Error('Not implemented')
     // }
 
-    async interpretTx(txHash: string, userAddress: Address | null = null): Promise<Interpretation> {
+    async interpretTx(txHash: string, userAddress: string | null = null): Promise<Interpretation> {
         const rawTxData = await this.getRawTxData(txHash)
         const addresses = this.getContractAddressesFromRawTxData(rawTxData)
         const [unfilteredAbiMap, officialContractNamesMap] = await this.getABIsAndNamesForContracts(addresses)

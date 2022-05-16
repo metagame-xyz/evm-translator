@@ -1,15 +1,5 @@
 import { ABI_ItemUnfiltered } from './abi'
-import {
-    TransactionReceipt as unvalidatedTransactionReceipt,
-    TransactionResponse as unvalidatedTransactionResponse,
-} from '@ethersproject/providers'
-import { BigNumber } from 'ethers'
-
-/* eslint-disable no-unused-vars */
-/** 40 char hexadecimal address. Can be an EOA, Contract, or Token address */
-export type Address = `0x${string}`
-
-// export type TxHash = `0x${string}`
+import { RawTxData } from './rawData'
 
 export const enum ChainSymbol {
     ETH = 'ETH',
@@ -30,13 +20,13 @@ export type Chain = {
     /** The block explorer URL for this chain. https://etherscan.io/ */
     blockExplorerUrl: string
     /** The singleton contract address for the wrapped version of the native token. Need to change the variable name */
-    wethAddress: Address
+    wethAddress: string
     /** The singleton contract address for USDC */
-    usdcAddress: Address
+    usdcAddress: string
     /** The singleton contract address for USDT */
-    usdtAddress: Address
+    usdtAddress: string
     /** The singleton contract address for DAI */
-    daiAddress: Address
+    daiAddress: string
 }
 
 /** Map of EVM chain names to an object with Chain metadata */
@@ -52,86 +42,20 @@ export const enum TxType {
     CONTRACT_INTERACTION = 'contract interaction',
 }
 
-export type TxResponse = Omit<unvalidatedTransactionResponse, 'from' | 'to'> & { from: Address; creates: string }
-export type TxReceipt = Omit<unvalidatedTransactionReceipt, 'from' | 'to'> & {
-    from: Address
-    to: Address
-    timestamp: number
-}
-
-export type UnvalidatedTraceLog = {
-    action: UnvalidatedTraceLogAction
-    blockHash: string
-    blockNumber: number
-    result: {
-        gasUsed: string // hex
-        output: string // hex
-    }
-    subtraces: number
-    traceAddress: number[]
-    transactionHash: string
-    transactionPosition: number
-    type: string
-}
-
-export type UnvalidatedTraceLogAction = {
-    callType: string
-    from: Address
-    to: Address
-    gas: string //hex
-    input: string //hex
-    value: string //hex
-}
-
-export type TraceLog = {
-    action: TraceLogAction
-    blockHash: string
-    blockNumber: number
-    result: {
-        gasUsed: BigNumber // hex
-        output: string // hex
-    }
-    subtraces: number
-    traceAddress: number[]
-    transactionHash: string
-    transactionPosition: number
-    type: string
-}
-
-export type TraceLogAction = {
-    callType: string
-    from: Address
-    to: Address
-    gas: BigNumber //hex
-    input: string //hex
-    value: BigNumber //hex
-}
-
-export type RawTxData = {
-    txResponse: TxResponse
-    txReceipt: TxReceipt
-    txTrace: TraceLog[]
-}
-
-export type RawTxDataWithoutTrace = {
-    txResponse: TxResponse
-    txReceipt: TxReceipt
-}
-
 export type InProgressActivity = {
     rawTxData?: RawTxData
     decoded?: Decoded
 }
 
 export type RawLogEvent = {
-    address: Address
+    address: string
     topics: string[]
     data: string
     logIndex: number
 }
 
 export type ContractData = {
-    address: Address
+    address: string
     type: ContractType
     tokenName: string | null
     tokenSymbol: string | null
@@ -170,8 +94,8 @@ export type Decoded = {
     /** The symbol for the native token. ex: ETH */
     chainSymbol: string
     txIndex: number
-    fromAddress: Address
-    toAddress: Address | null
+    fromAddress: string
+    toAddress: string | null
     reverted: boolean
     timestamp: number | null
     gasUsed: string
@@ -181,7 +105,7 @@ export type Decoded = {
 export type Interaction = {
     contractName: string | null
     contractSymbol: string | null
-    contractAddress: Address
+    contractAddress: string
     events: InteractionEvent[]
 }
 
@@ -230,7 +154,7 @@ export type UnknownKey = Omit<string, keyof InteractionEvent>
  */
 export type Interpretation = {
     txHash: string
-    userAddress: Address
+    userAddress: string
     contractName: string | null
     action: Action
     exampleDescription: string
@@ -293,7 +217,7 @@ export type Token = {
     type: TokenType
     name: string | null
     symbol: string | null
-    address: Address
+    address: string
     amount?: string
     token0?: Token
     token1?: Token

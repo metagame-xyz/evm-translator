@@ -1,6 +1,6 @@
 import Etherscan, { SourceCodeObject } from './clients/Etherscan'
 import { keccak256, toUtf8Bytes } from 'ethers/lib/utils'
-import { Action, Address } from 'interfaces'
+import { Action } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered, ABIStringMap } from 'interfaces/abi'
 import { InterpreterMap } from 'interfaces/contractInterpreter'
 
@@ -11,7 +11,7 @@ export default class InterpreterTemplateGenerator {
         this.etherscan = new Etherscan(etherscanApiKey)
     }
 
-    async generateInterpreter(contractAddress: Address): Promise<InterpreterMap> {
+    async generateInterpreter(contractAddress: string): Promise<InterpreterMap> {
         let sourceCode: SourceCodeObject
         try {
             sourceCode = await this.etherscan.getSourceCode(contractAddress)

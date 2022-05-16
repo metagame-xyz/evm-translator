@@ -1,4 +1,5 @@
-import { Address, Decoded, Interpretation, RawTxData, TokenType } from 'interfaces'
+import { RawTxData } from './rawData'
+import { Decoded, Interpretation, TokenType } from 'interfaces'
 
 export type ZenLedgerRow = {
     // ZenLedger required Columns
@@ -16,7 +17,7 @@ export type ZenLedgerRow = {
     // Additional helpful columns
     txHash: string
     // network: string // 'ETH' | 'MATIC' | 'UNKNOWN'
-    // walletAddress: Address
+    // walletAddress: string
     // walletName: string
     explorerUrl: string
     userInitiated: 'true' | 'false'
@@ -25,7 +26,7 @@ export type ZenLedgerRow = {
     inType: TokenType | 'native' | null
     outType: TokenType | 'native' | null
     lpRelated: 'true' | 'false'
-    toAddress: Address | null
+    toAddress: string | null
     // reviewed: null
 }
 

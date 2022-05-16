@@ -1,5 +1,3 @@
-import { Address } from 'interfaces'
-
 export type GetTransactionsOptions = {
     page?: number
     limit?: number
@@ -109,9 +107,9 @@ export type CovalentTxData = {
     tx_hash: string
     tx_offset: number
     successful: boolean
-    from_address: Address
+    from_address: string
     from_address_label?: any
-    to_address: Address
+    to_address: string
     to_address_label?: any
     value: string
     value_quote: number

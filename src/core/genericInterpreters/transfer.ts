@@ -1,6 +1,6 @@
-import { Action, Address, Decoded, InteractionEvent, Interpretation } from 'interfaces'
+import { Action, Decoded, InteractionEvent, Interpretation } from 'interfaces'
 
-function isSafeReceivedEvent(event: InteractionEvent, userAddress: Address) {
+function isSafeReceivedEvent(event: InteractionEvent, userAddress: string) {
     return event.eventName === 'SafeReceived' && event.params.sender === userAddress
 }
 

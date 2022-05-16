@@ -1,14 +1,14 @@
-import { ActivityData, Address, Chain, Decoded, Interpretation, TokenType } from 'interfaces'
+import { ActivityData, Chain, Decoded, Interpretation, TokenType } from 'interfaces'
 import { ZenLedgerRowType as RowType, ZenLedgerRow } from 'interfaces/zenLedger'
 import { chains } from 'utils'
 
 class TaxFormatter {
-    walletAddress: Address
+    walletAddress: string
     walletName: string
     chain: Chain
     rows: ZenLedgerRow[] = []
 
-    constructor(walletAddress: Address, walletName: string, chain: Chain = chains.ethereum) {
+    constructor(walletAddress: string, walletName: string, chain: Chain = chains.ethereum) {
         this.walletAddress = walletAddress
         this.walletName = walletName
         this.chain = chain
@@ -139,7 +139,7 @@ class TaxFormatter {
             lpRelated:
                 interpretedData.tokensReceived.length > 1 || interpretedData.tokensSent.length > 1 ? 'true' : 'false',
             // reviewed: null,
-            toAddress: decodedData.toAddress as Address | null,
+            toAddress: decodedData.toAddress || null,
         }
 
         this.rows.push(row)

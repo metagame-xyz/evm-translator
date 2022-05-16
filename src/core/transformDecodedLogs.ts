@@ -1,11 +1,10 @@
 import collect from 'collect.js'
-import { Address } from 'eth-ens-namehash'
 import { ContractData, DecodedCallData, Interaction, MostTypes, RawDecodedCallData, RawDecodedLog } from 'interfaces'
-import { validateAndNormalizeAddress } from 'utils'
+import { AddressZ } from 'interfaces/utils'
 
 export function transformDecodedLogs(
     decodedLogs: RawDecodedLog[],
-    contractDataMap: Record<Address, ContractData>,
+    contractDataMap: Record<string, ContractData>,
 ): Interaction[] {
     // tx.log_events.forEach((event) => {
     //     console.log('decoded', event)
@@ -18,7 +17,7 @@ export function transformDecodedLogs(
         // .reject((event) => !event.sender_name)
 
         .reject((log) => !log)
-        .mapToGroups((log: RawDecodedLog): [Address, Interaction] => {
+        .mapToGroups((log: RawDecodedLog): [string, Interaction] => {
             // console.log('params', event.decoded.params)
             const events = Object.fromEntries(
                 log.events?.map((param) => [
@@ -28,15 +27,15 @@ export function transformDecodedLogs(
                 ]) ?? [],
             )
 
-            const address = validateAndNormalizeAddress(log.address)
-            const contractData = contractDataMap[validateAndNormalizeAddress(address)]
+            const address = AddressZ.parse(log.address)
+            const contractData = contractDataMap[AddressZ.parse(address)]
 
             return [
                 address,
                 {
                     contractName: contractData?.contractName || null,
                     contractSymbol: contractData?.tokenSymbol || null,
-                    contractAddress: validateAndNormalizeAddress(address),
+                    contractAddress: AddressZ.parse(address),
                     events: [
                         {
                             eventName: log.name,

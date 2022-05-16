@@ -1,4 +1,3 @@
-import { Address } from 'interfaces'
 import { ABI_ItemUnfiltered } from 'interfaces/abi'
 import { RateLimiter } from 'limiter'
 import { fetcher } from 'utils'
@@ -37,7 +36,7 @@ export default class Etherscan {
         return url.toString()
     }
 
-    async getABI(contractAddress: Address): Promise<ABI_ItemUnfiltered[]> {
+    async getABI(contractAddress: string): Promise<ABI_ItemUnfiltered[]> {
         const params = {
             module: 'contract',
             action: 'getabi',
@@ -66,8 +65,8 @@ export default class Etherscan {
         return JSON.parse(response.result)
     }
 
-    async getABIs(contractAddresses: Address[]): Promise<Record<Address, ABI_ItemUnfiltered[]>> {
-        const ABIMap: Record<Address, ABI_ItemUnfiltered[]> = {}
+    async getABIs(contractAddresses: string[]): Promise<Record<string, ABI_ItemUnfiltered[]>> {
+        const ABIMap: Record<string, ABI_ItemUnfiltered[]> = {}
         try {
             await Promise.all(
                 contractAddresses.map(async (contractAddress) => {
@@ -83,7 +82,7 @@ export default class Etherscan {
         return ABIMap
     }
 
-    async getSourceCode(contractAddress: Address): Promise<SourceCodeObject> {
+    async getSourceCode(contractAddress: string): Promise<SourceCodeObject> {
         const params = {
             module: 'contract',
             action: 'getsourcecode',

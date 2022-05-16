@@ -2,7 +2,7 @@ import { Log } from '@ethersproject/providers'
 import { BigNumber, utils } from 'ethers'
 import { RawDecodedCallData, RawDecodedLog, RawDecodedLogEvent } from 'interfaces'
 import { ABI_Event, ABI_Item } from 'interfaces/abi'
-import { validateAndNormalizeAddress } from 'utils'
+import { AddressZ } from 'interfaces/utils'
 import ABICoder from 'utils/web3-abi-coder'
 
 function hash(data: string): string {
@@ -210,7 +210,7 @@ export function decodeLogs(logs: Log[]): RawDecodedLog[] {
                 return {
                     name: method.name,
                     events: decodedParams,
-                    address: validateAndNormalizeAddress(logItem.address),
+                    address: AddressZ.parse(logItem.address),
                     logIndex: logItem.logIndex,
                     decoded: true,
                 } as RawDecodedLog
@@ -218,7 +218,7 @@ export function decodeLogs(logs: Log[]): RawDecodedLog[] {
                 return {
                     name: null,
                     events: [],
-                    address: validateAndNormalizeAddress(logItem.address),
+                    address: AddressZ.parse(logItem.address),
                     logIndex: logItem.logIndex,
                     decoded: false,
                 } as RawDecodedLog

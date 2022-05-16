@@ -4,7 +4,6 @@ import { BaseProvider, Formatter } from '@ethersproject/providers'
 // import abiDecoder from 'abi-decoder'
 import { Contract } from 'ethers'
 import {
-    Address,
     Chain,
     ContractData,
     ContractType,
@@ -13,15 +12,14 @@ import {
     InProgressActivity,
     Interaction,
     InteractionEvent,
-    RawTxData,
-    RawTxDataWithoutTrace,
-    TraceLog,
     TxType,
 } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import { CovalentTxData } from 'interfaces/covalent'
+import { CallTraceLog, RawTxData, RawTxDataWithoutTrace, TraceLog, TraceType } from 'interfaces/rawData'
+import { AddressZ } from 'interfaces/utils'
 import traverse from 'traverse'
-import { filterABIs, getChainById, getEntries, getKeys, isAddress, validateAndNormalizeAddress } from 'utils'
+import { filterABIs, getChainById, getEntries, getKeys, isAddress } from 'utils'
 import * as abiDecoder from 'utils/abi-decoder'
 import tokenABIMap from 'utils/ABIs'
 import reverseRecordsABI from 'utils/ABIs/ReverseRecords.json'
@@ -29,7 +27,7 @@ import checkInterface from 'utils/checkInterface'
 import Covalent from 'utils/clients/Covalent'
 import Etherscan from 'utils/clients/Etherscan'
 import fourByteDirectory from 'utils/clients/FourByteDirectory'
-import { REVERSE_RECORDS_CONTRACT_ADDRESS } from 'utils/constants'
+import { blackholeAddress, REVERSE_RECORDS_CONTRACT_ADDRESS } from 'utils/constants'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 import getTypeFromABI from 'utils/getTypeFromABI'
 
@@ -58,7 +56,7 @@ export class Augmenter {
     covalentDataArr: CovalentTxData[] = []
 
     fnSigCache: Record<string, string> = {}
-    ensCache: Record<Address, string> = {}
+    ensCache: Record<string, string> = {}
 
     constructor(
         provider: BaseProvider,
@@ -90,7 +88,7 @@ export class Augmenter {
         this.augmentTimestampWithCovalent()
         await this.augmentOfficialContractNames()
         this.augmentInteractionData()
-        this.addTraceLogsAsInteractions()
+        this.addCallTraceLogsAsInteractions()
         if (this.provider.network.chainId == 1) {
             // only mainnet
             await this.augmentENSNamesArr()
@@ -101,8 +99,8 @@ export class Augmenter {
 
     decodeTxData(
         rawTxData: RawTxData | RawTxDataWithoutTrace,
-        ABIs: Record<Address, ABI_Item[]>,
-        contractDataMap: Record<Address, ContractData>,
+        ABIs: Record<string, ABI_Item[]>,
+        contractDataMap: Record<string, ContractData>,
     ): { decodedLogs: Interaction[]; decodedCallData: DecodedCallData } {
         const allABIs = []
         for (const abis of Object.values(ABIs)) {
@@ -126,8 +124,8 @@ export class Augmenter {
     augmentDecodedData(
         decodedLogs: Interaction[],
         decodedCallData: DecodedCallData,
-        ensMap: Record<Address, string>,
-        contractDataMap: Record<Address, ContractData>,
+        ensMap: Record<string, string>,
+        contractDataMap: Record<string, ContractData>,
         rawTxData: RawTxData | RawTxDataWithoutTrace,
     ): Decoded {
         const { txReceipt, txResponse } = rawTxData
@@ -146,14 +144,16 @@ export class Augmenter {
         const interactions =
             'txTrace' in rawTxData ? Augmenter.augmentTraceLogs(decodedLogs, rawTxData.txTrace) : decodedLogs
 
+        const interpreterMap = txReceipt.to ? contractDataMap[txReceipt.to] : null
+
         const transformedData: Decoded = {
             txHash: txResponse.hash,
             txType: txType,
             fromAddress: txReceipt.from,
             toAddress: txReceipt.to,
-            officialContractName: contractDataMap[txReceipt.to].contractOfficialName,
-            contractName: contractDataMap[txReceipt.to].contractName,
-            contractType: contractDataMap[txReceipt.to].type,
+            officialContractName: interpreterMap?.contractOfficialName || null,
+            contractName: interpreterMap?.contractName || null,
+            contractType: interpreterMap?.type || ContractType.OTHER,
             contractMethod: decodedCallData.name,
             contractMethodArguments: decodedCallData.params,
             nativeValueSent: value,
@@ -261,23 +261,83 @@ export class Augmenter {
         const interactions = [...interactionsWithoutNativeTransfers]
 
         function traceLogToEvent(nativeTransfer: TraceLog): InteractionEvent {
-            const { action } = nativeTransfer
-            return {
-                eventName: 'NativeTransfer',
+            const { action, type } = nativeTransfer
+
+            const generalNativeEvent: { nativeTransfer: true; logIndex: null } = {
                 nativeTransfer: true,
                 logIndex: null,
-                params: {
-                    from: action.from,
-                    to: action.to,
-                    value: action.value.toString(),
-                },
-            } as InteractionEvent
+            }
+
+            switch (type) {
+                case TraceType.enum.call:
+                    return {
+                        eventName: 'NativeTransfer',
+                        params: {
+                            from: action.from,
+                            to: action.to,
+                            value: action.value.toString(),
+                        },
+                        ...generalNativeEvent,
+                    }
+                case TraceType.enum.create:
+                    return {
+                        eventName: 'NativeCreate',
+                        params: {
+                            from: action.from,
+                            value: action.value.toString(),
+                        },
+                        ...generalNativeEvent,
+                    }
+                case TraceType.enum.suicide:
+                    return {
+                        eventName: 'NativeSuicide',
+                        params: {
+                            from: action.address,
+                            refundAddress: action.refundAddress,
+                            balance: action.balance.toString(),
+                        },
+                        ...generalNativeEvent,
+                    }
+                case TraceType.enum.reward:
+                    return {
+                        eventName: 'NativeReward',
+                        params: {
+                            author: action.author,
+                            rewardType: action.rewardType,
+                            value: action.value.toString(),
+                        },
+                        ...generalNativeEvent,
+                    }
+                default:
+                    return {
+                        eventName: 'NativeUnknown',
+                        params: {},
+                        ...generalNativeEvent,
+                    }
+            }
         }
 
-        const nativeTransfers = traceLogs.filter((traceLog) => {
-            return traceLog.action.callType === 'call' && !traceLog.action.value.isZero()
-        })
+        function filterToNativeTransfers(traceLogs: TraceLog[]): CallTraceLog[] {
+            const nativeTransfers = []
 
+            for (let i = 0; i < traceLogs.length; i++) {
+                const traceLog = traceLogs[i]
+
+                if (
+                    traceLog.type === TraceType.enum.call &&
+                    traceLog.action.callType == 'call' &&
+                    !traceLog.action.value.isZero()
+                ) {
+                    nativeTransfers.push(traceLog)
+                }
+            }
+
+            return nativeTransfers
+        }
+
+        const nativeTransfers = filterToNativeTransfers(traceLogs)
+
+        // add native transfers to interactions array
         for (const nt of nativeTransfers) {
             const interaction = interactions.find(
                 (i) => i.contractAddress == nt.action.from || i.contractAddress == nt.action.to,
@@ -302,62 +362,18 @@ export class Augmenter {
         return interactions
     }
 
-    private addTraceLogsAsInteractions() {
-        function traceLogToEvent(nativeTransfer: TraceLog): InteractionEvent {
-            const { action } = nativeTransfer
-            return {
-                eventName: 'NativeTransfer',
-                nativeTransfer: true,
-                logIndex: 0,
-                params: {
-                    from: action.from,
-                    to: action.to,
-                    value: action.value.toString(),
-                },
-            } as InteractionEvent
-        }
-
-        function nativeTransfersOnly(traceLog: TraceLog[]): TraceLog[] {
-            return traceLog.filter((traceLog) => {
-                return traceLog.action.callType === 'call' && !traceLog.action.value.isZero()
-            })
-        }
-
-        function add(interactions: Interaction[], traceLogs: TraceLog[]): Interaction[] {
-            const nativeTransfers = nativeTransfersOnly(traceLogs)
-
-            for (const ntt of nativeTransfers) {
-                const interaction = interactions.find(
-                    (i) => i.contractAddress == ntt.action.from || i.contractAddress == ntt.action.to,
-                )
-
-                // debugger
-                // usually it comes from one of the contracts that emitted other events
-                if (interaction) {
-                    interaction.events.push(traceLogToEvent(ntt))
-
-                    // but sometimes... it doesn't, so we need to add that contract
-                } else {
-                    interactions.push({
-                        contractAddress: ntt.action.from,
-                        contractName: null,
-                        contractSymbol: null,
-                        events: [traceLogToEvent(ntt)],
-                    })
-                }
-            }
-
-            return interactions
-        }
-
+    private addCallTraceLogsAsInteractions() {
         if (this.rawTxDataArr.length > 0) {
             this.rawTxDataArr.forEach((rawTxData, index) => {
-                this.decodedArr[index].interactions = add(this.decodedArr[index].interactions, rawTxData.txTrace)
+                this.decodedArr[index].interactions = Augmenter.augmentTraceLogs(
+                    this.decodedArr[index].interactions,
+                    rawTxData.txTrace,
+                )
             })
         }
     }
 
-    async getENSNames(addresses: Address[]): Promise<Record<Address, string>> {
+    async getENSNames(addresses: string[]): Promise<Record<string, string>> {
         const reverseRecords = new Contract(REVERSE_RECORDS_CONTRACT_ADDRESS, reverseRecordsABI, this.provider)
 
         const allDirtyNames = (await reverseRecords.getNames(addresses)) as string[]
@@ -396,17 +412,19 @@ export class Augmenter {
         return addressToNameMap
     }
 
-    static augmentENSNames(decoded: Decoded, ensMap: Record<Address, string>): Decoded {
+    static augmentENSNames(decoded: Decoded, ensMap: Record<string, string>): Decoded {
         const decodedWithENS = traverse(decoded).map((thing) => {
             if (!!thing && typeof thing === 'object' && !Array.isArray(thing)) {
                 for (const [key, val] of Object.entries(thing)) {
-                    if (ensMap[val as Address]) {
-                        if (key == 'toAddress') {
-                            thing.toENS = ensMap[val as Address]
-                        } else if (key == 'fromAddress') {
-                            thing.fromENS = ensMap[val as Address]
-                        } else {
-                            thing[key + 'ENS'] = ensMap[val as Address]
+                    if (typeof val === 'string') {
+                        if (ensMap[val]) {
+                            if (key == 'toAddress') {
+                                thing.toENS = ensMap[val]
+                            } else if (key == 'fromAddress') {
+                                thing.fromENS = ensMap[val]
+                            } else {
+                                thing[key + 'ENS'] = ensMap[val]
+                            }
                         }
                     }
                 }
@@ -417,11 +435,11 @@ export class Augmenter {
     }
 
     private async augmentENSNamesArr(): Promise<void> {
-        const allAddresses: Address[] = []
+        const allAddresses: string[] = []
 
         traverse(this.decodedArr).forEach(function (value: string) {
             if (isAddress(value)) {
-                allAddresses.push(validateAndNormalizeAddress(value))
+                allAddresses.push(AddressZ.parse(value))
             }
         })
 
@@ -433,13 +451,15 @@ export class Augmenter {
         const decodedArrWithENS = traverse(this.decodedArr).map((thing) => {
             if (!!thing && typeof thing === 'object' && !Array.isArray(thing)) {
                 for (const [key, val] of Object.entries(thing)) {
-                    if (addressToNameMap[val as Address]) {
-                        if (key == 'toAddress') {
-                            thing.toENS = addressToNameMap[val as Address]
-                        } else if (key == 'fromAddress') {
-                            thing.fromENS = addressToNameMap[val as Address]
-                        } else {
-                            thing[key + 'ENS'] = addressToNameMap[val as Address]
+                    if (typeof val === 'string') {
+                        if (addressToNameMap[val]) {
+                            if (key == 'toAddress') {
+                                thing.toENS = addressToNameMap[val]
+                            } else if (key == 'fromAddress') {
+                                thing.fromENS = addressToNameMap[val]
+                            } else {
+                                thing[key + 'ENS'] = addressToNameMap[val]
+                            }
                         }
                     }
                 }
@@ -508,7 +528,7 @@ export class Augmenter {
         })
     }
 
-    async getContractType(contractAddress: Address, abiArr: ABI_ItemUnfiltered[] | null = null): Promise<ContractType> {
+    async getContractType(contractAddress: string, abiArr: ABI_ItemUnfiltered[] | null = null): Promise<ContractType> {
         if (contractAddress == this.chain.wethAddress) {
             return ContractType.WETH
         }
@@ -523,8 +543,8 @@ export class Augmenter {
         const contractTypes = await Promise.all(
             this.rawTxDataArr.map(async (rawTxData, index) => {
                 let contractType = ContractType.OTHER
-                if (this.decodedArr[index].txType == TxType.CONTRACT_INTERACTION) {
-                    contractType = await this.getContractType(rawTxData.txReceipt.to)
+                if (this.decodedArr[index].txType == TxType.CONTRACT_INTERACTION && rawTxData.txResponse.to) {
+                    contractType = await this.getContractType(rawTxData.txReceipt.to || blackholeAddress) // WARNING hack for now
                 }
                 //     else if (this.decodedArr[index].txType == TX_TYPE.CONTRACT_DEPLOY) {
                 //         //TODO
@@ -539,10 +559,10 @@ export class Augmenter {
     }
 
     async getContractsData(
-        contractToAbiMap: Record<Address, ABI_ItemUnfiltered[]>,
-        contractToOfficialNameMap: Record<Address, string | null>,
-    ): Promise<Record<Address, ContractData>> {
-        const contractDataMap: Record<Address, ContractData> = {}
+        contractToAbiMap: Record<string, ABI_ItemUnfiltered[]>,
+        contractToOfficialNameMap: Record<string, string | null>,
+    ): Promise<Record<string, ContractData>> {
+        const contractDataMap: Record<string, ContractData> = {}
         const filteredABIs = filterABIs(contractToAbiMap)
 
         const addresses = getKeys(contractToAbiMap)
@@ -589,9 +609,9 @@ export class Augmenter {
 
     // TODO get the names
     async getABIsAndNamesForContracts(
-        contractAddresses: Address[],
-    ): Promise<[Record<Address, ABI_ItemUnfiltered[]>, Record<Address, string | null>]> {
-        const addresses = contractAddresses.map((a) => validateAndNormalizeAddress(a))
+        contractAddresses: string[],
+    ): Promise<[Record<string, ABI_ItemUnfiltered[]>, Record<string, string | null>]> {
+        const addresses = contractAddresses.map((a) => AddressZ.parse(a))
 
         const contractDataMap = await this.databaseInterface.getContractDataForManyContracts(addresses)
 
@@ -602,16 +622,16 @@ export class Augmenter {
         const AbiMapFromDB = getEntries(contractDataMap).reduce((acc, [address, contractData]) => {
             acc[address] = contractData?.abi || null
             return acc
-        }, {} as Record<Address, ABI_ItemUnfiltered[]>)
+        }, {} as Record<string, ABI_ItemUnfiltered[]>)
 
         const abiMap = { ...AbiMapFromDB, ...abiMapFromEtherscan }
 
         const nameMapFromDB = getEntries(contractDataMap).reduce((acc, [address, contractData]) => {
             acc[address] = contractData?.contractOfficialName || null
             return acc
-        }, {} as Record<Address, string>)
+        }, {} as Record<string, string>)
 
-        const nameMapFromEtherscan: Record<Address, string | null> = {}
+        const nameMapFromEtherscan: Record<string, string | null> = {}
 
         const nameMap = { ...nameMapFromDB, ...nameMapFromEtherscan }
 
@@ -621,19 +641,19 @@ export class Augmenter {
     static getAllAddresses(
         decodedLogs: Interaction[],
         decodedCallData: DecodedCallData,
-        contractAddresses: Address[],
-    ): Address[] {
-        const addresses: Address[] = []
+        contractAddresses: string[],
+    ): string[] {
+        const addresses: string[] = []
 
         traverse(decodedLogs).forEach(function (value: string) {
             if (isAddress(value)) {
-                addresses.push(validateAndNormalizeAddress(value))
+                addresses.push(AddressZ.parse(value))
             }
         })
 
         traverse(decodedCallData).forEach(function (value: string) {
             if (isAddress(value)) {
-                addresses.push(validateAndNormalizeAddress(value))
+                addresses.push(AddressZ.parse(value))
             }
         })
 
