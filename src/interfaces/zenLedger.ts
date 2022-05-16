@@ -1,4 +1,5 @@
 import { RawTxData } from './rawData'
+
 import { Decoded, Interpretation, TokenType } from 'interfaces'
 
 export type ZenLedgerRow = {

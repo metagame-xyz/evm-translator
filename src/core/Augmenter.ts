@@ -3,6 +3,8 @@ import { transformDecodedData, transformDecodedLogs } from './transformDecodedLo
 import { BaseProvider, Formatter } from '@ethersproject/providers'
 // import abiDecoder from 'abi-decoder'
 import { Contract } from 'ethers'
+import traverse from 'traverse'
+
 import {
     Chain,
     ContractData,
@@ -18,7 +20,7 @@ import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import { CovalentTxData } from 'interfaces/covalent'
 import { CallTraceLog, RawTxData, RawTxDataWithoutTrace, TraceLog, TraceType } from 'interfaces/rawData'
 import { AddressZ } from 'interfaces/utils'
-import traverse from 'traverse'
+
 import { filterABIs, getChainById, getEntries, getKeys, isAddress } from 'utils'
 import * as abiDecoder from 'utils/abi-decoder'
 import tokenABIMap from 'utils/ABIs'

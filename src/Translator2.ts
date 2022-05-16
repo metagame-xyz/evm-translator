@@ -1,15 +1,18 @@
 import { AlchemyProvider } from '@ethersproject/providers'
-import { Augmenter } from 'core/Augmenter'
-import Interpreter from 'core/Interpreter'
-import RawDataFetcher from 'core/RawDataFetcher'
+
 import { Chain, ContractData, ContractType, Decoded, DecodedCallData, Interaction, Interpretation } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import { RawTxData, RawTxDataWithoutTrace } from 'interfaces/RawData'
 import { EVMTransaction } from 'interfaces/s3'
 import { AddressZ } from 'interfaces/utils'
+
 import { filterABIs } from 'utils'
 import Etherscan from 'utils/clients/Etherscan'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
+
+import { Augmenter } from 'core/Augmenter'
+import Interpreter from 'core/Interpreter'
+import RawDataFetcher from 'core/RawDataFetcher'
 
 export type TranslatorConfigTwo = {
     chain: Chain

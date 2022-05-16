@@ -1,3 +1,5 @@
+import { z } from 'zod'
+
 import {
     AddressZ,
     BigNumberZ,
@@ -10,7 +12,6 @@ import {
     OptionalBigNumberZ,
     string,
 } from 'interfaces/utils'
-import { z } from 'zod'
 
 // type EVMTransaction struct {
 // 	Hash               string                 `json:"hash"`

@@ -6,6 +6,7 @@ import interpretGenericToken from './genericInterpreters/token'
 import interpretGenericTransfer from './genericInterpreters/transfer'
 import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
+
 import {
     Action,
     Chain,
@@ -20,6 +21,7 @@ import {
 } from 'interfaces'
 import { InterpreterMap } from 'interfaces/contractInterpreter'
 import { AddressZ } from 'interfaces/utils'
+
 import { fillDescriptionTemplate, getNativeTokenValueEvents, shortenNamesInString } from 'utils'
 
 function deepCopy<T>(obj: T): T {

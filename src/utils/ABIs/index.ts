@@ -1,5 +1,6 @@
 import erc20 from './erc20.json'
 import fallback from './fallback.json'
+
 import { ContractType } from 'interfaces'
 
 const tokenABIMap = {

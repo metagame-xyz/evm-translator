@@ -1,5 +1,7 @@
-import { ABI_ItemUnfiltered } from 'interfaces/abi'
 import { RateLimiter } from 'limiter'
+
+import { ABI_ItemUnfiltered } from 'interfaces/abi'
+
 import { fetcher } from 'utils'
 
 export type SourceCodeObject = {

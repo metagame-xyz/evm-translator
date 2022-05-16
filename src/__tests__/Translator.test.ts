@@ -1,5 +1,6 @@
-import Translator, { createEthersAPIKeyObj, TranslatorConfig } from 'Translator'
 import { chains } from 'utils'
+
+import Translator, { createEthersAPIKeyObj, TranslatorConfig } from 'Translator'
 
 jest.mock('node-fetch', () => jest.fn())
 

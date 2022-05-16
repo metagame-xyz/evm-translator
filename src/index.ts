@@ -1,6 +1,7 @@
+import InterpreterTemplateGenerator from 'utils/generateInterpreter'
+
 import Translator from 'Translator'
 import Translator2 from 'Translator2'
-import InterpreterTemplateGenerator from 'utils/generateInterpreter'
 
 export { createEthersAPIKeyObj } from 'Translator'
 export { chains } from 'utils'

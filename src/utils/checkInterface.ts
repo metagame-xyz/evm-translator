@@ -1,6 +1,8 @@
 import { BaseProvider } from '@ethersproject/providers'
 import { Contract } from 'ethers'
+
 import { ContractType } from 'interfaces'
+
 import { ERC20InterfaceId, ERC721InterfaceId, ERC1155InterfaceId } from 'utils/constants'
 
 async function checkInterface(contractAddress: string, provider: BaseProvider): Promise<ContractType> {

@@ -1,4 +1,5 @@
 import { Action, Decoded, Interpretation } from 'interfaces'
+
 import { getStablecoinOrNativeWrappedAddressesBySymbol } from 'utils'
 
 function sentBaseToken(interpretation: Interpretation): boolean {

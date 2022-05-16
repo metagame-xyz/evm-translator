@@ -1,5 +1,6 @@
 import { ActivityData, Chain, Decoded, Interpretation, TokenType } from 'interfaces'
 import { ZenLedgerRowType as RowType, ZenLedgerRow } from 'interfaces/zenLedger'
+
 import { chains } from 'utils'
 
 class TaxFormatter {

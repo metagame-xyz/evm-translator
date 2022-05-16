@@ -1,9 +1,10 @@
 import collect from 'collect.js'
 import { BigNumber } from 'ethers'
-import { Chain, Chains, ChainSymbol, Interaction, InteractionEvent, Interpretation } from 'interfaces'
-import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import fetch, { Response } from 'node-fetch'
 import traverse from 'traverse'
+
+import { Chain, Chains, ChainSymbol, Interaction, InteractionEvent, Interpretation } from 'interfaces'
+import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 
 const ethereum: Chain = {
     EVM: true,

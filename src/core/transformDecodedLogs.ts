@@ -1,4 +1,5 @@
 import collect from 'collect.js'
+
 import { ContractData, DecodedCallData, Interaction, MostTypes, RawDecodedCallData, RawDecodedLog } from 'interfaces'
 import { AddressZ } from 'interfaces/utils'
 

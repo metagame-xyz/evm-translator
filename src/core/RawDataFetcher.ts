@@ -4,6 +4,7 @@ import {
     TransactionResponse as unvalidatedTransactionResponse,
 } from '@ethersproject/abstract-provider'
 import { AlchemyProvider, Formatter } from '@ethersproject/providers'
+
 import { CovalentTxData } from 'interfaces/covalent'
 import {
     RawTxData,
@@ -16,6 +17,7 @@ import {
     TxResponseZ,
 } from 'interfaces/rawData'
 import { EVMTransaction, EVMTransactionReceiptStringified, EVMTransactionStringified } from 'interfaces/s3'
+
 import Covalent from 'utils/clients/Covalent'
 
 export default class RawDataFetcher {

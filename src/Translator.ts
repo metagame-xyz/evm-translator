@@ -1,13 +1,16 @@
 import { AlchemyProvider, BaseProvider, getDefaultProvider } from '@ethersproject/providers'
+
+import { ActivityData, Chain, EthersAPIKeys } from 'interfaces'
+import { ActivityDataWthZenLedger, ZenLedgerRow } from 'interfaces/zenLedger'
+
+import { chains, cleanseDataInPlace } from 'utils'
+import Covalent from 'utils/clients/Covalent'
+import Etherscan from 'utils/clients/Etherscan'
+
 import { Augmenter } from 'core/Augmenter'
 import Interpreter from 'core/Interpreter'
 import RawDataFetcher from 'core/RawDataFetcher'
 import TaxFormatter from 'core/TaxFormatter'
-import { ActivityData, Chain, EthersAPIKeys } from 'interfaces'
-import { ActivityDataWthZenLedger, ZenLedgerRow } from 'interfaces/zenLedger'
-import { chains, cleanseDataInPlace } from 'utils'
-import Covalent from 'utils/clients/Covalent'
-import Etherscan from 'utils/clients/Etherscan'
 
 // export const defaultMainnetProvider = getDefaultProvider('homestead', ethersApiKeys)
 

@@ -8,6 +8,7 @@ import {
     Token,
     TokenType,
 } from 'interfaces'
+
 import { ensure, shortenName } from 'utils'
 import { blackholeAddress } from 'utils/constants'
 
