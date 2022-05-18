@@ -64,16 +64,19 @@
             }
         },
         "incrementNonce": {
-            "action": "______TODO______",
-            "exampleDescriptionTemplate": "______TODO______",
-            "exampleDescription": "______TODO______",
+            "action": "canceled one or more listings",
             "keywords": {
-                "__EXAMPLE_KEYWORD__": {
-                    "key": "______TODO______",
-                    "filters": {},
-                    "defaultValue": "______TODO______"
+                "nonce": {
+                    "key": "newNonce",
+                    "filters": {
+                        "eventName": "NonceIncremented",
+                        "maker": "{userAddress}"
+                    },
+                    "defaultValue": "??"
                 }
-            }
+            },
+            "exampleDescriptionTemplate": "{userName} {action} on {contractName}.",
+            "exampleDescription": "ammar.eth canceled one or more listings on Opensea"
         },
         "renounceOwnership": {
             "action": "______TODO______",
@@ -100,16 +103,10 @@
             }
         },
         "cancelOrder_": {
-            "action": "______TODO______",
-            "exampleDescriptionTemplate": "______TODO______",
-            "exampleDescription": "______TODO______",
-            "keywords": {
-                "__EXAMPLE_KEYWORD__": {
-                    "key": "______TODO______",
-                    "filters": {},
-                    "defaultValue": "______TODO______"
-                }
-            }
+            "action": "canceled a bid",
+            "keywords": {},
+            "exampleDescriptionTemplate": "{userName} {action} on {contractName}",
+            "exampleDescription": "ammaralinur.eth canceled a bid on OpenSea"
         },
         "atomicMatch_": {
             "action": "bought",
