@@ -33,7 +33,7 @@ class TaxFormatter {
         const getType = (data: Interpretation, decodedData: Decoded): RowType | null => {
             let rowType = null
 
-            // console.log('method:', decodedData.contractMethod, 'tokens received', interpretedData.tokensReceived)
+            // console.log('method:', decodedData.methodCall.name, 'tokens received', interpretedData.tokensReceived)
 
             const receivedSomething = data.tokensReceived.length > 0 // dont know how to get if you received eth
             const receivedNothing = data.tokensReceived.length === 0 // dont know how to get if you received eth
@@ -42,7 +42,7 @@ class TaxFormatter {
 
             if (receivedNothing && sentNothing) {
                 rowType = RowType.fee
-            } else if (decodedData.contractMethod === 'mint') {
+            } else if (decodedData.methodCall.name === 'mint') {
                 rowType = RowType.nft_mint
             } else if (receivedSomething && data.tokensSent[0]?.symbol === 'USDC') {
                 rowType = RowType.buy
@@ -121,7 +121,7 @@ class TaxFormatter {
             Type: getType(interpretedData, decodedData),
             inType: inType,
             outType: outType,
-            method: decodedData.contractMethod || 'UNKNOWN',
+            method: decodedData.methodCall.name || 'UNKNOWN',
             contract: interpretedData.contractName || 'UNKNOWN',
             'In Amount': inAmount,
             'In Currency': inCurrency,

@@ -87,7 +87,12 @@ class Interpreter {
     }
 
     public interpretSingleTx(decodedData: Decoded, userAddressFromInput: string | null = null): Interpretation {
-        const { contractMethod, interactions, fromAddress, toAddress } = decodedData
+        const {
+            methodCall: { name: methodName },
+            interactions,
+            fromAddress,
+            toAddress,
+        } = decodedData
 
         const { nativeValueSent, txHash } = decodedData
 
@@ -139,7 +144,7 @@ class Interpreter {
         }
 
         const interpretationMapping = (toAddress && this.contractSpecificInterpreters[toAddress]) || null
-        const methodSpecificMapping = (contractMethod && interpretationMapping?.writeFunctions[contractMethod]) || null
+        const methodSpecificMapping = (methodName && interpretationMapping?.writeFunctions[methodName]) || null
 
         // if there's no contract-specific mapping, try to use the fallback mapping
 
@@ -159,8 +164,8 @@ class Interpreter {
         } else if (decodedData.txType === TxType.TRANSFER) {
             interpretGenericTransfer(decodedData, interpretation)
             // contract-specific interpretation
-        } else if (interpretationMapping && methodSpecificMapping && contractMethod && toAddress) {
-            console.log('contract-specific interpretation', interpretationMapping.contractName, contractMethod)
+        } else if (interpretationMapping && methodSpecificMapping && methodName && toAddress) {
+            console.log('contract-specific interpretation', interpretationMapping.contractName, methodName)
             // some of these will be arbitrary keys
             interpretation.contractName = interpretationMapping.contractName
             interpretation.action = methodSpecificMapping.action
@@ -178,7 +183,7 @@ class Interpreter {
             )
 
             interpretation.exampleDescription = fillDescriptionTemplate(
-                interpretationMapping.writeFunctions[contractMethod].exampleDescriptionTemplate,
+                interpretationMapping.writeFunctions[methodName].exampleDescriptionTemplate,
                 interpretation,
             )
         } else {

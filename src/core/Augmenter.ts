@@ -161,8 +161,11 @@ export class Augmenter {
             officialContractName: interpreterMap?.contractOfficialName || null,
             contractName: interpreterMap?.contractName || null,
             contractType: interpreterMap?.type || ContractType.OTHER,
-            contractMethod: decodedCallData.name,
-            contractMethodArguments: decodedCallData.params,
+            methodCall: {
+                name: decodedCallData.name,
+                arguments: decodedCallData.params,
+                ...(!decodedCallData.decoded && { decoded: decodedCallData.decoded }),
+            },
             nativeValueSent: value,
             chainSymbol: this.chain.symbol,
             interactions,
@@ -209,8 +212,10 @@ export class Augmenter {
                     fromAddress: txReceipt.from,
                     toAddress: txReceipt.to,
                     interactions: [],
-                    contractMethod: null,
-                    contractMethodArguments: {},
+                    methodCall: {
+                        name: null,
+                        arguments: {},
+                    },
                     contractType: ContractType.OTHER,
                     officialContractName: null,
                     contractName: null,
@@ -531,7 +536,7 @@ export class Augmenter {
         )
 
         methodNames.forEach((methodName, index) => {
-            this.decodedArr[index].contractMethod = methodName
+            this.decodedArr[index].methodCall.name = methodName
         })
     }
 
