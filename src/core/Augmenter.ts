@@ -22,7 +22,7 @@ import { CallTraceLog, RawTxData, RawTxDataWithoutTrace, TraceLog, TraceType } f
 import { AddressZ } from 'interfaces/utils'
 
 import { filterABIs, getChainById, getEntries, getKeys, isAddress } from 'utils'
-import * as abiDecoder from 'utils/abi-decoder'
+import ABIDecoder from 'utils/abi-decoder'
 import tokenABIMap from 'utils/ABIs'
 import reverseRecordsABI from 'utils/ABIs/ReverseRecords.json'
 import checkInterface from 'utils/checkInterface'
@@ -99,23 +99,28 @@ export class Augmenter {
         return this.decodedArr
     }
 
-    decodeTxData(
+    async decodeTxData(
         rawTxData: RawTxData | RawTxDataWithoutTrace,
         ABIs: Record<string, ABI_Item[]>,
         contractDataMap: Record<string, ContractData>,
-    ): { decodedLogs: Interaction[]; decodedCallData: DecodedCallData } {
+    ): Promise<{ decodedLogs: Interaction[]; decodedCallData: DecodedCallData }> {
         const allABIs = []
         for (const abis of Object.values(ABIs)) {
             allABIs.push(...abis)
         }
+
+        const abiDecoder = new ABIDecoder()
         abiDecoder.addABI(allABIs)
 
         const { logs } = rawTxData.txReceipt
 
         // TODO logs that don't get decoded dont show up as 'null' or 'undefined', which will throw off mapping the logIndex to the decoded log
 
-        const rawDecodedLogs = abiDecoder.decodeLogs(logs)
-        const rawDecodedCallData = abiDecoder.decodeMethod(rawTxData.txResponse.data) || { name: null, params: [] }
+        const rawDecodedLogs = await abiDecoder.decodeLogs(logs)
+        const rawDecodedCallData = (await abiDecoder.decodeMethod(rawTxData.txResponse.data)) || {
+            name: null,
+            params: [],
+        }
 
         const decodedLogs = transformDecodedLogs(rawDecodedLogs, contractDataMap)
         const decodedCallData = transformDecodedData(rawDecodedCallData)

@@ -68,18 +68,6 @@ export default class ABICoder {
     }
 
     decodeParameters(outputs: any, bytes: any): any {
-        return this.decodeParametersWith(outputs, bytes, false)
-    }
-    /**
-     * Should be used to decode list of params
-     *
-     * @method decodeParameter
-     * @param {Array} outputs
-     * @param {String} bytes
-     * @param {Boolean} loose
-     * @return {Array} array of plain params
-     */
-    decodeParametersWith(outputs: any[], bytes: string, loose: boolean | undefined): any {
         if (outputs.length > 0 && (!bytes || bytes === '0x' || bytes === '0X')) {
             throw new Error(
                 "Returned values aren't valid, did it run Out of Gas? " +
@@ -89,8 +77,7 @@ export default class ABICoder {
                     'or querying a node which is not fully synced.',
             )
         }
-        const res = ethersAbiCoder.decode(this.mapTypes(outputs), '0x' + bytes.replace(/0x/i, ''), loose)
-        // console.log('res', res)
+        const res = ethersAbiCoder.decode(this.mapTypes(outputs), '0x' + bytes.replace(/0x/i, ''), false)
         const returnValue: Record<string, any> = {}
         outputs.forEach((output: any, i: number) => {
             let decodedValue = res[Object.keys(returnValue).length]

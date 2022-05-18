@@ -82,6 +82,7 @@ export type Decoded = {
     /** The type of contract. An ERC-xx, WETH, or  */
     contractType: ContractType
     /** the name of the function that initiated the transaction. If not decoded, null  */
+    // methodCall: MethodCall
     contractMethod: string | null
     contractMethodArguments: Record<string, MostTypes>
     contractName: string | null
@@ -101,6 +102,12 @@ export type Decoded = {
     gasUsed: string
     effectiveGasPrice: string | null
 }
+
+// export type MethodCall = {
+//     methodName: string | null
+//     methodArguments: Record<string, MostTypes>
+//     decoded?: boolean
+// }
 
 export type Interaction = {
     contractName: string | null

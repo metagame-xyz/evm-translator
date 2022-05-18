@@ -47,9 +47,7 @@ export default class RawDataFetcher {
 
     async getTxResponse(txHash: string): Promise<TxResponse> {
         const unformatted = await this.provider.getTransaction(txHash)
-        console.log('unformatted:', unformatted)
         const unvalidated = this.formatter.transactionResponse(unformatted)
-        console.log('formatted', unvalidated)
         const txResponse = RawDataFetcher.validateTxResponse(unvalidated)
         return txResponse
     }

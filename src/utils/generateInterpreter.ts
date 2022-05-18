@@ -85,7 +85,9 @@ const getSignatures = (abi: ABI_Item[]): ABIStringMap => {
         const sig = getFunctionSignature(item)
 
         if (item.type === 'function') {
-            const functionType = writeStates.includes(item.stateMutability) ? 'writeFunction' : 'readFunction'
+            const functionType = writeStates.includes(item.stateMutability || 'unknown')
+                ? 'writeFunction'
+                : 'readFunction'
             map[functionType].push(sig)
         } else if (item.type === 'event') {
             map[item.type].push(sig)

@@ -32,7 +32,7 @@ export type ABI_Function = {
     inputs: ABI_FunctionInput[]
     outputs: ABI_FunctionOutput[]
     type: 'function'
-    stateMutability: StateMutability
+    stateMutability: StateMutability | undefined
 }
 
 export type ABI_Event = {

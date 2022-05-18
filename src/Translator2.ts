@@ -155,12 +155,12 @@ class Translator2 {
     /**********************************************/
     /******      DECODING / AUGMENTING     ********/
     /**********************************************/
-    decodeTxData(
+    async decodeTxData(
         rawTxData: RawTxData | RawTxDataWithoutTrace,
         ABIs: Record<string, ABI_Item[]>,
         contractDataMap: Record<string, ContractData>,
-    ): { decodedLogs: Interaction[]; decodedCallData: DecodedCallData } {
-        return this.augmenter.decodeTxData(rawTxData, ABIs, contractDataMap)
+    ): Promise<{ decodedLogs: Interaction[]; decodedCallData: DecodedCallData }> {
+        return await this.augmenter.decodeTxData(rawTxData, ABIs, contractDataMap)
     }
 
     decodeTxDataArr(rawTxDataArr: RawTxData[], ABIs: Record<string, ABI_Item[]>[]): Decoded[] {
@@ -203,7 +203,7 @@ class Translator2 {
         const ensMap = await this.getENSNames(addresses)
         const contractDataMap = await this.getContractsData(AbiMap, officialContractNamesMap)
 
-        const { decodedLogs, decodedCallData } = this.decodeTxData(rawTxData, AbiMap, contractDataMap)
+        const { decodedLogs, decodedCallData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)
         const decodedWithAugmentation = this.augmentDecodedData(
             decodedLogs,
             decodedCallData,
