@@ -1,3 +1,34 @@
+import { z } from 'zod'
+
+import { boolean, string } from 'interfaces/utils'
+
+const ABI_FunctionOutputZ = z.object({
+    name: string,
+    internalType: string,
+    type: string,
+})
+
+const ABI_FunctionInputZ = z.object({
+    name: string,
+    internalType: string,
+    type: string,
+    components: z.array(
+        z.object({
+            name: string,
+            type: string,
+        }),
+    ),
+})
+
+const ABI_EventInputZ = ABI_FunctionInputZ.extend({ indexed: boolean })
+
+export type ABI_FunctionOutput = z.infer<typeof ABI_FunctionOutputZ>
+export type ABI_FunctionInput = z.infer<typeof ABI_FunctionInputZ>
+export type ABI_EventInput = z.infer<typeof ABI_EventInputZ>
+
+export const ABI_Type = z.enum(['function', 'event', 'constructor', 'fallback', 'receive', 'error'])
+export const StateMutability = z.enum(['pure', 'view', 'nonpayable', 'payable'])
+
 export type ABIStringMap = {
     constructor: string
     event: string[]
@@ -5,75 +36,68 @@ export type ABIStringMap = {
     readFunction: string[]
 }
 
-export type ABI_Type = 'constructor' | 'event' | 'function' | 'fallback' | 'receive' | 'error'
+const ABI_RowZ = z.object({
+    name: string,
+    type: ABI_Type,
+    hashableSignature: string,
+    hexSignature: string,
+    fullABI: string,
+})
 
-export type ABI_Row = {
-    name: string
-    type: ABI_Type
-    hashableSignature: string
-    fullSignature: string
-    hexSignature: string
-    fullABI: string
-}
+export type ABI_Row = z.infer<typeof ABI_RowZ>
 
-export type ABI_ItemUnfiltered = ABI_Function | ABI_Event | ABI_Constructor | ABI_Fallbacks | ABI_Error
-export type ABI_Item = ABI_Function | ABI_Event
+export const ABI_ConstructorZ = z.object({
+    type: z.literal(ABI_Type.enum.constructor),
+    inputs: z.array(ABI_FunctionInputZ),
+    stateMutability: StateMutability,
+})
 
-export type StateMutability = 'pure' | 'view' | 'nonpayable' | 'payable'
+export const ABI_FunctionZ = z.object({
+    type: z.literal(ABI_Type.enum.function),
+    name: string,
+    inputs: z.array(ABI_FunctionInputZ),
+    outputs: z.array(ABI_FunctionOutputZ),
+    stateMutability: StateMutability.optional(),
+})
 
-export type ABI_Constructor = {
-    type: 'constructor'
-    inputs: ABI_FunctionInput[]
-    stateMutability: StateMutability
-}
+export const ABI_EventZ = z.object({
+    type: z.literal(ABI_Type.enum.event),
+    name: string,
+    inputs: z.array(ABI_EventInputZ),
+    anonymous: boolean,
+})
+export const ABI_ReceiveZ = z.object({
+    type: z.literal(ABI_Type.enum.receive),
+    stateMutability: StateMutability,
+})
+export const ABI_FallbackZ = z.object({
+    type: z.literal(ABI_Type.enum.fallback),
+    stateMutability: StateMutability,
+})
 
-export type ABI_Function = {
-    name: string
-    inputs: ABI_FunctionInput[]
-    outputs: ABI_FunctionOutput[]
-    type: 'function'
-    stateMutability: StateMutability | undefined
-}
+export const ABI_ErrorZ = z.object({
+    type: z.literal(ABI_Type.enum.error),
+    name: string,
+    inputs: z.array(ABI_FunctionInputZ),
+})
 
-export type ABI_Event = {
-    type: 'event'
-    name: string
-    inputs: ABI_EventInput[]
-    anonymous: boolean
-}
+export const ABI_ItemUnfilteredZ = z.discriminatedUnion('type', [
+    ABI_ConstructorZ,
+    ABI_FunctionZ,
+    ABI_EventZ,
+    ABI_ErrorZ,
+    ABI_FallbackZ,
+    ABI_ReceiveZ,
+])
 
-export type ABI_Fallbacks = {
-    type: 'receive' | 'fallback'
-    stateMutability: StateMutability
-}
+export const ABI_ItemZ = z.discriminatedUnion('type', [ABI_FunctionZ, ABI_EventZ])
 
-export type ABI_Error = {
-    type: 'error'
-    name: string
-    inputs: ABI_FunctionInput[]
-}
+export type ABI_Constructor = z.infer<typeof ABI_ConstructorZ>
+export type ABI_Function = z.infer<typeof ABI_FunctionZ>
+export type ABI_Event = z.infer<typeof ABI_EventZ>
+export type ABI_Receive = z.infer<typeof ABI_ReceiveZ>
+export type ABI_Fallback = z.infer<typeof ABI_FallbackZ>
+export type ABI_Error = z.infer<typeof ABI_ErrorZ>
 
-export type ABI_FunctionOutput = {
-    name: string
-    internalType: string
-    type: string
-}
-export type ABI_FunctionInput = {
-    name: string
-    internalType: string
-    type: string
-    components?: {
-        name: string
-        type: string
-    }[]
-}
-export type ABI_EventInput = {
-    name: string
-    internalType: string
-    type: string
-    indexed: boolean
-    components?: {
-        name: string
-        type: string
-    }[]
-}
+export type ABI_ItemUnfiltered = z.infer<typeof ABI_ItemUnfilteredZ>
+export type ABI_Item = z.infer<typeof ABI_ItemZ>

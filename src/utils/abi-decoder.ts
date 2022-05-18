@@ -1,4 +1,5 @@
 import fourByteDirectory from './clients/FourByteDirectory'
+import { DatabaseInterface } from './DatabaseInterface'
 import { Log } from '@ethersproject/providers'
 import { BigNumber, utils } from 'ethers'
 
@@ -18,11 +19,13 @@ export default class ABIDecoder {
     savedABIs: any[]
     methodSigs: { [key: string]: ABI_Function }
     eventSigs: { [key: string]: ABI_Event }
+    db: DatabaseInterface
 
-    constructor() {
+    constructor(databaseInterface: DatabaseInterface) {
         this.savedABIs = []
         this.methodSigs = {}
         this.eventSigs = {}
+        this.db = databaseInterface
     }
     getABIs() {
         return this.savedABIs

@@ -58,7 +58,7 @@ class Translator {
         this.augmenter = new Augmenter(this.provider, this.covalent, this.etherscan)
     }
 
-    public async translateFromHash(txHash: string, userAddress = null): Promise<ActivityData> {
+    public async translateFromHash(txHash: string, userAddress: string | null = null): Promise<ActivityData> {
         try {
             /*
             step 1 (parallelize)

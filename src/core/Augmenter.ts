@@ -109,7 +109,7 @@ export class Augmenter {
             allABIs.push(...abis)
         }
 
-        const abiDecoder = new ABIDecoder()
+        const abiDecoder = new ABIDecoder(this.databaseInterface)
         abiDecoder.addABI(allABIs)
 
         const { logs } = rawTxData.txReceipt

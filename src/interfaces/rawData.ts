@@ -108,7 +108,7 @@ export type TraceResult = z.infer<typeof TraceResultZ>
 
 // https://ethereum.stackexchange.com/questions/63743/whats-the-difference-between-type-and-calltype-in-parity-trace
 // https://github.com/openethereum/parity-ethereum/blob/master/rpc/src/v1/types/trace.rs#L246
-const TraceActionCallTypeZ = z.enum(['call', 'delegateCall', 'callCode', 'staticCall'])
+const TraceActionCallTypeZ = z.enum(['call', 'delegatecall', 'callcode', 'staticcall'])
 // const TraceActionCreateTypeZ = z.enum(['create', 'create2'])
 // const TraceActionSuicideTypeZ = z.enum(['suicide'])
 // const TraceACtionRewardTypeZ = z.enum(['block', 'uncle', 'emptyStep', 'extneral'])
