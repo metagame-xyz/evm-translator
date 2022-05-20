@@ -28,6 +28,7 @@ export type ABI_EventInput = z.infer<typeof ABI_EventInputZ>
 
 export const ABI_Type = z.enum(['function', 'event', 'constructor', 'fallback', 'receive', 'error'])
 export const StateMutability = z.enum(['pure', 'view', 'nonpayable', 'payable'])
+export const writeStates = [StateMutability.enum.payable, StateMutability.enum.nonpayable]
 
 export type ABIStringMap = {
     constructor: string
@@ -35,8 +36,6 @@ export type ABIStringMap = {
     writeFunction: string[]
     readFunction: string[]
 }
-
-export type ABI_Row = z.infer<typeof ABI_RowZ>
 
 export const ABI_ConstructorZ = z.object({
     type: z.literal(ABI_Type.enum.constructor),
@@ -84,14 +83,66 @@ export const ABI_ItemUnfilteredZ = z.discriminatedUnion('type', [
 
 export const ABI_ItemZ = z.discriminatedUnion('type', [ABI_FunctionZ, ABI_EventZ])
 
-export const ABI_RowZ = z.object({
+export const ABI_RowConstructorZ = z.object({
     name: string,
-    type: ABI_Type,
+    type: z.literal(ABI_Type.enum.constructor),
     hashableSignature: string,
     hashedSignature: string,
     fullSignature: string,
-    abiJSON: ABI_ItemUnfilteredZ,
+    abiJSON: ABI_ConstructorZ,
 })
+export const ABI_RowFunctionZ = z.object({
+    name: string,
+    type: z.literal(ABI_Type.enum.function),
+    hashableSignature: string,
+    hashedSignature: string,
+    fullSignature: string,
+    abiJSON: ABI_FunctionZ,
+})
+export const ABI_RowEventZ = z.object({
+    name: string,
+    type: z.literal(ABI_Type.enum.event),
+    hashableSignature: string,
+    hashedSignature: string,
+    fullSignature: string,
+    abiJSON: ABI_EventZ,
+})
+
+export const ABI_RowReceiveZ = z.object({
+    name: string,
+    type: z.literal(ABI_Type.enum.receive),
+    hashableSignature: string,
+    hashedSignature: string,
+    fullSignature: string,
+    abiJSON: ABI_ReceiveZ,
+})
+export const ABI_RowFallbackZ = z.object({
+    name: string,
+    type: z.literal(ABI_Type.enum.fallback),
+    hashableSignature: string,
+    hashedSignature: string,
+    fullSignature: string,
+    abiJSON: ABI_FallbackZ,
+})
+export const ABI_RowErrorZ = z.object({
+    name: string,
+    type: z.literal(ABI_Type.enum.error),
+    hashableSignature: string,
+    hashedSignature: string,
+    fullSignature: string,
+    abiJSON: ABI_ErrorZ,
+})
+
+export const ABI_RowZ = z.discriminatedUnion('type', [
+    ABI_RowConstructorZ,
+    ABI_RowEventZ,
+    ABI_RowFunctionZ,
+    ABI_RowReceiveZ,
+    ABI_RowFallbackZ,
+    ABI_RowErrorZ,
+])
+
+export type ABI_Row = z.infer<typeof ABI_RowZ>
 
 export type ABI_Constructor = z.infer<typeof ABI_ConstructorZ>
 export type ABI_Function = z.infer<typeof ABI_FunctionZ>

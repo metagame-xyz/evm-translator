@@ -4,7 +4,7 @@ import { Log } from '@ethersproject/providers'
 import { BigNumber, utils } from 'ethers'
 
 import { RawDecodedCallData, RawDecodedLog, RawDecodedLogEvent } from 'interfaces'
-import { ABI_Event, ABI_Function, ABI_Item, ABI_RowZ } from 'interfaces/abi'
+import { ABI_Event, ABI_Function, ABI_Item, ABI_Row, ABI_RowZ, ABI_Type } from 'interfaces/abi'
 import { AddressZ } from 'interfaces/utils'
 
 import ABICoder from 'utils/web3-abi-coder'
@@ -16,57 +16,51 @@ function hash(data: string): string {
 
 const abiCoder = new ABICoder()
 
+export function abiToAbiRow(abi: ABI_Item): ABI_Row {
+    const frag = Fragment.from(abi)
+
+    const hashed = hash(frag.format(FormatTypes.sighash))
+    const signature = abi.type === ABI_Type.enum.event ? hashed : hashed.slice(0, 10)
+
+    const abiRow = ABI_RowZ.parse({
+        name: abi.name,
+        type: abi.type,
+        hashableSignature: frag.format(FormatTypes.sighash),
+        hashedSignature: signature,
+        fullSignature: frag.format(FormatTypes.full),
+        abiJSON: JSON.parse(frag.format(FormatTypes.json)),
+    })
+    return abiRow
+}
+
 export default class ABIDecoder {
     savedABIs: any[]
     methodSigs: { [key: string]: ABI_Function }
     eventSigs: { [key: string]: ABI_Event }
+    abiRows: ABI_Row[]
     db: DatabaseInterface
-    abiRows: any[]
 
     constructor(databaseInterface: DatabaseInterface) {
         this.savedABIs = []
         this.methodSigs = {}
         this.eventSigs = {}
-        this.db = databaseInterface
         this.abiRows = []
+        this.db = databaseInterface
     }
     getABIs() {
         return this.savedABIs
     }
-    static typeToString(input: any) {
-        if (input.type === 'tuple' && input.components) {
-            return '(' + input.components?.map(ABIDecoder.typeToString).join(',') + ')'
-        }
-        return input.type
-    }
+
     addABI(abiArray: ABI_Item[]) {
-        // console.log('abiArray', abiArray)
         abiArray.map((abi) => {
-            let fullSignature = ''
-            let signature = ''
-            if (abi.name) {
-                fullSignature = hash(abi.name + '(' + abi.inputs.map(ABIDecoder.typeToString).join(',') + ')') as string
-                if (abi.type === 'event') {
-                    signature = fullSignature
-                    this.eventSigs[signature] = abi
-                } else {
-                    signature = fullSignature.slice(0, 10)
-                    this.methodSigs[signature] = abi
-                }
-            }
-
-            const frag = Fragment.from(abi)
-
-            const abiRow = ABI_RowZ.parse({
-                name: abi.name,
-                type: abi.type,
-                hashableSignature: frag.format(FormatTypes.sighash),
-                hashedSignature: signature,
-                fullSignature: frag.format(FormatTypes.full),
-                abiJSON: JSON.parse(frag.format(FormatTypes.json)),
-            })
-
+            const abiRow = abiToAbiRow(abi)
             this.abiRows.push(abiRow)
+
+            if (abiRow.type === ABI_Type.enum.event) {
+                this.eventSigs[abiRow.hashedSignature] = abiRow.abiJSON
+            } else if (abiRow.type === ABI_Type.enum.function) {
+                this.methodSigs[abiRow.hashedSignature] = abiRow.abiJSON
+            }
         })
 
         this.savedABIs = this.savedABIs.concat(abiArray)
