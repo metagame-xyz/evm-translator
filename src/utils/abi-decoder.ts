@@ -4,13 +4,14 @@ import { Log } from '@ethersproject/providers'
 import { BigNumber, utils } from 'ethers'
 
 import { RawDecodedCallData, RawDecodedLog, RawDecodedLogEvent } from 'interfaces'
-import { ABI_Event, ABI_Function, ABI_Item } from 'interfaces/abi'
+import { ABI_Event, ABI_Function, ABI_Item, ABI_RowZ } from 'interfaces/abi'
 import { AddressZ } from 'interfaces/utils'
 
 import ABICoder from 'utils/web3-abi-coder'
 
+const { toUtf8Bytes, keccak256, FormatTypes, Fragment } = utils
 function hash(data: string): string {
-    return utils.keccak256(utils.toUtf8Bytes(data))
+    return keccak256(toUtf8Bytes(data))
 }
 
 const abiCoder = new ABICoder()
@@ -20,12 +21,14 @@ export default class ABIDecoder {
     methodSigs: { [key: string]: ABI_Function }
     eventSigs: { [key: string]: ABI_Event }
     db: DatabaseInterface
+    abiRows: any[]
 
     constructor(databaseInterface: DatabaseInterface) {
         this.savedABIs = []
         this.methodSigs = {}
         this.eventSigs = {}
         this.db = databaseInterface
+        this.abiRows = []
     }
     getABIs() {
         return this.savedABIs
@@ -37,17 +40,33 @@ export default class ABIDecoder {
         return input.type
     }
     addABI(abiArray: ABI_Item[]) {
+        // console.log('abiArray', abiArray)
         abiArray.map((abi) => {
+            let fullSignature = ''
+            let signature = ''
             if (abi.name) {
-                const signature = hash(
-                    abi.name + '(' + abi.inputs.map(ABIDecoder.typeToString).join(',') + ')',
-                ) as string
+                fullSignature = hash(abi.name + '(' + abi.inputs.map(ABIDecoder.typeToString).join(',') + ')') as string
                 if (abi.type === 'event') {
+                    signature = fullSignature
                     this.eventSigs[signature] = abi
                 } else {
-                    this.methodSigs[signature.slice(0, 10)] = abi
+                    signature = fullSignature.slice(0, 10)
+                    this.methodSigs[signature] = abi
                 }
             }
+
+            const frag = Fragment.from(abi)
+
+            const abiRow = ABI_RowZ.parse({
+                name: abi.name,
+                type: abi.type,
+                hashableSignature: frag.format(FormatTypes.sighash),
+                hashedSignature: signature,
+                fullSignature: frag.format(FormatTypes.full),
+                abiJSON: JSON.parse(frag.format(FormatTypes.json)),
+            })
+
+            this.abiRows.push(abiRow)
         })
 
         this.savedABIs = this.savedABIs.concat(abiArray)
@@ -85,6 +104,7 @@ export default class ABIDecoder {
     async getABIEventFromExternalSource(hexSignature: string): Promise<ABI_Event | undefined> {
         const abiSig = await fourByteDirectory.getEventSignature(hexSignature)
 
+        console.log('abiSig', abiSig)
         return abiSig
             ? {
                   name: abiSig,
@@ -152,7 +172,7 @@ export default class ABIDecoder {
                 }
 
                 retData.params.push({
-                    name: abiItem.inputs[i].name,
+                    name: abiItem.inputs[i].name || '',
                     value: parsedParam,
                     type: abiItem.inputs[i].type,
                 })
@@ -172,10 +192,8 @@ export default class ABIDecoder {
                 .filter((log) => log.topics.length > 0)
                 .map(async (logItem) => {
                     const eventID = logItem.topics[0]
-                    // const abiItem = this.eventSigs[eventID] || (await this.getABIEventFromExternalSource(eventID))
-                    const abiItem = await this.getABIEventFromExternalSource(eventID)
-
-                    console.log('abiItem', abiItem)
+                    const abiItem = this.eventSigs[eventID] || (await this.getABIEventFromExternalSource(eventID))
+                    // const abiItem = await this.getABIEventFromExternalSource(eventID)
 
                     if (abiItem) {
                         const logData = logItem.data.slice(2)
@@ -207,7 +225,7 @@ export default class ABIDecoder {
                         // Loop topic and data to get the params
                         abiItem.inputs.map(function (param) {
                             const decodedP: DecodedParam = {
-                                name: param.name,
+                                name: param.name || '',
                                 type: param.type,
                                 value: '',
                             }
@@ -250,7 +268,6 @@ export default class ABIDecoder {
                             decoded: true,
                         } as RawDecodedLog
                     } else {
-                        // TODO call 4byte / db to
                         return {
                             name: null,
                             events: [],

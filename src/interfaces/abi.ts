@@ -3,21 +3,21 @@ import { z } from 'zod'
 import { boolean, string } from 'interfaces/utils'
 
 const ABI_FunctionOutputZ = z.object({
-    name: string,
-    internalType: string,
+    name: string.optional(),
     type: string,
 })
 
 const ABI_FunctionInputZ = z.object({
-    name: string,
-    internalType: string,
+    name: string.optional(),
     type: string,
-    components: z.array(
-        z.object({
-            name: string,
-            type: string,
-        }),
-    ),
+    components: z
+        .array(
+            z.object({
+                name: string,
+                type: string,
+            }),
+        )
+        .optional(),
 })
 
 const ABI_EventInputZ = ABI_FunctionInputZ.extend({ indexed: boolean })
@@ -35,14 +35,6 @@ export type ABIStringMap = {
     writeFunction: string[]
     readFunction: string[]
 }
-
-const ABI_RowZ = z.object({
-    name: string,
-    type: ABI_Type,
-    hashableSignature: string,
-    hexSignature: string,
-    fullABI: string,
-})
 
 export type ABI_Row = z.infer<typeof ABI_RowZ>
 
@@ -91,6 +83,15 @@ export const ABI_ItemUnfilteredZ = z.discriminatedUnion('type', [
 ])
 
 export const ABI_ItemZ = z.discriminatedUnion('type', [ABI_FunctionZ, ABI_EventZ])
+
+export const ABI_RowZ = z.object({
+    name: string,
+    type: ABI_Type,
+    hashableSignature: string,
+    hashedSignature: string,
+    fullSignature: string,
+    abiJSON: ABI_ItemUnfilteredZ,
+})
 
 export type ABI_Constructor = z.infer<typeof ABI_ConstructorZ>
 export type ABI_Function = z.infer<typeof ABI_FunctionZ>

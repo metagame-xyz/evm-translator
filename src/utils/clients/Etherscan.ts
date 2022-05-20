@@ -70,12 +70,10 @@ export default class Etherscan {
     async getABIs(contractAddresses: string[]): Promise<Record<string, ABI_ItemUnfiltered[]>> {
         const ABIMap: Record<string, ABI_ItemUnfiltered[]> = {}
         try {
-            await Promise.all(
-                contractAddresses.map(async (contractAddress) => {
-                    const abi = await this.getABI(contractAddress)
-                    ABIMap[contractAddress] = abi
-                }),
-            )
+            for (const contractAddress of contractAddresses) {
+                const abi = await this.getABI(contractAddress)
+                ABIMap[contractAddress] = abi
+            }
         } catch (e) {
             console.error(e)
             throw new Error(`Etherscan API error: ${e}`)
