@@ -30,13 +30,6 @@ export const ABI_Type = z.enum(['function', 'event', 'constructor', 'fallback', 
 export const StateMutability = z.enum(['pure', 'view', 'nonpayable', 'payable'])
 export const writeStates = [StateMutability.enum.payable, StateMutability.enum.nonpayable]
 
-export type ABIStringMap = {
-    constructor: string
-    event: string[]
-    writeFunction: string[]
-    readFunction: string[]
-}
-
 export const ABI_ConstructorZ = z.object({
     type: z.literal(ABI_Type.enum.constructor),
     inputs: z.array(ABI_FunctionInputZ),
