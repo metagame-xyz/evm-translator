@@ -1,10 +1,11 @@
 import collect from 'collect.js'
 import { BigNumber } from 'ethers'
+import { FormatTypes, Fragment, keccak256, toUtf8Bytes } from 'ethers/lib/utils'
 import fetch, { Response } from 'node-fetch'
 import traverse from 'traverse'
 
 import { Chain, Chains, ChainSymbol, Interaction, InteractionEvent, Interpretation } from 'interfaces'
-import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
+import { ABI_Item, ABI_ItemUnfiltered, ABI_Row, ABI_RowZ, ABI_Type } from 'interfaces/abi'
 
 const ethereum: Chain = {
     EVM: true,
@@ -191,6 +192,8 @@ export const getKeys = <T>(obj: T) => Object.keys(obj) as Array<keyof T>
 
 export const getEntries = <T>(obj: T) => Object.entries(obj) as Array<[keyof T, any]>
 
+export const getValues = <T>(obj: Record<any, T>) => Object.values(obj) as Array<T>
+
 export function filterABIs(unfilteredABIs: Record<string, ABI_ItemUnfiltered[]>): Record<string, ABI_Item[]> {
     const filteredABIs: Record<string, ABI_Item[]> = {}
 
@@ -200,4 +203,29 @@ export function filterABIs(unfilteredABIs: Record<string, ABI_ItemUnfiltered[]>)
     }
 
     return filteredABIs
+}
+
+export function hash(data: string): string {
+    return keccak256(toUtf8Bytes(data))
+}
+
+export function abiToAbiRow(abi: ABI_ItemUnfiltered): ABI_Row {
+    const frag = Fragment.from(abi)
+
+    const hashed = hash(frag.format(FormatTypes.sighash))
+    const signature = abi.type === ABI_Type.enum.event ? hashed : hashed.slice(0, 10)
+
+    const abiRow = ABI_RowZ.parse({
+        name: 'name' in abi ? abi.name : '',
+        type: abi.type,
+        hashableSignature: frag.format(FormatTypes.sighash),
+        hashedSignature: signature,
+        fullSignature: frag.format(FormatTypes.full),
+        abiJSON: JSON.parse(frag.format(FormatTypes.json)),
+    })
+    return abiRow
+}
+
+export function abiArrToAbiRows(abiArr: ABI_ItemUnfiltered[]): ABI_Row[] {
+    return abiArr.map(abiToAbiRow)
 }

@@ -1,37 +1,16 @@
 import fourByteDirectory from './clients/FourByteDirectory'
 import { DatabaseInterface } from './DatabaseInterface'
 import { Log } from '@ethersproject/providers'
-import { BigNumber, utils } from 'ethers'
+import { BigNumber } from 'ethers'
 
 import { RawDecodedCallData, RawDecodedLog, RawDecodedLogEvent } from 'interfaces'
-import { ABI_Event, ABI_Function, ABI_Item, ABI_Row, ABI_RowZ, ABI_Type } from 'interfaces/abi'
+import { ABI_Event, ABI_Function, ABI_Item, ABI_Row, ABI_Type } from 'interfaces/abi'
 import { AddressZ } from 'interfaces/utils'
 
+import { abiToAbiRow, hash } from 'utils'
 import ABICoder from 'utils/web3-abi-coder'
 
-const { toUtf8Bytes, keccak256, FormatTypes, Fragment } = utils
-function hash(data: string): string {
-    return keccak256(toUtf8Bytes(data))
-}
-
 const abiCoder = new ABICoder()
-
-export function abiToAbiRow(abi: ABI_Item): ABI_Row {
-    const frag = Fragment.from(abi)
-
-    const hashed = hash(frag.format(FormatTypes.sighash))
-    const signature = abi.type === ABI_Type.enum.event ? hashed : hashed.slice(0, 10)
-
-    const abiRow = ABI_RowZ.parse({
-        name: abi.name,
-        type: abi.type,
-        hashableSignature: frag.format(FormatTypes.sighash),
-        hashedSignature: signature,
-        fullSignature: frag.format(FormatTypes.full),
-        abiJSON: JSON.parse(frag.format(FormatTypes.json)),
-    })
-    return abiRow
-}
 
 export default class ABIDecoder {
     savedABIs: any[]
@@ -50,7 +29,6 @@ export default class ABIDecoder {
     getABIs() {
         return this.savedABIs
     }
-
     addABI(abiArray: ABI_Item[]) {
         abiArray.map((abi) => {
             const abiRow = abiToAbiRow(abi)
@@ -65,36 +43,9 @@ export default class ABIDecoder {
 
         this.savedABIs = this.savedABIs.concat(abiArray)
     }
-    removeABI(abiArray: ABI_Item[]) {
-        // Iterate new abi to generate method id"s
-        abiArray.map((abi) => {
-            if (abi.name) {
-                const signature = hash(
-                    abi.name +
-                        '(' +
-                        abi.inputs
-                            .map(function (input) {
-                                return input.type
-                            })
-                            .join(',') +
-                        ')',
-                ) as string
-                if (abi.type === 'event') {
-                    if (this.methodSigs[signature]) {
-                        delete this.methodSigs[signature]
-                    }
-                } else {
-                    if (this.methodSigs[signature.slice(0, 10)]) {
-                        delete this.methodSigs[signature.slice(0, 10)]
-                    }
-                }
-            }
-        })
-    }
     getMethodIDs() {
         return this.methodSigs
     }
-
     async getABIEventFromExternalSource(hexSignature: string): Promise<ABI_Event | undefined> {
         const abiSig = await fourByteDirectory.getEventSignature(hexSignature)
 
@@ -125,7 +76,9 @@ export default class ABIDecoder {
     async decodeMethod(data: string): Promise<RawDecodedCallData> {
         const methodID = data.slice(0, 10)
 
-        const abiItem = this.methodSigs[methodID] || (await this.getABIFunctionFromExternalSource(methodID))
+        // TODO shouldn't just be grabbing index 0
+        const abiItem = this.methodSigs[methodID] || (await this.db.getABIsForHexSignature(methodID))?.[0]
+        // const abiItem = this.methodSigs[methodID] || (await this.getABIFunctionFromExternalSource(methodID))
         // const abiItem = await this.getABIFunctionFromExternalSource(methodID)
 
         if (abiItem) {
@@ -186,7 +139,10 @@ export default class ABIDecoder {
                 .filter((log) => log.topics.length > 0)
                 .map(async (logItem) => {
                     const eventID = logItem.topics[0]
-                    const abiItem = this.eventSigs[eventID] || (await this.getABIEventFromExternalSource(eventID))
+
+                    // TODO shouldn't just be grabbing index 0
+                    const abiItem = this.eventSigs[eventID] || (await this.db.getABIsForHexSignature(eventID))?.[0]
+                    // const abiItem = this.eventSigs[eventID] || (await this.getABIEventFromExternalSource(eventID))
                     // const abiItem = await this.getABIEventFromExternalSource(eventID)
 
                     if (abiItem) {
@@ -272,5 +228,32 @@ export default class ABIDecoder {
                     }
                 }),
         )
+    }
+
+    removeABI(abiArray: ABI_Item[]) {
+        // Iterate new abi to generate method id"s
+        abiArray.map((abi) => {
+            if (abi.name) {
+                const signature = hash(
+                    abi.name +
+                        '(' +
+                        abi.inputs
+                            .map(function (input) {
+                                return input.type
+                            })
+                            .join(',') +
+                        ')',
+                ) as string
+                if (abi.type === 'event') {
+                    if (this.methodSigs[signature]) {
+                        delete this.methodSigs[signature]
+                    }
+                } else {
+                    if (this.methodSigs[signature.slice(0, 10)]) {
+                        delete this.methodSigs[signature.slice(0, 10)]
+                    }
+                }
+            }
+        })
     }
 }

@@ -21,7 +21,7 @@ import { CovalentTxData } from 'interfaces/covalent'
 import { CallTraceLog, RawTxData, RawTxDataWithoutTrace, TraceLog, TraceType } from 'interfaces/rawData'
 import { AddressZ } from 'interfaces/utils'
 
-import { filterABIs, getChainById, getEntries, getKeys, isAddress } from 'utils'
+import { abiArrToAbiRows, filterABIs, getChainById, getEntries, getKeys, getValues, isAddress } from 'utils'
 import ABIDecoder from 'utils/abi-decoder'
 import tokenABIMap from 'utils/ABIs'
 import reverseRecordsABI from 'utils/ABIs/ReverseRecords.json'
@@ -45,7 +45,7 @@ export class Augmenter {
     covalent: Covalent | null
     etherscan: Etherscan
 
-    databaseInterface: DatabaseInterface
+    db: DatabaseInterface
 
     formatter = new Formatter()
     chain: Chain
@@ -69,7 +69,7 @@ export class Augmenter {
         this.provider = provider
         this.covalent = covalent
         this.etherscan = etherscan
-        this.databaseInterface = databaseInterface
+        this.db = databaseInterface
 
         this.chain = getChainById(this.provider.network.chainId)
     }
@@ -104,17 +104,14 @@ export class Augmenter {
         ABIs: Record<string, ABI_Item[]>,
         contractDataMap: Record<string, ContractData>,
     ): Promise<{ decodedLogs: Interaction[]; decodedCallData: DecodedCallData }> {
-        const allABIs = []
-        for (const abis of Object.values(ABIs)) {
-            allABIs.push(...abis)
-        }
+        const allABIs: ABI_Item[] = []
+        const abiArrArr = getValues(ABIs)
+        allABIs.push(...abiArrArr.flat())
 
-        const abiDecoder = new ABIDecoder(this.databaseInterface)
+        const abiDecoder = new ABIDecoder(this.db)
         abiDecoder.addABI(allABIs)
 
         const { logs } = rawTxData.txReceipt
-
-        // TODO logs that don't get decoded dont show up as 'null' or 'undefined', which will throw off mapping the logIndex to the decoded log
 
         const rawDecodedLogs = await abiDecoder.decodeLogs(logs)
         const rawDecodedCallData = (await abiDecoder.decodeMethod(rawTxData.txResponse.data)) || {
@@ -579,7 +576,7 @@ export class Augmenter {
 
         const addresses = getKeys(contractToAbiMap)
 
-        const contractDataMapFromDB = await this.databaseInterface.getContractDataForManyContracts(addresses)
+        const contractDataMapFromDB = await this.db.getContractDataForManyContracts(addresses)
 
         await Promise.all(
             addresses.map(async (address) => {
@@ -616,6 +613,8 @@ export class Augmenter {
                 contractDataMap[address] = contractData
             }),
         )
+
+        await this.db.addOrUpdateManyContractData(getValues(contractDataMap).flat())
         return contractDataMap
     }
 
@@ -625,11 +624,17 @@ export class Augmenter {
     ): Promise<[Record<string, ABI_ItemUnfiltered[]>, Record<string, string | null>]> {
         const addresses = contractAddresses.map((a) => AddressZ.parse(a))
 
-        const contractDataMap = await this.databaseInterface.getContractDataForManyContracts(addresses)
+        const contractDataMap = await this.db.getContractDataForManyContracts(addresses)
 
         const addressesWithMissingABIs = getKeys(contractDataMap).filter((address) => !contractDataMap[address]?.abi)
 
+        // get abis from etherscan only for contracts we dont have an abi for
         const abiMapFromEtherscan = await this.etherscan.getABIs(addressesWithMissingABIs)
+
+        // an array of all abis
+        const abiArray = getValues(abiMapFromEtherscan).flat()
+        // insert all abis into the abi table
+        await this.db.addOrUpdateManyABI(abiArrToAbiRows(abiArray))
 
         const AbiMapFromDB = getEntries(contractDataMap).reduce((acc, [address, contractData]) => {
             acc[address] = contractData?.abi || null
@@ -643,6 +648,7 @@ export class Augmenter {
             return acc
         }, {} as Record<string, string>)
 
+        // TODO get names from 3rd party APIs
         const nameMapFromEtherscan: Record<string, string | null> = {}
 
         const nameMap = { ...nameMapFromDB, ...nameMapFromEtherscan }

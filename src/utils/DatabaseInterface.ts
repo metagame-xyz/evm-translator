@@ -17,12 +17,12 @@ export abstract class DatabaseInterface {
     abstract AppendABIsToContractData(contractAddress: string, abi: ABI_ItemUnfiltered[]): Promise<void>
 
     abstract addOrUpdateABI(abiArr: ABI_Row): Promise<void>
-    abstract addOrUpdateABIs(abiArr: ABI_Row[]): Promise<void>
+    abstract addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<void>
 
     /** Returns an array b/c there might be more than one full signature per hex signature. hex<-->hashable is 1:1*/
     abstract getABIsForHexSignature(hexSignature: string): Promise<ABI_Row[] | null>
-    abstract addABIsForHexSignature(abiArr: ABI_Row[]): Promise<void>
-    abstract addABIForHexSignature(abi: ABI_Row): Promise<void>
+    // abstract addABIsForHexSignature(abiArr: ABI_Row[]): Promise<void>
+    // abstract addABIForHexSignature(abi: ABI_Row): Promise<void>
 
     abstract getDecodedData(txHash: string): Promise<Decoded | null>
     abstract getManyDecodedData(txHashes: string[]): Promise<Array<Decoded> | null>
@@ -47,9 +47,12 @@ export class NullDatabaseInterface extends DatabaseInterface {
         super(connectionString)
     }
 
+    // skip for now
     async getContractDataForContract(contractAddress: string): Promise<ContractData | null> {
         return Promise.resolve(null)
     }
+
+    // implemented
     async getContractDataForManyContracts(contractAddresses: string[]): Promise<Record<string, ContractData | null>> {
         const obj: Record<string, ContractData | null> = {}
         for (let i = 0; i < contractAddresses.length; i++) {
@@ -58,9 +61,12 @@ export class NullDatabaseInterface extends DatabaseInterface {
         return Promise.resolve(obj)
     }
 
+    // skip for now
     async addOrUpdateContractData(contractData: ContractData): Promise<void> {
         return Promise.resolve()
     }
+
+    // implemented
     async addOrUpdateManyContractData(contractDataArr: ContractData[]): Promise<void> {
         return Promise.resolve()
     }
@@ -69,21 +75,19 @@ export class NullDatabaseInterface extends DatabaseInterface {
         return Promise.resolve()
     }
 
+    // skip for now
     async addOrUpdateABI(abiArr: ABI_Row): Promise<void> {
         return Promise.resolve()
     }
-    async addOrUpdateABIs(abiArr: ABI_Row[]): Promise<void> {
+
+    // implemented
+    async addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<void> {
         return Promise.resolve()
     }
     /** Returns an array b/c there might be more than one full signature per hex signature. hex<-->hashable is 1:1*/
+    // implemented
     async getABIsForHexSignature(hexSignature: string): Promise<ABI_Row[] | null> {
         return Promise.resolve(null)
-    }
-    async addABIsForHexSignature(abiArr: ABI_Row[]): Promise<void> {
-        return Promise.resolve()
-    }
-    async addABIForHexSignature(abi: ABI_Row): Promise<void> {
-        return Promise.resolve()
     }
 
     async getDecodedData(txHash: string): Promise<Decoded | null> {
