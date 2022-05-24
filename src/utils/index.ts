@@ -205,12 +205,22 @@ export function filterABIs(unfilteredABIs: Record<string, ABI_ItemUnfiltered[]>)
     return filteredABIs
 }
 
+export function filterABIArray(unfilteredABIs: ABI_ItemUnfiltered[]): ABI_Item[] {
+    return unfilteredABIs.filter(
+        ({ type }) => type === ABI_Type.enum.event || type === ABI_Type.enum.function,
+    ) as ABI_Item[]
+}
+
 export function hash(data: string): string {
     return keccak256(toUtf8Bytes(data))
 }
 
-export function abiToAbiRow(abi: ABI_ItemUnfiltered): ABI_Row {
+export function abiToAbiRow(abi: ABI_Item): ABI_Row {
     const frag = Fragment.from(abi)
+
+    if (!frag) {
+        console.log(abi)
+    }
 
     const hashed = hash(frag.format(FormatTypes.sighash))
     const signature = abi.type === ABI_Type.enum.event ? hashed : hashed.slice(0, 10)
@@ -226,6 +236,6 @@ export function abiToAbiRow(abi: ABI_ItemUnfiltered): ABI_Row {
     return abiRow
 }
 
-export function abiArrToAbiRows(abiArr: ABI_ItemUnfiltered[]): ABI_Row[] {
+export function abiArrToAbiRows(abiArr: ABI_Item[]): ABI_Row[] {
     return abiArr.map(abiToAbiRow)
 }

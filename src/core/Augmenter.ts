@@ -16,12 +16,21 @@ import {
     InteractionEvent,
     TxType,
 } from 'interfaces'
-import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
+import { ABI_Item, ABI_ItemUnfiltered, ABI_Type } from 'interfaces/abi'
 import { CovalentTxData } from 'interfaces/covalent'
 import { CallTraceLog, RawTxData, RawTxDataWithoutTrace, TraceLog, TraceType } from 'interfaces/rawData'
 import { AddressZ } from 'interfaces/utils'
 
-import { abiArrToAbiRows, filterABIs, getChainById, getEntries, getKeys, getValues, isAddress } from 'utils'
+import {
+    abiArrToAbiRows,
+    filterABIArray,
+    filterABIs,
+    getChainById,
+    getEntries,
+    getKeys,
+    getValues,
+    isAddress,
+} from 'utils'
 import ABIDecoder from 'utils/abi-decoder'
 import tokenABIMap from 'utils/ABIs'
 import reverseRecordsABI from 'utils/ABIs/ReverseRecords.json'
@@ -634,7 +643,8 @@ export class Augmenter {
         // an array of all abis
         const abiArray = getValues(abiMapFromEtherscan).flat()
         // insert all abis into the abi table
-        await this.db.addOrUpdateManyABI(abiArrToAbiRows(abiArray))
+
+        await this.db.addOrUpdateManyABI(abiArrToAbiRows(filterABIArray(abiArray)))
 
         const AbiMapFromDB = getEntries(contractDataMap).reduce((acc, [address, contractData]) => {
             acc[address] = contractData?.abi || null

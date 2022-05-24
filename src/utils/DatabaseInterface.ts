@@ -3,20 +3,15 @@ import { ContractData, Decoded, Interpretation } from 'interfaces'
 import { ABI_ItemUnfiltered, ABI_Row } from 'interfaces/abi'
 
 export abstract class DatabaseInterface {
-    connectionString: string | null
-    constructor(connectionString: string | null) {
-        this.connectionString = connectionString
-    }
-
-    abstract getContractDataForContract(contractAddress: string): Promise<ContractData | null>
+    // abstract getContractDataForContract(contractAddress: string): Promise<ContractData | null>
     abstract getContractDataForManyContracts(contractAddresses: string[]): Promise<Record<string, ContractData | null>>
 
-    abstract addOrUpdateContractData(contractData: ContractData): Promise<void>
+    // abstract addOrUpdateContractData(contractData: ContractData): Promise<void>
     abstract addOrUpdateManyContractData(contractDataArr: ContractData[]): Promise<void>
     /** Contracts often don't have their full ABI shared, but we can infer it using a signature table when we see a contract using that ABI */
-    abstract AppendABIsToContractData(contractAddress: string, abi: ABI_ItemUnfiltered[]): Promise<void>
+    // abstract AppendABIsToContractData(contractAddress: string, abi: ABI_ItemUnfiltered[]): Promise<void>
 
-    abstract addOrUpdateABI(abiArr: ABI_Row): Promise<void>
+    // abstract addOrUpdateABI(abiArr: ABI_Row): Promise<void>
     abstract addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<void>
 
     /** Returns an array b/c there might be more than one full signature per hex signature. hex<-->hashable is 1:1*/
@@ -24,29 +19,25 @@ export abstract class DatabaseInterface {
     // abstract addABIsForHexSignature(abiArr: ABI_Row[]): Promise<void>
     // abstract addABIForHexSignature(abi: ABI_Row): Promise<void>
 
-    abstract getDecodedData(txHash: string): Promise<Decoded | null>
-    abstract getManyDecodedData(txHashes: string[]): Promise<Array<Decoded> | null>
+    // abstract getDecodedData(txHash: string): Promise<Decoded | null>
+    // abstract getManyDecodedData(txHashes: string[]): Promise<Array<Decoded> | null>
 
-    abstract addOrUpdateDecodedData(decodedData: Decoded): Promise<void>
-    abstract addOrUpdateManyDecodedData(decodedDataArr: Decoded[]): Promise<void>
+    // abstract addOrUpdateDecodedData(decodedData: Decoded): Promise<void>
+    // abstract addOrUpdateManyDecodedData(decodedDataArr: Decoded[]): Promise<void>
 
-    abstract addOrUpdateInterpretedData(interpretedData: Interpretation): Promise<void>
-    abstract addOrUpdateManyInterpretedData(interpretedDataArr: Interpretation[]): Promise<void>
+    // abstract addOrUpdateInterpretedData(interpretedData: Interpretation): Promise<void>
+    // abstract addOrUpdateManyInterpretedData(interpretedDataArr: Interpretation[]): Promise<void>
 
-    abstract getInterpretedData(txHash: string, userAddress: string | null): Promise<Interpretation | null>
-    abstract getManyInterpretedData(
-        txHashes: string[],
-        userAddress: string | null,
-    ): Promise<Array<Interpretation | null> | null>
-    abstract getAllInterpretationsForTxHash(txHash: string): Promise<Interpretation[] | null>
-    abstract getAllInterpretationsForAddress(address: string): Promise<Interpretation[] | null>
+    // abstract getInterpretedData(txHash: string, userAddress: string | null): Promise<Interpretation | null>
+    // abstract getManyInterpretedData(
+    //     txHashes: string[],
+    //     userAddress: string | null,
+    // ): Promise<Array<Interpretation | null> | null>
+    // abstract getAllInterpretationsForTxHash(txHash: string): Promise<Interpretation[] | null>
+    // abstract getAllInterpretationsForAddress(address: string): Promise<Interpretation[] | null>
 }
 
 export class NullDatabaseInterface extends DatabaseInterface {
-    constructor(connectionString: string | null = null) {
-        super(connectionString)
-    }
-
     // skip for now
     async getContractDataForContract(contractAddress: string): Promise<ContractData | null> {
         return Promise.resolve(null)

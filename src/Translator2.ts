@@ -9,6 +9,7 @@ import { AddressZ } from 'interfaces/utils'
 import { filterABIs } from 'utils'
 import Etherscan from 'utils/clients/Etherscan'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
+import { MongooseDatabaseInterface } from 'utils/mongoose'
 
 import { Augmenter } from 'core/Augmenter'
 import Interpreter from 'core/Interpreter'
@@ -20,7 +21,7 @@ export type TranslatorConfigTwo = {
     alchemyProjectId: string
     etherscanAPIKey: string
     userAddress?: string
-    databaseInterface?: DatabaseInterface
+    connectionString?: string
 }
 
 export type NamesAndSymbolsMap = Record<string, { name: string | null; symbol: string | null }>
@@ -50,11 +51,19 @@ class Translator2 {
         this.userAddress = config.userAddress ? AddressZ.parse(config.userAddress) : null
         this.provider = this.getProvider()
         this.etherscan = new Etherscan(this.etherscanAPIKey)
-        this.databaseInterface = config.databaseInterface || new NullDatabaseInterface()
+        this.databaseInterface = config.connectionString
+            ? new MongooseDatabaseInterface(config.connectionString)
+            : new NullDatabaseInterface()
 
         this.rawDataFetcher = new RawDataFetcher(this.provider)
         this.augmenter = new Augmenter(this.provider, null, this.etherscan, this.databaseInterface)
         this.interpreter = new Interpreter(config.chain)
+    }
+
+    async initializeMongoose() {
+        if (this.databaseInterface instanceof MongooseDatabaseInterface) {
+            await this.databaseInterface.connect()
+        }
     }
 
     private getProvider(): AlchemyProvider {

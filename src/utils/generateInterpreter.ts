@@ -1,9 +1,10 @@
-import { abiToAbiRow } from './abi-decoder'
 import Etherscan, { SourceCodeObject } from './clients/Etherscan'
 
 import { Action } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered, ABI_Type, writeStates } from 'interfaces/abi'
 import { InterpreterMap } from 'interfaces/contractInterpreter'
+
+import { abiToAbiRow } from 'utils'
 
 export default class InterpreterTemplateGenerator {
     etherscan: Etherscan

@@ -45,6 +45,7 @@
         "eth-ens-namehash": "^2.0.8",
         "ethers": "^5.6.2",
         "limiter": "^2.1.0",
+        "mongoose": "^6.3.4",
         "node-fetch": "2.6.6",
         "require-context": "^1.1.0",
         "traverse": "^0.6.6",
