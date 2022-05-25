@@ -22,6 +22,6 @@ const ContractSchema = new Schema<ContractData, ContractModelType>({
     contractName: { type: String, required: false },
     contractOfficialName: { type: String, required: false },
     abi: { type: [ABI_ItemSchema], required: true },
-})
+}).index({ address: 1 }, { unique: true })
 
 export const ContractModel = models.contract || model<ContractData>('contract', ContractSchema)

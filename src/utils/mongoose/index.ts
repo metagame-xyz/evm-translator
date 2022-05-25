@@ -1,3 +1,4 @@
+import { ContractModel } from './models/contract'
 import { connect } from 'mongoose'
 
 import { ContractData } from 'interfaces'
@@ -20,22 +21,48 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
     }
 
     async getContractDataForManyContracts(contractAddresses: string[]): Promise<Record<string, ContractData | null>> {
-        const obj: Record<string, ContractData | null> = {}
+        const contractMap: Record<string, ContractData | null> = {}
         for (let i = 0; i < contractAddresses.length; i++) {
-            obj[contractAddresses[i]] = null
+            contractMap[contractAddresses[i]] = null
         }
-        return Promise.resolve(obj)
 
-        // try {
-        //     const data = await ContractModel.find({ address: { $in: contractAddresses } })
-        //     return data
-        // } else {
-        //     return null
-        // }
+        try {
+            const modelData = await ContractModel.find({ address: { $in: contractAddresses } })
+            const data = modelData.map((model) => model.toObject())
+
+            for (let i = 0; i < contractAddresses.length; i++) {
+                const contractAddress = contractAddresses[i]
+                const contractData = data.find((contract) => contract.address === contractAddress)
+                contractMap[contractAddress] = contractData || null
+            }
+        } catch (e) {
+            console.log('get contract mongoose error')
+            console.log(e)
+            // return null
+        }
+        // return here instead of in the try, so that it still works if the db is down
+        return contractMap
     }
 
     async addOrUpdateManyContractData(contractDataArr: ContractData[]): Promise<void> {
-        return Promise.resolve()
+        try {
+            // only way to do bulk upsert
+            const { result } = await ContractModel.bulkWrite(
+                contractDataArr.map((contract) => ({
+                    updateOne: {
+                        filter: { address: contract.address },
+                        update: contract,
+                        upsert: true,
+                    },
+                })),
+            )
+
+            console.log('contracts:')
+            console.log(result)
+        } catch (e) {
+            console.log('contract mongoose error')
+            console.log(e)
+        }
     }
 
     async addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<void> {
@@ -56,9 +83,10 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
                 })),
             )
 
+            console.log('ABIs:')
             console.log(result)
         } catch (e) {
-            console.log('mongoose error')
+            console.log('abi mongoose error')
             console.log(e)
         }
     }
