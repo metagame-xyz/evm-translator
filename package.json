@@ -63,6 +63,7 @@
         "@typescript-eslint/parser": "^5.16.0",
         "babel-jest": "^28.1.0",
         "concurrently": "^7.0.0",
+        "encoding": "^0.1.13",
         "eslint": "^8.11.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-jest": "^26.1.3",

@@ -86,7 +86,11 @@ class Interpreter {
         return interpretations
     }
 
-    public interpretSingleTx(decodedData: Decoded, userAddressFromInput: string | null = null): Interpretation {
+    public interpretSingleTx(
+        decodedData: Decoded,
+        userAddressFromInput: string | null = null,
+        userNameFromInput: string | null = null,
+    ): Interpretation {
         const {
             methodCall: { name: methodName },
             interactions,
@@ -100,9 +104,9 @@ class Interpreter {
             BigNumber.from(decodedData.gasUsed).mul(BigNumber.from(decodedData.effectiveGasPrice)),
         )
 
-        const userAddress = userAddressFromInput || this.userAddress || fromAddress
+        const userAddress = AddressZ.parse(userAddressFromInput) || this.userAddress || fromAddress
 
-        let userName = userAddress.substring(0, 6)
+        let userName = userNameFromInput || userAddress.substring(0, 6)
 
         if (fromAddress === userAddress) {
             userName = decodedData.fromENS || userName

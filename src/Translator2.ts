@@ -195,8 +195,12 @@ class Translator2 {
     /******          INTERPRETING          ********/
     /**********************************************/
 
-    interpretDecodedTx(decoded: Decoded, userAddress: string | null = null): Interpretation {
-        return this.interpreter.interpretSingleTx(decoded, userAddress)
+    interpretDecodedTx(
+        decoded: Decoded,
+        userAddress: string | null = null,
+        userName: string | null = null,
+    ): Interpretation {
+        return this.interpreter.interpretSingleTx(decoded, userAddress, userName)
     }
 
     // If we do this after we've created the example description, we'll have to figure out how to parse any addresses we've turned into a shorter name or onoma name
@@ -224,6 +228,41 @@ class Translator2 {
         const interpretation = this.interpretDecodedTx(decodedWithAugmentation, userAddress)
 
         return interpretation
+    }
+
+    async allDataFromTxHash(
+        txHash: string,
+        userAddressUnvalidated: string | null = null,
+    ): Promise<{ interpretedData: Interpretation; decodedData: Decoded; rawTxData: RawTxData }> {
+        const userAddress = AddressZ.parse(userAddressUnvalidated)
+
+        const rawTxData = await this.getRawTxData(txHash)
+
+        const contractAddresses = this.getContractAddressesFromRawTxData(rawTxData)
+        const [unfilteredAbiMap, officialContractNamesMap] = await this.getABIsAndNamesForContracts(contractAddresses)
+
+        const contractDataMap = await this.getContractsData(unfilteredAbiMap, officialContractNamesMap)
+
+        const AbiMap = filterABIs(unfilteredAbiMap)
+        const { decodedLogs, decodedCallData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)
+
+        const allAddresses = this.getAllAddresses(decodedLogs, decodedCallData, contractAddresses)
+
+        const ensMap = await this.getENSNames(allAddresses)
+
+        const decodedWithAugmentation = this.augmentDecodedData(
+            decodedLogs,
+            decodedCallData,
+            ensMap,
+            contractDataMap,
+            rawTxData,
+        )
+
+        const userName = ensMap[userAddress || ''] || null
+
+        const interpretation = this.interpretDecodedTx(decodedWithAugmentation, userAddress, userName)
+
+        return { interpretedData: interpretation, decodedData: decodedWithAugmentation, rawTxData }
     }
 }
 

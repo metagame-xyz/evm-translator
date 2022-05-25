@@ -154,6 +154,9 @@ export class Augmenter {
             txType = TxType.CONTRACT_INTERACTION
         }
 
+        const fromENS = ensMap[txReceipt.from] || null
+        const toENS = ensMap[txReceipt.to || ''] || null
+
         const interactions =
             'txTrace' in rawTxData ? Augmenter.augmentTraceLogs(decodedLogs, rawTxData.txTrace) : decodedLogs
 
@@ -180,8 +183,8 @@ export class Augmenter {
             timestamp: txReceipt.timestamp,
             txIndex: txReceipt.transactionIndex,
             reverted: txReceipt.status == 0, // will return true if status==undefined
-            fromENS: null,
-            toENS: null,
+            fromENS,
+            toENS,
         }
 
         const transformedAugmentedData = Augmenter.augmentENSNames(transformedData, ensMap)

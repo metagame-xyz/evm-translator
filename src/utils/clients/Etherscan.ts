@@ -35,6 +35,7 @@ export default class Etherscan {
         Object.entries(params).forEach(([key, value]) => {
             url.searchParams.set(key, value)
         })
+
         return url.toString()
     }
 
