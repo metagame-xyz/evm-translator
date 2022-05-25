@@ -1,3 +1,4 @@
+import Bottleneck from 'bottleneck'
 import collect from 'collect.js'
 import { BigNumber } from 'ethers'
 import { FormatTypes, Fragment, keccak256, toUtf8Bytes } from 'ethers/lib/utils'
@@ -118,6 +119,46 @@ export class FetcherError extends Error {
 
 export function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+export class Fetcher {
+    limiter: Bottleneck
+    fetchDefaultOptions = {
+        body: undefined,
+    }
+
+    constructor(perSecond: number) {
+        const maxConcurrent = perSecond
+        const minTime = (1000 / perSecond) * 1.1
+        this.limiter = new Bottleneck({ maxConcurrent, minTime })
+    }
+
+    scheduleRequest(url: string, options: Record<string, any> = this.fetchDefaultOptions): Promise<Response> {
+        return this.limiter.schedule(() => fetch(url, options))
+    }
+
+    async fetch(url: string, options = fetchOptions) {
+        let retry = 3
+        while (retry > 0) {
+            const response = await this.scheduleRequest(url, options)
+            if (response.ok) {
+                return response.json() as Promise<any>
+            } else {
+                const error = {
+                    status: response.status,
+                    statusText: response.statusText,
+                    url: response.url,
+                    bodySent: options.body ? JSON.parse(options.body) : null,
+                    message: await response.text(),
+                }
+                retry--
+                if (retry === 0) {
+                    throw new FetcherError(error)
+                }
+                await sleep(2000)
+            }
+        }
+    }
 }
 
 export async function fetcher(url: string, options = fetchOptions) {

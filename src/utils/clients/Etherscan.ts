@@ -1,8 +1,6 @@
-import { RateLimiter } from 'limiter'
+import { ABI_ItemUnfiltered, ABI_ItemUnfilteredZ } from 'interfaces/abi'
 
-import { ABI_ItemUnfiltered } from 'interfaces/abi'
-
-import { fetcher } from 'utils'
+import { Fetcher } from 'utils'
 
 export type SourceCodeObject = {
     SourceCode: string
@@ -20,10 +18,21 @@ export type SourceCodeObject = {
     SwarmSource: string
 }
 
+function promiseAll(promises: Array<Promise<any>>, errors: any[]) {
+    return Promise.all(
+        promises.map((p) => {
+            return p.catch((e) => {
+                errors.push(e)
+                return e
+            })
+        }),
+    )
+}
+
 export default class Etherscan {
     baseUrl = 'https://api.etherscan.io/api'
     apiKey: string
-    limiter = new RateLimiter({ tokensPerInterval: 4, interval: 'second' })
+    fetcher = new Fetcher(5)
 
     constructor(apiKey: string) {
         this.apiKey = apiKey
@@ -39,45 +48,59 @@ export default class Etherscan {
         return url.toString()
     }
 
-    async getABI(contractAddress: string): Promise<ABI_ItemUnfiltered[]> {
-        const params = {
+    static abiParams(contractAddress: string): Record<string, string> {
+        return {
             module: 'contract',
             action: 'getabi',
             address: contractAddress,
         }
+    }
 
-        const remaining = await this.limiter.removeTokens(1)
-
-        if (remaining < 1) {
-            console.log('etherscan rate limiter engaged. tokens remaining:', remaining)
-        }
-
-        const response = await fetcher(this.createUrl(params))
-
+    static parseABIResponse(response: any): ABI_ItemUnfiltered[] {
         // console.log(response)
-
+        // debugger
         if (response.result == 'Contract source code not verified') {
             return []
         }
 
         if (response.status !== '1') {
-            throw new Error(`Etherscan API error: ${response.result}`)
+            console.warn(`Etherscan API error: ${response.result}`)
+            // throw new Error(`Etherscan API error: ${response.result}`)
             return []
         }
 
-        return JSON.parse(response.result)
+        const abiArray: any[] = JSON.parse(response.result)
+
+        const abiArrayValidated = abiArray.map((fragment) => ABI_ItemUnfilteredZ.parse(fragment))
+
+        return abiArrayValidated
+    }
+
+    async getABI(contractAddress: string): Promise<ABI_ItemUnfiltered[]> {
+        const response = await this.fetcher.fetch(this.createUrl(Etherscan.abiParams(contractAddress)))
+
+        return Etherscan.parseABIResponse(response)
     }
 
     async getABIs(contractAddresses: string[]): Promise<Record<string, ABI_ItemUnfiltered[]>> {
         const ABIMap: Record<string, ABI_ItemUnfiltered[]> = {}
-        try {
-            for (const contractAddress of contractAddresses) {
-                const abi = await this.getABI(contractAddress)
-                ABIMap[contractAddress] = abi
-            }
-        } catch (e) {
-            console.error(e)
-            throw new Error(`Etherscan API error: ${e}`)
+
+        const errors: any[] = []
+
+        const abiPromises = contractAddresses.map((contractAddress) => {
+            return this.fetcher.fetch(this.createUrl(Etherscan.abiParams(contractAddress)))
+        })
+
+        const abiResults = await promiseAll(abiPromises, errors)
+
+        const abis = abiResults.map((abiResult) => Etherscan.parseABIResponse(abiResult))
+
+        abis.forEach((abi, i) => {
+            ABIMap[contractAddresses[i]] = abi
+        })
+
+        if (errors.length > 0) {
+            console.warn('errors:', errors)
         }
 
         return ABIMap
@@ -89,16 +112,11 @@ export default class Etherscan {
             action: 'getsourcecode',
             address: contractAddress,
         }
-        const remaining = await this.limiter.removeTokens(1)
 
-        if (remaining < 1) {
-            console.log('etherscan rate limiter engaged. tokens remaining:', remaining)
-        }
-
-        const response = await fetcher(this.createUrl(params))
+        const response = await this.fetcher.fetch(this.createUrl(params))
 
         if (response.status !== '1') {
-            throw new Error(`Etherscan API error bad statuss: ${response.result}`)
+            throw new Error(`Etherscan API error bad status: ${response.result}`)
         }
 
         if (response.result[0].ABI === 'Contract source code not verified') {
