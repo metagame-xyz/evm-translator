@@ -2,7 +2,7 @@ import { ContractModel } from './models/contract'
 import { connect } from 'mongoose'
 
 import { ContractData } from 'interfaces'
-import { ABI_Row } from 'interfaces/abi'
+import { ABI_ItemUnfiltered, ABI_Row, ABI_RowZ } from 'interfaces/abi'
 
 import { DatabaseInterface } from 'utils/DatabaseInterface'
 import { ABI_RowModel } from 'utils/mongoose/models/abi'
@@ -91,7 +91,13 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         }
     }
 
-    async getABIsForHexSignature(hexSignature: string): Promise<ABI_Row[] | null> {
-        return Promise.resolve(null)
+    async getABIsForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered[] | null> {
+        const abiModels = await ABI_RowModel.find({ hashedSignature: hexSignature })
+        const abis = abiModels.map((abi) => ABI_RowZ.parse(abi.toObject()))
+        return abis.map((abi) => abi.abiJSON)
+    }
+    async getFirstABIForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered | null> {
+        const abis = (await this.getABIsForHexSignature(hexSignature)) || []
+        return abis.length ? abis[0] : null
     }
 }

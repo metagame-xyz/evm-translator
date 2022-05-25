@@ -15,7 +15,11 @@ export abstract class DatabaseInterface {
     abstract addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<void>
 
     /** Returns an array b/c there might be more than one full signature per hex signature. hex<-->hashable is 1:1*/
-    abstract getABIsForHexSignature(hexSignature: string): Promise<ABI_Row[] | null>
+    abstract getABIsForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered[] | null>
+    abstract getFirstABIForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered | null>
+
+    // abstract getABIRowsForHexSignature(hexSignature: string): Promise<ABI_Row[] | null>
+    // abstract getFirstABIRowForHexSignature(hexSignature: string): Promise<ABI_Row | null>
     // abstract addABIsForHexSignature(abiArr: ABI_Row[]): Promise<void>
     // abstract addABIForHexSignature(abi: ABI_Row): Promise<void>
 
@@ -77,7 +81,19 @@ export class NullDatabaseInterface extends DatabaseInterface {
     }
     /** Returns an array b/c there might be more than one full signature per hex signature. hex<-->hashable is 1:1*/
     // implemented
-    async getABIsForHexSignature(hexSignature: string): Promise<ABI_Row[] | null> {
+    async getABIsForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered[] | null> {
+        return Promise.resolve(null)
+    }
+
+    async getFirstABIForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered | null> {
+        return Promise.resolve(null)
+    }
+
+    async getABIRowsForHexSignature(hexSignature: string): Promise<ABI_Row[] | null> {
+        return Promise.resolve(null)
+    }
+
+    async getFirstABIRowForHexSignature(hexSignature: string): Promise<ABI_Row | null> {
         return Promise.resolve(null)
     }
 

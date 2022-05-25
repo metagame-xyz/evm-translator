@@ -4,7 +4,7 @@ import { Log } from '@ethersproject/providers'
 import { BigNumber } from 'ethers'
 
 import { RawDecodedCallData, RawDecodedLog, RawDecodedLogEvent } from 'interfaces'
-import { ABI_Event, ABI_Function, ABI_Item, ABI_Row, ABI_Type } from 'interfaces/abi'
+import { ABI_Event, ABI_Function, ABI_FunctionZ, ABI_Item, ABI_Row, ABI_Type } from 'interfaces/abi'
 import { AddressZ } from 'interfaces/utils'
 
 import { abiToAbiRow, hash } from 'utils'
@@ -77,9 +77,11 @@ export default class ABIDecoder {
         const methodID = data.slice(0, 10)
 
         // TODO shouldn't just be grabbing index 0
-        const abiItem = this.methodSigs[methodID] || (await this.db.getABIsForHexSignature(methodID))?.[0]
+        // const abiItem = this.methodSigs[methodID] || (await this.db.getABIsForHexSignature(methodID))?.[0]
         // const abiItem = this.methodSigs[methodID] || (await this.getABIFunctionFromExternalSource(methodID))
         // const abiItem = await this.getABIFunctionFromExternalSource(methodID)
+        const dbResult = await this.db.getFirstABIForHexSignature(methodID)
+        const abiItem = dbResult ? ABI_FunctionZ.parse(dbResult) : null
 
         if (abiItem) {
             const decoded = abiCoder.decodeParameters(abiItem.inputs, data.slice(10))

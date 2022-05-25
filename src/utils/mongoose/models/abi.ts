@@ -10,7 +10,7 @@ const ABI_RowSchema = new Schema<ABI_Row, ABI_RowModelType>({
     hashableSignature: { type: String, required: true },
     hashedSignature: { type: String, required: true },
     fullSignature: { type: String, required: true },
-    abiJSON: { type: [{}], required: true },
+    abiJSON: { type: {}, required: true },
 }).index({ hashedSignature: 1, fullSignature: -1 }, { unique: true })
 
 export const ABI_RowModel = models.abi || model<ABI_Row>('abi', ABI_RowSchema)

@@ -16,7 +16,7 @@ import {
     InteractionEvent,
     TxType,
 } from 'interfaces'
-import { ABI_Item, ABI_ItemUnfiltered, ABI_Type } from 'interfaces/abi'
+import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import { CovalentTxData } from 'interfaces/covalent'
 import { CallTraceLog, RawTxData, RawTxDataWithoutTrace, TraceLog, TraceType } from 'interfaces/rawData'
 import { AddressZ } from 'interfaces/utils'
