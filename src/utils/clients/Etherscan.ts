@@ -57,8 +57,6 @@ export default class Etherscan {
     }
 
     static parseABIResponse(response: any): ABI_ItemUnfiltered[] {
-        // console.log(response)
-        // debugger
         if (response.result == 'Contract source code not verified') {
             return []
         }
@@ -71,7 +69,9 @@ export default class Etherscan {
 
         const abiArray: any[] = JSON.parse(response.result)
 
-        const abiArrayValidated = abiArray.map((fragment) => ABI_ItemUnfilteredZ.parse(fragment))
+        const abiArrayValidated = abiArray.map((fragment) => {
+            return ABI_ItemUnfilteredZ.parse(fragment)
+        })
 
         return abiArrayValidated
     }

@@ -459,7 +459,7 @@ export class Augmenter {
         const allAddresses: string[] = []
 
         traverse(this.decodedArr).forEach(function (value: string) {
-            if (isAddress(value)) {
+            if (this.isLeaf && isAddress(value)) {
                 allAddresses.push(AddressZ.parse(value))
             }
         })
@@ -647,7 +647,9 @@ export class Augmenter {
         const abiArray = getValues(abiMapFromEtherscan).flat()
         // insert all abis into the abi table
 
-        await this.db.addOrUpdateManyABI(abiArrToAbiRows(filterABIArray(abiArray)))
+        const filtered = filterABIArray(abiArray)
+
+        await this.db.addOrUpdateManyABI(abiArrToAbiRows(filtered))
 
         const AbiMapFromDB = getEntries(contractDataMap).reduce((acc, [address, contractData]) => {
             acc[address] = contractData?.abi || null
@@ -677,13 +679,13 @@ export class Augmenter {
         const addresses: string[] = []
 
         traverse(decodedLogs).forEach(function (value: string) {
-            if (isAddress(value)) {
+            if (this.isLeaf && isAddress(value)) {
                 addresses.push(AddressZ.parse(value))
             }
         })
 
         traverse(decodedCallData).forEach(function (value: string) {
-            if (isAddress(value)) {
+            if (this.isLeaf && isAddress(value)) {
                 addresses.push(AddressZ.parse(value))
             }
         })

@@ -4,7 +4,7 @@ import { Log } from '@ethersproject/providers'
 import { BigNumber } from 'ethers'
 
 import { RawDecodedCallData, RawDecodedLog, RawDecodedLogEvent } from 'interfaces'
-import { ABI_Event, ABI_Function, ABI_FunctionZ, ABI_Item, ABI_Row, ABI_Type } from 'interfaces/abi'
+import { ABI_Event, ABI_Function, ABI_FunctionZ, ABI_Item, ABI_ItemUnfiltered, ABI_Row, ABI_Type } from 'interfaces/abi'
 import { AddressZ } from 'interfaces/utils'
 
 import { abiToAbiRow, hash } from 'utils'
@@ -142,26 +142,45 @@ export default class ABIDecoder {
                 .map(async (logItem) => {
                     const eventID = logItem.topics[0]
 
-                    // TODO shouldn't just be grabbing index 0
-                    const abiItem = this.eventSigs[eventID] || (await this.db.getABIsForHexSignature(eventID))?.[0]
-                    // const abiItem = this.eventSigs[eventID] || (await this.getABIEventFromExternalSource(eventID))
-                    // const abiItem = await this.getABIEventFromExternalSource(eventID)
+                    // first check if it the contract's abi has it
+                    let abiItem: ABI_Event | null = this.eventSigs[eventID] || null
 
+                    let abiItemOptions: ABI_Event[] = []
+
+                    // if not, check if we have any matches in the database
+                    if (!abiItem) {
+                        abiItemOptions = (await this.db.getEventABIsForHexSignature(eventID)) || []
+                        abiItem = abiItemOptions?.[0] || null
+                    }
+
+                    let decodedData: any = null
+                    let dataIndex = 0
+                    let topicsIndex = 1
+
+                    // if we found any matches, try to decode
                     if (abiItem) {
-                        const logData = logItem.data.slice(2)
-                        const decodedParams: RawDecodedLogEvent[] = []
-                        let dataIndex = 0
-                        let topicsIndex = 1
+                        // try all of the options, it'll throw an error if it doesn't match, catch it, try the next one
+                        // TODO hardcode standard ones like 'Transfer'
+                        while (!decodedData && abiItemOptions.length > 0) {
+                            const logData = logItem.data.slice(2)
 
-                        const dataTypes: any[] = []
-                        abiItem.inputs.map(function (input) {
-                            if (!input.indexed) {
-                                dataTypes.push(input.type)
+                            const dataTypes: any[] = []
+                            abiItem.inputs.map(function (input) {
+                                if (!input.indexed) {
+                                    dataTypes.push(input.type)
+                                }
+                            })
+
+                            try {
+                                decodedData = abiCoder.decodeParameters(dataTypes, logData)
+                            } catch (e) {
+                                console.warn(`abi didn't fit, looping thru options`, abiItem.name)
+                                abiItemOptions.shift()
                             }
-                        })
+                        }
+                    }
 
-                        const decodedData = abiCoder.decodeParameters(dataTypes, logData)
-
+                    if (decodedData) {
                         type DecodedParam = {
                             name: string
                             value: string | BigNumber
@@ -174,6 +193,7 @@ export default class ABIDecoder {
                             type: string
                         }
 
+                        const decodedParams: RawDecodedLogEvent[] = []
                         // Loop topic and data to get the params
                         abiItem.inputs.map(function (param) {
                             const decodedP: DecodedParam = {
@@ -213,8 +233,8 @@ export default class ABIDecoder {
                         })
 
                         return {
-                            name: abiItem.name,
                             events: decodedParams,
+                            name: abiItem.name,
                             address: AddressZ.parse(logItem.address),
                             logIndex: logItem.logIndex,
                             decoded: true,

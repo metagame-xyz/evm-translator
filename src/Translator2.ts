@@ -87,6 +87,10 @@ class Translator2 {
         this.userAddress = AddressZ.parse(userAddress)
     }
 
+    async getTxHashesByBlockNumber(blockNumber: string): Promise<string[]> {
+        return this, this.rawDataFetcher.getTxHashesByBlockNumber(blockNumber)
+    }
+
     // Gets the txResponse, txReceipt, txTrace from a node. Archive node needed
     async getRawTxData(txHash: string): Promise<RawTxData> {
         return this.rawDataFetcher.getTxData(txHash)

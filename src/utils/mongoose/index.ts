@@ -2,7 +2,7 @@ import { ContractModel } from './models/contract'
 import { connect } from 'mongoose'
 
 import { ContractData } from 'interfaces'
-import { ABI_ItemUnfiltered, ABI_Row, ABI_RowZ } from 'interfaces/abi'
+import { ABI_Event, ABI_EventZ, ABI_ItemUnfiltered, ABI_Row, ABI_RowZ, ABI_Type } from 'interfaces/abi'
 
 import { DatabaseInterface } from 'utils/DatabaseInterface'
 import { ABI_RowModel } from 'utils/mongoose/models/abi'
@@ -91,7 +91,7 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         }
     }
 
-    async getABIsForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered[] | null> {
+    async getABIsForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered[]> {
         const abiModels = await ABI_RowModel.find({ hashedSignature: hexSignature })
         const abis = abiModels.map((abi) => ABI_RowZ.parse(abi.toObject()))
         return abis.map((abi) => abi.abiJSON)
@@ -99,5 +99,13 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
     async getFirstABIForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered | null> {
         const abis = (await this.getABIsForHexSignature(hexSignature)) || []
         return abis.length ? abis[0] : null
+    }
+
+    async getEventABIsForHexSignature(hexSignature: string): Promise<ABI_Event[]> {
+        const abiModels = await ABI_RowModel.find({ hashedSignature: hexSignature })
+        const abisRows = abiModels.map((abi) => ABI_RowZ.parse(abi.toObject()))
+        const abis = abisRows.map((abi) => abi.abiJSON)
+        const events = abis.filter((abi) => abi.type === ABI_Type.enum.event)
+        return events.map((event) => ABI_EventZ.parse(event))
     }
 }

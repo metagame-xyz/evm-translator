@@ -260,7 +260,7 @@ export function abiToAbiRow(abi: ABI_Item): ABI_Row {
     const frag = Fragment.from(abi)
 
     if (!frag) {
-        console.log(abi)
+        console.log('No frag!', abi)
     }
 
     const hashed = hash(frag.format(FormatTypes.sighash))

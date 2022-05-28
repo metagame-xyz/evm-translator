@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ContractData, Decoded, Interpretation } from 'interfaces'
-import { ABI_ItemUnfiltered, ABI_Row } from 'interfaces/abi'
+import { ABI_Event, ABI_ItemUnfiltered, ABI_Row } from 'interfaces/abi'
 
 export abstract class DatabaseInterface {
     // abstract getContractDataForContract(contractAddress: string): Promise<ContractData | null>
@@ -15,8 +15,9 @@ export abstract class DatabaseInterface {
     abstract addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<void>
 
     /** Returns an array b/c there might be more than one full signature per hex signature. hex<-->hashable is 1:1*/
-    abstract getABIsForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered[] | null>
+    abstract getABIsForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered[]>
     abstract getFirstABIForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered | null>
+    abstract getEventABIsForHexSignature(hexSignature: string): Promise<ABI_Event[]>
 
     // abstract getABIRowsForHexSignature(hexSignature: string): Promise<ABI_Row[] | null>
     // abstract getFirstABIRowForHexSignature(hexSignature: string): Promise<ABI_Row | null>
@@ -81,8 +82,12 @@ export class NullDatabaseInterface extends DatabaseInterface {
     }
     /** Returns an array b/c there might be more than one full signature per hex signature. hex<-->hashable is 1:1*/
     // implemented
-    async getABIsForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered[] | null> {
-        return Promise.resolve(null)
+    async getABIsForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered[]> {
+        return Promise.resolve([])
+    }
+
+    async getEventABIsForHexSignature(hexSignature: string): Promise<ABI_Event[]> {
+        return Promise.resolve([])
     }
 
     async getFirstABIForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered | null> {

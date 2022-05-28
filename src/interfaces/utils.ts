@@ -2,7 +2,7 @@ import { BigNumber } from 'ethers'
 import { z } from 'zod'
 
 export const addressRegex = new RegExp(/^0x[a-fA-F0-9]{40}$/)
-export const hashRegex = new RegExp(/^0x[a-fA-F0-9]+$/)
+export const hashRegex = new RegExp(/^0x[a-fA-F0-9]*$/)
 export const toLowercaseFn = (x: string) => x.toLowerCase()
 
 export const number = z.number()

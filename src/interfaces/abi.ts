@@ -5,19 +5,13 @@ import { boolean, string } from 'interfaces/utils'
 const ABI_FunctionOutputZ = z.object({
     name: string.optional(),
     type: string,
+    components: z.array(z.any()).optional(),
 })
 
 const ABI_FunctionInputZ = z.object({
     name: string.optional(),
     type: string,
-    components: z
-        .array(
-            z.object({
-                name: string,
-                type: string,
-            }),
-        )
-        .optional(),
+    components: z.array(z.any()).optional(),
 })
 
 const ABI_EventInputZ = ABI_FunctionInputZ.extend({ indexed: boolean })
@@ -33,7 +27,7 @@ export const writeStates = [StateMutability.enum.payable, StateMutability.enum.n
 export const ABI_ConstructorZ = z.object({
     type: z.literal(ABI_Type.enum.constructor),
     inputs: z.array(ABI_FunctionInputZ),
-    stateMutability: StateMutability,
+    stateMutability: StateMutability.optional(),
 })
 
 export const ABI_FunctionZ = z.object({
@@ -42,6 +36,8 @@ export const ABI_FunctionZ = z.object({
     inputs: z.array(ABI_FunctionInputZ),
     outputs: z.array(ABI_FunctionOutputZ),
     stateMutability: StateMutability.optional(),
+    constant: boolean.optional(),
+    payable: boolean.optional(),
 })
 
 export const ABI_EventZ = z.object({
@@ -52,11 +48,15 @@ export const ABI_EventZ = z.object({
 })
 export const ABI_ReceiveZ = z.object({
     type: z.literal(ABI_Type.enum.receive),
-    stateMutability: StateMutability,
+    stateMutability: StateMutability.optional(),
+    constant: boolean.optional(),
+    payable: boolean.optional(),
 })
 export const ABI_FallbackZ = z.object({
     type: z.literal(ABI_Type.enum.fallback),
-    stateMutability: StateMutability,
+    stateMutability: StateMutability.optional(),
+    constant: boolean.optional(),
+    payable: boolean.optional(),
 })
 
 export const ABI_ErrorZ = z.object({
