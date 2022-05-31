@@ -122,7 +122,7 @@ export class Augmenter {
 
         const { logs } = rawTxData.txReceipt
 
-        const rawDecodedLogs = await abiDecoder.decodeLogs(logs)
+        const rawDecodedLogs = await abiDecoder.decodeLogs(logs, contractDataMap)
         const rawDecodedCallData = (await abiDecoder.decodeMethod(rawTxData.txResponse.data)) || {
             name: null,
             params: [],

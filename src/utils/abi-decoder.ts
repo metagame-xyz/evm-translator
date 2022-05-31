@@ -3,12 +3,27 @@ import { DatabaseInterface } from './DatabaseInterface'
 import { Log } from '@ethersproject/providers'
 import { BigNumber } from 'ethers'
 
-import { RawDecodedCallData, RawDecodedLog, RawDecodedLogEvent } from 'interfaces'
+import { ContractData, ContractType, RawDecodedCallData, RawDecodedLog, RawDecodedLogEvent } from 'interfaces'
 import { ABI_Event, ABI_Function, ABI_FunctionZ, ABI_Item, ABI_ItemUnfiltered, ABI_Row, ABI_Type } from 'interfaces/abi'
 import { AddressZ } from 'interfaces/utils'
 
 import { abiToAbiRow, hash } from 'utils'
+import erc20 from 'utils/ABIs/erc20.json'
+import erc721 from 'utils/ABIs/erc721.json'
 import ABICoder from 'utils/web3-abi-coder'
+
+const transferHash = hash('Transfer(address,address,uint256)')
+
+function getABIForTransferEvent(contractType: ContractType | null): ABI_Event | null {
+    switch (contractType) {
+        case ContractType.ERC20:
+            return erc20.find((abi) => abi.name === 'Transfer') as ABI_Event
+        case ContractType.ERC721:
+            return erc721.find((abi) => abi.name === 'Transfer') as ABI_Event
+        default:
+            return null
+    }
+}
 
 const abiCoder = new ABICoder()
 
@@ -135,7 +150,7 @@ export default class ABIDecoder {
             }
         }
     }
-    async decodeLogs(logs: Log[]): Promise<RawDecodedLog[]> {
+    async decodeLogs(logs: Log[], contractDataMap: Record<string, ContractData>): Promise<RawDecodedLog[]> {
         return await Promise.all(
             logs
                 .filter((log) => log.topics.length > 0)
@@ -145,7 +160,15 @@ export default class ABIDecoder {
                     // first check if it the contract's abi has it
                     let abiItem: ABI_Event | null = this.eventSigs[eventID] || null
 
-                    let abiItemOptions: ABI_Event[] = []
+                    console.log('abiItem', abiItem)
+
+                    // if it's there, add it as an option
+                    let abiItemOptions: ABI_Event[] = abiItem ? [abiItem] : []
+
+                    // if not, and it's the ambiguous Transfer event, check the contract type
+                    if (!abiItem && eventID === transferHash) {
+                        abiItem = getABIForTransferEvent(contractDataMap[AddressZ.parse(logItem.address)]?.type)
+                    }
 
                     // if not, check if we have any matches in the database
                     if (!abiItem) {
@@ -161,23 +184,23 @@ export default class ABIDecoder {
                     if (abiItem) {
                         // try all of the options, it'll throw an error if it doesn't match, catch it, try the next one
                         // TODO hardcode standard ones like 'Transfer'
-                        while (!decodedData && abiItemOptions.length > 0) {
-                            const logData = logItem.data.slice(2)
+                        // while (!decodedData && abiItemOptions.length > 0) {
+                        const logData = logItem.data.slice(2)
 
-                            const dataTypes: any[] = []
-                            abiItem.inputs.map(function (input) {
-                                if (!input.indexed) {
-                                    dataTypes.push(input.type)
-                                }
-                            })
-
-                            try {
-                                decodedData = abiCoder.decodeParameters(dataTypes, logData)
-                            } catch (e) {
-                                console.warn(`abi didn't fit, looping thru options`, abiItem.name)
-                                abiItemOptions.shift()
+                        const dataTypes: any[] = []
+                        abiItem.inputs.map(function (input) {
+                            if (!input.indexed) {
+                                dataTypes.push(input.type)
                             }
-                        }
+                        })
+
+                        // try {
+                        decodedData = abiCoder.decodeParameters(dataTypes, logData)
+                        // } catch (e) {
+                        //     console.warn(`abi didn't fit, looping thru options`, abiItem.name)
+                        //     abiItemOptions.shift()
+                        // }
+                        // }
                     }
 
                     if (decodedData) {
