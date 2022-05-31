@@ -104,6 +104,7 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
     async getEventABIsForHexSignature(hexSignature: string): Promise<ABI_Event[]> {
         const abiModels = await ABI_RowModel.find({ hashedSignature: hexSignature })
         const abisRows = abiModels.map((abi) => ABI_RowZ.parse(abi.toObject()))
+        abisRows.sort((a, b) => Number(b.default || false) - Number(a.default || false)) // get default(s) first
         const abis = abisRows.map((abi) => abi.abiJSON)
         const events = abis.filter((abi) => abi.type === ABI_Type.enum.event)
         return events.map((event) => ABI_EventZ.parse(event))

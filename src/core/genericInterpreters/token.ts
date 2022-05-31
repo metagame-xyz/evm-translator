@@ -292,7 +292,6 @@ function addExampleDescription(interpretation: Interpretation, token: Token) {
 }
 
 function interpretGenericToken(decodedData: Decoded, interpretation: Interpretation) {
-    console.log('interpretGenericToken:', interpretation.txHash)
     const { userAddress } = interpretation
     const { fromAddress, toAddress, interactions, contractType } = decodedData
 

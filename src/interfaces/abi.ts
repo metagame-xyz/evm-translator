@@ -83,6 +83,7 @@ export const ABI_RowConstructorZ = z.object({
     hashedSignature: string,
     fullSignature: string,
     abiJSON: ABI_ConstructorZ,
+    default: boolean.optional(),
 })
 export const ABI_RowFunctionZ = z.object({
     name: string,
@@ -91,6 +92,7 @@ export const ABI_RowFunctionZ = z.object({
     hashedSignature: string,
     fullSignature: string,
     abiJSON: ABI_FunctionZ,
+    default: boolean.optional(),
 })
 export const ABI_RowEventZ = z.object({
     name: string,
@@ -99,6 +101,7 @@ export const ABI_RowEventZ = z.object({
     hashedSignature: string,
     fullSignature: string,
     abiJSON: ABI_EventZ,
+    default: boolean.optional(),
 })
 
 export const ABI_RowReceiveZ = z.object({
@@ -108,6 +111,7 @@ export const ABI_RowReceiveZ = z.object({
     hashedSignature: string,
     fullSignature: string,
     abiJSON: ABI_ReceiveZ,
+    default: boolean.optional(),
 })
 export const ABI_RowFallbackZ = z.object({
     name: string,
@@ -116,6 +120,7 @@ export const ABI_RowFallbackZ = z.object({
     hashedSignature: string,
     fullSignature: string,
     abiJSON: ABI_FallbackZ,
+    default: boolean.optional(),
 })
 export const ABI_RowErrorZ = z.object({
     name: string,
@@ -124,6 +129,7 @@ export const ABI_RowErrorZ = z.object({
     hashedSignature: string,
     fullSignature: string,
     abiJSON: ABI_ErrorZ,
+    default: boolean.optional(),
 })
 
 export const ABI_RowZ = z.discriminatedUnion('type', [

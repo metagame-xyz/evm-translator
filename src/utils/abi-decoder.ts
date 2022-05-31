@@ -13,6 +13,7 @@ import erc721 from 'utils/ABIs/erc721.json'
 import ABICoder from 'utils/web3-abi-coder'
 
 const transferHash = hash('Transfer(address,address,uint256)')
+const approvalHash = hash('Approval(address,address,uint256)')
 
 function getABIForTransferEvent(contractType: ContractType | null): ABI_Event | null {
     switch (contractType) {
@@ -20,6 +21,16 @@ function getABIForTransferEvent(contractType: ContractType | null): ABI_Event | 
             return erc20.find((abi) => abi.name === 'Transfer') as ABI_Event
         case ContractType.ERC721:
             return erc721.find((abi) => abi.name === 'Transfer') as ABI_Event
+        default:
+            return null
+    }
+}
+function getABIForApprovalEvent(contractType: ContractType | null): ABI_Event | null {
+    switch (contractType) {
+        case ContractType.ERC20:
+            return erc20.find((abi) => abi.name === 'Approval') as ABI_Event
+        case ContractType.ERC721:
+            return erc721.find((abi) => abi.name === 'Approval') as ABI_Event
         default:
             return null
     }
@@ -160,8 +171,6 @@ export default class ABIDecoder {
                     // first check if it the contract's abi has it
                     let abiItem: ABI_Event | null = this.eventSigs[eventID] || null
 
-                    console.log('abiItem', abiItem)
-
                     // if it's there, add it as an option
                     let abiItemOptions: ABI_Event[] = abiItem ? [abiItem] : []
 
@@ -170,21 +179,27 @@ export default class ABIDecoder {
                         abiItem = getABIForTransferEvent(contractDataMap[AddressZ.parse(logItem.address)]?.type)
                     }
 
+                    if (!abiItem && eventID === approvalHash) {
+                        abiItem = getABIForApprovalEvent(contractDataMap[AddressZ.parse(logItem.address)]?.type)
+                        console.log('abiItem', abiItem)
+                    }
+
                     // if not, check if we have any matches in the database
                     if (!abiItem) {
                         abiItemOptions = (await this.db.getEventABIsForHexSignature(eventID)) || []
-                        abiItem = abiItemOptions?.[0] || null
+                        // abiItem = abiItemOptions?.[0] || null
                     }
+
+                    console.log('eventId', eventID)
+                    // console.log('logItem', logItem)
+                    // console.log('abiItem', abiItem)
 
                     let decodedData: any = null
                     let dataIndex = 0
                     let topicsIndex = 1
 
-                    // if we found any matches, try to decode
-                    if (abiItem) {
-                        // try all of the options, it'll throw an error if it doesn't match, catch it, try the next one
-                        // TODO hardcode standard ones like 'Transfer'
-                        // while (!decodedData && abiItemOptions.length > 0) {
+                    function getDecodedData(logItem: Log, abiItem: ABI_Event) {
+                        console.log('abiItemOptions', abiItemOptions)
                         const logData = logItem.data.slice(2)
 
                         const dataTypes: any[] = []
@@ -193,17 +208,31 @@ export default class ABIDecoder {
                                 dataTypes.push(input.type)
                             }
                         })
-
-                        // try {
-                        decodedData = abiCoder.decodeParameters(dataTypes, logData)
-                        // } catch (e) {
-                        //     console.warn(`abi didn't fit, looping thru options`, abiItem.name)
-                        //     abiItemOptions.shift()
-                        // }
-                        // }
+                        return abiCoder.decodeParameters(dataTypes, logData)
                     }
 
-                    if (decodedData) {
+                    // if we found any matches, try to decode
+                    if (abiItem) {
+                        try {
+                            decodedData = getDecodedData(logItem, abiItem)
+                        } catch (e) {
+                            console.warn(`the single abi didn't fit, looping thru options`, abiItem.name)
+                        }
+                    } else if (abiItemOptions.length > 0) {
+                        // try all of the options, it'll throw an error if it doesn't match, catch it, try the next one
+                        while (!decodedData && abiItemOptions.length > 0) {
+                            abiItem = abiItemOptions.shift() as ABI_Event
+                            try {
+                                decodedData = getDecodedData(logItem, abiItem)
+                            } catch (e) {
+                                console.warn(`the first abi didn't fit, looping thru options`, abiItem.name)
+                            }
+                        }
+                    }
+
+                    console.log('decodedData', decodedData)
+
+                    if (abiItem && decodedData) {
                         type DecodedParam = {
                             name: string
                             value: string | BigNumber
