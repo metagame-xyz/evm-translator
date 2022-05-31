@@ -24,7 +24,7 @@ import { AddressZ } from 'interfaces/utils'
 import {
     abiArrToAbiRows,
     filterABIArray,
-    filterABIs,
+    filterABIMap,
     getChainById,
     getEntries,
     getKeys,
@@ -584,7 +584,7 @@ export class Augmenter {
         contractToOfficialNameMap: Record<string, string | null>,
     ): Promise<Record<string, ContractData>> {
         const contractDataMap: Record<string, ContractData> = {}
-        const filteredABIs = filterABIs(contractToAbiMap)
+        const filteredABIs = filterABIMap(contractToAbiMap)
 
         const addresses = getKeys(contractToAbiMap)
 

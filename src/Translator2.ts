@@ -6,8 +6,8 @@ import { RawTxData, RawTxDataWithoutTrace } from 'interfaces/RawData'
 import { EVMTransaction } from 'interfaces/s3'
 import { AddressZ } from 'interfaces/utils'
 
-import { filterABIs } from 'utils'
-import Etherscan from 'utils/clients/Etherscan'
+import { Fetcher, filterABIMap } from 'utils'
+import Etherscan, { EtherscanServiceLevel } from 'utils/clients/Etherscan'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 import { MongooseDatabaseInterface } from 'utils/mongoose'
 
@@ -22,6 +22,7 @@ export type TranslatorConfigTwo = {
     etherscanAPIKey: string
     userAddress?: string
     connectionString?: string
+    etherscanServiceLevel?: EtherscanServiceLevel
 }
 
 export type NamesAndSymbolsMap = Record<string, { name: string | null; symbol: string | null }>
@@ -34,7 +35,6 @@ class Translator2 {
     nodeUrl: string | null
     alchemyProjectId: string
     chain: Chain
-    etherscanAPIKey: string
     provider: AlchemyProvider
     rawDataFetcher: RawDataFetcher
     etherscan: Etherscan
@@ -47,10 +47,9 @@ class Translator2 {
         this.chain = config.chain
         this.nodeUrl = config.nodeUrl || null
         this.alchemyProjectId = config.alchemyProjectId
-        this.etherscanAPIKey = config.etherscanAPIKey
         this.userAddress = config.userAddress ? AddressZ.parse(config.userAddress) : null
         this.provider = this.getProvider()
-        this.etherscan = new Etherscan(this.etherscanAPIKey)
+        this.etherscan = new Etherscan(config.etherscanAPIKey, config.etherscanServiceLevel)
         this.databaseInterface = config.connectionString
             ? new MongooseDatabaseInterface(config.connectionString)
             : new NullDatabaseInterface()
@@ -216,7 +215,7 @@ class Translator2 {
         const rawTxData = await this.getRawTxData(txHash)
         const addresses = this.getContractAddressesFromRawTxData(rawTxData)
         const [unfilteredAbiMap, officialContractNamesMap] = await this.getABIsAndNamesForContracts(addresses)
-        const AbiMap = filterABIs(unfilteredAbiMap)
+        const AbiMap = filterABIMap(unfilteredAbiMap)
         const ensMap = await this.getENSNames(addresses)
         const contractDataMap = await this.getContractsData(AbiMap, officialContractNamesMap)
 
@@ -247,7 +246,7 @@ class Translator2 {
 
         const contractDataMap = await this.getContractsData(unfilteredAbiMap, officialContractNamesMap)
 
-        const AbiMap = filterABIs(unfilteredAbiMap)
+        const AbiMap = filterABIMap(unfilteredAbiMap)
         const { decodedLogs, decodedCallData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)
 
         const allAddresses = this.getAllAddresses(decodedLogs, decodedCallData, contractAddresses)

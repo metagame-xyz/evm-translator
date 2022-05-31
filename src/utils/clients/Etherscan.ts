@@ -1,6 +1,13 @@
 import { ABI_ItemUnfiltered, ABI_ItemUnfilteredZ } from 'interfaces/abi'
 
-import { Fetcher } from 'utils'
+import { Fetcher, promiseAll } from 'utils'
+
+export const enum EtherscanServiceLevel {
+    free = 5,
+    standard = 10,
+    advanced = 20,
+    professional = 30,
+}
 
 export type SourceCodeObject = {
     SourceCode: string
@@ -18,24 +25,14 @@ export type SourceCodeObject = {
     SwarmSource: string
 }
 
-function promiseAll(promises: Array<Promise<any>>, errors: any[]) {
-    return Promise.all(
-        promises.map((p) => {
-            return p.catch((e) => {
-                errors.push(e)
-                return e
-            })
-        }),
-    )
-}
-
 export default class Etherscan {
     baseUrl = 'https://api.etherscan.io/api'
     apiKey: string
-    fetcher = new Fetcher(5)
+    fetcher: Fetcher
 
-    constructor(apiKey: string) {
+    constructor(apiKey: string, etherscanServiceLevel = EtherscanServiceLevel.free) {
         this.apiKey = apiKey
+        this.fetcher = new Fetcher(etherscanServiceLevel)
     }
 
     createUrl(params: Record<string, any>): string {

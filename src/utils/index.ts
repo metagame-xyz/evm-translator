@@ -235,11 +235,15 @@ export const getEntries = <T>(obj: T) => Object.entries(obj) as Array<[keyof T, 
 
 export const getValues = <T>(obj: Record<any, T>) => Object.values(obj) as Array<T>
 
-export function filterABIs(unfilteredABIs: Record<string, ABI_ItemUnfiltered[]>): Record<string, ABI_Item[]> {
+export function filterABI(unfilteredABI: ABI_ItemUnfiltered[]): ABI_Item[] {
+    return unfilteredABI.filter(({ type }) => type === 'function' || type === 'event') as ABI_Item[]
+}
+
+export function filterABIMap(unfilteredABIs: Record<string, ABI_ItemUnfiltered[]>): Record<string, ABI_Item[]> {
     const filteredABIs: Record<string, ABI_Item[]> = {}
 
     for (const [address, unfilteredABI] of Object.entries(unfilteredABIs)) {
-        const abi = unfilteredABI.filter(({ type }) => type === 'function' || type === 'event') as ABI_Item[]
+        const abi = filterABI(unfilteredABI)
         filteredABIs[address] = abi
     }
 
@@ -278,5 +282,17 @@ export function abiToAbiRow(abi: ABI_Item): ABI_Row {
 }
 
 export function abiArrToAbiRows(abiArr: ABI_Item[]): ABI_Row[] {
+    console.log('abiArrToAbiRows', abiArr)
     return abiArr.map(abiToAbiRow)
+}
+
+export function promiseAll(promises: Array<Promise<any>>, errors: any[]) {
+    return Promise.all(
+        promises.map((p) => {
+            return p.catch((e) => {
+                errors.push(e)
+                return e
+            })
+        }),
+    )
 }

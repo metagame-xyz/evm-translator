@@ -11,6 +11,7 @@
         "format": "prettier --write \"src/**/*.ts\" \"docs/**/*.md\"",
         "lint": "eslint --ignore-path .eslintignore --ext .ts .",
         "check": "yarn run lint && yarn run format && yarn run test",
+        "seed": "node lib/scripts/seed-db.js",
         "prepare": "yarn run build",
         "preversion": "yarn run lint",
         "version": "yarn run format && git add -A src",
