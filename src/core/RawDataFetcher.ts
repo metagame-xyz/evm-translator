@@ -35,6 +35,7 @@ export default class RawDataFetcher {
         return TxResponseZ.parse(unvalidatedTxResponse)
     }
 
+    // TODO use this
     static validateTxReceipt(unvalidatedTxReceipt: any): TxReceipt {
         return TxReceiptZ.parse(unvalidatedTxReceipt)
     }

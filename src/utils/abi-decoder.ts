@@ -4,7 +4,7 @@ import { Log } from '@ethersproject/providers'
 import { BigNumber } from 'ethers'
 
 import { ContractData, ContractType, RawDecodedCallData, RawDecodedLog, RawDecodedLogEvent } from 'interfaces'
-import { ABI_Event, ABI_Function, ABI_FunctionZ, ABI_Item, ABI_ItemUnfiltered, ABI_Row, ABI_Type } from 'interfaces/abi'
+import { ABI_Event, ABI_Function, ABI_FunctionZ, ABI_Item, ABI_Row, ABI_Type } from 'interfaces/abi'
 import { AddressZ } from 'interfaces/utils'
 
 import { abiToAbiRow, hash } from 'utils'

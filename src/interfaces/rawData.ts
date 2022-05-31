@@ -111,7 +111,7 @@ export type TraceResult = z.infer<typeof TraceResultZ>
 const TraceActionCallTypeZ = z.enum(['call', 'delegatecall', 'callcode', 'staticcall'])
 // const TraceActionCreateTypeZ = z.enum(['create', 'create2'])
 // const TraceActionSuicideTypeZ = z.enum(['suicide'])
-// const TraceACtionRewardTypeZ = z.enum(['block', 'uncle', 'emptyStep', 'extneral'])
+// const TraceACtionRewardTypeZ = z.enum(['block', 'uncle', 'emptyStep', 'external'])
 
 const CallTraceActionZ = z.object({
     callType: TraceActionCallTypeZ,
@@ -166,22 +166,22 @@ const traceLogAbstractZ = z.object({
 export const CallTraceLogZ = traceLogAbstractZ.extend({
     type: z.literal(TraceType.Enum.call),
     action: CallTraceActionZ,
-    result: StandardTraceResultZ,
+    result: StandardTraceResultZ.nullable(),
 })
 export const CreateTraceLogZ = traceLogAbstractZ.extend({
     type: z.literal(TraceType.Enum.create),
     action: CreateTraceActionZ,
-    result: CreateTraceResultZ,
+    result: CreateTraceResultZ.nullable(),
 })
 export const SuicideTraceLogZ = traceLogAbstractZ.extend({
     type: z.literal(TraceType.Enum.suicide),
     action: SuicideTraceActionZ,
-    result: StandardTraceResultZ,
+    result: StandardTraceResultZ.nullable(),
 })
 export const RewardTraceLogZ = traceLogAbstractZ.extend({
     type: z.literal(TraceType.Enum.reward),
     action: RewardTraceActionZ,
-    result: StandardTraceResultZ,
+    result: StandardTraceResultZ.nullable(),
 })
 
 export const TraceLogZ = z.discriminatedUnion('type', [

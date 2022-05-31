@@ -347,7 +347,8 @@ export class Augmenter {
                 if (
                     traceLog.type === TraceType.enum.call &&
                     traceLog.action.callType == 'call' &&
-                    !traceLog.action.value.isZero()
+                    !traceLog.action.value.isZero() &&
+                    !traceLog.error
                 ) {
                     nativeTransfers.push(traceLog)
                 }
