@@ -28,6 +28,7 @@ import {
     getChainById,
     getEntries,
     getKeys,
+    getProxyAddresses,
     getValues,
     isAddress,
 } from 'utils'
@@ -583,6 +584,7 @@ export class Augmenter {
     async getContractsData(
         contractToAbiMap: Record<string, ABI_ItemUnfiltered[]>,
         contractToOfficialNameMap: Record<string, string | null>,
+        proxyAddressMap: Record<string, string>,
     ): Promise<Record<string, ContractData>> {
         const contractDataMap: Record<string, ContractData> = {}
         const filteredABIs = filterABIMap(contractToAbiMap)
@@ -593,7 +595,11 @@ export class Augmenter {
 
         await Promise.all(
             addresses.map(async (address) => {
+                const proxyAddress = proxyAddressMap[address] || null
                 const abi = contractToAbiMap[address]
+                // if the contract has a proxy, add the proxy's ABI too
+                if (proxyAddress) abi.concat(contractToAbiMap[proxyAddress])
+
                 const contractType =
                     contractDataMapFromDB[address]?.type || (await this.getContractType(address, filteredABIs[address]))
 
@@ -612,9 +618,6 @@ export class Augmenter {
                     ;({ tokenName, tokenSymbol, contractName } = await this.getNameAndSymbol(address, contractType))
                 }
 
-                const proxyAddress = await this.provider
-                    .getStorageAt(address, proxyImplementationAddress)
-                    .catch(() => null)
                 // const contractName = await this.getContractName(address)
                 const contractData: ContractData = {
                     address,
@@ -636,9 +639,18 @@ export class Augmenter {
         return contractDataMap
     }
 
-    // async augmentProxyContractABIs(contractDataMap: Record<string, ContractData>): Promise<Record<string, ContractData>> {
+    async getProxyContractMap(contractAddresses: string[]): Promise<Record<string, string>> {
+        const proxyMap: Record<string, string> = {}
+        const proxyAddresses = await getProxyAddresses(this.provider, contractAddresses)
 
-    // }
+        for (const [index, proxyAddress] of proxyAddresses.entries()) {
+            if (proxyAddress) {
+                proxyMap[contractAddresses[index]] = proxyAddress
+            }
+        }
+
+        return proxyMap
+    }
 
     // TODO get the names
     async getABIsAndNamesForContracts(

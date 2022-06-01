@@ -303,9 +303,15 @@ export function promiseAll(promises: Array<Promise<any>>, errors: any[]) {
 export async function getProxyAddresses(provider: BaseProvider, addresses: string[]): Promise<Array<string | null>> {
     const proxyAddresses = await Promise.all(
         addresses.map((address) => {
+            console.log('getProxyAddress', address)
             return provider.getStorageAt(address, proxyImplementationAddress).catch(() => null)
         }),
     )
-
-    return proxyAddresses.map((proxyAddress) => (proxyAddress ? AddressZ.parse(proxyAddress) : null))
+    return proxyAddresses.map((proxyAddress) => {
+        try {
+            return AddressZ.parse(proxyAddress)
+        } catch (e) {
+            return null
+        }
+    })
 }

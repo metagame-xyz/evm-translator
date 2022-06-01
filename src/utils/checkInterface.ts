@@ -18,7 +18,7 @@ async function checkInterface(contractAddress: string, provider: BaseProvider): 
             return ContractType.OTHER
         }
     } catch (e) {
-        console.log(`${contractAddress} doesn't have a supportsInterface function`)
+        // console.log(`${contractAddress} doesn't have a supportsInterface function`)
         return ContractType.OTHER
     }
 }

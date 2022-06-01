@@ -6,7 +6,7 @@ import { RawTxData, RawTxDataWithoutTrace } from 'interfaces/RawData'
 import { EVMTransaction } from 'interfaces/s3'
 import { AddressZ } from 'interfaces/utils'
 
-import { Fetcher, filterABIMap } from 'utils'
+import { Fetcher, filterABIMap, getProxyAddresses, getValues } from 'utils'
 import Etherscan, { EtherscanServiceLevel } from 'utils/clients/Etherscan'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 import { MongooseDatabaseInterface } from 'utils/mongoose'
@@ -130,9 +130,9 @@ class Translator2 {
         return this.augmenter.getABIsAndNamesForContracts(contractAddresses)
     }
 
-    // async augmentProxyContractABIs(contractDataMap: Record<string, ContractData>): Promise<Record<string, ContractData>> {
-    //     return this.augmenter.augmentProxyContractABIs(contractDataMap)
-    // }
+    async getProxyContractMap(contractAddresses: string[]): Promise<Record<string, string>> {
+        return this.augmenter.getProxyContractMap(contractAddresses)
+    }
 
     async getNameAndSymbol(
         address: string,
@@ -156,8 +156,9 @@ class Translator2 {
     async getContractsData(
         contractToAbiMap: Record<string, ABI_ItemUnfiltered[]>,
         contractToOfficialNameMap: Record<string, string | null>,
+        proxyAddressMap: Record<string, string>,
     ): Promise<Record<string, ContractData>> {
-        return this.augmenter.getContractsData(contractToAbiMap, contractToOfficialNameMap)
+        return this.augmenter.getContractsData(contractToAbiMap, contractToOfficialNameMap, proxyAddressMap)
     }
 
     // We should store this in a contracts table just so we can see this data more easily
@@ -219,9 +220,10 @@ class Translator2 {
         const rawTxData = await this.getRawTxData(txHash)
         const addresses = this.getContractAddressesFromRawTxData(rawTxData)
         const [unfilteredAbiMap, officialContractNamesMap] = await this.getABIsAndNamesForContracts(addresses)
+        const proxyAddressMap = await this.getProxyContractMap(addresses)
         const AbiMap = filterABIMap(unfilteredAbiMap)
         const ensMap = await this.getENSNames(addresses)
-        const contractDataMap = await this.getContractsData(AbiMap, officialContractNamesMap)
+        const contractDataMap = await this.getContractsData(AbiMap, officialContractNamesMap, proxyAddressMap)
 
         const { decodedLogs, decodedCallData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)
         const decodedWithAugmentation = this.augmentDecodedData(
@@ -246,9 +248,18 @@ class Translator2 {
         const rawTxData = await this.getRawTxData(txHash)
 
         const contractAddresses = this.getContractAddressesFromRawTxData(rawTxData)
-        const [unfilteredAbiMap, officialContractNamesMap] = await this.getABIsAndNamesForContracts(contractAddresses)
 
-        const contractDataMap = await this.getContractsData(unfilteredAbiMap, officialContractNamesMap)
+        // const proxyAddressMap = await this.getProxyContractMap(contractAddresses)
+        // console.log('proxyAddressMap', proxyAddressMap)
+
+        const proxyAddressMap: Record<string, string> = {}
+
+        const contractAndProxyAddresses = [...contractAddresses, ...getValues(proxyAddressMap)]
+        const [unfilteredAbiMap, officialContractNamesMap] = await this.getABIsAndNamesForContracts(
+            contractAndProxyAddresses,
+        )
+
+        const contractDataMap = await this.getContractsData(unfilteredAbiMap, officialContractNamesMap, proxyAddressMap)
 
         // contractDataMap = await this.augmentProxyContractABIs(contractDataMap)
 
