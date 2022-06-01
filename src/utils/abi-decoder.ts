@@ -181,7 +181,6 @@ export default class ABIDecoder {
 
                     if (!abiItem && eventID === approvalHash) {
                         abiItem = getABIForApprovalEvent(contractDataMap[AddressZ.parse(logItem.address)]?.type)
-                        console.log('abiItem', abiItem)
                     }
 
                     // if not, check if we have any matches in the database
@@ -190,7 +189,7 @@ export default class ABIDecoder {
                         // abiItem = abiItemOptions?.[0] || null
                     }
 
-                    console.log('eventId', eventID)
+                    // console.log('eventId', eventID)
                     // console.log('logItem', logItem)
                     // console.log('abiItem', abiItem)
 
@@ -199,7 +198,6 @@ export default class ABIDecoder {
                     let topicsIndex = 1
 
                     function getDecodedData(logItem: Log, abiItem: ABI_Event) {
-                        console.log('abiItemOptions', abiItemOptions)
                         const logData = logItem.data.slice(2)
 
                         const dataTypes: any[] = []
@@ -229,8 +227,6 @@ export default class ABIDecoder {
                             }
                         }
                     }
-
-                    console.log('decodedData', decodedData)
 
                     if (abiItem && decodedData) {
                         type DecodedParam = {

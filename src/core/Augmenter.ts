@@ -38,7 +38,7 @@ import checkInterface from 'utils/checkInterface'
 import Covalent from 'utils/clients/Covalent'
 import Etherscan from 'utils/clients/Etherscan'
 import fourByteDirectory from 'utils/clients/FourByteDirectory'
-import { blackholeAddress, REVERSE_RECORDS_CONTRACT_ADDRESS } from 'utils/constants'
+import { blackholeAddress, proxyImplementationAddress, REVERSE_RECORDS_CONTRACT_ADDRESS } from 'utils/constants'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 import getTypeFromABI from 'utils/getTypeFromABI'
 
@@ -611,6 +611,10 @@ export class Augmenter {
                 if (!contractName) {
                     ;({ tokenName, tokenSymbol, contractName } = await this.getNameAndSymbol(address, contractType))
                 }
+
+                const proxyAddress = await this.provider
+                    .getStorageAt(address, proxyImplementationAddress)
+                    .catch(() => null)
                 // const contractName = await this.getContractName(address)
                 const contractData: ContractData = {
                     address,
@@ -620,6 +624,7 @@ export class Augmenter {
                     abi,
                     contractName,
                     contractOfficialName: contractToOfficialNameMap[address],
+                    proxyAddress,
                 }
 
                 // console.log('contractData', contractData)
@@ -630,6 +635,10 @@ export class Augmenter {
         await this.db.addOrUpdateManyContractData(getValues(contractDataMap).flat())
         return contractDataMap
     }
+
+    // async augmentProxyContractABIs(contractDataMap: Record<string, ContractData>): Promise<Record<string, ContractData>> {
+
+    // }
 
     // TODO get the names
     async getABIsAndNamesForContracts(

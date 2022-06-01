@@ -68,7 +68,7 @@ class Translator2 {
     private getProvider(): AlchemyProvider {
         if (this.nodeUrl) {
             throw new Error(
-                'the node url option (JsonRpcProvider instead of AlchemyProvider) Not implemented. RawDataFetcher uses AlchemyProvider b/c defaultProvider was throwing errors, and using just Alchemy wasnt throwing errors',
+                'the node url option (JsonRpcProvider instead of AlchemyProvider) Not implemented. RawDataFetcher uses AlchemyProvider b/c defaultProvider was throwing errors, and using just Alchemy was not throwing errors',
             )
             // return new JsonRpcProvider(this.nodeUrl, this.chain.id)
         }
@@ -129,6 +129,10 @@ class Translator2 {
     ): Promise<[Record<string, ABI_ItemUnfiltered[]>, Record<string, string | null>]> {
         return this.augmenter.getABIsAndNamesForContracts(contractAddresses)
     }
+
+    // async augmentProxyContractABIs(contractDataMap: Record<string, ContractData>): Promise<Record<string, ContractData>> {
+    //     return this.augmenter.augmentProxyContractABIs(contractDataMap)
+    // }
 
     async getNameAndSymbol(
         address: string,
@@ -245,6 +249,8 @@ class Translator2 {
         const [unfilteredAbiMap, officialContractNamesMap] = await this.getABIsAndNamesForContracts(contractAddresses)
 
         const contractDataMap = await this.getContractsData(unfilteredAbiMap, officialContractNamesMap)
+
+        // contractDataMap = await this.augmentProxyContractABIs(contractDataMap)
 
         const AbiMap = filterABIMap(unfilteredAbiMap)
         const { decodedLogs, decodedCallData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)

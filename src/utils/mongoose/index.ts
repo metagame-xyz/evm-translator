@@ -56,9 +56,6 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
                     },
                 })),
             )
-
-            console.log('contracts:')
-            console.log(result)
         } catch (e) {
             console.log('contract mongoose error')
             console.log(e)
@@ -82,9 +79,6 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
                     },
                 })),
             )
-
-            console.log('ABIs:')
-            console.log(result)
         } catch (e) {
             console.log('abi mongoose error')
             console.log(e)

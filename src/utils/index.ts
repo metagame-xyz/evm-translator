@@ -1,3 +1,5 @@
+import { proxyImplementationAddress } from './constants'
+import { BaseProvider } from '@ethersproject/providers'
 import Bottleneck from 'bottleneck'
 import collect from 'collect.js'
 import { BigNumber } from 'ethers'
@@ -7,6 +9,7 @@ import traverse from 'traverse'
 
 import { Chain, Chains, ChainSymbol, Interaction, InteractionEvent, Interpretation } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered, ABI_Row, ABI_RowZ, ABI_Type } from 'interfaces/abi'
+import { AddressZ } from 'interfaces/utils'
 
 const ethereum: Chain = {
     EVM: true,
@@ -295,4 +298,14 @@ export function promiseAll(promises: Array<Promise<any>>, errors: any[]) {
             })
         }),
     )
+}
+
+export async function getProxyAddresses(provider: BaseProvider, addresses: string[]): Promise<Array<string | null>> {
+    const proxyAddresses = await Promise.all(
+        addresses.map((address) => {
+            return provider.getStorageAt(address, proxyImplementationAddress).catch(() => null)
+        }),
+    )
+
+    return proxyAddresses.map((proxyAddress) => (proxyAddress ? AddressZ.parse(proxyAddress) : null))
 }

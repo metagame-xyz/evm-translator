@@ -170,7 +170,7 @@ function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Int
             }
         }
         default:
-            console.log('getTokenInfo action not supported: ')
+            // console.log('getTokenInfo action not supported: ')
             return {
                 type: TokenType.DEFAULT,
                 name: '',
