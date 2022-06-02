@@ -6,7 +6,7 @@ import { RawTxData, RawTxDataWithoutTrace } from 'interfaces/RawData'
 import { EVMTransaction } from 'interfaces/s3'
 import { AddressZ } from 'interfaces/utils'
 
-import { Fetcher, filterABIMap, getProxyAddresses, getValues } from 'utils'
+import { filterABIMap, getProxyAddresses, getValues } from 'utils'
 import Etherscan, { EtherscanServiceLevel } from 'utils/clients/Etherscan'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 import { MongooseDatabaseInterface } from 'utils/mongoose'

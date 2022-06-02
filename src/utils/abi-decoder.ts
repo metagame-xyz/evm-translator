@@ -7,7 +7,7 @@ import { ContractData, ContractType, RawDecodedCallData, RawDecodedLog, RawDecod
 import { ABI_Event, ABI_Function, ABI_FunctionZ, ABI_Item, ABI_Row, ABI_Type } from 'interfaces/abi'
 import { AddressZ } from 'interfaces/utils'
 
-import { abiToAbiRow, hash } from 'utils'
+import { abiToAbiRow, getEntries, hash } from 'utils'
 import erc20 from 'utils/ABIs/erc20.json'
 import erc721 from 'utils/ABIs/erc721.json'
 import ABICoder from 'utils/web3-abi-coder'
@@ -38,40 +38,43 @@ function getABIForApprovalEvent(contractType: ContractType | null): ABI_Event | 
 
 const abiCoder = new ABICoder()
 
+type methodSigs = {
+    [key: string]: ABI_Function
+}
+type eventSigs = {
+    [key: string]: { [key: string]: ABI_Event }
+}
+
 export default class ABIDecoder {
-    savedABIs: any[]
-    methodSigs: { [key: string]: ABI_Function }
-    eventSigs: { [key: string]: ABI_Event }
+    methodSigs: methodSigs
+    eventSigs: eventSigs
     abiRows: ABI_Row[]
     db: DatabaseInterface
 
     constructor(databaseInterface: DatabaseInterface) {
-        this.savedABIs = []
         this.methodSigs = {}
         this.eventSigs = {}
         this.abiRows = []
         this.db = databaseInterface
     }
-    getABIs() {
-        return this.savedABIs
-    }
-    addABI(abiArray: ABI_Item[]) {
-        abiArray.map((abi) => {
-            const abiRow = abiToAbiRow(abi)
-            this.abiRows.push(abiRow)
 
-            if (abiRow.type === ABI_Type.enum.event) {
-                this.eventSigs[abiRow.hashedSignature] = abiRow.abiJSON
-            } else if (abiRow.type === ABI_Type.enum.function) {
-                this.methodSigs[abiRow.hashedSignature] = abiRow.abiJSON
-            }
+    addABI(abiMap: Record<string, ABI_Item[]>) {
+        getEntries(abiMap).map(([contractAddress, abiArray]) => {
+            abiArray.map((abi) => {
+                const abiRow = abiToAbiRow(abi)
+                this.abiRows.push(abiRow)
+
+                if (abiRow.type === ABI_Type.enum.event) {
+                    // per contract ABIs so erc20 Transfer and erc721 Transfer don't conflict
+                    this.eventSigs[contractAddress] = this.eventSigs[contractAddress] || {}
+                    this.eventSigs[contractAddress][abiRow.hashedSignature] = abiRow.abiJSON
+                } else if (abiRow.type === ABI_Type.enum.function) {
+                    this.methodSigs[abiRow.hashedSignature] = abiRow.abiJSON
+                }
+            })
         })
+    }
 
-        this.savedABIs = this.savedABIs.concat(abiArray)
-    }
-    getMethodIDs() {
-        return this.methodSigs
-    }
     async getABIEventFromExternalSource(hexSignature: string): Promise<ABI_Event | undefined> {
         const abiSig = await fourByteDirectory.getEventSignature(hexSignature)
 
@@ -106,8 +109,8 @@ export default class ABIDecoder {
         // const abiItem = this.methodSigs[methodID] || (await this.db.getABIsForHexSignature(methodID))?.[0]
         // const abiItem = this.methodSigs[methodID] || (await this.getABIFunctionFromExternalSource(methodID))
         // const abiItem = await this.getABIFunctionFromExternalSource(methodID)
-        const dbResult = await this.db.getFirstABIForHexSignature(methodID)
-        const abiItem = dbResult ? ABI_FunctionZ.parse(dbResult) : null
+        const abiResult = this.methodSigs[methodID] || (await this.db.getFirstABIForHexSignature(methodID))
+        const abiItem = abiResult ? ABI_FunctionZ.parse(abiResult) : null
 
         if (abiItem) {
             const decoded = abiCoder.decodeParameters(abiItem.inputs, data.slice(10))
@@ -167,20 +170,21 @@ export default class ABIDecoder {
                 .filter((log) => log.topics.length > 0)
                 .map(async (logItem) => {
                     const eventID = logItem.topics[0]
+                    const address = AddressZ.parse(logItem.address)
 
                     // first check if it the contract's abi has it
-                    let abiItem: ABI_Event | null = this.eventSigs[eventID] || null
+                    let abiItem: ABI_Event | null = this.eventSigs[address][eventID] || null
 
                     // if it's there, add it as an option
-                    let abiItemOptions: ABI_Event[] = abiItem ? [abiItem] : []
+                    let abiItemOptions: ABI_Event[] = []
 
                     // if not, and it's the ambiguous Transfer event, check the contract type
                     if (!abiItem && eventID === transferHash) {
-                        abiItem = getABIForTransferEvent(contractDataMap[AddressZ.parse(logItem.address)]?.type)
+                        abiItem = getABIForTransferEvent(contractDataMap[address].type)
                     }
 
                     if (!abiItem && eventID === approvalHash) {
-                        abiItem = getABIForApprovalEvent(contractDataMap[AddressZ.parse(logItem.address)]?.type)
+                        abiItem = getABIForApprovalEvent(contractDataMap[address].type)
                     }
 
                     // if not, check if we have any matches in the database

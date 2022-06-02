@@ -111,15 +111,15 @@ export class Augmenter {
 
     async decodeTxData(
         rawTxData: RawTxData | RawTxDataWithoutTrace,
-        ABIs: Record<string, ABI_Item[]>,
+        abiMap: Record<string, ABI_Item[]>,
         contractDataMap: Record<string, ContractData>,
     ): Promise<{ decodedLogs: Interaction[]; decodedCallData: DecodedCallData }> {
         const allABIs: ABI_Item[] = []
-        const abiArrArr = getValues(ABIs)
+        const abiArrArr = getValues(abiMap)
         allABIs.push(...abiArrArr.flat())
 
         const abiDecoder = new ABIDecoder(this.db)
-        abiDecoder.addABI(allABIs)
+        abiDecoder.addABI(abiMap)
 
         const { logs } = rawTxData.txReceipt
 
@@ -658,9 +658,15 @@ export class Augmenter {
     ): Promise<[Record<string, ABI_ItemUnfiltered[]>, Record<string, string | null>]> {
         const addresses = contractAddresses.map((a) => AddressZ.parse(a))
 
-        const contractDataMap = await this.db.getContractDataForManyContracts(addresses)
+        const contractDataMapWithNulls = await this.db.getContractDataForManyContracts(addresses)
 
-        const addressesWithMissingABIs = getKeys(contractDataMap).filter((address) => !contractDataMap[address]?.abi)
+        const addressesWithMissingABIs = getKeys(contractDataMapWithNulls).filter(
+            (address) => !contractDataMapWithNulls[address]?.abi,
+        )
+
+        const contractDataMap = Object.fromEntries(
+            Object.entries(contractDataMapWithNulls).filter(([, v]) => v != null),
+        ) as Record<string, ContractData>
 
         // get abis from etherscan only for contracts we dont have an abi for
         const abiMapFromEtherscan = await this.etherscan.getABIs(addressesWithMissingABIs)
@@ -674,16 +680,16 @@ export class Augmenter {
         await this.db.addOrUpdateManyABI(abiArrToAbiRows(filtered))
 
         const AbiMapFromDB = getEntries(contractDataMap).reduce((acc, [address, contractData]) => {
-            acc[address] = contractData?.abi || null
+            acc[address] = contractData.abi || null
             return acc
         }, {} as Record<string, ABI_ItemUnfiltered[]>)
 
         const abiMap = { ...AbiMapFromDB, ...abiMapFromEtherscan }
 
         const nameMapFromDB = getEntries(contractDataMap).reduce((acc, [address, contractData]) => {
-            acc[address] = contractData?.contractOfficialName || null
+            acc[address] = contractData.contractOfficialName || null
             return acc
-        }, {} as Record<string, string>)
+        }, {} as Record<string, string | null>)
 
         // TODO get names from 3rd party APIs
         const nameMapFromEtherscan: Record<string, string | null> = {}

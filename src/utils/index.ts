@@ -132,7 +132,7 @@ export class Fetcher {
 
     constructor(perSecond: number) {
         const maxConcurrent = perSecond
-        const minTime = (1000 / perSecond) * 1.1
+        const minTime = (1000 / perSecond) * 1.15
         this.limiter = new Bottleneck({ maxConcurrent, minTime })
     }
 
@@ -234,9 +234,9 @@ export const getNativeTokenValueEvents = (interactions: Interaction[]): Interact
 
 export const getKeys = <T>(obj: T) => Object.keys(obj) as Array<keyof T>
 
-export const getEntries = <T>(obj: T) => Object.entries(obj) as Array<[keyof T, any]>
+export const getEntries = <T>(obj: Record<string, T>) => Object.entries(obj) as Array<[string, T]>
 
-export const getValues = <T>(obj: Record<any, T>) => Object.values(obj) as Array<T>
+export const getValues = <T>(obj: Record<string, T>) => Object.values(obj) as Array<T>
 
 export function filterABI(unfilteredABI: ABI_ItemUnfiltered[]): ABI_Item[] {
     return unfilteredABI.filter(({ type }) => type === 'function' || type === 'event') as ABI_Item[]
@@ -285,7 +285,9 @@ export function abiToAbiRow(abi: ABI_Item): ABI_Row {
 }
 
 export function abiArrToAbiRows(abiArr: ABI_Item[]): ABI_Row[] {
-    console.log('abiArrToAbiRows', abiArr)
+    if (abiArr.length) {
+        console.log('abiArrToAbiRows', abiArr)
+    }
     return abiArr.map(abiToAbiRow)
 }
 

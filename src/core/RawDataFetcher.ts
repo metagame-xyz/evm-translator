@@ -1,5 +1,4 @@
 /* eslint-disable no-debugger */
-// import { createAlchemyWeb3 } from '@alch/alchemy-web3'
 import {
     TransactionReceipt as unvalidatedTransactionReceipt,
     TransactionResponse as unvalidatedTransactionResponse,
@@ -64,14 +63,9 @@ export default class RawDataFetcher {
     }
 
     async getTxTrace(txHash: string): Promise<TraceLog[]> {
-        console.log('in trace:', txHash)
-        // const url = this.provider.connection.url
-        // const alchemyWeb3 = createAlchemyWeb3(url)
-        // const unvalidatedTrace = await alchemyWeb3.
+        console.log('trace logs:', txHash)
         const unvalidatedTrace = await this.provider.send('trace_transaction', [txHash])
-
         const traceLogs = RawDataFetcher.validateTraceLogs(unvalidatedTrace)
-        console.log('tried tracing')
         // console.log('trace logs', traceLogs)
 
         return traceLogs

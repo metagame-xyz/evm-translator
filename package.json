@@ -51,6 +51,7 @@
         "node-fetch": "2.6.6",
         "require-context": "^1.1.0",
         "traverse": "^0.6.6",
+        "winston": "^3.7.2",
         "zod": "^3.16.0"
     },
     "devDependencies": {
