@@ -9,7 +9,7 @@ import {
     TokenType,
 } from 'interfaces'
 
-import { ensure, shortenName } from 'utils'
+import { shortenName } from 'utils'
 import { blackholeAddress } from 'utils/constants'
 
 type TokenVars = {

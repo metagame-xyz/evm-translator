@@ -1,13 +1,13 @@
-import { logInfo } from './logging'
+import { logTimer } from './logging'
 
 class Timer {
     globalTimer = 0
     #timers: Record<string, number> = {}
 
-    public logDev(message: string): void {
+    public logDev(secondsElapsed: number, message: string): void {
         if (process.env.NODE_ENV !== 'development') return
 
-        logInfo({}, message)
+        logTimer({ secondsElapsed }, message)
     }
 
     public startGlobalTimer(): void {
@@ -28,7 +28,9 @@ class Timer {
         const elapsed = (new Date().getTime() - this.#timers[key]) / 1000
         delete this.#timers[key]
 
-        this.logDev(`${this.globalTimer ? `${this.globalElapsed()}s:` : ''} ${key} took ${elapsed}s`)
+        this.logDev(elapsed, key)
+
+        // this.logDev(`${this.globalTimer ? `${this.globalElapsed()}s:` : ''} ${key} took ${elapsed}s`)
 
         return elapsed
     }

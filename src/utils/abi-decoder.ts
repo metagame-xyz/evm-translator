@@ -1,5 +1,6 @@
 import fourByteDirectory from './clients/FourByteDirectory'
 import { DatabaseInterface } from './DatabaseInterface'
+import { logWarning } from './logging'
 import { Log } from '@ethersproject/providers'
 import { BigNumber } from 'ethers'
 
@@ -292,6 +293,7 @@ export default class ABIDecoder {
                             decoded: true,
                         } as RawDecodedLog
                     } else {
+                        logWarning({ address, eventHash: eventID }, 'no abi found')
                         return {
                             name: null,
                             events: [],

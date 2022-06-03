@@ -132,7 +132,7 @@ export class Fetcher {
 
     constructor(perSecond: number) {
         const maxConcurrent = perSecond
-        const minTime = (1000 / perSecond) * 1.2
+        const minTime = (1000 / perSecond) * 1.3
         this.limiter = new Bottleneck({ maxConcurrent, minTime })
     }
 
