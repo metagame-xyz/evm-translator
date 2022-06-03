@@ -198,14 +198,6 @@ export function fillDescriptionTemplate(template: string, interpretation: Interp
     return template
 }
 
-export function ensure<T>(argument: T | undefined | null, message = 'This value was promised to be there.'): T {
-    if (argument === undefined || argument === null) {
-        throw new TypeError(message)
-    }
-
-    return argument
-}
-
 const validAddress = new RegExp(/^0x[a-fA-F0-9]{40}$/)
 
 export const shortenName = (username: string): string => {

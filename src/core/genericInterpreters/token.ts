@@ -293,7 +293,7 @@ function addExampleDescription(interpretation: Interpretation, token: Token) {
 
 function interpretGenericToken(decodedData: Decoded, interpretation: Interpretation) {
     const { userAddress } = interpretation
-    const { fromAddress, toAddress, interactions, contractType } = decodedData
+    const { fromAddress, toAddress, interactions, contractType, contractName } = decodedData
 
     if (contractType === ContractType.OTHER || contractType === ContractType.GNOSIS) {
         throw new Error('Token type not supported')
@@ -304,9 +304,17 @@ function interpretGenericToken(decodedData: Decoded, interpretation: Interpretat
     // console.log(decodedData)
     // console.log(decodedData.interactions.map((i) => console.log(i.events)))
     // console.log(interpretation)
-    const tokenContractInteraction = ensure(
-        interactions.find((interaction) => interaction.contractAddress === toAddress),
-    )
+
+    const defaultTokenInteraction: Interaction = {
+        contractName,
+        contractSymbol: null,
+        contractAddress: toAddress || '',
+        events: [],
+    }
+
+    const tokenContractInteraction =
+        interactions.find((interaction) => interaction.contractAddress === toAddress) || defaultTokenInteraction
+
     const tokenEvents = tokenContractInteraction?.events || []
 
     interpretation.action = getAction(t, tokenEvents, userAddress, fromAddress)

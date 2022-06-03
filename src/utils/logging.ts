@@ -78,7 +78,7 @@ export const logDebug = (logData: LogData, message: any) => {
     const logDataCopy = { ...logData, level: 'debug', message }
     logger.log(logDataCopy)
 }
-export const logMessage = (logData: LogData, message: any) => {
+export const logInfo = (logData: LogData, message: any) => {
     const logDataCopy = { ...logData, level: 'info', message }
     logger.log(logDataCopy)
 }

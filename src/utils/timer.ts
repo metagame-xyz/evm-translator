@@ -1,11 +1,13 @@
+import { logInfo } from './logging'
+
 class Timer {
     globalTimer = 0
     #timers: Record<string, number> = {}
 
-    public debug(...data: any[]): void {
+    public logDev(message: string): void {
         if (process.env.NODE_ENV !== 'development') return
 
-        console.log(...data)
+        logInfo({}, message)
     }
 
     public startGlobalTimer(): void {
@@ -19,14 +21,14 @@ class Timer {
     public startTimer(key: string): void {
         this.#timers[key] = new Date().getTime()
 
-        this.debug(`${this.globalTimer ? `${this.globalElapsed()}s:` : ''} started loading ${key}`)
+        // this.debug(`${this.globalTimer ? `${this.globalElapsed()}s:` : ''} started loading ${key}`)
     }
 
-    public endTimer(key: string, msg = ''): number {
+    public endTimer(key: string): number {
         const elapsed = (new Date().getTime() - this.#timers[key]) / 1000
         delete this.#timers[key]
 
-        this.debug(`${this.globalTimer ? `${this.globalElapsed()}s:` : ''} ${key} took ${elapsed}s`, msg)
+        this.logDev(`${this.globalTimer ? `${this.globalElapsed()}s:` : ''} ${key} took ${elapsed}s`)
 
         return elapsed
     }
