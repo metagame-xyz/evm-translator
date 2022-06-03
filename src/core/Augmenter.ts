@@ -42,6 +42,7 @@ import fourByteDirectory from 'utils/clients/FourByteDirectory'
 import { blackholeAddress, proxyImplementationAddress, REVERSE_RECORDS_CONTRACT_ADDRESS } from 'utils/constants'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 import getTypeFromABI from 'utils/getTypeFromABI'
+import { logDebug } from 'utils/logging'
 
 export type DecoderConfig = {
     covalentData?: CovalentTxData
@@ -516,6 +517,10 @@ export class Augmenter {
             tokenName = contractName
         }
 
+        if (contractName) {
+            logDebug({ address }, `${contractName} (${tokenSymbol})`)
+        }
+
         return { tokenName, tokenSymbol, contractName }
     }
 
@@ -663,6 +668,10 @@ export class Augmenter {
         const addressesWithMissingABIs = getKeys(contractDataMapWithNulls).filter(
             (address) => !contractDataMapWithNulls[address]?.abi,
         )
+
+        addressesWithMissingABIs.forEach((address) => {
+            logDebug({ address }, 'missing ABI. retrieving from etherscan')
+        })
 
         const contractDataMap = Object.fromEntries(
             Object.entries(contractDataMapWithNulls).filter(([, v]) => v != null),

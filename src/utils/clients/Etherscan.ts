@@ -1,6 +1,7 @@
 import { ABI_ItemUnfiltered, ABI_ItemUnfilteredZ } from 'interfaces/abi'
 
 import { Fetcher, promiseAll } from 'utils'
+import { logError } from 'utils/logging'
 
 export const enum EtherscanServiceLevel {
     free = 5,
@@ -53,13 +54,14 @@ export default class Etherscan {
         }
     }
 
-    static parseABIResponse(response: any): ABI_ItemUnfiltered[] {
+    static parseABIResponse(response: any, address: string | null = null): ABI_ItemUnfiltered[] {
         if (response.result == 'Contract source code not verified') {
             return []
         }
 
         if (response.status !== '1') {
-            console.warn(`Etherscan API error: ${response.result}`)
+            logError({ address: address ?? '' }, `Etherscan API error: ${response.result}`)
+            // console.warn(`Etherscan API error: ${response.result}`)
             // throw new Error(`Etherscan API error: ${response.result}`)
             return []
         }
@@ -76,7 +78,7 @@ export default class Etherscan {
     async getABI(contractAddress: string): Promise<ABI_ItemUnfiltered[]> {
         const response = await this.fetcher.fetch(this.createUrl(Etherscan.abiParams(contractAddress)))
 
-        return Etherscan.parseABIResponse(response)
+        return Etherscan.parseABIResponse(response, contractAddress)
     }
 
     async getABIs(contractAddresses: string[]): Promise<Record<string, ABI_ItemUnfiltered[]>> {
@@ -90,7 +92,7 @@ export default class Etherscan {
 
         const abiResults = await promiseAll(abiPromises, errors)
 
-        const abis = abiResults.map((abiResult) => Etherscan.parseABIResponse(abiResult))
+        const abis = abiResults.map((abiResult, i) => Etherscan.parseABIResponse(abiResult, contractAddresses[i]))
 
         abis.forEach((abi, i) => {
             ABIMap[contractAddresses[i]] = abi

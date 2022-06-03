@@ -19,6 +19,7 @@ import {
 import { EVMTransaction, EVMTransactionReceiptStringified, EVMTransactionStringified } from 'interfaces/s3'
 
 import Covalent from 'utils/clients/Covalent'
+import { logDebug, logError } from 'utils/logging'
 
 export default class RawDataFetcher {
     provider: AlchemyProvider
@@ -40,7 +41,16 @@ export default class RawDataFetcher {
     }
 
     static validateTraceLogs(unvalidatedTraceLogs: any[]): TraceLog[] {
-        return unvalidatedTraceLogs.map((tl: any) => TraceLogZ.parse(tl))
+        return unvalidatedTraceLogs.map((tl: any) => {
+            const data = TraceLogZ.safeParse(tl)
+            if (data.success) {
+                return data.data
+            } else {
+                console.log('error in validateTraceLogs', data.error)
+                logError({ txHash: tl.transactionHash, extra: tl }, JSON.stringify(data.error))
+                return tl as TraceLog
+            }
+        })
     }
 
     async getTxHashesByBlockNumber(blockNumber: string): Promise<string[]> {
@@ -63,7 +73,8 @@ export default class RawDataFetcher {
     }
 
     async getTxTrace(txHash: string): Promise<TraceLog[]> {
-        console.log('trace logs:', txHash)
+        // console.log('trace logs:', txHash)
+        logDebug({ txHash }, 'getting trace log')
         const unvalidatedTrace = await this.provider.send('trace_transaction', [txHash])
         const traceLogs = RawDataFetcher.validateTraceLogs(unvalidatedTrace)
         // console.log('trace logs', traceLogs)

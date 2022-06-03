@@ -132,7 +132,7 @@ export class Fetcher {
 
     constructor(perSecond: number) {
         const maxConcurrent = perSecond
-        const minTime = (1000 / perSecond) * 1.15
+        const minTime = (1000 / perSecond) * 1.2
         this.limiter = new Bottleneck({ maxConcurrent, minTime })
     }
 
@@ -285,9 +285,6 @@ export function abiToAbiRow(abi: ABI_Item): ABI_Row {
 }
 
 export function abiArrToAbiRows(abiArr: ABI_Item[]): ABI_Row[] {
-    if (abiArr.length) {
-        console.log('abiArrToAbiRows', abiArr)
-    }
     return abiArr.map(abiToAbiRow)
 }
 

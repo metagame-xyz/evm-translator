@@ -173,7 +173,7 @@ export default class ABIDecoder {
                     const address = AddressZ.parse(logItem.address)
 
                     // first check if it the contract's abi has it
-                    let abiItem: ABI_Event | null = this.eventSigs[address][eventID] || null
+                    let abiItem: ABI_Event | null = this.eventSigs[address] ? this.eventSigs[address][eventID] : null
 
                     // if it's there, add it as an option
                     let abiItemOptions: ABI_Event[] = []
