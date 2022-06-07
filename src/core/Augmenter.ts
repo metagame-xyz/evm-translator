@@ -1,6 +1,7 @@
 import { transformCovalentEvents } from './transformCovalentLogs'
 import { transformDecodedData, transformDecodedLogs } from './transformDecodedLogs'
 import { BaseProvider, Formatter } from '@ethersproject/providers'
+import axios from 'axios'
 // import abiDecoder from 'abi-decoder'
 import { Contract } from 'ethers'
 import traverse from 'traverse'
@@ -23,6 +24,7 @@ import { AddressZ } from 'interfaces/utils'
 
 import {
     abiArrToAbiRows,
+    Fetcher,
     filterABIArray,
     filterABIMap,
     getChainById,
@@ -493,6 +495,31 @@ export class Augmenter {
         this.decodedArr = decodedArrWithENS
     }
 
+    async downloadContractsFromTinTin(): Promise<ContractData[]> {
+        const mainnetTinTinUrl =
+            'https://raw.githubusercontent.com/tintinweb/smart-contract-sanctuary-ethereum/eb6b57e33f0a157c3688024a1eead4ea85753bd1/contracts/mainnet/contracts.json'
+
+        const contractMapping = (await axios.get(mainnetTinTinUrl).then((res) =>
+            JSON.parse(`[${res.data.replaceAll('}', '},').slice(0, -2)}]`).map((mapping: any) => ({
+                address: mapping.address,
+                contractOfficialName: mapping.name,
+                txCount: mapping.txCount,
+                type: ContractType.OTHER,
+                tokenName: null,
+                tokenSymbol: null,
+                contractName: null,
+                abi: [],
+                proxyAddress: null,
+            })),
+        )) as ContractData[]
+
+        await this.db.addOrUpdateManyContractData(contractMapping)
+
+        return contractMapping
+    }
+
+    
+
     async getNameAndSymbol(
         address: string,
         contractType: ContractType,
@@ -633,6 +660,7 @@ export class Augmenter {
                     contractName,
                     contractOfficialName: contractToOfficialNameMap[address],
                     proxyAddress,
+                    txCount: null,
                 }
 
                 // console.log('contractData', contractData)

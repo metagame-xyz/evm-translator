@@ -60,6 +60,28 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
             console.log('contract mongoose error')
             console.log(e)
         }
+
+        // const chunks = collect(contractDataArr).chunk(500).toArray() as ContractData[][]
+
+        // for (const chunkId in chunks) {
+        //     const chunk = chunks[chunkId]
+
+        //     try {
+        //         // only way to do bulk upsert
+        //         const { result } = await ContractModel.bulkWrite(
+        //             chunk.map((contract) => ({
+        //                 updateOne: {
+        //                     filter: { address: contract.address },
+        //                     update: contract,
+        //                     upsert: true,
+        //                 },
+        //             })),
+        //         )
+        //     } catch (e) {
+        //         console.log('contract mongoose error')
+        //         console.log(e)
+        //     }
+        // }
     }
 
     async addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<void> {

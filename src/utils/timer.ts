@@ -24,7 +24,7 @@ class Timer {
         // this.debug(`${this.globalTimer ? `${this.globalElapsed()}s:` : ''} started loading ${key}`)
     }
 
-    public endTimer(key: string): number {
+    public stopTimer(key: string): number {
         const elapsed = (new Date().getTime() - this.#timers[key]) / 1000
         delete this.#timers[key]
 
@@ -38,7 +38,7 @@ class Timer {
     public time<T>(key: string, op: () => T): T {
         this.startTimer(key)
         const result = op()
-        this.endTimer(key)
+        this.stopTimer(key)
 
         return result
     }

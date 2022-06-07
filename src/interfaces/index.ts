@@ -63,6 +63,7 @@ export type ContractData = {
     contractOfficialName: string | null
     abi: ABI_ItemUnfiltered[]
     proxyAddress: string | null
+    txCount: number | null
 }
 
 export const enum ContractType {

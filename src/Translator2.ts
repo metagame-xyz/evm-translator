@@ -141,6 +141,10 @@ class Translator2 {
         return this.augmenter.getNameAndSymbol(address, contractType)
     }
 
+    async downloadContractsFromTinTin(): Promise<ContractData[]> {
+        return this.augmenter.downloadContractsFromTinTin()
+    }
+
     async getENSNames(addresses: string[]): Promise<Record<string, string>> {
         return this.augmenter.getENSNames(addresses)
     }
