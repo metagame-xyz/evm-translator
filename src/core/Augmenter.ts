@@ -24,7 +24,6 @@ import { AddressZ } from 'interfaces/utils'
 
 import {
     abiArrToAbiRows,
-    Fetcher,
     filterABIArray,
     filterABIMap,
     getChainById,

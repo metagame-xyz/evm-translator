@@ -1,18 +1,8 @@
 import { model, Model, models, Schema } from 'mongoose'
 
 import { ContractData } from 'interfaces'
-import { ABI_ItemUnfiltered } from 'interfaces/abi'
 
 type ContractModelType = Model<ContractData>
-
-// const ABI_ItemSchema = new Schema<ABI_ItemUnfiltered>({
-//     name: { type: String, required: false },
-//     type: { type: String, required: true },
-//     inputs: { type: [], required: false },
-//     outputs: { type: [], required: false },
-//     stateMutability: { type: String, required: false },
-//     anonymous: { type: Boolean, required: false },
-// })
 
 const ContractSchema = new Schema<ContractData, ContractModelType>({
     address: { type: String, required: true },
