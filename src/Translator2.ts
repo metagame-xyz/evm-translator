@@ -310,6 +310,19 @@ class Translator2 {
 
         return { interpretedData: interpretation, decodedData: decodedWithAugmentation, rawTxData }
     }
+
+    async allDataFromTxHashArr(
+        txHashArr: string[],
+        userAddressUnvalidated: string | null = null,
+    ): Promise<{ interpretedData: Interpretation; decodedData: Decoded; rawTxData: RawTxData }[]> {
+        const promises = txHashArr.map((txHash) => {
+            return this.allDataFromTxHash(txHash, userAddressUnvalidated)
+        })
+
+        const results = await Promise.all(promises)
+
+        return results
+    }
 }
 
 export default Translator2

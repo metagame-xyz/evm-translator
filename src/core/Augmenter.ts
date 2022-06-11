@@ -404,9 +404,9 @@ export class Augmenter {
 
         const allDirtyNames = (await reverseRecords.getNames(addresses)) as string[]
 
-        // remove illegal chars
+        // remove illegal chars TODO allow more chars
         const names = allDirtyNames.map((name) => {
-            return name.replace(/([^\w\s+*:;,.()/\\]+)/gi, '¿')
+            return name.replace(/([^\w\s+*:;,.()\-/\\]+)/gi, '¿')
         })
 
         let addressToNameMap: Record<string, string> = {}
@@ -517,8 +517,6 @@ export class Augmenter {
 
         return contractMapping
     }
-
-    
 
     async getNameAndSymbol(
         address: string,
