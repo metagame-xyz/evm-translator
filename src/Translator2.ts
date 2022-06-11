@@ -7,9 +7,11 @@ import { EVMTransaction } from 'interfaces/s3'
 import { AddressZ } from 'interfaces/utils'
 
 import { filterABIMap, getProxyAddresses, getValues } from 'utils'
+import Covalent from 'utils/clients/Covalent'
 import Etherscan, { EtherscanServiceLevel } from 'utils/clients/Etherscan'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 import { MongooseDatabaseInterface } from 'utils/mongoose'
+import timer from 'utils/timer'
 
 import { Augmenter } from 'core/Augmenter'
 import Interpreter from 'core/Interpreter'
@@ -23,6 +25,7 @@ export type TranslatorConfigTwo = {
     userAddress?: string
     connectionString?: string
     etherscanServiceLevel?: EtherscanServiceLevel
+    covalentAPIKey?: string
 }
 
 export type NamesAndSymbolsMap = Record<string, { name: string | null; symbol: string | null }>
@@ -42,6 +45,7 @@ class Translator2 {
     augmenter: Augmenter
     interpreter: Interpreter
     databaseInterface: DatabaseInterface
+    covalent: Covalent | null
 
     constructor(config: TranslatorConfigTwo) {
         this.chain = config.chain
@@ -57,6 +61,7 @@ class Translator2 {
         this.rawDataFetcher = new RawDataFetcher(this.provider)
         this.augmenter = new Augmenter(this.provider, null, this.etherscan, this.databaseInterface)
         this.interpreter = new Interpreter(config.chain)
+        this.covalent = config.covalentAPIKey ? new Covalent(config.covalentAPIKey, config.chain.id) : null
     }
 
     async initializeMongoose() {
@@ -97,6 +102,23 @@ class Translator2 {
 
     async getRawTxDataWithoutTrace(txHash: string): Promise<RawTxDataWithoutTrace> {
         return this.rawDataFetcher.getTxDataWithoutTrace(txHash)
+    }
+
+    async getTxHashArrayForAddress(
+        address: string,
+        // includeInitiatedTxs = true,
+        // includeNotInitiatedTxs = false,
+        limit = 100,
+    ): Promise<string[]> {
+        if (!this.covalent) throw new Error('Covalent not configured')
+
+        const ens = (await this.getENSNames([address]))[address]
+
+        timer.startTimer(`covalent for ${ens || address}`)
+        const allCovalentTxDataArr = await this.covalent.getTransactionsFor(AddressZ.parse(address), limit)
+        timer.stopTimer(`covalent for ${ens || address}`)
+
+        return allCovalentTxDataArr.map((txData) => txData.tx_hash)
     }
 
     getRawDataFromS3Data(tx: EVMTransaction, timestamp: number): RawTxData {
