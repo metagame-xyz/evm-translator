@@ -165,6 +165,7 @@ export type Interpretation = {
     txHash: string
     userAddress: string
     contractName: string | null
+    contractAddress: string | null
     action: Action
     exampleDescription: string
     tokensSent: Token[] // usually just one token
@@ -178,6 +179,7 @@ export type Interpretation = {
     /* null when false so we can hide the null columns more easily */
     reverted: true | null
     gasPaid: string
+    timestamp: number | null
 }
 
 export type ActivityData = {

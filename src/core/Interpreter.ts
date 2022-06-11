@@ -96,6 +96,7 @@ class Interpreter {
             interactions,
             fromAddress,
             toAddress,
+            timestamp,
         } = decodedData
 
         const { nativeValueSent, txHash } = decodedData
@@ -121,6 +122,7 @@ class Interpreter {
         const interpretation: Interpretation = {
             txHash,
             userAddress,
+            contractAddress: toAddress,
             action: Action.unknown,
             nativeValueSent: this.getNativeTokenValueSent(
                 interactions,
@@ -139,6 +141,7 @@ class Interpreter {
             reverted: decodedData.reverted ? true : null,
             contractName: null,
             counterpartyName: null,
+            timestamp,
         }
 
         if (interpretation.reverted) {

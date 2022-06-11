@@ -67,8 +67,10 @@ export default class RawDataFetcher {
 
     async getTxReceipt(txHash: string): Promise<TxReceipt> {
         const txReceipt = await this.provider.getTransactionReceipt(txHash)
-        // console.log('txReceipt:', txReceipt)
-        const validatedAndFormattedTxReceipt = validateAndFormatTxData(txReceipt)
+        const timestamp = await this.provider.getBlock(txReceipt.blockNumber).then((block) => block.timestamp)
+
+        const validatedAndFormattedTxReceipt = validateAndFormatTxData(txReceipt, timestamp)
+
         return validatedAndFormattedTxReceipt
     }
 
@@ -234,7 +236,7 @@ function numbersToStrings(txData: EVMTransaction): EVMTransactionStringified {
 
 // lowercase addresses b/c addresses have uppercase for the checksum, but aren't when they're in a topic
 function validateAndFormatTxData(txData: unvalidatedTransactionResponse): TxResponse
-function validateAndFormatTxData(txData: unvalidatedTransactionReceipt): TxReceipt
+function validateAndFormatTxData(txData: unvalidatedTransactionReceipt, timestamp: number): TxReceipt
 function validateAndFormatTxData(txData: EVMTransactionReceiptStringified, timestamp: number | null): TxReceipt
 function validateAndFormatTxData(txData: EVMTransactionStringified): TxResponse
 function validateAndFormatTxData(

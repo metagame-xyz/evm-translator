@@ -140,7 +140,7 @@ export class Fetcher {
         return this.limiter.schedule(() => fetch(url, options))
     }
 
-    async fetch(url: string, options = fetchOptions) {
+    async fetch(url: string, options: Record<string, any> = fetchOptions) {
         let retry = 3
         while (retry > 0) {
             const response = await this.scheduleRequest(url, options)
