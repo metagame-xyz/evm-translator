@@ -1,5 +1,6 @@
 // import DatadogWinston from 'datadog-winston';
 import winston, { format } from 'winston'
+import { ConsoleTransportInstance, Transports } from 'winston/lib/winston/transports'
 
 // import { DATADOG_API_KEY } from './constants';
 
@@ -58,16 +59,18 @@ const timingFormat = printf((d) => {
     return `${d.level}: ${type}: ${val} ${message}${error}`
 })
 
-const localTransports = [
-    new winston.transports.Console({ level: 'debug' }),
-    new winston.transports.File({ level: 'warning', filename: 'logs/warnings.log' }),
-]
-
 const prodTransports = [new winston.transports.Console({ level: 'debug' })]
 
-const timerTransports = [new winston.transports.File({ level: 'debug', filename: 'logs/timers.log' })]
+const localTransports: any = [new winston.transports.Console({ level: 'debug' })]
+
+const timerTransports = []
 
 const isProdEnv = process.env.NODE_ENV === 'production'
+
+if (isProdEnv) {
+    localTransports.push(new winston.transports.File({ level: 'debug', filename: 'logs/warnings.log' }))
+    timerTransports.push(new winston.transports.File({ level: 'debug', filename: 'logs/timers.log' }))
+}
 
 //combine(colorize(), prodFormat)
 
