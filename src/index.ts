@@ -10,7 +10,6 @@ export * from 'utils'
 export * from 'utils/constants'
 export * from 'utils/DatabaseInterface'
 export * from 'utils/generateInterpreter'
-export * from 'utils/timer'
 export { timer, InterpreterTemplateGenerator }
 
 /* Interfaces */
