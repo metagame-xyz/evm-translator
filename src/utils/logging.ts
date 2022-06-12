@@ -67,7 +67,7 @@ const timerTransports = []
 
 const isProdEnv = process.env.NODE_ENV === 'production'
 
-if (isProdEnv) {
+if (!isProdEnv) {
     localTransports.push(new winston.transports.File({ level: 'debug', filename: 'logs/warnings.log' }))
     timerTransports.push(new winston.transports.File({ level: 'debug', filename: 'logs/timers.log' }))
 }
