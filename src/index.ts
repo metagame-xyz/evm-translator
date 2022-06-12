@@ -1,6 +1,5 @@
-import InterpreterTemplateGenerator from 'utils/generateInterpreter'
-import timer from 'utils/timer'
-
+// import InterpreterTemplateGenerator from 'utils/generateInterpreter'
+// import timer from 'utils/timer'
 import Translator from 'Translator'
 
 export * from 'Translator'
@@ -10,7 +9,10 @@ export * from 'utils'
 export * from 'utils/constants'
 export * from 'utils/DatabaseInterface'
 export * from 'utils/generateInterpreter'
-export { timer, InterpreterTemplateGenerator }
+export * from 'utils/logging'
+
+export { default as timer } from 'utils/timer'
+export { default as InterpreterTemplateGenerator } from 'utils/generateInterpreter'
 
 /* Interfaces */
 export * from 'interfaces'
