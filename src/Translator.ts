@@ -274,10 +274,12 @@ class Translator {
         return interpretation
     }
 
-    async allDataFromTxHash(txHash: string, userAddressUnvalidated: string | null = null): Promise<ActivityData> {
-        const userAddress = AddressZ.parse(userAddressUnvalidated)
-
+    async allDataFromTxHash(txHash: string, providedUserAddress: string | null = null): Promise<ActivityData> {
         const rawTxData = await this.getRawTxData(txHash)
+
+        const userAddressUnvalidated = providedUserAddress || rawTxData.txResponse.from
+
+        const userAddress = AddressZ.parse(userAddressUnvalidated)
 
         const contractAddresses = this.getContractAddressesFromRawTxData(rawTxData)
 

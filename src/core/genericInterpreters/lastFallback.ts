@@ -6,7 +6,9 @@ function sentBaseToken(interpretation: Interpretation): boolean {
     const { chainSymbol, nativeValueSent } = interpretation
     const currency = getStablecoinOrNativeWrappedAddressesBySymbol(chainSymbol)
 
-    return !!interpretation.tokensSent.find((token) => currency.includes(token.address) || Number(nativeValueSent) > 0)
+    return !!(
+        interpretation.tokensSent.find((token) => currency.includes(token.address)) || Number(nativeValueSent) > 0
+    )
 }
 
 function receivedBaseToken(interpretation: Interpretation): boolean {
@@ -85,6 +87,11 @@ function getAction(interpretation: Interpretation, userAddress: string, fromAddr
     // const isSentOtherToken = sentOtherToken(interpretation)
     // const isReceivedBaseToken = receivedBaseToken(interpretation)
     // const isReceivedOtherToken = receivedOtherToken(interpretation)
+
+    // console.log('isSentBaseToken', isSentBaseToken)
+    // console.log('isSentOtherToken', isSentOtherToken)
+    // console.log('isReceivedBaseToken', isReceivedBaseToken)
+    // console.log('isReceivedOtherToken', isReceivedOtherToken)
 
     if (isAirdrop(interpretation, userAddress, fromAddress)) {
         return Action.gotAirdropped

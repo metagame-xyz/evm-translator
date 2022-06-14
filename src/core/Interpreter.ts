@@ -154,7 +154,6 @@ class Interpreter {
         const methodSpecificMapping = (methodName && interpretationMapping?.writeFunctions[methodName]) || null
 
         // if there's no contract-specific mapping, try to use the fallback mapping
-
         if (decodedData.txType === TxType.CONTRACT_DEPLOY) {
             interpretation.action = Action.deployed
             interpretation.exampleDescription = contractDeployInterpreter.exampleDescription
