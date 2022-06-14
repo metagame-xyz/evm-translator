@@ -1,3 +1,4 @@
+import { AlchemyConfig, initializeAlchemy, Network } from '@alch/alchemy-sdk'
 import { AlchemyProvider } from '@ethersproject/providers'
 
 import {
@@ -87,7 +88,16 @@ class Translator {
             // return new JsonRpcProvider(this.nodeUrl, this.chain.id)
         }
         if (this.alchemyProjectId) {
-            return new AlchemyProvider(this.chain.id, this.alchemyProjectId)
+            const settings = {
+                apiKey: this.alchemyProjectId, // Replace with your Alchemy API Key.
+                network: Network.ETH_MAINNET, // Replace with your network. // TODO move this to Chain config
+                maxRetries: 10,
+            }
+
+            const alchemy = initializeAlchemy(settings)
+            const provider = alchemy.getProvider()
+
+            return provider
         } else {
             throw new Error('No node url or alchemy project id provided')
         }

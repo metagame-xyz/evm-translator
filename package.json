@@ -41,6 +41,7 @@
     },
     "homepage": "https://github.com/the-metagame/evm-translator#readme",
     "dependencies": {
+        "@alch/alchemy-sdk": "^1.0.3",
         "axios": "^0.26.1",
         "bottleneck": "^2.19.5",
         "collect.js": "^4.32.0",
