@@ -16,6 +16,7 @@ export { default as InterpreterTemplateGenerator } from 'utils/generateInterpret
 
 /* Interfaces */
 export * from 'interfaces/decoded'
+export * from 'interfaces/interpreted'
 export * from 'interfaces/abi'
 export * from 'interfaces/contractInterpreter'
 export * from 'interfaces/covalent'
