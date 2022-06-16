@@ -1,4 +1,3 @@
-import { transformCovalentEvents } from './transformCovalentLogs'
 import { transformDecodedData, transformDecodedLogs } from './transformDecodedLogs'
 import { BaseProvider, Formatter } from '@ethersproject/providers'
 import axios from 'axios'
@@ -39,7 +38,6 @@ import reverseRecordsABI from 'utils/ABIs/ReverseRecords.json'
 import checkInterface from 'utils/checkInterface'
 import Covalent from 'utils/clients/Covalent'
 import Etherscan from 'utils/clients/Etherscan'
-import fourByteDirectory from 'utils/clients/FourByteDirectory'
 import { blackholeAddress, proxyImplementationAddress, REVERSE_RECORDS_CONTRACT_ADDRESS } from 'utils/constants'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 import getTypeFromABI from 'utils/getTypeFromABI'
@@ -84,31 +82,6 @@ export class Augmenter {
         this.db = databaseInterface
 
         this.chain = getChainById(this.provider.network.chainId)
-    }
-
-    async decode(rawTxDataArr: RawTxData[], covalentTxDataArr: CovalentTxData[] = []): Promise<Decoded[]> {
-        this.rawTxDataArr = rawTxDataArr
-        this.covalentDataArr = covalentTxDataArr
-
-        this.createDecodedArr()
-
-        await this.decodeMethodNames()
-        await this.getContractTypes()
-
-        if (!this.covalentDataArr.length && this.rawTxDataArr.length) {
-            await this.getCovalentData()
-        }
-
-        this.augmentTimestampWithCovalent()
-        await this.augmentOfficialContractNames()
-        this.augmentInteractionData()
-        this.addCallTraceLogsAsInteractions()
-        if (this.provider.network.chainId == 1) {
-            // only mainnet
-            await this.augmentENSNamesArr()
-        }
-
-        return this.decodedArr
     }
 
     async decodeTxData(
@@ -195,69 +168,6 @@ export class Augmenter {
         return transformedAugmentedData
     }
 
-    private createDecodedArr() {
-        const formattedRawTxDataArr = this.rawTxDataArr.map((rawTxData) => {
-            try {
-                const { txReceipt, txResponse } = rawTxData
-                const value = rawTxData.txResponse.value.toString()
-
-                let txType: TxType
-                if (!txReceipt.to) {
-                    txType = TxType.CONTRACT_DEPLOY
-                } else if (txResponse.data == '0x') {
-                    txType = TxType.TRANSFER
-                } else {
-                    // TODO txReceipt.contractAddress is the address of the contract created, add it
-                    txType = TxType.CONTRACT_INTERACTION
-                }
-
-                const transformedData: Decoded = {
-                    txHash: txResponse.hash,
-                    txType: txType,
-                    nativeValueSent: value,
-                    chainSymbol: this.chain.symbol,
-                    txIndex: txReceipt.transactionIndex,
-                    reverted: txReceipt.status == 0,
-                    gasUsed: txReceipt.gasUsed.toString(),
-                    effectiveGasPrice:
-                        txReceipt.effectiveGasPrice?.toString() || txResponse?.gasPrice?.toString() || null,
-                    fromAddress: txReceipt.from,
-                    toAddress: txReceipt.to,
-                    interactions: [],
-                    methodCall: {
-                        name: null,
-                        arguments: {},
-                    },
-                    contractType: ContractType.OTHER,
-                    officialContractName: null,
-                    contractName: null,
-                    timestamp: txReceipt.timestamp,
-                    fromENS: null,
-                    toENS: null,
-                }
-
-                return transformedData
-            } catch (e) {
-                console.error('error in createDecodedArr', e)
-                throw e
-            }
-        })
-
-        this.decodedArr = formattedRawTxDataArr
-    }
-
-    private async getCovalentData(): Promise<void> {
-        if (this.rawTxDataArr.length > 1) {
-            throw new Error('Not implemented. This only happens if you already got raw data via Covalent')
-        } else if (!this.covalent) {
-            throw new Error('Covalent not initialized')
-        } else {
-            const covalentResponse = await this.covalent.getTransactionFor(this.rawTxDataArr[0].txResponse.hash)
-            const covalentData = covalentResponse.items[0]
-            this.covalentDataArr.push(covalentData)
-        }
-    }
-
     // TODO need to get it from contract JSON, ABI, and/or TinTin too, instead of Covalent
     private augmentOfficialContractNames() {
         if (this.covalentDataArr.length) {
@@ -271,14 +181,6 @@ export class Augmenter {
         this.covalentDataArr.forEach((covalentData, index) => {
             this.decodedArr[index].timestamp = Number(covalentData.block_signed_at)
         })
-    }
-    private augmentInteractionData() {
-        // we can get do this transformation with the ABI too. We can trust Covalent for now, but we already have a shim in there for ERC721s...
-        if (this.covalentDataArr.length) {
-            this.covalentDataArr.forEach((covalentData, index) => {
-                this.decodedArr[index].interactions = transformCovalentEvents(covalentData)
-            })
-        }
     }
 
     static augmentTraceLogs(interactionsWithoutNativeTransfers: Interaction[], traceLogs: TraceLog[]): Interaction[] {
@@ -387,17 +289,6 @@ export class Augmenter {
         return interactions
     }
 
-    private addCallTraceLogsAsInteractions() {
-        if (this.rawTxDataArr.length > 0) {
-            this.rawTxDataArr.forEach((rawTxData, index) => {
-                this.decodedArr[index].interactions = Augmenter.augmentTraceLogs(
-                    this.decodedArr[index].interactions,
-                    rawTxData.txTrace,
-                )
-            })
-        }
-    }
-
     async getENSNames(addresses: string[]): Promise<Record<string, string>> {
         const reverseRecords = new Contract(REVERSE_RECORDS_CONTRACT_ADDRESS, reverseRecordsABI, this.provider)
 
@@ -459,41 +350,6 @@ export class Augmenter {
         return decodedWithENS
     }
 
-    private async augmentENSNamesArr(): Promise<void> {
-        const allAddresses: string[] = []
-
-        traverse(this.decodedArr).forEach(function (value: string) {
-            if (this.isLeaf && isAddress(value)) {
-                allAddresses.push(AddressZ.parse(value))
-            }
-        })
-
-        // filter out duplicates
-        const addresses = [...new Set(allAddresses)]
-
-        const addressToNameMap = await this.getENSNames(addresses)
-
-        const decodedArrWithENS = traverse(this.decodedArr).map((thing) => {
-            if (!!thing && typeof thing === 'object' && !Array.isArray(thing)) {
-                for (const [key, val] of Object.entries(thing)) {
-                    if (typeof val === 'string') {
-                        if (addressToNameMap[val]) {
-                            if (key == 'toAddress') {
-                                thing.toENS = addressToNameMap[val]
-                            } else if (key == 'fromAddress') {
-                                thing.fromENS = addressToNameMap[val]
-                            } else {
-                                thing[key + 'ENS'] = addressToNameMap[val]
-                            }
-                        }
-                    }
-                }
-            }
-        })
-
-        this.decodedArr = decodedArrWithENS
-    }
-
     async downloadContractsFromTinTin(): Promise<ContractData[]> {
         const mainnetTinTinUrl =
             'https://raw.githubusercontent.com/tintinweb/smart-contract-sanctuary-ethereum/eb6b57e33f0a157c3688024a1eead4ea85753bd1/contracts/mainnet/contracts.json'
@@ -546,38 +402,6 @@ export class Augmenter {
         }
 
         return { tokenName, tokenSymbol, contractName }
-    }
-
-    private async decodeMethodName(rawTxData: RawTxData): Promise<string> {
-        // first try to get if from the contract-specific interpreter, or ABI
-
-        let contractMethod = null
-
-        const hexSignature = rawTxData.txResponse.data.slice(0, 10)
-        if (this.fnSigCache[hexSignature]) {
-            contractMethod = this.fnSigCache[hexSignature]
-        } else {
-            contractMethod = await fourByteDirectory.getMethodSignature(hexSignature)
-            this.fnSigCache[hexSignature] = contractMethod
-        }
-
-        return contractMethod
-    }
-
-    private async decodeMethodNames(): Promise<void> {
-        const methodNames = await Promise.all(
-            this.rawTxDataArr.map(async (rawTxData, index) => {
-                let methodName = null
-                if (this.decodedArr[index].txType !== TxType.TRANSFER) {
-                    methodName = await this.decodeMethodName(rawTxData)
-                }
-                return methodName
-            }),
-        )
-
-        methodNames.forEach((methodName, index) => {
-            this.decodedArr[index].methodCall.name = methodName
-        })
     }
 
     async getContractType(contractAddress: string, abiArr: ABI_ItemUnfiltered[] | null = null): Promise<ContractType> {

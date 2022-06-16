@@ -88,7 +88,7 @@ class Translator {
             // return new JsonRpcProvider(this.nodeUrl, this.chain.id)
         }
         if (this.alchemyProjectId) {
-            const settings = {
+            const settings: AlchemyConfig = {
                 apiKey: this.alchemyProjectId, // Replace with your Alchemy API Key.
                 network: Network.ETH_MAINNET, // Replace with your network. // TODO move this to Chain config
                 maxRetries: 10,

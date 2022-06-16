@@ -18,6 +18,7 @@ import {
 } from 'interfaces/rawData'
 import { EVMTransaction, EVMTransactionReceiptStringified, EVMTransactionStringified } from 'interfaces/s3'
 
+import { retryProviderCall } from 'utils'
 import Covalent from 'utils/clients/Covalent'
 import { logDebug, logError } from 'utils/logging'
 
@@ -54,7 +55,9 @@ export default class RawDataFetcher {
     }
 
     async getTxHashesByBlockNumber(blockNumber: string): Promise<string[]> {
-        const txHashes = await this.provider.getBlock(Number(blockNumber)).then((block) => block.transactions)
+        const txHashes = await retryProviderCall(this.provider.getBlock(Number(blockNumber))).then(
+            (block) => block.transactions,
+        )
         return txHashes
     }
 
@@ -66,8 +69,10 @@ export default class RawDataFetcher {
     }
 
     async getTxReceipt(txHash: string): Promise<TxReceipt> {
-        const txReceipt = await this.provider.getTransactionReceipt(txHash)
-        const timestamp = await this.provider.getBlock(txReceipt.blockNumber).then((block) => block.timestamp)
+        const txReceipt = await retryProviderCall(this.provider.getTransactionReceipt(txHash))
+        const timestamp = await retryProviderCall(this.provider.getBlock(txReceipt.blockNumber)).then(
+            (block) => block.timestamp,
+        )
 
         const validatedAndFormattedTxReceipt = validateAndFormatTxData(txReceipt, timestamp)
 
@@ -77,7 +82,7 @@ export default class RawDataFetcher {
     async getTxTrace(txHash: string): Promise<TraceLog[]> {
         // console.log('trace logs:', txHash)
         logDebug({ txHash }, 'getting trace log')
-        const unvalidatedTrace = await this.provider.send('trace_transaction', [txHash])
+        const unvalidatedTrace = await retryProviderCall(this.provider.send('trace_transaction', [txHash]))
         const traceLogs = RawDataFetcher.validateTraceLogs(unvalidatedTrace)
         // console.log('trace logs', traceLogs)
 

@@ -1,4 +1,6 @@
 import { proxyImplementationAddress } from './constants'
+import { logWarning } from './logging'
+import { AlchemyProvider } from '@alch/alchemy-sdk'
 import { BaseProvider } from '@ethersproject/providers'
 import Bottleneck from 'bottleneck'
 import collect from 'collect.js'
@@ -185,6 +187,25 @@ export async function fetcher(url: string, options = fetchOptions) {
             await sleep(2000)
         }
     }
+}
+
+export const retryProviderCall = async <T>(providerPromise: Promise<T>): Promise<Awaited<T>> => {
+    let retry = 5
+    let error = null
+    while (retry > 0) {
+        try {
+            const data = await providerPromise
+            return data
+        } catch (err) {
+            retry--
+            logWarning({ thrown_error: err }, `retries left: ${retry}`)
+            if (retry === 0) {
+                error = err
+            }
+            await sleep(100)
+        }
+    }
+    throw error
 }
 
 export function fillDescriptionTemplate(template: string, interpretation: Interpretation): string {
