@@ -2,7 +2,7 @@ import collect from 'collect.js'
 import { ethers } from 'ethers'
 import { BigNumber } from 'ethers'
 
-import { Interaction } from 'interfaces'
+import { Interaction } from 'interfaces/decoded'
 import { CovalentLogEvent, CovalentTxData } from 'interfaces/covalent'
 
 type Event = {

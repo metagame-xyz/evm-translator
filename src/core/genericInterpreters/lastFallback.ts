@@ -1,4 +1,5 @@
-import { Action, Decoded, Interpretation } from 'interfaces'
+import { Decoded } from 'interfaces/decoded'
+import { Action, Interpretation } from 'interfaces/interpreted'
 
 import { getStablecoinOrNativeWrappedAddressesBySymbol } from 'utils'
 

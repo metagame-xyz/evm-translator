@@ -1,4 +1,4 @@
-import { Action } from 'interfaces'
+import { Action } from 'interfaces/interpreted'
 
 export type InterpreterMap = {
     /** The address of the contract this map is for */

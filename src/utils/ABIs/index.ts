@@ -2,7 +2,7 @@ import erc20 from './erc20.json'
 import erc721 from './erc721.json'
 import fallback from './fallback.json'
 
-import { ContractType } from 'interfaces'
+import { ContractType } from 'interfaces/decoded'
 
 const tokenABIMap = {
     [ContractType.ERC20]: erc20,

@@ -1,37 +1,6 @@
 import { ABI_ItemUnfiltered } from './abi'
 import { RawTxData } from './rawData'
 
-export const enum ChainSymbol {
-    ETH = 'ETH',
-    MATIC = 'MATIC',
-}
-
-export type Chain = {
-    /** If this transaction is from an EVM-compatible chain. This it true for all, currently */
-    EVM: boolean
-    /** The chain's id. ETH=1, MATIC=137 */
-    id: number
-    /** The chain's colloquial name. Ethereum, Polygon */
-    name: string
-    /** The chain's symbol. ETH, MATIC */
-    symbol: ChainSymbol
-    /** If this chain is a testnet. */
-    testnet: boolean
-    /** The block explorer URL for this chain. https://etherscan.io/ */
-    blockExplorerUrl: string
-    /** The singleton contract address for the wrapped version of the native token. Need to change the variable name */
-    wethAddress: string
-    /** The singleton contract address for USDC */
-    usdcAddress: string
-    /** The singleton contract address for USDT */
-    usdtAddress: string
-    /** The singleton contract address for DAI */
-    daiAddress: string
-}
-
-/** Map of EVM chain names to an object with Chain metadata */
-export type Chains = Record<string, Chain>
-
 /** The types of transactions an EOA can initiate */
 export const enum TxType {
     /** A transaction that sends a native token (ex: ETH) from one address to another */
@@ -100,7 +69,7 @@ export type Decoded = {
     fromAddress: string
     toAddress: string | null
     reverted: boolean
-    timestamp: number | null
+    timestamp: number
     gasUsed: string
     effectiveGasPrice: string | null
 }
@@ -151,99 +120,6 @@ export type InteractionEventParams = {
     _ids?: string[]
     _id?: string | null
     [key: string]: string | string[] | undefined | null | number | boolean
-}
-
-export type UnknownKey = Omit<string, keyof InteractionEvent>
-
-// Generally objective additional info (data hardcoded by humans)
-
-/**
- * Each address that was part of a transaction has its own interpretation of the transaction.
- * native tokens and gas number are denominated in their native token (ex: eth, not wei)
- */
-export type Interpretation = {
-    txHash: string
-    userAddress: string
-    contractName: string | null
-    contractAddress: string | null
-    action: Action
-    exampleDescription: string
-    tokensSent: Token[] // usually just one token
-    tokensReceived: Token[] // usually just one token
-    nativeValueSent: string
-    nativeValueReceived: string
-    chainSymbol: ChainSymbol
-    userName: string
-    counterpartyName: string | null // the opposite side of the tx, opposite of userName
-    extra: Record<string, any>
-    /* null when false so we can hide the null columns more easily */
-    reverted: true | null
-    gasPaid: string
-    timestamp: number | null
-}
-
-export type ActivityData = {
-    rawTxData: RawTxData
-    decodedData: Decoded
-    interpretedData: Interpretation
-}
-
-export const enum Action {
-    unknown = 'unknown',
-    received = 'received',
-    sent = 'sent',
-    minted = 'minted',
-    burned = 'burned',
-    transferred = 'transferred',
-    deployed = 'deployed',
-    executed = 'executed',
-    bought = 'bought',
-    sold = 'sold',
-    /** Trading one non-native, non-stablecoin token for another */
-    traded = 'traded',
-    /** Trading one stablecoin for another, or native token for the wrapped version (but not actually wrapping it using the wrapping contract itself) */
-    swapped = 'swapped',
-    canceled = 'canceled',
-    transferredOwnership = 'transferred ownership',
-    receivedOwnership = 'received ownership',
-    addedLiquidity = 'added liquidity',
-    removedLiquidity = 'removed liquidity',
-    claimed = 'claimed',
-    contributed = 'contributed',
-    redeemed = 'redeemed',
-    approved = 'approved',
-    revoked = 'revoked',
-    gotAirdropped = 'got airdropped',
-    ______TODO______ = '______TODO______',
-}
-
-export const enum TokenType {
-    ERC20 = 'ERC20',
-    ERC721 = 'ERC721',
-    ERC1155 = 'ERC1155',
-    LPToken = 'LPToken',
-    DEFAULT = 'unknown',
-}
-export type Token = {
-    type: TokenType
-    name: string | null
-    symbol: string | null
-    address: string
-    amount?: string
-    token0?: Token
-    token1?: Token
-    pair?: string // "RARE-WETH"
-    tokenId?: string
-}
-
-export type EthersAPIKeys = {
-    alchemy: string
-    etherscan: string
-    infura: string
-    pocket: {
-        applicationId: string
-        applicationSecretKey: string
-    }
 }
 
 export type RawDecodedLogEvent = {

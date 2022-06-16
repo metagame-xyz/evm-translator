@@ -23,3 +23,33 @@ export const BigNumberZ = z
 export const OptionalBigNumberZ = BigNumberZ.optional()
 
 export const functionSchema = z.function().args(AddressZ).returns(AddressZ)
+
+export const enum ChainSymbol {
+    ETH = 'ETH',
+    MATIC = 'MATIC',
+}
+
+export type Chain = {
+    /** If this transaction is from an EVM-compatible chain. This it true for all, currently */
+    EVM: boolean
+    /** The chain's id. ETH=1, MATIC=137 */
+    id: number
+    /** The chain's colloquial name. Ethereum, Polygon */
+    name: string
+    /** The chain's symbol. ETH, MATIC */
+    symbol: ChainSymbol
+    /** If this chain is a testnet. */
+    testnet: boolean
+    /** The block explorer URL for this chain. https://etherscan.io/ */
+    blockExplorerUrl: string
+    /** The singleton contract address for the wrapped version of the native token. Need to change the variable name */
+    wethAddress: string
+    /** The singleton contract address for USDC */
+    usdcAddress: string
+    /** The singleton contract address for USDT */
+    usdtAddress: string
+    /** The singleton contract address for DAI */
+    daiAddress: string
+}
+/** Map of EVM chain names to an object with Chain metadata */
+export type Chains = Record<string, Chain>

@@ -9,8 +9,10 @@ import { FormatTypes, Fragment, keccak256, toUtf8Bytes } from 'ethers/lib/utils'
 import fetch, { Response } from 'node-fetch'
 import traverse from 'traverse'
 
-import { Chain, Chains, ChainSymbol, Interaction, InteractionEvent, Interpretation } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered, ABI_Row, ABI_RowZ, ABI_Type } from 'interfaces/abi'
+import { Interaction, InteractionEvent } from 'interfaces/decoded'
+import { Interpretation } from 'interfaces/interpreted'
+import { Chain, Chains, ChainSymbol } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
 const ethereum: Chain = {

@@ -1,6 +1,7 @@
 import { RawTxData } from './rawData'
 
-import { Decoded, Interpretation, TokenType } from 'interfaces'
+import { Decoded } from 'interfaces/decoded'
+import { Interpretation, TokenType } from 'interfaces/interpreted'
 
 export type ZenLedgerRow = {
     // ZenLedger required Columns

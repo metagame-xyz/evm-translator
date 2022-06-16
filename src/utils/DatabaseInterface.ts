@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ContractData, Decoded, Interpretation } from 'interfaces'
 import { ABI_Event, ABI_ItemUnfiltered, ABI_Row } from 'interfaces/abi'
+import { ContractData, Decoded } from 'interfaces/decoded'
+import { Interpretation } from 'interfaces/interpreted'
 
 export abstract class DatabaseInterface {
     // abstract getContractDataForContract(contractAddress: string): Promise<ContractData | null>

@@ -1,7 +1,7 @@
 import { ContractModel } from './models/contract'
 import { connect } from 'mongoose'
 
-import { ContractData } from 'interfaces'
+import { ContractData } from 'interfaces/decoded'
 import { ABI_Event, ABI_EventZ, ABI_ItemUnfiltered, ABI_Row, ABI_RowZ, ABI_Type } from 'interfaces/abi'
 
 import { DatabaseInterface } from 'utils/DatabaseInterface'

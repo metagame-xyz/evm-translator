@@ -4,7 +4,7 @@ import { logWarning } from './logging'
 import { Log } from '@ethersproject/providers'
 import { BigNumber } from 'ethers'
 
-import { ContractData, ContractType, RawDecodedCallData, RawDecodedLog, RawDecodedLogEvent } from 'interfaces'
+import { ContractData, ContractType, RawDecodedCallData, RawDecodedLog, RawDecodedLogEvent } from 'interfaces/decoded'
 import { ABI_Event, ABI_Function, ABI_FunctionZ, ABI_Item, ABI_Row, ABI_Type } from 'interfaces/abi'
 import { AddressZ } from 'interfaces/utils'
 

@@ -5,20 +5,19 @@ import axios from 'axios'
 import { Contract } from 'ethers'
 import traverse from 'traverse'
 
+import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
+import { CovalentTxData } from 'interfaces/covalent'
 import {
-    Chain,
     ContractData,
     ContractType,
     Decoded,
     DecodedCallData,
-    InProgressActivity,
     Interaction,
     InteractionEvent,
     TxType,
-} from 'interfaces'
-import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
-import { CovalentTxData } from 'interfaces/covalent'
+} from 'interfaces/decoded'
 import { CallTraceLog, RawTxData, RawTxDataWithoutTrace, TraceLog, TraceType } from 'interfaces/rawData'
+import { Chain } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
 import {
@@ -60,7 +59,6 @@ export class Augmenter {
     formatter = new Formatter()
     chain: Chain
 
-    inProgressActivity!: InProgressActivity
     rawTxDataArr!: RawTxData[]
     decodedArr!: Decoded[]
 

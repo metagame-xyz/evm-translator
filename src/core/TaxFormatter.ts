@@ -1,4 +1,6 @@
-import { ActivityData, Chain, Decoded, Interpretation, TokenType } from 'interfaces'
+import { Decoded } from 'interfaces/decoded'
+import { ActivityData, Interpretation, TokenType } from 'interfaces/interpreted'
+import { Chain } from 'interfaces/utils'
 import { ZenLedgerRowType as RowType, ZenLedgerRow } from 'interfaces/zenLedger'
 
 import { chains } from 'utils'

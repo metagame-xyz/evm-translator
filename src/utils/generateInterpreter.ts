@@ -1,8 +1,8 @@
 import Etherscan, { SourceCodeObject } from './clients/Etherscan'
 
-import { Action } from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered, ABI_Type, writeStates } from 'interfaces/abi'
 import { InterpreterMap } from 'interfaces/contractInterpreter'
+import { Action } from 'interfaces/interpreted'
 
 import { abiToAbiRow } from 'utils'
 

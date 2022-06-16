@@ -1,6 +1,6 @@
 import { model, Model, models, Schema } from 'mongoose'
 
-import { ContractData } from 'interfaces'
+import { ContractData } from 'interfaces/decoded'
 
 type ContractModelType = Model<ContractData>
 

@@ -15,7 +15,7 @@ export { default as timer } from 'utils/timer'
 export { default as InterpreterTemplateGenerator } from 'utils/generateInterpreter'
 
 /* Interfaces */
-export * from 'interfaces'
+export * from 'interfaces/decoded'
 export * from 'interfaces/abi'
 export * from 'interfaces/contractInterpreter'
 export * from 'interfaces/covalent'

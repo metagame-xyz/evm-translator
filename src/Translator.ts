@@ -1,19 +1,12 @@
 import { AlchemyConfig, initializeAlchemy, Network } from '@alch/alchemy-sdk'
 import { AlchemyProvider } from '@ethersproject/providers'
 
-import {
-    ActivityData,
-    Chain,
-    ContractData,
-    ContractType,
-    Decoded,
-    DecodedCallData,
-    Interaction,
-    Interpretation,
-} from 'interfaces'
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
+import { ContractData, ContractType, Decoded, DecodedCallData, Interaction } from 'interfaces/decoded'
+import { ActivityData, Interpretation } from 'interfaces/interpreted'
 import { RawTxData, RawTxDataWithoutTrace } from 'interfaces/RawData'
 import { EVMTransaction } from 'interfaces/s3'
+import { Chain } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
 import { filterABIMap, getProxyAddresses, getValues } from 'utils'

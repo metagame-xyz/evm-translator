@@ -1,13 +1,5 @@
-import {
-    Action,
-    ContractType,
-    Decoded,
-    Interaction,
-    InteractionEvent,
-    Interpretation,
-    Token,
-    TokenType,
-} from 'interfaces'
+import { ContractType, Decoded, Interaction, InteractionEvent } from 'interfaces/decoded'
+import { Action, Interpretation, Token, TokenType } from 'interfaces/interpreted'
 
 import { shortenName } from 'utils'
 import { blackholeAddress } from 'utils/constants'

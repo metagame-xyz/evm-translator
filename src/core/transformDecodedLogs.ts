@@ -1,6 +1,13 @@
 import collect from 'collect.js'
 
-import { ContractData, DecodedCallData, Interaction, MostTypes, RawDecodedCallData, RawDecodedLog } from 'interfaces'
+import {
+    ContractData,
+    DecodedCallData,
+    Interaction,
+    MostTypes,
+    RawDecodedCallData,
+    RawDecodedLog,
+} from 'interfaces/decoded'
 import { AddressZ } from 'interfaces/utils'
 
 export function transformDecodedLogs(
