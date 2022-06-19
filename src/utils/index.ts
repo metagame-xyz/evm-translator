@@ -192,7 +192,7 @@ export async function fetcher(url: string, options = fetchOptions) {
 }
 
 export const retryProviderCall = async <T>(providerPromise: Promise<T>): Promise<Awaited<T>> => {
-    let retry = 5
+    let retry = 10
     let error = null
     while (retry > 0) {
         try {
@@ -204,7 +204,7 @@ export const retryProviderCall = async <T>(providerPromise: Promise<T>): Promise
             if (retry === 0) {
                 error = err
             }
-            await sleep(100)
+            await sleep(200)
         }
     }
     throw error

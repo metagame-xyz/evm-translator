@@ -166,22 +166,22 @@ const traceLogAbstractZ = z.object({
 export const CallTraceLogZ = traceLogAbstractZ.extend({
     type: z.literal(TraceType.Enum.call),
     action: CallTraceActionZ,
-    result: StandardTraceResultZ.nullable(),
+    result: StandardTraceResultZ.optional().nullable(),
 })
 export const CreateTraceLogZ = traceLogAbstractZ.extend({
     type: z.literal(TraceType.Enum.create),
     action: CreateTraceActionZ,
-    result: CreateTraceResultZ.nullable(),
+    result: CreateTraceResultZ.optional().nullable(),
 })
 export const SuicideTraceLogZ = traceLogAbstractZ.extend({
     type: z.literal(TraceType.Enum.suicide),
     action: SuicideTraceActionZ,
-    result: StandardTraceResultZ.nullable(),
+    result: StandardTraceResultZ.optional().nullable(),
 })
 export const RewardTraceLogZ = traceLogAbstractZ.extend({
     type: z.literal(TraceType.Enum.reward),
     action: RewardTraceActionZ,
-    result: StandardTraceResultZ.nullable(),
+    result: StandardTraceResultZ.optional().nullable(),
 })
 
 export const TraceLogZ = z.discriminatedUnion('type', [

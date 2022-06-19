@@ -4,8 +4,8 @@ import { logWarning } from './logging'
 import { Log } from '@ethersproject/providers'
 import { BigNumber } from 'ethers'
 
-import { ContractData, ContractType, RawDecodedCallData, RawDecodedLog, RawDecodedLogEvent } from 'interfaces/decoded'
 import { ABI_Event, ABI_Function, ABI_FunctionZ, ABI_Item, ABI_Row, ABI_Type } from 'interfaces/abi'
+import { ContractData, ContractType, RawDecodedCallData, RawDecodedLog, RawDecodedLogEvent } from 'interfaces/decoded'
 import { AddressZ } from 'interfaces/utils'
 
 import { abiToAbiRow, getEntries, hash } from 'utils'
@@ -219,7 +219,7 @@ export default class ABIDecoder {
                         try {
                             decodedData = getDecodedData(logItem, abiItem)
                         } catch (e) {
-                            console.warn(`the single abi didn't fit, looping thru options`, abiItem.name)
+                            //try again
                         }
                     } else if (abiItemOptions.length > 0) {
                         // try all of the options, it'll throw an error if it doesn't match, catch it, try the next one
@@ -228,7 +228,7 @@ export default class ABIDecoder {
                             try {
                                 decodedData = getDecodedData(logItem, abiItem)
                             } catch (e) {
-                                console.warn(`the first abi didn't fit, looping thru options`, abiItem.name)
+                                //try again
                             }
                         }
                     }
@@ -293,7 +293,7 @@ export default class ABIDecoder {
                             decoded: true,
                         } as RawDecodedLog
                     } else {
-                        logWarning({ address, eventHash: eventID }, 'no abi found')
+                        // logWarning({ address, eventHash: eventID }, 'no abi found')
                         return {
                             name: null,
                             events: [],

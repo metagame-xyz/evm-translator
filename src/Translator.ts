@@ -2,7 +2,7 @@ import { AlchemyConfig, initializeAlchemy, Network } from '@alch/alchemy-sdk'
 import { AlchemyProvider } from '@ethersproject/providers'
 
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
-import { ContractData, ContractType, Decoded, DecodedCallData, Interaction } from 'interfaces/decoded'
+import { ContractData, ContractType, DecodedCallData, DecodedTx, Interaction } from 'interfaces/decoded'
 import { ActivityData, Interpretation } from 'interfaces/interpreted'
 import { RawTxData, RawTxDataWithoutTrace } from 'interfaces/RawData'
 import { EVMTransaction } from 'interfaces/s3'
@@ -13,6 +13,7 @@ import { filterABIMap, getProxyAddresses, getValues } from 'utils'
 import Covalent from 'utils/clients/Covalent'
 import Etherscan, { EtherscanServiceLevel } from 'utils/clients/Etherscan'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
+import { LogData, logError } from 'utils/logging'
 import { MongooseDatabaseInterface } from 'utils/mongoose'
 import timer from 'utils/timer'
 
@@ -96,13 +97,13 @@ class Translator {
         }
     }
 
-    /**********************************************/
-    /**** FROM WALLET ADDRESS OR TX HASH ONLY *****/
-    /**********************************************/
     updateUserAddress(userAddress: string) {
         this.userAddress = AddressZ.parse(userAddress)
     }
 
+    /**********************************************/
+    /**** FROM WALLET ADDRESS OR TX HASH ONLY *****/
+    /**********************************************/
     async getTxHashesByBlockNumber(blockNumber: string): Promise<string[]> {
         return this, this.rawDataFetcher.getTxHashesByBlockNumber(blockNumber)
     }
@@ -146,6 +147,11 @@ class Translator {
         return RawDataFetcher.getContractAddressesFromRawTxData(rawTxData)
     }
 
+    /**********************************************/
+    /**** USING TX AND CONTRACT ADDRESSES  ********/
+    /****  Data used to decode & augment   ********/
+    /**********************************************/
+
     getAllAddresses(
         decodedLogs: Interaction[],
         decodedCallData: DecodedCallData,
@@ -154,10 +160,6 @@ class Translator {
         return Augmenter.getAllAddresses(decodedLogs, decodedCallData, contractAddresses)
     }
 
-    /**********************************************/
-    /**** USING TX AND CONTRACT ADDRESSES  ********/
-    /****  Data used to decode & augment   ********/
-    /**********************************************/
     async getABIsAndNamesForContracts(
         contractAddresses: string[],
     ): Promise<[Record<string, ABI_ItemUnfiltered[]>, Record<string, string | null>]> {
@@ -218,7 +220,7 @@ class Translator {
         return await this.augmenter.decodeTxData(rawTxData, ABIs, contractDataMap)
     }
 
-    decodeTxDataArr(rawTxDataArr: RawTxData[], ABIs: Record<string, ABI_Item[]>[]): Decoded[] {
+    decodeTxDataArr(rawTxDataArr: RawTxData[], ABIs: Record<string, ABI_Item[]>[]): DecodedTx[] {
         throw new Error('Not implemented')
     }
 
@@ -228,31 +230,41 @@ class Translator {
         ensMap: Record<string, string>,
         contractDataMap: Record<string, ContractData>,
         rawTxData: RawTxData | RawTxDataWithoutTrace,
-    ): Decoded {
+    ): DecodedTx {
         return this.augmenter.augmentDecodedData(decodedLogs, decodedCallData, ensMap, contractDataMap, rawTxData)
     }
-
-    //This is a subset of augmentDecodedData
-    // addEnsToDecodedData(decoded: Decoded, ens: Record<string, string>): Decoded {
-    //     throw new Error('Not implemented')
-    // }
 
     /**********************************************/
     /******          INTERPRETING          ********/
     /**********************************************/
 
     interpretDecodedTx(
-        decoded: Decoded,
+        decoded: DecodedTx,
         userAddress: string | null = null,
         userName: string | null = null,
     ): Interpretation {
         return this.interpreter.interpretSingleTx(decoded, userAddress, userName)
     }
 
+    interpretDecodedTxArr(
+        decodedTxArr: (DecodedTx | null)[],
+        userAddress: string | null = null,
+        userName: string | null = null,
+    ): (Interpretation | null)[] {
+        return decodedTxArr.map((decodedTx) => {
+            console.log('decodedTx', decodedTx)
+            return decodedTx ? this.interpretDecodedTx(decodedTx, userAddress, userName) : null
+        })
+    }
+
     // If we do this after we've created the example description, we'll have to figure out how to parse any addresses we've turned into a shorter name or onoma name
     // addEnsToInterpretedData(ens: Record<string, string>): Interpretation {
     //     throw new Error('Not implemented')
     // }
+
+    /**********************************************/
+    /******            COMBINED            ********/
+    /**********************************************/
 
     async interpretTx(txHash: string, userAddress: string | null = null): Promise<Interpretation> {
         const rawTxData = await this.getRawTxData(txHash)
@@ -278,48 +290,67 @@ class Translator {
     }
 
     async allDataFromTxHash(txHash: string, providedUserAddress: string | null = null): Promise<ActivityData> {
-        const rawTxData = await this.getRawTxData(txHash)
+        const logData: LogData = {
+            txHash,
+        }
 
-        const userAddressUnvalidated = providedUserAddress || rawTxData.txResponse.from
+        try {
+            logData.functionName = 'getRawTxData'
+            const rawTxData = await this.getRawTxData(txHash)
 
-        const userAddress = AddressZ.parse(userAddressUnvalidated)
+            const userAddressUnvalidated = providedUserAddress || rawTxData.txResponse.from
 
-        const contractAddresses = this.getContractAddressesFromRawTxData(rawTxData)
+            const userAddress = AddressZ.parse(userAddressUnvalidated)
 
-        // const proxyAddressMap = await this.getProxyContractMap(contractAddresses)
-        // console.log('proxyAddressMap', proxyAddressMap)
+            logData.address = userAddress
 
-        const proxyAddressMap: Record<string, string> = {}
+            const contractAddresses = this.getContractAddressesFromRawTxData(rawTxData)
 
-        const contractAndProxyAddresses = [...contractAddresses, ...getValues(proxyAddressMap)]
-        const [unfilteredAbiMap, officialContractNamesMap] = await this.getABIsAndNamesForContracts(
-            contractAndProxyAddresses,
-        )
+            // const proxyAddressMap = await this.getProxyContractMap(contractAddresses)
+            // console.log('proxyAddressMap', proxyAddressMap)
 
-        const contractDataMap = await this.getContractsData(unfilteredAbiMap, officialContractNamesMap, proxyAddressMap)
+            const proxyAddressMap: Record<string, string> = {}
 
-        // contractDataMap = await this.augmentProxyContractABIs(contractDataMap)
+            const contractAndProxyAddresses = [...contractAddresses, ...getValues(proxyAddressMap)]
+            logData.functionName = 'getABIsAndNamesForContracts'
+            const [unfilteredAbiMap, officialContractNamesMap] = await this.getABIsAndNamesForContracts(
+                contractAndProxyAddresses,
+            )
 
-        const AbiMap = filterABIMap(unfilteredAbiMap)
-        const { decodedLogs, decodedCallData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)
+            const contractDataMap = await this.getContractsData(
+                unfilteredAbiMap,
+                officialContractNamesMap,
+                proxyAddressMap,
+            )
 
-        const allAddresses = this.getAllAddresses(decodedLogs, decodedCallData, contractAddresses)
+            // contractDataMap = await this.augmentProxyContractABIs(contractDataMap)
 
-        const ensMap = await this.getENSNames(allAddresses)
+            const AbiMap = filterABIMap(unfilteredAbiMap)
+            logData.functionName = 'decodeTxData'
+            const { decodedLogs, decodedCallData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)
 
-        const decodedWithAugmentation = this.augmentDecodedData(
-            decodedLogs,
-            decodedCallData,
-            ensMap,
-            contractDataMap,
-            rawTxData,
-        )
+            const allAddresses = this.getAllAddresses(decodedLogs, decodedCallData, contractAddresses)
 
-        const userName = ensMap[userAddress || ''] || null
+            logData.functionName = 'getENSNames'
+            const ensMap = await this.getENSNames(allAddresses)
 
-        const interpretation = this.interpretDecodedTx(decodedWithAugmentation, userAddress, userName)
+            const decodedWithAugmentation = this.augmentDecodedData(
+                decodedLogs,
+                decodedCallData,
+                ensMap,
+                contractDataMap,
+                rawTxData,
+            )
 
-        return { interpretedData: interpretation, decodedData: decodedWithAugmentation, rawTxData }
+            const userName = ensMap[userAddress || ''] || null
+
+            const interpretation = this.interpretDecodedTx(decodedWithAugmentation, userAddress, userName)
+
+            return { interpretedData: interpretation, decodedTx: decodedWithAugmentation, rawTxData }
+        } catch (error) {
+            logError(logData, error)
+            throw error
+        }
     }
 
     async allDataFromTxHashArr(
@@ -332,7 +363,24 @@ class Translator {
 
         const results = await Promise.all(promises)
 
+        const decodedTxArr = results.map((result) => result.decodedTx)
+        await this.initializeMongoose()
+        await this.databaseInterface.addOrUpdateManyDecodedTx(decodedTxArr)
+
         return results
+    }
+
+    /**********************************************/
+    /******       DB ONLY CALLs            ********/
+    /**********************************************/
+
+    async getManyDecodedTxFromDB(txHashArr: string[]): Promise<(DecodedTx | null)[]> {
+        if (!(this.databaseInterface instanceof MongooseDatabaseInterface)) {
+            throw new Error('This function only works with MongodB')
+        }
+        await this.initializeMongoose()
+        const map = await this.databaseInterface.getManyDecodedTxMap(txHashArr)
+        return getValues(map)
     }
 
     // public async translateWithTaxData(

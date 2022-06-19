@@ -8,7 +8,7 @@ import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 
 import { InterpreterMap } from 'interfaces/contractInterpreter'
-import { ContractType, Decoded, Interaction, InteractionEvent, TxType } from 'interfaces/decoded'
+import { ContractType, DecodedTx, Interaction, InteractionEvent, TxType } from 'interfaces/decoded'
 import { Action, Interpretation, Token, TokenType } from 'interfaces/interpreted'
 import { Chain } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
@@ -65,7 +65,7 @@ class Interpreter {
         this.chain = chain
     }
 
-    public interpret(decodedDataArr: Decoded[]): Interpretation[] {
+    public interpret(decodedDataArr: DecodedTx[]): Interpretation[] {
         const interpretations: Interpretation[] = []
 
         for (let i = 0; i < decodedDataArr.length; i++) {
@@ -78,7 +78,7 @@ class Interpreter {
     }
 
     public interpretSingleTx(
-        decodedData: Decoded,
+        decodedData: DecodedTx,
         userAddressFromInput: string | null = null,
         userNameFromInput: string | null = null,
     ): Interpretation {
@@ -96,7 +96,9 @@ class Interpreter {
             BigNumber.from(decodedData.gasUsed).mul(BigNumber.from(decodedData.effectiveGasPrice)),
         )
 
-        const userAddress = AddressZ.parse(userAddressFromInput) || this.userAddress || fromAddress
+        const parsedAddress = AddressZ.safeParse(userAddressFromInput)
+
+        const userAddress = parsedAddress.success ? parsedAddress.data : this.userAddress || fromAddress
 
         let userName = userNameFromInput || userAddress.substring(0, 6)
 

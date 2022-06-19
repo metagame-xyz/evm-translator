@@ -55,8 +55,9 @@ const timingFormat = printf((d) => {
     // const address = d.address ? ` | ${d.address}` : ' | unknown address'
     const message = d.message ? ` | ${d.message}` : ''
     const error = d.error ? ` | ${d.error}` : ''
+    const extra = d.extra ? ` | ${d.extra}` : ''
 
-    return `${d.level}: ${type}: ${val} ${message}${error}`
+    return `${d.level}: ${type}: ${val} ${message}${error}${extra}`
 })
 
 const prodTransports = [new winston.transports.Console({ level: 'debug' })]
@@ -117,20 +118,20 @@ export const logWarning = (logData: LogData, message: any) => {
     const logDataCopy = { ...logData, level: 'warning', message }
     logger.log(logDataCopy)
 }
-export const logError = (logData: LogData, message: any) => {
-    const logDataCopy = { ...logData, level: 'error', message }
-    logger.log(logDataCopy)
-}
-// export const logError = (logData: LogData, error: any, alert = false) => {
-//     const logDataCopy = {
-//         ...logData,
-//         level: 'error',
-//         message: error?.message || 'error obj had no .message',
-//         alert,
-//     }
-//     logDataCopy.thrown_error = error
+// export const logError = (logData: LogData, message: any) => {
+//     const logDataCopy = { ...logData, level: 'error', message }
 //     logger.log(logDataCopy)
 // }
+export const logError = (logData: LogData, error: any, alert = false) => {
+    const logDataCopy = {
+        ...logData,
+        level: 'error',
+        message: error?.message || 'error obj had no .message',
+        alert,
+    }
+    logDataCopy.thrown_error = error
+    logger.log(logDataCopy)
+}
 
 export const logSuccess = (logData: LogData, message = 'success') => {
     const logDataCopy = { ...logData, level: 'info', message }
@@ -147,6 +148,7 @@ export type LogData = {
     secondsElapsed?: number
     thrown_error?: any
     extra?: any
+    functionName?: string
 }
 // export type LogData = {
 //     level?: 'emerg' | 'alert' | 'crit' | 'error' | 'warning' | 'notice' | 'info' | 'debug'

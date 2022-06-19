@@ -1,6 +1,6 @@
 import { RawTxData } from './rawData'
 
-import { Decoded } from 'interfaces/decoded'
+import { DecodedTx } from 'interfaces/decoded'
 import { Interpretation, TokenType } from 'interfaces/interpreted'
 
 export type ZenLedgerRow = {
@@ -65,7 +65,7 @@ export enum ZenLedgerRowType {
 
 export type ActivityDataWthZenLedger = {
     rawTxData: RawTxData
-    decodedData: Decoded
+    decodedData: DecodedTx
     interpretedData: Interpretation
     taxData?: ZenLedgerRow
 }

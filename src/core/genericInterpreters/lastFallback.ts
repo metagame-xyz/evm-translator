@@ -1,4 +1,4 @@
-import { Decoded } from 'interfaces/decoded'
+import { DecodedTx } from 'interfaces/decoded'
 import { Action, Interpretation } from 'interfaces/interpreted'
 
 import { getStablecoinOrNativeWrappedAddressesBySymbol } from 'utils'
@@ -115,7 +115,7 @@ function getAction(interpretation: Interpretation, userAddress: string, fromAddr
     return Action.______TODO______
 }
 
-function lastFallback(decodedData: Decoded, interpretation: Interpretation) {
+function lastFallback(decodedData: DecodedTx, interpretation: Interpretation) {
     const { fromAddress, toAddress } = decodedData
     const { nativeValueReceived, nativeValueSent, chainSymbol, userAddress, tokensReceived, tokensSent } =
         interpretation

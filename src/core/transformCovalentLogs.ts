@@ -2,8 +2,8 @@ import collect from 'collect.js'
 import { ethers } from 'ethers'
 import { BigNumber } from 'ethers'
 
-import { Interaction } from 'interfaces/decoded'
 import { CovalentLogEvent, CovalentTxData } from 'interfaces/covalent'
+import { Interaction } from 'interfaces/decoded'
 
 type Event = {
     contractName: string

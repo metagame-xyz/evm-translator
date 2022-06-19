@@ -10,8 +10,8 @@ import { CovalentTxData } from 'interfaces/covalent'
 import {
     ContractData,
     ContractType,
-    Decoded,
     DecodedCallData,
+    DecodedTx,
     Interaction,
     InteractionEvent,
     TxType,
@@ -60,7 +60,7 @@ export class Augmenter {
     chain: Chain
 
     rawTxDataArr!: RawTxData[]
-    decodedArr!: Decoded[]
+    decodedArr!: DecodedTx[]
 
     covalentData?: CovalentTxData
     covalentDataArr: CovalentTxData[] = []
@@ -114,7 +114,7 @@ export class Augmenter {
         ensMap: Record<string, string>,
         contractDataMap: Record<string, ContractData>,
         rawTxData: RawTxData | RawTxDataWithoutTrace,
-    ): Decoded {
+    ): DecodedTx {
         const { txReceipt, txResponse } = rawTxData
         const value = rawTxData.txResponse.value.toString()
 
@@ -136,7 +136,7 @@ export class Augmenter {
 
         const interpreterMap = txReceipt.to ? contractDataMap[txReceipt.to] : null
 
-        const transformedData: Decoded = {
+        const transformedData: DecodedTx = {
             txHash: txResponse.hash,
             txType: txType,
             fromAddress: txReceipt.from,
@@ -326,7 +326,7 @@ export class Augmenter {
         return addressToNameMap
     }
 
-    static augmentENSNames(decoded: Decoded, ensMap: Record<string, string>): Decoded {
+    static augmentENSNames(decoded: DecodedTx, ensMap: Record<string, string>): DecodedTx {
         const decodedWithENS = traverse(decoded).map((thing) => {
             if (!!thing && typeof thing === 'object' && !Array.isArray(thing)) {
                 for (const [key, val] of Object.entries(thing)) {
@@ -349,6 +349,7 @@ export class Augmenter {
     }
 
     async downloadContractsFromTinTin(): Promise<ContractData[]> {
+        // TODO programmatically get the latest hash of this repo and use that instead of this hardcoded one
         const mainnetTinTinUrl =
             'https://raw.githubusercontent.com/tintinweb/smart-contract-sanctuary-ethereum/eb6b57e33f0a157c3688024a1eead4ea85753bd1/contracts/mainnet/contracts.json'
 
@@ -442,7 +443,7 @@ export class Augmenter {
 
         const addresses = getKeys(contractToAbiMap)
 
-        const contractDataMapFromDB = await this.db.getContractDataForManyContracts(addresses)
+        const contractDataMapFromDB = await this.db.getManyContractDataMap(addresses)
 
         await Promise.all(
             addresses.map(async (address) => {
@@ -510,7 +511,7 @@ export class Augmenter {
     ): Promise<[Record<string, ABI_ItemUnfiltered[]>, Record<string, string | null>]> {
         const addresses = contractAddresses.map((a) => AddressZ.parse(a))
 
-        const contractDataMapWithNulls = await this.db.getContractDataForManyContracts(addresses)
+        const contractDataMapWithNulls = await this.db.getManyContractDataMap(addresses)
 
         const addressesWithMissingABIs = getKeys(contractDataMapWithNulls).filter(
             (address) => !contractDataMapWithNulls[address]?.abi,

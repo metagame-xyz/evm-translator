@@ -13,7 +13,7 @@ export const enum TxType {
 
 export type InProgressActivity = {
     rawTxData?: RawTxData
-    decoded?: Decoded
+    decoded?: DecodedTx
 }
 
 export type RawLogEvent = {
@@ -45,7 +45,7 @@ export const enum ContractType {
 }
 
 //  100% objective additional info (data taken from a blockchain)
-export type Decoded = {
+export type DecodedTx = {
     /** The transaction's unique hash */
     txHash: string
     /** The one of three types the transaction can be. TODO switch to required*/

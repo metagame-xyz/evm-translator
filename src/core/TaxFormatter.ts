@@ -1,4 +1,4 @@
-import { Decoded } from 'interfaces/decoded'
+import { DecodedTx } from 'interfaces/decoded'
 import { ActivityData, Interpretation, TokenType } from 'interfaces/interpreted'
 import { Chain } from 'interfaces/utils'
 import { ZenLedgerRowType as RowType, ZenLedgerRow } from 'interfaces/zenLedger'
@@ -30,9 +30,9 @@ class TaxFormatter {
     }
 
     formatSingleActivity(activity: ActivityData) {
-        const { rawTxData, decodedData, interpretedData } = activity
+        const { rawTxData, decodedTx: decodedData, interpretedData } = activity
 
-        const getType = (data: Interpretation, decodedData: Decoded): RowType | null => {
+        const getType = (data: Interpretation, decodedData: DecodedTx): RowType | null => {
             let rowType = null
 
             // console.log('method:', decodedData.methodCall.name, 'tokens received', interpretedData.tokensReceived)

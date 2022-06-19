@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ABI_Event, ABI_ItemUnfiltered, ABI_Row } from 'interfaces/abi'
-import { ContractData, Decoded } from 'interfaces/decoded'
+import { ContractData, DecodedTx } from 'interfaces/decoded'
 import { Interpretation } from 'interfaces/interpreted'
 
 export abstract class DatabaseInterface {
     // abstract getContractDataForContract(contractAddress: string): Promise<ContractData | null>
-    abstract getContractDataForManyContracts(contractAddresses: string[]): Promise<Record<string, ContractData | null>>
+    abstract getManyContractDataMap(contractAddresses: string[]): Promise<Record<string, ContractData | null>>
 
     // abstract addOrUpdateContractData(contractData: ContractData): Promise<void>
     abstract addOrUpdateManyContractData(contractDataArr: ContractData[]): Promise<void>
@@ -25,11 +25,11 @@ export abstract class DatabaseInterface {
     // abstract addABIsForHexSignature(abiArr: ABI_Row[]): Promise<void>
     // abstract addABIForHexSignature(abi: ABI_Row): Promise<void>
 
-    // abstract getDecodedData(txHash: string): Promise<Decoded | null>
-    // abstract getManyDecodedData(txHashes: string[]): Promise<Array<Decoded> | null>
+    // abstract getDecodedTx(txHash: string): Promise<Decoded | null>
+    abstract getManyDecodedTxMap(txHashes: string[]): Promise<Record<string, DecodedTx | null>>
 
-    // abstract addOrUpdateDecodedData(decodedData: Decoded): Promise<void>
-    // abstract addOrUpdateManyDecodedData(decodedDataArr: Decoded[]): Promise<void>
+    // abstract addOrUpdateDecodedTx(decodedData: DecodedTx): Promise<void>
+    abstract addOrUpdateManyDecodedTx(decodedDataArr: DecodedTx[]): Promise<void>
 
     // abstract addOrUpdateInterpretedData(interpretedData: Interpretation): Promise<void>
     // abstract addOrUpdateManyInterpretedData(interpretedDataArr: Interpretation[]): Promise<void>
@@ -50,7 +50,7 @@ export class NullDatabaseInterface extends DatabaseInterface {
     }
 
     // implemented
-    async getContractDataForManyContracts(contractAddresses: string[]): Promise<Record<string, ContractData | null>> {
+    async getManyContractDataMap(contractAddresses: string[]): Promise<Record<string, ContractData | null>> {
         const obj: Record<string, ContractData | null> = {}
         for (let i = 0; i < contractAddresses.length; i++) {
             obj[contractAddresses[i]] = null
@@ -103,18 +103,19 @@ export class NullDatabaseInterface extends DatabaseInterface {
         return Promise.resolve(null)
     }
 
-    async getDecodedData(txHash: string): Promise<Decoded | null> {
+    async getDecodedTx(txHash: string): Promise<DecodedTx | null> {
         return Promise.resolve(null)
     }
 
-    async getManyDecodedData(txHashes: string[]): Promise<Array<Decoded> | null> {
-        return Promise.resolve(null)
+    async getManyDecodedTxMap(txHashes: string[]): Promise<Record<string, DecodedTx | null>> {
+        const obj: Record<string, DecodedTx | null> = {}
+        for (let i = 0; i < txHashes.length; i++) {
+            obj[txHashes[i]] = null
+        }
+        return Promise.resolve(obj)
     }
 
-    async addOrUpdateDecodedData(decodedData: Decoded): Promise<void> {
-        return Promise.resolve()
-    }
-    async addOrUpdateManyDecodedData(decodedDataArr: Decoded[]): Promise<void> {
+    async addOrUpdateManyDecodedTx(decodedData: DecodedTx[]): Promise<void> {
         return Promise.resolve()
     }
 

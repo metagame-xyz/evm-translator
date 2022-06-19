@@ -1,5 +1,5 @@
 // Generally objective additional info (data hardcoded by humans)
-import { Decoded } from './decoded'
+import { DecodedTx } from './decoded'
 import { RawTxData } from './rawData'
 import { ChainSymbol } from './utils'
 
@@ -30,7 +30,7 @@ export type Interpretation = {
 
 export type ActivityData = {
     rawTxData: RawTxData
-    decodedData: Decoded
+    decodedTx: DecodedTx
     interpretedData: Interpretation
 }
 

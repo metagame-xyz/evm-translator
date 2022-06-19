@@ -1,11 +1,11 @@
-import { Decoded, InteractionEvent } from 'interfaces/decoded'
+import { DecodedTx, InteractionEvent } from 'interfaces/decoded'
 import { Action, Interpretation } from 'interfaces/interpreted'
 
 function isSafeReceivedEvent(event: InteractionEvent, userAddress: string) {
     return event.eventName === 'SafeReceived' && event.params.sender === userAddress
 }
 
-function interpretGenericTransfer(decodedData: Decoded, interpretation: Interpretation) {
+function interpretGenericTransfer(decodedData: DecodedTx, interpretation: Interpretation) {
     const { fromAddress, toAddress, interactions } = decodedData
     const { userAddress, nativeValueSent, chainSymbol, userName } = interpretation
     const sending = fromAddress === userAddress

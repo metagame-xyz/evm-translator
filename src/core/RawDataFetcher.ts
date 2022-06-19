@@ -47,8 +47,8 @@ export default class RawDataFetcher {
             if (data.success) {
                 return data.data
             } else {
-                console.log('error in validateTraceLogs', data.error)
-                logError({ txHash: tl.transactionHash, extra: tl }, JSON.stringify(data.error))
+                console.log('error in validateTraceLogs', data.error, tl)
+                logError({ txHash: tl.transactionHash, extra: tl }, data.error)
                 return tl as TraceLog
             }
         })
@@ -81,7 +81,7 @@ export default class RawDataFetcher {
 
     async getTxTrace(txHash: string): Promise<TraceLog[]> {
         // console.log('trace logs:', txHash)
-        logDebug({ txHash }, 'getting trace log')
+        // logDebug({ txHash }, 'getting trace log')
         const unvalidatedTrace = await retryProviderCall(this.provider.send('trace_transaction', [txHash]))
         const traceLogs = RawDataFetcher.validateTraceLogs(unvalidatedTrace)
         // console.log('trace logs', traceLogs)

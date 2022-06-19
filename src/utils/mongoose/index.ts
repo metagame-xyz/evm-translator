@@ -1,8 +1,9 @@
 import { ContractModel } from './models/contract'
+import { DecodedTxModel } from './models/decodedTx'
 import { connect } from 'mongoose'
 
-import { ContractData } from 'interfaces/decoded'
 import { ABI_Event, ABI_EventZ, ABI_ItemUnfiltered, ABI_Row, ABI_RowZ, ABI_Type } from 'interfaces/abi'
+import { ContractData, DecodedTx } from 'interfaces/decoded'
 
 import { DatabaseInterface } from 'utils/DatabaseInterface'
 import { ABI_RowModel } from 'utils/mongoose/models/abi'
@@ -20,7 +21,7 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         await connect(this.connectionString)
     }
 
-    async getContractDataForManyContracts(contractAddresses: string[]): Promise<Record<string, ContractData | null>> {
+    async getManyContractDataMap(contractAddresses: string[]): Promise<Record<string, ContractData | null>> {
         const contractMap: Record<string, ContractData | null> = {}
         for (let i = 0; i < contractAddresses.length; i++) {
             contractMap[contractAddresses[i]] = null
@@ -124,5 +125,47 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         const abis = abisRows.map((abi) => abi.abiJSON)
         const events = abis.filter((abi) => abi.type === ABI_Type.enum.event)
         return events.map((event) => ABI_EventZ.parse(event))
+    }
+
+    async addOrUpdateManyDecodedTx(decodedTxArr: DecodedTx[]): Promise<void> {
+        try {
+            // only way to do bulk upsert
+            const { result } = await DecodedTxModel.bulkWrite(
+                decodedTxArr.map((decodedTx) => ({
+                    updateOne: {
+                        filter: { txHash: decodedTx.txHash },
+                        update: decodedTx,
+                        upsert: true,
+                    },
+                })),
+            )
+        } catch (e) {
+            console.log('decodedTx mongoose error')
+            console.log(e)
+        }
+    }
+
+    async getManyDecodedTxMap(txHashes: string[]): Promise<Record<string, DecodedTx | null>> {
+        const decodedTxMap: Record<string, DecodedTx | null> = {}
+        for (let i = 0; i < txHashes.length; i++) {
+            decodedTxMap[txHashes[i]] = null
+        }
+
+        try {
+            const modelData = await DecodedTxModel.find({ txHash: { $in: txHashes } })
+            const data = modelData.map((model) => model.toObject())
+
+            for (let i = 0; i < txHashes.length; i++) {
+                const txHash = txHashes[i]
+                const decodedTx = data.find((tx) => tx.txHash === txHash)
+                decodedTxMap[txHash] = decodedTx || null
+            }
+        } catch (e) {
+            console.log('get decodedTxs mongoose error')
+            console.log(e)
+            // return null
+        }
+        // return here instead of in the try, so that it still works if the db is down
+        return decodedTxMap
     }
 }

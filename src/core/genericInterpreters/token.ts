@@ -1,4 +1,4 @@
-import { ContractType, Decoded, Interaction, InteractionEvent } from 'interfaces/decoded'
+import { ContractType, DecodedTx, Interaction, InteractionEvent } from 'interfaces/decoded'
 import { Action, Interpretation, Token, TokenType } from 'interfaces/interpreted'
 
 import { shortenName } from 'utils'
@@ -283,7 +283,7 @@ function addExampleDescription(interpretation: Interpretation, token: Token) {
     interpretation.exampleDescription = exampleDescription
 }
 
-function interpretGenericToken(decodedData: Decoded, interpretation: Interpretation) {
+function interpretGenericToken(decodedData: DecodedTx, interpretation: Interpretation) {
     const { userAddress } = interpretation
     const { fromAddress, toAddress, interactions, contractType, contractName } = decodedData
 
@@ -308,6 +308,8 @@ function interpretGenericToken(decodedData: Decoded, interpretation: Interpretat
         interactions.find((interaction) => interaction.contractAddress === toAddress) || defaultTokenInteraction
 
     const tokenEvents = tokenContractInteraction?.events || []
+
+    // maybe something to do with the fact it sends both an  erc20 and an erc721?
 
     interpretation.action = getAction(t, tokenEvents, userAddress, fromAddress)
 
