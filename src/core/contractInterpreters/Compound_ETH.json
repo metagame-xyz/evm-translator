@@ -1,0 +1,127 @@
+{
+  "methods": {
+    "0x1249c58b": [
+      "mint",
+      "mint()"
+    ],
+    "0x852a12e3": [
+      "redeemUnderlying",
+      "redeemUnderlying(uint256)"
+    ],
+    "0xdb006a75": [
+      "redeem",
+      "redeem(uint256)"
+    ],
+    "0x4e4d9fea": [
+      "repayBorrow",
+      "repayBorrow()"
+    ],
+    "0xc5ebeaec": [
+      "borrow",
+      "borrow(uint256)"
+    ]
+  },
+  "contractOfficialName": "CompoundProtocol",
+  "contractName": "Compound",
+  "writeFunctions": {
+    "borrow": {
+      "exampleDescriptionTemplate": "{userName} borrowed {tokenAmount} ETH from Compound",
+      "exampleDescription": "0x7f76 borrowed 0.84 ETH from Compound",
+      "action": "borrowed",
+      "keywords": {
+        "tokenAmount": {
+          "key": "borrowAmount",
+          "filters": {
+            "eventName": "Borrow",
+            "borrower": "{userAddress}"
+          },
+          "defaultValue": "an unknown amount of"
+        }
+      }
+    },
+    "mint": {
+      "exampleDescriptionTemplate": "{userName} minted {tokenAmount0} cETH for {tokenAmount1} ETH using Compound",
+      "exampleDescription": "0x7f76 minted 99.33 cETH for 2 ETH using Compound",
+      "action": "minted",
+      "keywords": {
+        "tokenAmount0": {
+          "key": "mintTokens",
+          "filters": {
+            "eventName": "Mint",
+            "minter": "{userAddress}"
+          },
+          "defaultValue": "an unknown amount"
+        },
+        "tokenAmount1": {
+          "key": "mintAmount",
+          "filters": {
+            "eventName": "Mint",
+            "minter": "{userAddress}"
+          },
+          "defaultValue": "an unknown amount"
+        }
+      }
+    },
+    "redeem": {
+      "exampleDescriptionTemplate": "{userName} redeemed {tokenAmount0} ETH for {tokenAmount1} cETH using Compound",
+      "exampleDescription": "0x7f76 redeemed 2 LINK for 99.33 cLINK using Compound",
+      "action": "redeemed",
+      "keywords": {
+        "tokenAmount0": {
+          "key": "redeemAmount",
+          "filters": {
+            "eventName": "Redeem",
+            "redeemer": "{userAddress}"
+          },
+          "defaultValue": "an unknown amount of"
+        },
+        "tokenAmount1": {
+          "key": "redeemTokens",
+          "filters": {
+            "eventName": "Redeem",
+            "redeemer": "{userAddress}"
+          },
+          "defaultValue": "an unknown amount of"
+        }
+      }
+    },
+    "redeemUnderlying": {
+      "exampleDescriptionTemplate": "{userName} redeemed {tokenAmount0} ETH for {tokenAmount1} cETH using Compound",
+      "exampleDescription": "0x7f76 redeemed 2 ETH for 99.33 cETH using Compound",
+      "action": "redeemed",
+      "keywords": {
+        "tokenAmount0": {
+          "key": "redeemAmount",
+          "filters": {
+            "eventName": "Redeem",
+            "redeemer": "{userAddress}"
+          },
+          "defaultValue": "an unknown amount"
+        },
+        "tokenAmount1": {
+          "key": "redeemTokens",
+          "filters": {
+            "eventName": "Redeem",
+            "redeemer": "{userAddress}"
+          },
+          "defaultValue": "an unknown amount"
+        }
+      }
+    },
+    "repayBorrow": {
+      "exampleDescriptionTemplate": "{userName} repaid a loan of {tokenAmount} ETH to Compound",
+      "exampleDescription": "0x7f76 repaid a loan of 56.24 ETH to Compound",
+      "action": "repaid",
+      "keywords": {
+        "tokenAmount": {
+          "key": "value",
+          "filters": {
+            "eventName": "Transfer",
+            "from": "{userAddress}"
+          },
+          "defaultValue": "an unknown amount of"
+        }
+      }
+    }
+  }
+}
