@@ -1,6 +1,4 @@
 import Translator, { chains } from '../index'
-
-
 import {
     ALCHEMY_PROJECT_ID,
     COVALENT_API_KEY,
