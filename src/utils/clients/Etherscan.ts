@@ -60,7 +60,7 @@ export default class Etherscan {
         }
 
         if (response.status !== '1') {
-            logError({ address: address ?? '' }, `Etherscan API error: ${response.result}`)
+            logError({ address: address ?? '', thrown_error: response.result }, {})
             // console.warn(`Etherscan API error: ${response.result}`)
             // throw new Error(`Etherscan API error: ${response.result}`)
             return []

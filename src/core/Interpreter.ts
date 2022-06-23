@@ -88,6 +88,7 @@ class Interpreter {
             fromAddress,
             toAddress,
             timestamp,
+            officialContractName,
         } = decodedData
 
         const { nativeValueSent, txHash } = decodedData
@@ -132,7 +133,7 @@ class Interpreter {
             extra: {},
             exampleDescription: 'no example description defined',
             reverted: decodedData.reverted ? true : null,
-            contractName: null,
+            contractName: officialContractName,
             counterpartyName: null,
             timestamp,
         }

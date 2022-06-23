@@ -40,7 +40,7 @@ import Etherscan from 'utils/clients/Etherscan'
 import { blackholeAddress, proxyImplementationAddress, REVERSE_RECORDS_CONTRACT_ADDRESS } from 'utils/constants'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 import getTypeFromABI from 'utils/getTypeFromABI'
-import { logDebug } from 'utils/logging'
+import { logDebug, logError } from 'utils/logging'
 
 export type DecoderConfig = {
     covalentData?: CovalentTxData
@@ -412,6 +412,16 @@ export class Augmenter {
         if (contractType === ContractType.OTHER) {
             contractType = await getTypeFromABI(contractAddress, this.etherscan, abiArr)
         }
+        // if (contractType === ContractType.OTHER) {
+        //     try {
+        //         const code = await this.provider.getCode(contractAddress)
+        //         if (code == '0x') {
+        //             contractType = ContractType.EOA
+        //         }
+        //     } catch (e) {
+        //         logError({ functionName: 'provider.getCode', address: contractAddress }, e)
+        //     }
+        // }
         return contractType
     }
     private async getContractTypes() {
