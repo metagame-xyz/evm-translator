@@ -1,3 +1,4 @@
+[![Tests](https://github.com/metagame-xyz/evm-translator/actions/workflows/tests.yml/badge.svg)](https://github.com/metagame-xyz/evm-translator/actions/workflows/tests.yml)
 [![GitHub license](https://img.shields.io/github/license/the-metagame/evm-translator)](https://github.com/the-metagame/evm-translator/blob/main/LICENSE)
 
 Add more things from here https://shields.io/category/build
