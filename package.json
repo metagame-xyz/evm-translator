@@ -25,6 +25,9 @@
         },
         "setupFilesAfterEnv": [
             "./src/__tests__/setupTests.js"
+        ],
+        "testMatch": [
+            "**/lib/__tests__/*.test.js"
         ]
     },
     "repository": {
