@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import contractInterpreters from './contractInterpreters'
 import contractDeployInterpreter from './genericInterpreters/ContractDeploy.json'
+import interpretGnosisExecution from './genericInterpreters/gnosis'
 import lastFallback from './genericInterpreters/lastFallback'
 import interpretGenericToken from './genericInterpreters/token'
 import interpretGenericTransfer from './genericInterpreters/transfer'
@@ -187,7 +188,9 @@ class Interpreter {
                 interpretation,
             )
         } else {
-            if (decodedData.contractType !== ContractType.OTHER) {
+            if (decodedData.contractType === ContractType.GNOSIS) {
+                interpretGnosisExecution(decodedData, interpretation)
+            } else if (decodedData.contractType !== ContractType.OTHER) {
                 interpretGenericToken(decodedData, interpretation)
             } else {
                 lastFallback(decodedData, interpretation)

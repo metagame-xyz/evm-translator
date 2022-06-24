@@ -42,6 +42,8 @@
     "homepage": "https://github.com/the-metagame/evm-translator#readme",
     "dependencies": {
         "@alch/alchemy-sdk": "^1.0.3",
+        "@gnosis.pm/safe-ethers-lib": "^1.1.0",
+        "@gnosis.pm/safe-service-client": "^1.1.2",
         "axios": "^0.26.1",
         "bottleneck": "^2.19.5",
         "collect.js": "^4.32.0",
