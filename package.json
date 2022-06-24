@@ -28,7 +28,8 @@
         ],
         "testMatch": [
             "**/lib/__tests__/*.test.js"
-        ]
+        ],
+        "snapshotResolver": "./src/__tests__/snapshotResolver.js"
     },
     "repository": {
         "type": "git",

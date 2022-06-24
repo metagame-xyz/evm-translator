@@ -14,4 +14,9 @@ Note: you will have to complete this step every time the `testTxHashArr.json` fi
 
 ## Testing the interpreter with snapshotting
 
-TODO
+1. In a new terminal tab, run `yarn dev` within the evm-translator folder. This will enable hot reloading for your changes.
+
+2. Make sure you have followed the above steps to store decoded transactions in your local DB. Keep the local DB instance up and running.
+
+3. Run `yarn test`. If this fails, you know the interpreter broke. If it failed but you'd like to update the snapshot so that this new
+intepretations is the "answer" going forward, run `yarn test -u`. Then run `yarn test` again to rewrite the snapshots.
