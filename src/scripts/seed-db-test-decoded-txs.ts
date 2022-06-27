@@ -10,28 +10,29 @@ async function run() {
 
   const translator = await getTranslator()
 
-  const decodedTxArr: DecodedTx[] = [];
-  for (const txHash of txHashArr) {
-    const rawTxData = await translator.getRawTxData(txHash)
-    const addresses = translator.getContractAddressesFromRawTxData(rawTxData)
-    const [unfilteredAbiMap, officialContractNamesMap] = await translator.getABIsAndNamesForContracts(addresses)
-    const proxyAddressMap = await translator.getProxyContractMap(addresses)
-    const AbiMap = filterABIMap(unfilteredAbiMap)
-    const ensMap = await translator.getENSNames(addresses)
-    const contractDataMap = await translator.getContractsData(AbiMap, officialContractNamesMap, proxyAddressMap)
+  await translator.allDataFromTxHashArr(txHashArr);
+  // const decodedTxArr: DecodedTx[] = [];
+  // for (const txHash of txHashArr) {
+  //   const rawTxData = await translator.getRawTxData(txHash)
+  //   const addresses = translator.getContractAddressesFromRawTxData(rawTxData)
+  //   const [unfilteredAbiMap, officialContractNamesMap] = await translator.getABIsAndNamesForContracts(addresses)
+  //   const proxyAddressMap = await translator.getProxyContractMap(addresses)
+  //   const AbiMap = filterABIMap(unfilteredAbiMap)
+  //   const ensMap = await translator.getENSNames(addresses)
+  //   const contractDataMap = await translator.getContractsData(AbiMap, officialContractNamesMap, proxyAddressMap)
 
-    const { decodedLogs, decodedCallData } = await translator.decodeTxData(rawTxData, AbiMap, contractDataMap)
-    const decodedWithAugmentation = translator.augmentDecodedData(
-      decodedLogs,
-      decodedCallData,
-      ensMap,
-      contractDataMap,
-      rawTxData,
-    )
-    decodedTxArr.push(decodedWithAugmentation)
-  }
+  //   const { decodedLogs, decodedCallData } = await translator.decodeTxData(rawTxData, AbiMap, contractDataMap)
+  //   const decodedWithAugmentation = translator.augmentDecodedData(
+  //     decodedLogs,
+  //     decodedCallData,
+  //     ensMap,
+  //     contractDataMap,
+  //     rawTxData,
+  //   )
+  //   decodedTxArr.push(decodedWithAugmentation)
+  // }
 
-  await db.addOrUpdateManyDecodedTx(decodedTxArr)
+  // await db.addOrUpdateManyDecodedTx(decodedTxArr)
 
   process.exit(0)
 }

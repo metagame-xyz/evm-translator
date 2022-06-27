@@ -4,7 +4,7 @@
   "contractName": "Aave V2",
   "writeFunctions": {
     "borrow": {
-      "exampleDescriptionTemplate": "{userName} borrowed {tokenAmount} {tokenName} from Aave V2",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenName} from {contractName}",
       "exampleDescription": "0x7f76 borrowed 56.24 SNX from Aave V2",
       "action": "borrowed",
       "keywords": {
@@ -27,7 +27,7 @@
       }
     },
     "deposit": {
-      "exampleDescriptionTemplate": "{userName} deposited {tokenAmount} {tokenName} into Aave V2",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenName} into {contractName}",
       "exampleDescription": "0x7f76 desposited 56.24 SNX into Aave V2",
       "action": "deposited",
       "keywords": {
@@ -50,7 +50,7 @@
       }
     },
     "repay": {
-      "exampleDescriptionTemplate": "{userName} repaid {tokenAmount} {tokenName} to Aave V2",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenName} to {contractName}",
       "exampleDescription": "0x7f76 repaid 56.24 SNX to Aave V2",
       "action": "repaid",
       "keywords": {
@@ -66,14 +66,14 @@
           "key": "contractSymbol",
           "filters": {
             "eventName": "Transfer",
-            "from": "{userAddress}"
+            "_from": "{userAddress}"
           },
           "defaultValue": "an unknown token"
         }
       }
     },
     "withdraw": {
-      "exampleDescriptionTemplate": "{userName} withdrew {tokenAmount} {tokenName} from Aave V2",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenName} from {contractName}",
       "exampleDescription": "0x7f76 withdrew 56.24 SNX from Aave V2",
       "action": "withdrew",
       "keywords": {
@@ -81,7 +81,7 @@
           "key": "value",
           "filters": {
             "eventName": "Transfer",
-            "from": "{userAddress}"
+            "to": "{userAddress}"
           },
           "defaultValue": "an unknown amount of"
         },
@@ -89,7 +89,7 @@
           "key": "contractSymbol",
           "filters": {
             "eventName": "Transfer",
-            "from": "{userAddress}"
+            "to": "{userAddress}"
           },
           "defaultValue": "an unknown token"
         }

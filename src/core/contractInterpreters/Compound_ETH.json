@@ -3,7 +3,7 @@
   "contractName": "Compound",
   "writeFunctions": {
     "borrow": {
-      "exampleDescriptionTemplate": "{userName} borrowed {tokenAmount} ETH from Compound",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} ETH from {contractName}",
       "exampleDescription": "0x7f76 borrowed 0.84 ETH from Compound",
       "action": "borrowed",
       "keywords": {
@@ -18,7 +18,7 @@
       }
     },
     "mint": {
-      "exampleDescriptionTemplate": "{userName} minted {tokenAmount0} cETH for {tokenAmount1} ETH using Compound",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} cETH for {tokenAmount1} ETH using {contractName}",
       "exampleDescription": "0x7f76 minted 99.33 cETH for 2 ETH using Compound",
       "action": "minted",
       "keywords": {
@@ -41,7 +41,7 @@
       }
     },
     "redeem": {
-      "exampleDescriptionTemplate": "{userName} redeemed {tokenAmount0} ETH for {tokenAmount1} cETH using Compound",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} ETH for {tokenAmount1} cETH using {contractName}",
       "exampleDescription": "0x7f76 redeemed 2 LINK for 99.33 cLINK using Compound",
       "action": "redeemed",
       "keywords": {
@@ -64,7 +64,7 @@
       }
     },
     "redeemUnderlying": {
-      "exampleDescriptionTemplate": "{userName} redeemed {tokenAmount0} ETH for {tokenAmount1} cETH using Compound",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} ETH for {tokenAmount1} cETH using {contractName}",
       "exampleDescription": "0x7f76 redeemed 2 ETH for 99.33 cETH using Compound",
       "action": "redeemed",
       "keywords": {
@@ -87,7 +87,7 @@
       }
     },
     "repayBorrow": {
-      "exampleDescriptionTemplate": "{userName} repaid a loan of {tokenAmount} ETH to Compound",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} ETH to {contractName}",
       "exampleDescription": "0x7f76 repaid a loan of 56.24 ETH to Compound",
       "action": "repaid",
       "keywords": {

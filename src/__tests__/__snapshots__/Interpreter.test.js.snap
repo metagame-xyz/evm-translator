@@ -41,7 +41,7 @@ Object {
   "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
   "contractName": "Uniswap V2",
   "counterpartyName": null,
-  "exampleDescription": "0x10fc bought 1 ETH of HOGE on Uniswap V2",
+  "exampleDescription": "thememelord.eth bought 1 ETH of HOGE on Uniswap V2",
   "extra": Object {
     "tokenAmount": "11567525892826453",
     "tokenName": "HOGE",
@@ -63,7 +63,7 @@ Object {
   "tokensSent": Array [],
   "txHash": "0x32706fd90e141319710989feb555d6c9e394b1788802df6281d257cda0701c84",
   "userAddress": "0x10fced9a7c5d1ae7186d5e5912b73d47c1283d65",
-  "userName": "0x10fc",
+  "userName": "thememelord.eth",
 }
 `;
 
@@ -284,5 +284,126 @@ Object {
   "txHash": "0xc814cb6b61222beda8a9bcc359e776e72ae732a1c29df572099ecef27c8461e4",
   "userAddress": "0x96a675775b8546a8602a1015efaacbc87358e478",
   "userName": "0x96a6",
+}
+`;
+
+exports[`Interpreter 9`] = `
+Object {
+  "action": "repaid",
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
+  "contractName": "Aave V2",
+  "counterpartyName": null,
+  "exampleDescription": "0xd8a3 repaid 314305817611832341382659 CRV to Aave V2",
+  "extra": Object {
+    "tokenAmount": "314305817611832341382659",
+    "tokenName": "CRV",
+  },
+  "gasPaid": "0.012144212798965408",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1656357349,
+  "tokensReceived": Array [],
+  "tokensSent": Array [
+    Object {
+      "address": "0x00ad8ebf64f141f1c81e9f8f792d3d1631c6c684",
+      "amount": "314305817611832341382659",
+      "name": "Aave variable debt bearing CRV",
+      "symbol": "variableDebtCRV",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xd533a949740bb3306d119cc777fa900ba034cd52",
+      "name": "Curve DAO Token",
+      "symbol": "CRV",
+      "type": "unknown",
+    },
+  ],
+  "txHash": "0xdf2f782ab0296121318cca140ef069f9f074c51ff4b11f0c677bcb01126f81de",
+  "userAddress": "0xd8a3785869f3fc0f0019ec8e9f649b4c43a33383",
+  "userName": "0xd8a3",
+}
+`;
+
+exports[`Interpreter 10`] = `
+Object {
+  "action": "deposited",
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
+  "contractName": "Aave V2",
+  "counterpartyName": null,
+  "exampleDescription": "0x88a9 deposited 2800000000 USDT into Aave V2",
+  "extra": Object {
+    "tokenAmount": "2800000000",
+    "tokenName": "USDT",
+  },
+  "gasPaid": "0.015157096544929638",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1656358062,
+  "tokensReceived": Array [
+    Object {
+      "address": "0x3ed3b47dd13ec9a98b44e6204a523e766b225811",
+      "amount": "2800000000",
+      "name": "Aave interest bearing USDT",
+      "symbol": "aUSDT",
+      "type": "ERC20",
+    },
+  ],
+  "tokensSent": Array [
+    Object {
+      "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "amount": "2800000000",
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "type": "ERC20",
+    },
+  ],
+  "txHash": "0x24ee705da17a6061091880f47335d92950c72398980e271cdb9c69e8502827f4",
+  "userAddress": "0x88a902adc0ff5bfe283d8d2365b51de6bc5e1666",
+  "userName": "0x88a9",
+}
+`;
+
+exports[`Interpreter 11`] = `
+Object {
+  "action": "withdrew",
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
+  "contractName": "Aave V2",
+  "counterpartyName": null,
+  "exampleDescription": "0xd8a3 withdrew 432225355877 USDC from Aave V2",
+  "extra": Object {
+    "tokenAmount": "432225355877",
+    "tokenName": "USDC",
+  },
+  "gasPaid": "0.014723072749854258",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1656357807,
+  "tokensReceived": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "432225355877",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "tokensSent": Array [
+    Object {
+      "address": "0xbcca60bb61934080951369a648fb03df4f96263c",
+      "amount": "432225355877",
+      "name": "Aave interest bearing USDC",
+      "symbol": "aUSDC",
+      "type": "ERC20",
+    },
+  ],
+  "txHash": "0xf8353e31f9a00ed12402fbfcb7cb3f168bf4c36f6edee3bfae3d70d6ef7b410d",
+  "userAddress": "0xd8a3785869f3fc0f0019ec8e9f649b4c43a33383",
+  "userName": "0xd8a3",
 }
 `;

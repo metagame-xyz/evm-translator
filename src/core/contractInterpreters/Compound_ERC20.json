@@ -4,7 +4,7 @@
   "contractName": "Compound",
   "writeFunctions": {
     "borrow": {
-      "exampleDescriptionTemplate": "{userName} borrowed {tokenAmount} {tokenName} from Compound",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenName} from {contractName}",
       "exampleDescription": "0x7f76 borrowed 56.24 DAI from Compound",
       "action": "borrowed",
       "keywords": {
@@ -27,7 +27,7 @@
       }
     },
     "mint": {
-      "exampleDescriptionTemplate": "{userName} minted {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} using Compound",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} using {contractName}",
       "exampleDescription": "0x7f76 minted 99.33 cLINK for 2 LINK using Compound",
       "action": "minted",
       "keywords": {
@@ -66,7 +66,7 @@
       }
     },
     "redeem": {
-      "exampleDescriptionTemplate": "{userName} redeemed {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} using Compound",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} using {contractName}",
       "exampleDescription": "0x7f76 redeemed 2 LINK for 99.33 cLINK using Compound",
       "action": "redeemed",
       "keywords": {
@@ -105,7 +105,7 @@
       }
     },
     "redeemUnderlying": {
-      "exampleDescriptionTemplate": "{userName} redeemed {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} using Compound",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} using {contractName}",
       "exampleDescription": "0x7f76 redeemed 2 LINK for 99.33 cLINK using Compound",
       "action": "redeemed",
       "keywords": {
@@ -144,7 +144,7 @@
       }
     },
     "repayBorrow": {
-      "exampleDescriptionTemplate": "{userName} repaid a loan of {tokenAmount} {tokenName} to Compound",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenName} to {contractName}",
       "exampleDescription": "0x7f76 repaid a loan of 56.24 DAI to Compound",
       "action": "repaid",
       "keywords": {
