@@ -1,20 +1,5 @@
 {
     "contractAddress": "0xd569d3cce55b71a8a3f3c418c329a66e5f714431",
-    "methods": {
-        "0x238efcbc": ["acceptGovernance", "acceptGovernance()"],
-        "0x8a19e355": ["addToBalance", "addToBalance(uint256)"],
-        "0x308a20ad": ["allowMigration", "allowMigration(address)"],
-        "0xe2c673a5": ["appointGovernance", "appointGovernance(address)"],
-        "0x4531fb36": ["configure", "configure(uint256,tuple,tuple,tuple[],tuple[])"],
-        "0x1296dc29": ["deploy", "deploy(address,bytes32,string,tuple,tuple,tuple[],tuple[])"],
-        "0x405b84fa": ["migrate", "migrate(uint256,address)"],
-        "0x02c8986f": ["pay", "pay(uint256,address,string,bool)"],
-        "0x2be5c650": ["printPreminedTickets", "printPreminedTickets(uint256,uint256,uint256,address,string,bool)"],
-        "0xaf82d3be": ["printReservedTickets", "printReservedTickets(uint256)"],
-        "0x3015a5b5": ["redeem", "redeem(address,uint256,uint256,uint256,address,bool)"],
-        "0x69fe0e2d": ["setFee", "setFee(uint256)"],
-        "0x08014ddc": ["tap", "tap(uint256,uint256,uint256,uint256)"]
-    },
     "contractOfficialName": "TerminalV1",
     "contractName": "______TODO______",
     "writeFunctions": {

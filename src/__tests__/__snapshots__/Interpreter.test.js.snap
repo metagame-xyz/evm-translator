@@ -253,3 +253,36 @@ Object {
   "userName": "0xa72d",
 }
 `;
+
+exports[`Interpreter 8`] = `
+Object {
+  "action": "bought",
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7f268357a8c2552623316e2562d90e642bb538e5",
+  "contractName": "OpenSea",
+  "counterpartyName": null,
+  "exampleDescription": "0x96a6 bought The Ninja Hideout #228 on OpenSea for 0.05 ETH",
+  "extra": Object {
+    "NFT": "The Ninja Hideout",
+    "tokenId": "#228",
+  },
+  "gasPaid": "0.00837078350034528",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0.05",
+  "reverted": null,
+  "timestamp": 1656089719,
+  "tokensReceived": Array [
+    Object {
+      "address": "0x97e41d5ce9c8cb1f83947ef82a86e345aed673f3",
+      "name": "The Ninja Hideout",
+      "symbol": "TNH",
+      "tokenId": "228",
+      "type": "ERC721",
+    },
+  ],
+  "tokensSent": Array [],
+  "txHash": "0xc814cb6b61222beda8a9bcc359e776e72ae732a1c29df572099ecef27c8461e4",
+  "userAddress": "0x96a675775b8546a8602a1015efaacbc87358e478",
+  "userName": "0x96a6",
+}
+`;

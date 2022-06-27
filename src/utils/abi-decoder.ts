@@ -170,7 +170,6 @@ export default class ABIDecoder {
             logs
                 .filter((log) => log.topics.length > 0)
                 .map(async (logItem) => {
-
                     const eventID = logItem.topics[0]
                     const address = AddressZ.parse(logItem.address)
 
@@ -234,7 +233,7 @@ export default class ABIDecoder {
                         }
                     }
 
-                    if (abiItem && decodedData && Object.keys(decodedData).length) {
+                    if (abiItem && decodedData) {
                         type DecodedParam = {
                             name: string
                             value: string | BigNumber

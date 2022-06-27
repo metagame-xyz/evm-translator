@@ -1,27 +1,5 @@
 {
   "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
-  "methods": {
-    "0xa0712d68": [
-      "mint",
-      "mint(uint256)"
-    ],
-    "0x852a12e3": [
-      "redeemUnderlying",
-      "redeemUnderlying(uint256)"
-    ],
-    "0xdb006a75": [
-      "redeem",
-      "redeem(uint256)"
-    ],
-    "0x0e752702": [
-      "repayBorrow",
-      "repayBorrow(uint256)"
-    ],
-    "0xc5ebeaec": [
-      "borrow",
-      "borrow(uint256)"
-    ]
-  },
   "contractOfficialName": "CompoundProtocol",
   "contractName": "Compound",
   "writeFunctions": {

@@ -82,15 +82,16 @@ class Interpreter {
         userAddressFromInput: string | null = null,
         userNameFromInput: string | null = null,
     ): Interpretation {
+        // Prep data coming in from 'decodedData'
         const {
             methodCall: { name: methodName },
             interactions,
             fromAddress,
             toAddress,
             timestamp,
+            nativeValueSent,
+            txHash
         } = decodedData
-
-        const { nativeValueSent, txHash } = decodedData
 
         const gasUsed = formatEther(
             BigNumber.from(decodedData.gasUsed).mul(BigNumber.from(decodedData.effectiveGasPrice)),
@@ -148,6 +149,7 @@ class Interpreter {
 
         // if there's no contract-specific mapping, try to use the fallback mapping
         if (decodedData.txType === TxType.CONTRACT_DEPLOY) {
+            // Contract deploy
             interpretation.action = Action.deployed
             interpretation.exampleDescription = contractDeployInterpreter.exampleDescription
 
@@ -161,13 +163,15 @@ class Interpreter {
                 interpretation,
             )
         } else if (decodedData.txType === TxType.TRANSFER) {
+            // Generic transfer
             interpretGenericTransfer(decodedData, interpretation)
-            // contract-specific interpretation
         } else if (interpretationMapping && methodSpecificMapping && methodName && toAddress) {
+            // Contract-specific interpretation
+
             console.log('contract-specific interpretation', interpretationMapping.contractName, methodName)
             // some of these will be arbitrary keys
             interpretation.contractName = interpretationMapping.contractName
-            interpretation.action = methodSpecificMapping.action
+            interpretation.action = methodSpecificMapping.action // TODO: make a dynamic "action" field
             interpretation.exampleDescription = methodSpecificMapping.exampleDescription
 
             if (decodedData.reverted) {
@@ -186,6 +190,7 @@ class Interpreter {
                 interpretation,
             )
         } else {
+            // Base case
             if (decodedData.contractType !== ContractType.OTHER) {
                 interpretGenericToken(decodedData, interpretation)
             } else {

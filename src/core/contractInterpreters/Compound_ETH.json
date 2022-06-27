@@ -1,26 +1,4 @@
 {
-  "methods": {
-    "0x1249c58b": [
-      "mint",
-      "mint()"
-    ],
-    "0x852a12e3": [
-      "redeemUnderlying",
-      "redeemUnderlying(uint256)"
-    ],
-    "0xdb006a75": [
-      "redeem",
-      "redeem(uint256)"
-    ],
-    "0x4e4d9fea": [
-      "repayBorrow",
-      "repayBorrow()"
-    ],
-    "0xc5ebeaec": [
-      "borrow",
-      "borrow(uint256)"
-    ]
-  },
   "contractOfficialName": "CompoundProtocol",
   "contractName": "Compound",
   "writeFunctions": {

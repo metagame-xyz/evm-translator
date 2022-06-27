@@ -87,10 +87,6 @@ export class Augmenter {
         abiMap: Record<string, ABI_Item[]>,
         contractDataMap: Record<string, ContractData>,
     ): Promise<{ decodedLogs: Interaction[]; decodedCallData: DecodedCallData }> {
-        const allABIs: ABI_Item[] = []
-        const abiArrArr = getValues(abiMap)
-        allABIs.push(...abiArrArr.flat())
-
         const abiDecoder = new ABIDecoder(this.db)
         abiDecoder.addABI(abiMap)
 
@@ -467,7 +463,7 @@ export class Augmenter {
 
                 // warning, we might assign contactName from somewhere else in the future, so it might not be null here even when we thought it would be, which means we might still need to get token symbol/name but we end up skipping it
                 if (!contractName) {
-                    ;({ tokenName, tokenSymbol, contractName } = await this.getNameAndSymbol(address, contractType))
+                    ; ({ tokenName, tokenSymbol, contractName } = await this.getNameAndSymbol(address, contractType))
                 }
 
                 // const contractName = await this.getContractName(address)

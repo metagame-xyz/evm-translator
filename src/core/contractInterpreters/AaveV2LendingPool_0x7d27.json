@@ -1,23 +1,5 @@
 {
   "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
-  "methods": {
-    "0xa415bcad": [
-      "borrow",
-      "borrow(address, uint256, uint256, uint16, address)"
-    ],
-    "0xe8eda9df": [
-      "deposit",
-      "deposit(address, uint256, address, uint16)"
-    ],
-    "0x573ade81": [
-      "repay",
-      "repay(address, uint256, uint256, address)"
-    ],
-    "0x69328dec": [
-      "withdraw",
-      "withdraw(address, uint256, address)"
-    ]
-  },
   "contractOfficialName": "AaveV2LendingPool",
   "contractName": "Aave V2",
   "writeFunctions": {

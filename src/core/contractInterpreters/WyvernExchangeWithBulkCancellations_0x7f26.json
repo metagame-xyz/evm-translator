@@ -1,29 +1,5 @@
 {
     "contractAddress": "0x7f268357a8c2552623316e2562d90e642bb538e5",
-    "methods": {
-        "0x14350c24": ["changeMinimumMakerProtocolFee", "changeMinimumMakerProtocolFee(uint256)"],
-        "0x1a6b13e2": ["changeMinimumTakerProtocolFee", "changeMinimumTakerProtocolFee(uint256)"],
-        "0x514f0330": ["changeProtocolFeeRecipient", "changeProtocolFeeRecipient(address)"],
-        "0x627cdcb9": ["incrementNonce", "incrementNonce()"],
-        "0x715018a6": ["renounceOwnership", "renounceOwnership()"],
-        "0x79666868": [
-            "approveOrder_",
-            "approveOrder_(address[7],uint256[9],uint8,uint8,uint8,uint8,bytes,bytes,bytes,bool)"
-        ],
-        "0xa8a41c70": [
-            "cancelOrder_",
-            "cancelOrder_(address[7],uint256[9],uint8,uint8,uint8,uint8,bytes,bytes,bytes,uint8,bytes32,bytes32)"
-        ],
-        "0xab834bab": [
-            "atomicMatch_",
-            "atomicMatch_(address[14],uint256[18],uint8[8],bytes,bytes,bytes,bytes,bytes,bytes,uint8[2],bytes32[5])"
-        ],
-        "0xf2fde38b": ["transferOwnership", "transferOwnership(address)"],
-        "0xf63e8379": [
-            "cancelOrderWithNonce_",
-            "cancelOrderWithNonce_(address[7],uint256[9],uint8,uint8,uint8,uint8,bytes,bytes,bytes,uint8,bytes32,bytes32,uint256)"
-        ]
-    },
     "contractOfficialName": "WyvernExchangeWithBulkCancellations",
     "contractName": "OpenSea",
     "writeFunctions": {
@@ -112,7 +88,7 @@
             "action": "bought",
             "keywords": {
                 "NFT": {
-                    "key": "contract",
+                    "key": "contractName",
                     "filters": {
                         "eventName": "Transfer",
                         "to": "{userAddress}"
