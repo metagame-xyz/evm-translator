@@ -37,11 +37,11 @@ import reverseRecordsABI from 'utils/ABIs/ReverseRecords.json'
 import checkInterface from 'utils/checkInterface'
 import Covalent from 'utils/clients/Covalent'
 import Etherscan from 'utils/clients/Etherscan'
-import { blackholeAddress, proxyImplementationAddress, REVERSE_RECORDS_CONTRACT_ADDRESS } from 'utils/constants'
+import { blackholeAddress, REVERSE_RECORDS_CONTRACT_ADDRESS } from 'utils/constants'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 import getTypeFromABI from 'utils/getTypeFromABI'
 import isGnosisSafeMaybe from 'utils/isGnosisSafeMaybe'
-import { logDebug, logError } from 'utils/logging'
+import { logDebug } from 'utils/logging'
 
 export type DecoderConfig = {
     covalentData?: CovalentTxData
@@ -280,6 +280,7 @@ export class Augmenter {
                     contractAddress: nt.action.from,
                     contractName: null,
                     contractSymbol: null,
+                    contractType: ContractType.OTHER, //TODO it's probably not 'other', it's probably 'native' or something
                     events: [traceLogToEvent(nt)],
                 })
             }

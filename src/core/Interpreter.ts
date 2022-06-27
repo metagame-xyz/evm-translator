@@ -296,8 +296,8 @@ class Interpreter {
 
         let filteredInteractions = deepCopy(interactions) as Interaction[]
 
-        const toKeys = ['to', '_to']
-        const fromKeys = ['from', '_from']
+        const toKeys = ['to', '_to', 'dst']
+        const fromKeys = ['from', '_from', 'src']
         const transferEvents = ['Transfer', 'TransferBatch', 'TransferSingle']
 
         for (const interaction of filteredInteractions) {
@@ -326,13 +326,17 @@ class Interpreter {
             if (interaction.contractSymbol && LPTokenSymbols.includes(interaction.contractSymbol)) {
                 tokenType = TokenType.LPToken
                 // ERC-1155
-            } else if (interaction.params._amount || interaction.params._amounts) {
+            } else if (
+                interaction.contractType == ContractType.ERC1155 ||
+                interaction.params._amount ||
+                interaction.params._amounts
+            ) {
                 tokenType = TokenType.ERC1155
                 // ERC-721
-            } else if (interaction.params.tokenId) {
+            } else if (interaction.contractType == ContractType.ERC721 || interaction.params.tokenId) {
                 tokenType = TokenType.ERC721
                 // ERC-20
-            } else if (Number(interaction.params.value) > 0) {
+            } else if (interaction.contractType == ContractType.ERC20 || Number(interaction.params.value) > 0) {
                 tokenType = TokenType.ERC20
             }
 
@@ -378,7 +382,8 @@ class Interpreter {
         tokens = flattenedInteractions.map((i) => {
             const tokenType = getTokenType(i)
 
-            const amount = tokenType === TokenType.ERC1155 ? i.params._amount : i.params.value
+            const amount =
+                tokenType === TokenType.ERC1155 ? i.params._amount : i.params.value || i.params.amount || i.params.wad
             const tokenId = (tokenType === TokenType.ERC1155 ? i.params._id : i.params.tokenId)?.toString()
 
             const token: Token = {

@@ -1,51 +1,5 @@
 {
     "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
-    "methods": {
-        "0xe8e33700": ["addLiquidity", "addLiquidity(address,address,uint256,uint256,uint256,uint256,address,uint256)"],
-        "0xf305d719": ["addLiquidityETH", "addLiquidityETH(address,uint256,uint256,uint256,address,uint256)"],
-        "0xbaa2abde": ["removeLiquidity", "removeLiquidity(address,address,uint256,uint256,uint256,address,uint256)"],
-        "0x02751cec": ["removeLiquidityETH", "removeLiquidityETH(address,uint256,uint256,uint256,address,uint256)"],
-        "0xaf2979eb": [
-            "removeLiquidityETHSupportingFeeOnTransferTokens",
-            "removeLiquidityETHSupportingFeeOnTransferTokens(address,uint256,uint256,uint256,address,uint256)"
-        ],
-        "0xded9382a": [
-            "removeLiquidityETHWithPermit",
-            "removeLiquidityETHWithPermit(address,uint256,uint256,uint256,address,uint256,bool,uint8,bytes32,bytes32)"
-        ],
-        "0x5b0d5984": [
-            "removeLiquidityETHWithPermitSupportingFeeOnTransferTokens",
-            "removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(address,uint256,uint256,uint256,address,uint256,bool,uint8,bytes32,bytes32)"
-        ],
-        "0x2195995c": [
-            "removeLiquidityWithPermit",
-            "removeLiquidityWithPermit(address,address,uint256,uint256,uint256,address,uint256,bool,uint8,bytes32,bytes32)"
-        ],
-        "0xfb3bdb41": ["swapETHForExactTokens", "swapETHForExactTokens(uint256,address[],address,uint256)"],
-        "0x7ff36ab5": ["swapExactETHForTokens", "swapExactETHForTokens(uint256,address[],address,uint256)"],
-        "0xb6f9de95": [
-            "swapExactETHForTokensSupportingFeeOnTransferTokens",
-            "swapExactETHForTokensSupportingFeeOnTransferTokens(uint256,address[],address,uint256)"
-        ],
-        "0x18cbafe5": ["swapExactTokensForETH", "swapExactTokensForETH(uint256,uint256,address[],address,uint256)"],
-        "0x791ac947": [
-            "swapExactTokensForETHSupportingFeeOnTransferTokens",
-            "swapExactTokensForETHSupportingFeeOnTransferTokens(uint256,uint256,address[],address,uint256)"
-        ],
-        "0x38ed1739": [
-            "swapExactTokensForTokens",
-            "swapExactTokensForTokens(uint256,uint256,address[],address,uint256)"
-        ],
-        "0x5c11d795": [
-            "swapExactTokensForTokensSupportingFeeOnTransferTokens",
-            "swapExactTokensForTokensSupportingFeeOnTransferTokens(uint256,uint256,address[],address,uint256)"
-        ],
-        "0x4a25d94a": ["swapTokensForExactETH", "swapTokensForExactETH(uint256,uint256,address[],address,uint256)"],
-        "0x8803dbee": [
-            "swapTokensForExactTokens",
-            "swapTokensForExactTokens(uint256,uint256,address[],address,uint256)"
-        ]
-    },
     "contractOfficialName": "UniswapV2Router02",
     "contractName": "Uniswap V2",
     "writeFunctions": {
@@ -358,7 +312,7 @@
                     "key": "value",
                     "filters": {
                         "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-                        "eventName": "Transfer",
+                        "eventName": "NativeTransfer",
                         "to": "{contractAddress}"
                     },
                     "defaultValue": "an unknown amount of"

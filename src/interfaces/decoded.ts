@@ -84,6 +84,7 @@ export type Interaction = {
     contractName: string | null
     contractSymbol: string | null
     contractAddress: string
+    contractType: ContractType
     events: InteractionEvent[]
 }
 
@@ -98,6 +99,8 @@ export type InteractionEvent = {
 
 export type InteractionEventParams = {
     value?: string
+    amount?: string
+    wad?: string
     from?: string
     _from?: string
     fromENS?: string

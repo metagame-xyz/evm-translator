@@ -301,6 +301,7 @@ function interpretGenericToken(decodedData: DecodedTx, interpretation: Interpret
         contractName,
         contractSymbol: null,
         contractAddress: toAddress || '',
+        contractType: ContractType.OTHER,
         events: [],
     }
 
