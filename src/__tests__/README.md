@@ -2,7 +2,14 @@
 
 ## Storing decoded transations in local DB
 
-1. Make sure you have a local instance of MongoDB running. (see https://github.com/the-metagame/metabot if you need one)
+1. Make sure you have a local instance of MongoDB running.
+[local mongoDB installation guide](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/)
+
+note: I've been running MongoDB "as a macOS service" as they suggest.
+
+To see the data in a GUI I've been using [Compass](https://www.mongodb.com/products/compass) (by the MongoDB team)
+
+You can connect to a local instance using `mongodb://localhost:27017`
 
 2. The `testTxHashArr.json` file has a list of transactions to test the interpreter with. If you add support
 for a new protocol, add example transactions to that file.
