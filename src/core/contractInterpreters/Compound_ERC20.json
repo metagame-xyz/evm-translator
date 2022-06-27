@@ -4,7 +4,7 @@
   "contractName": "Compound",
   "writeFunctions": {
     "borrow": {
-      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenName} from {contractName}",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenSymbol} from {contractName}",
       "exampleDescription": "0x7f76 borrowed 56.24 DAI from Compound",
       "action": "borrowed",
       "keywords": {
@@ -16,7 +16,7 @@
           },
           "defaultValue": "an unknown amount of"
         },
-        "tokenName": {
+        "tokenSymbol": {
           "key": "contractSymbol",
           "filters": {
             "eventName": "Transfer",
@@ -27,11 +27,11 @@
       }
     },
     "mint": {
-      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} using {contractName}",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenSymbol0} for {tokenAmount1} {tokenSymbol1} using {contractName}",
       "exampleDescription": "0x7f76 minted 99.33 cLINK for 2 LINK using Compound",
       "action": "minted",
       "keywords": {
-        "tokenName0": {
+        "tokenSymbol0": {
           "key": "contractSymbol",
           "filters": {
             "eventName": "Transfer",
@@ -47,7 +47,7 @@
           },
           "defaultValue": "an unknown amount"
         },
-        "tokenName1": {
+        "tokenSymbol1": {
           "key": "contractSymbol",
           "filters": {
             "eventName": "Transfer",
@@ -66,11 +66,11 @@
       }
     },
     "redeem": {
-      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} using {contractName}",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenSymbol0} for {tokenAmount1} {tokenSymbol1} using {contractName}",
       "exampleDescription": "0x7f76 redeemed 2 LINK for 99.33 cLINK using Compound",
       "action": "redeemed",
       "keywords": {
-        "tokenName0": {
+        "tokenSymbol0": {
           "key": "contractSymbol",
           "filters": {
             "eventName": "Transfer",
@@ -86,7 +86,7 @@
           },
           "defaultValue": "an unknown amount"
         },
-        "tokenName1": {
+        "tokenSymbol1": {
           "key": "contractSymbol",
           "filters": {
             "eventName": "Transfer",
@@ -105,11 +105,11 @@
       }
     },
     "redeemUnderlying": {
-      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} using {contractName}",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenSymbol0} for {tokenAmount1} {tokenSymbol1} using {contractName}",
       "exampleDescription": "0x7f76 redeemed 2 LINK for 99.33 cLINK using Compound",
       "action": "redeemed",
       "keywords": {
-        "tokenName0": {
+        "tokenSymbol0": {
           "key": "contractSymbol",
           "filters": {
             "eventName": "Transfer",
@@ -125,7 +125,7 @@
           },
           "defaultValue": "an unknown amount"
         },
-        "tokenName1": {
+        "tokenSymbol1": {
           "key": "contractSymbol",
           "filters": {
             "eventName": "Transfer",
@@ -144,7 +144,7 @@
       }
     },
     "repayBorrow": {
-      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenName} to {contractName}",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenSymbol} to {contractName}",
       "exampleDescription": "0x7f76 repaid a loan of 56.24 DAI to Compound",
       "action": "repaid",
       "keywords": {
@@ -156,7 +156,7 @@
           },
           "defaultValue": "an unknown amount of"
         },
-        "tokenName": {
+        "tokenSymbol": {
           "key": "contractSymbol",
           "filters": {
             "eventName": "Transfer",

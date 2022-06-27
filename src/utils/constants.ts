@@ -1,6 +1,3 @@
-import dotenv from 'dotenv'
-dotenv.config()
-
 export const REVERSE_RECORDS_CONTRACT_ADDRESS = '0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C'
 export const blackholeAddress = '0x0000000000000000000000000000000000000000'
 

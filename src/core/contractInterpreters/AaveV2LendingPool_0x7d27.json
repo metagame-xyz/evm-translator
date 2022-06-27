@@ -4,7 +4,7 @@
   "contractName": "Aave V2",
   "writeFunctions": {
     "borrow": {
-      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenName} from {contractName}",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenSymbol} from {contractName}",
       "exampleDescription": "0x7f76 borrowed 56.24 SNX from Aave V2",
       "action": "borrowed",
       "keywords": {
@@ -16,7 +16,7 @@
           },
           "defaultValue": "an unknown amount of"
         },
-        "tokenName": {
+        "tokenSymbol": {
           "key": "contractSymbol",
           "filters": {
             "eventName": "Transfer",
@@ -27,7 +27,7 @@
       }
     },
     "deposit": {
-      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenName} into {contractName}",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenSymbol} into {contractName}",
       "exampleDescription": "0x7f76 desposited 56.24 SNX into Aave V2",
       "action": "deposited",
       "keywords": {
@@ -39,7 +39,7 @@
           },
           "defaultValue": "an unknown amount of"
         },
-        "tokenName": {
+        "tokenSymbol": {
           "key": "contractSymbol",
           "filters": {
             "eventName": "Transfer",
@@ -50,7 +50,7 @@
       }
     },
     "repay": {
-      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenName} to {contractName}",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenSymbol} to {contractName}",
       "exampleDescription": "0x7f76 repaid 56.24 SNX to Aave V2",
       "action": "repaid",
       "keywords": {
@@ -62,7 +62,7 @@
           },
           "defaultValue": "an unknown amount of"
         },
-        "tokenName": {
+        "tokenSymbol": {
           "key": "contractSymbol",
           "filters": {
             "eventName": "Transfer",
@@ -73,7 +73,7 @@
       }
     },
     "withdraw": {
-      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenName} from {contractName}",
+      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenSymbol} from {contractName}",
       "exampleDescription": "0x7f76 withdrew 56.24 SNX from Aave V2",
       "action": "withdrew",
       "keywords": {
@@ -85,7 +85,7 @@
           },
           "defaultValue": "an unknown amount of"
         },
-        "tokenName": {
+        "tokenSymbol": {
           "key": "contractSymbol",
           "filters": {
             "eventName": "Transfer",
