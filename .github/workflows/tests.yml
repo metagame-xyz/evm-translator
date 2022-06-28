@@ -10,14 +10,19 @@ on: push
 #     branches: [ "main" ]
 
 
-env:
-  EVM_TRANSLATOR_CONNECTION_STRING: ${{ secrets.EVM_TRANSLATOR_CONNECTION_STRING }}
-  TEST_SECRET: ${{ secrets.TEST_SECRET }}
+
+
+  
 
 jobs:
   build:
     name: Run tests
     runs-on: ubuntu-latest
+    environment: test
+    
+    env:
+      EVM_TRANSLATOR_CONNECTION_STRING: ${{ secrets.EVM_TRANSLATOR_CONNECTION_STRING }}
+      TEST_SECRET: ${{ secrets.TEST_SECRET }}
 
     strategy:
       matrix:
@@ -36,4 +41,6 @@ jobs:
     - run: yarn format
     - name: "just a test"
       run: echo "$TEST_SECRET please work"
+      env:
+        TEST_SECRET: ${{ secrets.TEST_SECRET }}
     - run: yarn test
