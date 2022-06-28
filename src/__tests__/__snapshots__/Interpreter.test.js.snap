@@ -1,0 +1,353 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Interpreter 1`] = `
+Object {
+  "action": "sold",
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+  "contractName": "Uniswap V2",
+  "counterpartyName": null,
+  "exampleDescription": "0xdcde sold 71782049366433048 ETH of KINGDOM on Uniswap V2",
+  "extra": Object {
+    "ethValueReceived": "71782049366433048",
+    "tokenAmount": "458161051962122",
+    "tokenName": "KINGDOM",
+  },
+  "gasPaid": "0.03127220866447174",
+  "nativeValueReceived": "0.3949571157926511",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1638316845,
+  "tokensReceived": Array [],
+  "tokensSent": Array [
+    Object {
+      "address": "0x9273b71cfd60e022c2107d5bcf5ee62a88346550",
+      "amount": "458161051962122",
+      "name": "Kingdom Token",
+      "symbol": "KINGDOM",
+      "type": "ERC20",
+    },
+  ],
+  "txHash": "0xd7be990f8849ec0b74d86fbda86eaf4c0cb25b814fb1ab9d2f056705b2fdfba6",
+  "userAddress": "0xdcdee85472e19a9a1bba1b9c524c6105c727f3d6",
+  "userName": "0xdcde",
+}
+`;
+
+exports[`Interpreter 2`] = `
+Object {
+  "action": "bought",
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+  "contractName": "Uniswap V2",
+  "counterpartyName": null,
+  "exampleDescription": "thememelord.eth bought 1 ETH of HOGE on Uniswap V2",
+  "extra": Object {
+    "tokenAmount": "11567525892826453",
+    "tokenName": "HOGE",
+  },
+  "gasPaid": "0.023564857708634499",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "1",
+  "reverted": null,
+  "timestamp": 1638316845,
+  "tokensReceived": Array [
+    Object {
+      "address": "0xfad45e47083e4607302aa43c65fb3106f1cd7607",
+      "amount": "11567525892826453",
+      "name": "hoge.finance",
+      "symbol": "HOGE",
+      "type": "ERC20",
+    },
+  ],
+  "tokensSent": Array [],
+  "txHash": "0x32706fd90e141319710989feb555d6c9e394b1788802df6281d257cda0701c84",
+  "userAddress": "0x10fced9a7c5d1ae7186d5e5912b73d47c1283d65",
+  "userName": "thememelord.eth",
+}
+`;
+
+exports[`Interpreter 3`] = `
+Object {
+  "action": "swapped",
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+  "contractName": "Uniswap V2",
+  "counterpartyName": null,
+  "exampleDescription": "0x4090 swapped 900000000 USDC for 202899041047771 KINGDOM on Uniswap V2",
+  "extra": Object {
+    "tokenAmount0": "900000000",
+    "tokenAmount1": "202899041047771",
+    "tokenName0": "USDC",
+    "tokenName1": "KINGDOM",
+  },
+  "gasPaid": "0.026273653630187205",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1638316845,
+  "tokensReceived": Array [
+    Object {
+      "address": "0x9273b71cfd60e022c2107d5bcf5ee62a88346550",
+      "amount": "202899041047771",
+      "name": "Kingdom Token",
+      "symbol": "KINGDOM",
+      "type": "ERC20",
+    },
+  ],
+  "tokensSent": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "900000000",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "txHash": "0xb684992cdec31d2eeaf3866be82ddd2a9cfe2211bab96b1aa132d3a9ae50587b",
+  "userAddress": "0x4090bd947f70b9b8c9522faa0d2f7f9bbb4b2377",
+  "userName": "0x4090",
+}
+`;
+
+exports[`Interpreter 4`] = `
+Object {
+  "action": "added liquidity",
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+  "contractName": "Uniswap V2",
+  "counterpartyName": null,
+  "exampleDescription": "0x8b7b added liquidity to the ACYC-ETH Uniswap V2 pool",
+  "extra": Object {
+    "token_0": "ACYC",
+  },
+  "gasPaid": "0.037819919756787315",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "10",
+  "reverted": null,
+  "timestamp": 1638316877,
+  "tokensReceived": Array [
+    Object {
+      "address": "0xc7b7dac697b03e11e4af085d927f0c9b24b3f27d",
+      "amount": "3162277660168379331997893",
+      "name": "Uniswap V2",
+      "symbol": "UNI-V2",
+      "type": "LPToken",
+    },
+  ],
+  "tokensSent": Array [
+    Object {
+      "address": "0xb56a1f3310578f23120182fb2e58c087efe6e147",
+      "amount": "1000000000000000000000000000000",
+      "name": "AllCoinsYieldCapital",
+      "symbol": "ACYC",
+      "type": "ERC20",
+    },
+  ],
+  "txHash": "0xb78ce1e0f55e78cf005b4b5af9978b3d20292dc8c88c94f7ecade67083e2b97f",
+  "userAddress": "0x8b7b8448243559a5daa98a22cb6982796bce4271",
+  "userName": "0x8b7b",
+}
+`;
+
+exports[`Interpreter 5`] = `
+Object {
+  "action": "removed liquidity",
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+  "contractName": "Uniswap V2",
+  "counterpartyName": null,
+  "exampleDescription": "0x888a removed liquidity from the KAKASHI-WETH Uniswap V2 pool",
+  "extra": Object {
+    "token_0": "KAKASHI",
+    "token_1": "WETH",
+  },
+  "gasPaid": "0.029644983060867926",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1638318188,
+  "tokensReceived": Array [
+    Object {
+      "address": "0xb7b284c2ea09c637daa2f128a8756280a9bd9091",
+      "amount": "1868562427769924",
+      "name": "Kakashi",
+      "symbol": "KAKASHI",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "amount": "4356835431801684676",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "unknown",
+    },
+  ],
+  "tokensSent": Array [
+    Object {
+      "address": "0xbe2cee7429e427c262e73ea074bef59c6ad1d93b",
+      "amount": "93937438884835667",
+      "name": "Uniswap V2",
+      "symbol": "UNI-V2",
+      "type": "LPToken",
+    },
+  ],
+  "txHash": "0x967963d6eaad9e65d567cac325728d79aeaa319b1453e05ec55734f3b08445ec",
+  "userAddress": "0x888ae876e588cd29715ab2b4a6ecce0bc2e44655",
+  "userName": "0x888a",
+}
+`;
+
+exports[`Interpreter 6`] = `
+Object {
+  "action": "removed liquidity",
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+  "contractName": "Uniswap V2",
+  "counterpartyName": null,
+  "exampleDescription": "0xc712 removed liquidity from the SAND-ETH Uniswap V2 pool",
+  "extra": Object {
+    "ethValueReceived": "6538029747179976387",
+    "token_0": "SAND",
+  },
+  "gasPaid": "0.032858980114895286",
+  "nativeValueReceived": "6.538029747179976",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1638318377,
+  "tokensReceived": Array [
+    Object {
+      "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
+      "amount": "4456803721261159794400",
+      "name": "SAND",
+      "symbol": "SAND",
+      "type": "ERC20",
+    },
+  ],
+  "tokensSent": Array [
+    Object {
+      "address": "0x3dd49f67e9d5bc4c5e6634b3f70bfd9dc1b6bd74",
+      "amount": "123932818358485202218",
+      "name": "Uniswap V2",
+      "symbol": "UNI-V2",
+      "type": "LPToken",
+    },
+  ],
+  "txHash": "0x3dd8f41c008a6ce59ca8d2b24df700dc4441d0a83747b9b7c0587449a2e7c9ca",
+  "userAddress": "0xc712b31175906564bb41a7b84169bd4a9b522011",
+  "userName": "0xc712",
+}
+`;
+
+exports[`Interpreter 7`] = `
+Object {
+  "action": "bought",
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7f268357a8c2552623316e2562d90e642bb538e5",
+  "contractName": "OpenSea",
+  "counterpartyName": null,
+  "exampleDescription": "0x96a6 bought The Ninja Hideout #228 on OpenSea for 0.05 ETH",
+  "extra": Object {
+    "NFT": "The Ninja Hideout",
+    "tokenId": "#228",
+  },
+  "gasPaid": "0.00837078350034528",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0.05",
+  "reverted": null,
+  "timestamp": 1656089719,
+  "tokensReceived": Array [
+    Object {
+      "address": "0x97e41d5ce9c8cb1f83947ef82a86e345aed673f3",
+      "name": "The Ninja Hideout",
+      "symbol": "TNH",
+      "tokenId": "228",
+      "type": "ERC721",
+    },
+  ],
+  "tokensSent": Array [],
+  "txHash": "0xc814cb6b61222beda8a9bcc359e776e72ae732a1c29df572099ecef27c8461e4",
+  "userAddress": "0x96a675775b8546a8602a1015efaacbc87358e478",
+  "userName": "0x96a6",
+}
+`;
+
+exports[`Interpreter 8`] = `
+Object {
+  "action": "repaid",
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
+  "contractName": "Aave V2",
+  "counterpartyName": null,
+  "exampleDescription": "0xd8a3 repaid 314305817611832341382659 CRV to Aave V2",
+  "extra": Object {
+    "tokenAmount": "314305817611832341382659",
+    "tokenSymbol": "CRV",
+  },
+  "gasPaid": "0.012144212798965408",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1656357349,
+  "tokensReceived": Array [],
+  "tokensSent": Array [
+    Object {
+      "address": "0x00ad8ebf64f141f1c81e9f8f792d3d1631c6c684",
+      "amount": "314305817611832341382659",
+      "name": "Aave variable debt bearing CRV",
+      "symbol": "variableDebtCRV",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xd533a949740bb3306d119cc777fa900ba034cd52",
+      "name": "Curve DAO Token",
+      "symbol": "CRV",
+      "type": "unknown",
+    },
+  ],
+  "txHash": "0xdf2f782ab0296121318cca140ef069f9f074c51ff4b11f0c677bcb01126f81de",
+  "userAddress": "0xd8a3785869f3fc0f0019ec8e9f649b4c43a33383",
+  "userName": "0xd8a3",
+}
+`;
+
+exports[`Interpreter 9`] = `
+Object {
+  "action": "deposited",
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
+  "contractName": "Aave V2",
+  "counterpartyName": null,
+  "exampleDescription": "0x88a9 deposited 2800000000 USDT into Aave V2",
+  "extra": Object {
+    "tokenAmount": "2800000000",
+    "tokenSymbol": "USDT",
+  },
+  "gasPaid": "0.015157096544929638",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1656358062,
+  "tokensReceived": Array [
+    Object {
+      "address": "0x3ed3b47dd13ec9a98b44e6204a523e766b225811",
+      "amount": "2800000000",
+      "name": "Aave interest bearing USDT",
+      "symbol": "aUSDT",
+      "type": "ERC20",
+    },
+  ],
+  "tokensSent": Array [
+    Object {
+      "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "amount": "2800000000",
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "type": "ERC20",
+    },
+  ],
+  "txHash": "0x24ee705da17a6061091880f47335d92950c72398980e271cdb9c69e8502827f4",
+  "userAddress": "0x88a902adc0ff5bfe283d8d2365b51de6bc5e1666",
+  "userName": "0x88a9",
+}
+`;

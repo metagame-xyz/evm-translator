@@ -274,7 +274,7 @@ class Interpreter {
             for (const interaction of filteredInteractions) {
                 if (!includes(topLevelInteractionKeys, key)) {
                     interaction.events = interaction.events.filter(
-                        (d) => checkMultipleKeys(d, key, valueToFind) || d.eventName === valueToFind,
+                        (d) => checkMultipleKeys(d, key, valueToFind) || d.params[key] === valueToFind || d.eventName === valueToFind,
                     )
                 }
             }
