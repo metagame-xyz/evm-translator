@@ -6,7 +6,10 @@ import { DecodedTx } from '../interfaces/decoded'
 
 jest.mock('node-fetch', () => jest.fn())
 
+jest.useRealTimers();
+
 test('Interpreter', async () => {
+  jest.setTimeout(20 * 1000);
   const db = new MongooseDatabaseInterface('mongodb://localhost:27017/evm-translator')
   await db.connect()
   const interpreter = new Interpreter(chains.ethereum)
