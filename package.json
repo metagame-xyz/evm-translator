@@ -1,6 +1,7 @@
 {
     "name": "evm-translator",
     "version": "0.2.35",
+    "version": "0.2.28",
     "description": "a library for making EVM-based blockchain data more human-readable",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
