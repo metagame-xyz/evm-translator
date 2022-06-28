@@ -25,6 +25,7 @@ async function run() {
     await db.addOrUpdateManyABI(erc721rowsWithDefaults)
 
     console.log('done')
+    db.closeConnection()
     process.exit(0)
 }
 
