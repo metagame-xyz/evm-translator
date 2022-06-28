@@ -25,4 +25,4 @@ test('Interpreter', async () => {
   for (const decodedTx of filteredDecodedTxes) {
     expect(interpreter.interpretSingleTx(decodedTx!)).toMatchSnapshot()
   }
-})
+}, 20000)
