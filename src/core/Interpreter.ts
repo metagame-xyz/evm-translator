@@ -97,7 +97,7 @@ class Interpreter {
             toAddress,
             timestamp,
             nativeValueSent,
-            txHash
+            txHash,
             officialContractName,
         } = decodedData
 
