@@ -176,7 +176,6 @@ class Interpreter {
         } else if (interpretationMapping && methodSpecificMapping && methodName && toAddress) {
             // Contract-specific interpretation
 
-            console.log('contract-specific interpretation', interpretationMapping.contractName, methodName)
             // some of these will be arbitrary keys
             interpretation.contractName = interpretationMapping.contractName
             interpretation.action = methodSpecificMapping.action // TODO: make a dynamic "action" field

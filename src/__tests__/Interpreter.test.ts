@@ -3,6 +3,9 @@ import { chains } from '../index'
 import testTxHashes, { flattenTxHashes } from '../__tests__/testTxHashes.js'
 import { MongooseDatabaseInterface } from 'utils/mongoose'
 import { DecodedTx } from '../interfaces/decoded'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 jest.mock('node-fetch', () => jest.fn())
 
@@ -10,7 +13,7 @@ jest.useRealTimers();
 
 test('Interpreter', async () => {
   jest.setTimeout(200 * 1000);
-  const db = new MongooseDatabaseInterface('mongodb://localhost:27017/evm-translator')
+  const db = new MongooseDatabaseInterface(process.env.EVM_TRANSLATOR_CONNECTION_STRING || '')
   await db.connect()
   const interpreter = new Interpreter(chains.ethereum)
   const txMap = await db.getManyDecodedTxMap(flattenTxHashes())
