@@ -1,7 +1,7 @@
 import { ContractModel } from './models/contract'
 import { DecodedTxModel } from './models/decodedTx'
 import { BulkResult } from 'mongodb'
-import { connect, Document, Types } from 'mongoose'
+import { connect, connection, Document, Types } from 'mongoose'
 
 import { ABI_Event, ABI_EventZ, ABI_ItemUnfiltered, ABI_Row, ABI_RowZ, ABI_Type } from 'interfaces/abi'
 import { ContractData, DecodedTx } from 'interfaces/decoded'
@@ -188,5 +188,9 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
             console.log(e)
             throw e
         }
+    }
+
+    async closeConnection() {
+        connection.close()
     }
 }
