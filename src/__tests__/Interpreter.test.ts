@@ -3,6 +3,7 @@ import Interpreter from '../core/Interpreter'
 import { chains } from '../index'
 import { DecodedTx } from '../interfaces/decoded'
 import dotenv from 'dotenv'
+import { MongooseDatabaseInterface } from 'utils/mongoose'
 
 dotenv.config()
 
