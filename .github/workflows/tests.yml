@@ -26,9 +26,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: yarn
-      env:
-        EVM_TRANSLATOR_CONNECTION_STRING: ${{secrets.EVM_TRANSLATOR_CONNECTION_STRING}}
     - run: yarn install --immutable
     - run: yarn lint
     - run: yarn format
     - run: yarn test
+      env:
+        EVM_TRANSLATOR_CONNECTION_STRING: ${{secrets.EVM_TRANSLATOR_CONNECTION_STRING}}
