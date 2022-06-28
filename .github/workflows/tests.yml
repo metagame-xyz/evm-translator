@@ -9,6 +9,10 @@ on: push
 #   pull_request:
 #     branches: [ "main" ]
 
+
+env:
+  EVM_TRANSLATOR_CONNECTION_STRING: ${{ secrets.EVM_TRANSLATOR_CONNECTION_STRING }}
+
 jobs:
   build:
     name: Run tests
@@ -18,10 +22,6 @@ jobs:
       matrix:
         node-version: [12.x, 14.x, 16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        
-    
-    env:
-      EVM_TRANSLATOR_CONNECTION_STRING: ${{secrets.EVM_TRANSLATOR_CONNECTION_STRING}}
 
     steps:
     - uses: actions/checkout@v3
