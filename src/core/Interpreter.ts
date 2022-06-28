@@ -185,6 +185,7 @@ class Interpreter {
                 interpretation.reverted = true
                 // TODO the description and extras should be different for reverted transactions
             }
+            debugger
             interpretation.extra = this.useKeywordMap(
                 interactions,
                 methodSpecificMapping.keywords,
@@ -256,7 +257,7 @@ class Interpreter {
                     [fromKey]: fromKeys,
                 }
 
-                const keys = keyMapping[key]
+                const keys = [...(keyMapping[key] || []), key]
 
                 if (keys) {
                     for (const keyToCheck of keys) {

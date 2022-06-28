@@ -481,7 +481,6 @@ export class Augmenter {
 
                 // warning, we might assign contactName from somewhere else in the future, so it might not be null here even when we thought it would be, which means we might still need to get token symbol/name but we end up skipping it
 
-
                 // commented this out to make sure we get the token name/symbol from the contract. we'll end up always doing this call no matter what now but we can optimize later (WARNING)
                 // if (!contractName) {
                 ;({ tokenName, tokenSymbol, contractName } = await this.getNameAndSymbol(address, contractType))
