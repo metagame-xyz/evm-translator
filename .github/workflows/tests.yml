@@ -12,6 +12,7 @@ on: push
 
 env:
   EVM_TRANSLATOR_CONNECTION_STRING: ${{ secrets.EVM_TRANSLATOR_CONNECTION_STRING }}
+  TEST_SECRET: ${{ secrets.TEST_SECRET }}
 
 jobs:
   build:
@@ -33,4 +34,6 @@ jobs:
     - run: yarn install --immutable
     - run: yarn lint
     - run: yarn format
+    - name: "just a test"
+      run: echo "$TEST_SECRET please work"
     - run: yarn test
