@@ -30,7 +30,7 @@
             "**/lib/__tests__/*.test.js"
         ],
         "snapshotResolver": "./src/__tests__/snapshotResolver.js",
-        "testTimeout": 20000
+        "testTimeout": 200000
     },
     "repository": {
         "type": "git",
