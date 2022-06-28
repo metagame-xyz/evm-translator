@@ -44,6 +44,7 @@ export function transformDecodedLogs(
                     contractName: contractData?.contractName || null,
                     contractSymbol: contractData?.tokenSymbol || null,
                     contractAddress: AddressZ.parse(address),
+                    contractType: contractData?.type,
                     events: [
                         {
                             eventName: log.name,

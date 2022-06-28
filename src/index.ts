@@ -8,6 +8,7 @@ export * from 'Translator'
 export * from 'utils'
 export * from 'utils/constants'
 export * from 'utils/DatabaseInterface'
+export * from 'utils/mongoose/index'
 export * from 'utils/generateInterpreter'
 export * from 'utils/logging'
 

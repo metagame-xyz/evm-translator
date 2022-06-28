@@ -1,5 +1,5 @@
 import { transformDecodedData, transformDecodedLogs } from './transformDecodedLogs'
-import { BaseProvider, Formatter } from '@ethersproject/providers'
+import { AlchemyProvider, Formatter } from '@ethersproject/providers'
 import axios from 'axios'
 // import abiDecoder from 'abi-decoder'
 import { Contract } from 'ethers'
@@ -37,9 +37,10 @@ import reverseRecordsABI from 'utils/ABIs/ReverseRecords.json'
 import checkInterface from 'utils/checkInterface'
 import Covalent from 'utils/clients/Covalent'
 import Etherscan from 'utils/clients/Etherscan'
-import { blackholeAddress, proxyImplementationAddress, REVERSE_RECORDS_CONTRACT_ADDRESS } from 'utils/constants'
+import { blackholeAddress, REVERSE_RECORDS_CONTRACT_ADDRESS } from 'utils/constants'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 import getTypeFromABI from 'utils/getTypeFromABI'
+import isGnosisSafeMaybe from 'utils/isGnosisSafeMaybe'
 import { logDebug } from 'utils/logging'
 
 export type DecoderConfig = {
@@ -50,7 +51,7 @@ export type DecoderConfig = {
 }
 
 export class Augmenter {
-    provider: BaseProvider
+    provider: AlchemyProvider
     covalent: Covalent | null
     etherscan: Etherscan
 
@@ -69,7 +70,7 @@ export class Augmenter {
     ensCache: Record<string, string> = {}
 
     constructor(
-        provider: BaseProvider,
+        provider: AlchemyProvider,
         covalent: Covalent | null,
         etherscan: Etherscan,
         databaseInterface: DatabaseInterface = new NullDatabaseInterface(),
@@ -275,6 +276,7 @@ export class Augmenter {
                     contractAddress: nt.action.from,
                     contractName: null,
                     contractSymbol: null,
+                    contractType: ContractType.OTHER, //TODO it's probably not 'other', it's probably 'native' or something
                     events: [traceLogToEvent(nt)],
                 })
             }
@@ -408,6 +410,19 @@ export class Augmenter {
         if (contractType === ContractType.OTHER) {
             contractType = await getTypeFromABI(contractAddress, this.etherscan, abiArr)
         }
+        if (contractType === ContractType.OTHER) {
+            contractType = await isGnosisSafeMaybe(contractAddress, this.provider)
+        }
+        // if (contractType === ContractType.OTHER) {
+        //     try {
+        //         const code = await this.provider.getCode(contractAddress)
+        //         if (code == '0x') {
+        //             contractType = ContractType.EOA
+        //         }
+        //     } catch (e) {
+        //         logError({ functionName: 'provider.getCode', address: contractAddress }, e)
+        //     }
+        // }
         return contractType
     }
     private async getContractTypes() {
@@ -448,8 +463,11 @@ export class Augmenter {
                 // if the contract has a proxy, add the proxy's ABI too
                 if (proxyAddress) abi.concat(contractToAbiMap[proxyAddress])
 
-                const contractType =
-                    contractDataMapFromDB[address]?.type || (await this.getContractType(address, filteredABIs[address]))
+                let contractType = contractDataMapFromDB[address]?.type
+
+                if (!contractType || contractType === ContractType.OTHER) {
+                    contractType = await this.getContractType(address, filteredABIs[address])
+                }
 
                 let tokenName = null
                 let tokenSymbol = null
@@ -462,9 +480,12 @@ export class Augmenter {
                 }
 
                 // warning, we might assign contactName from somewhere else in the future, so it might not be null here even when we thought it would be, which means we might still need to get token symbol/name but we end up skipping it
-                if (!contractName) {
-                    ; ({ tokenName, tokenSymbol, contractName } = await this.getNameAndSymbol(address, contractType))
-                }
+
+
+                // commented this out to make sure we get the token name/symbol from the contract. we'll end up always doing this call no matter what now but we can optimize later (WARNING)
+                // if (!contractName) {
+                ;({ tokenName, tokenSymbol, contractName } = await this.getNameAndSymbol(address, contractType))
+                // }
 
                 // const contractName = await this.getContractName(address)
                 const contractData: ContractData = {

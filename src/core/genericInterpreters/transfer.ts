@@ -20,6 +20,7 @@ function interpretGenericTransfer(decodedData: DecodedTx, interpretation: Interp
 
     let counterpartyName = null
     if (isSafeReceived && sending) {
+        // TODO confirm safeReceived is decoded
         counterpartyName = `Gnosis Safe ${decodedData.toENS || toAddress?.slice(0, 6)}`
     } else if (sending) {
         counterpartyName = decodedData.toENS || toAddress?.slice(0, 6)

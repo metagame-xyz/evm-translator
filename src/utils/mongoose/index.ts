@@ -1,11 +1,13 @@
 import { ContractModel } from './models/contract'
 import { DecodedTxModel } from './models/decodedTx'
-import { connect } from 'mongoose'
+import { BulkResult } from 'mongodb'
+import { connect, Document, Types } from 'mongoose'
 
 import { ABI_Event, ABI_EventZ, ABI_ItemUnfiltered, ABI_Row, ABI_RowZ, ABI_Type } from 'interfaces/abi'
 import { ContractData, DecodedTx } from 'interfaces/decoded'
 
 import { DatabaseInterface } from 'utils/DatabaseInterface'
+import { logInfo } from 'utils/logging'
 import { ABI_RowModel } from 'utils/mongoose/models/abi'
 
 export class MongooseDatabaseInterface extends DatabaseInterface {
@@ -85,7 +87,7 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         // }
     }
 
-    async addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<void> {
+    async addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<BulkResult> {
         // prob don'`t need these 3 lines but might it optimize the writes
         const uniqueABIsAsStrings = new Set<string>()
         abiArr.map((abi) => uniqueABIsAsStrings.add(JSON.stringify(abi)))
@@ -102,9 +104,13 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
                     },
                 })),
             )
+
+            logInfo({}, `Added ${result.nUpserted} ABIs`)
+            return result
         } catch (e) {
             console.log('abi mongoose error')
             console.log(e)
+            throw e
         }
     }
 
@@ -167,5 +173,20 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         }
         // return here instead of in the try, so that it still works if the db is down
         return decodedTxMap
+    }
+
+    async getContractsBatch(
+        lastId: string,
+        batchSize: number,
+    ): Promise<(Document<unknown, any, ContractData> & ContractData & { _id: Types.ObjectId })[]> {
+        try {
+            const _id = new Types.ObjectId(lastId)
+            const modelData = await ContractModel.find({ _id: { $gt: _id } }).limit(batchSize)
+            return modelData
+        } catch (e) {
+            console.log('get contracts mongoose error')
+            console.log(e)
+            throw e
+        }
     }
 }

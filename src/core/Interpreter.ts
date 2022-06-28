@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import contractInterpreters from './contractInterpreters'
 import contractDeployInterpreter from './genericInterpreters/ContractDeploy.json'
+import interpretGnosisExecution from './genericInterpreters/gnosis'
 import lastFallback from './genericInterpreters/lastFallback'
 import interpretGenericToken from './genericInterpreters/token'
 import interpretGenericTransfer from './genericInterpreters/transfer'
@@ -14,6 +15,12 @@ import { Chain } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
 import { fillDescriptionTemplate, getNativeTokenValueEvents, shortenNamesInString } from 'utils'
+
+// Despite most contracts using Open Zeppelin's standard naming convention of "to, from, value", not all do. Most notably, DAI and WETH use "src, dst, wad". These are used rename the keys to match the standard (both for generic and contract-specific interpretations).
+const toKeys = ['to', '_to', 'dst']
+const fromKeys = ['from', '_from', 'src']
+const toKey = 'to'
+const fromKey = 'from'
 
 function deepCopy<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj))
@@ -91,6 +98,7 @@ class Interpreter {
             timestamp,
             nativeValueSent,
             txHash
+            officialContractName,
         } = decodedData
 
         const gasUsed = formatEther(
@@ -133,7 +141,7 @@ class Interpreter {
             extra: {},
             exampleDescription: 'no example description defined',
             reverted: decodedData.reverted ? true : null,
-            contractName: null,
+            contractName: officialContractName,
             counterpartyName: null,
             timestamp,
         }
@@ -190,8 +198,9 @@ class Interpreter {
                 interpretation,
             )
         } else {
-            // Base case
-            if (decodedData.contractType !== ContractType.OTHER) {
+            if (decodedData.contractType === ContractType.GNOSIS) {
+                interpretGnosisExecution(decodedData, interpretation)
+            } else if (decodedData.contractType !== ContractType.OTHER) {
                 interpretGenericToken(decodedData, interpretation)
             } else {
                 lastFallback(decodedData, interpretation)
@@ -237,11 +246,35 @@ class Interpreter {
             if (value === '{userAddress}') valueToFind = userAddress
             if (value === '{contractAddress}') valueToFind = contractAddress
 
+            // for example, DAI's Transfer event uses "dst" instead of "to", so we need to check for "dst" as well, even if the interpreter map uses "to". As we find more of these, we'll have to add them to the "toKeys" array. We mig
+            const checkMultipleKeys = (
+                interactionEvent: InteractionEvent,
+                key: string,
+                valueToFind: string,
+            ): boolean => {
+                const keyMapping: Record<string, string[]> = {
+                    [toKey]: toKeys,
+                    [fromKey]: fromKeys,
+                }
+
+                const keys = keyMapping[key]
+
+                if (keys) {
+                    for (const keyToCheck of keys) {
+                        if (interactionEvent.params[keyToCheck] === valueToFind) {
+                            return true
+                        }
+                    }
+                }
+
+                return false
+            }
+
             // filter out by events that don't have the keys we want
             for (const interaction of filteredInteractions) {
                 if (!includes(topLevelInteractionKeys, key)) {
                     interaction.events = interaction.events.filter(
-                        (d) => d.params[key] === valueToFind || d.eventName === valueToFind,
+                        (d) => checkMultipleKeys(d, key, valueToFind) || d.eventName === valueToFind,
                     )
                 }
             }
@@ -297,8 +330,6 @@ class Interpreter {
 
         let filteredInteractions = deepCopy(interactions) as Interaction[]
 
-        const toKeys = ['to', '_to']
-        const fromKeys = ['from', '_from']
         const transferEvents = ['Transfer', 'TransferBatch', 'TransferSingle']
 
         for (const interaction of filteredInteractions) {
@@ -327,13 +358,17 @@ class Interpreter {
             if (interaction.contractSymbol && LPTokenSymbols.includes(interaction.contractSymbol)) {
                 tokenType = TokenType.LPToken
                 // ERC-1155
-            } else if (interaction.params._amount || interaction.params._amounts) {
+            } else if (
+                interaction.contractType == ContractType.ERC1155 ||
+                interaction.params._amount ||
+                interaction.params._amounts
+            ) {
                 tokenType = TokenType.ERC1155
                 // ERC-721
-            } else if (interaction.params.tokenId) {
+            } else if (interaction.contractType == ContractType.ERC721 || interaction.params.tokenId) {
                 tokenType = TokenType.ERC721
                 // ERC-20
-            } else if (Number(interaction.params.value) > 0) {
+            } else if (interaction.contractType == ContractType.ERC20 || Number(interaction.params.value) > 0) {
                 tokenType = TokenType.ERC20
             }
 
@@ -379,7 +414,8 @@ class Interpreter {
         tokens = flattenedInteractions.map((i) => {
             const tokenType = getTokenType(i)
 
-            const amount = tokenType === TokenType.ERC1155 ? i.params._amount : i.params.value
+            const amount =
+                tokenType === TokenType.ERC1155 ? i.params._amount : i.params.value || i.params.amount || i.params.wad
             const tokenId = (tokenType === TokenType.ERC1155 ? i.params._id : i.params.tokenId)?.toString()
 
             const token: Token = {

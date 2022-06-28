@@ -13,7 +13,7 @@ export abstract class DatabaseInterface {
     // abstract AppendABIsToContractData(contractAddress: string, abi: ABI_ItemUnfiltered[]): Promise<void>
 
     // abstract addOrUpdateABI(abiArr: ABI_Row): Promise<void>
-    abstract addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<void>
+    abstract addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<void | any>
 
     /** Returns an array b/c there might be more than one full signature per hex signature. hex<-->hashable is 1:1*/
     abstract getABIsForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered[]>
@@ -78,7 +78,7 @@ export class NullDatabaseInterface extends DatabaseInterface {
     }
 
     // implemented
-    async addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<void> {
+    async addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<void | any> {
         return Promise.resolve()
     }
     /** Returns an array b/c there might be more than one full signature per hex signature. hex<-->hashable is 1:1*/
