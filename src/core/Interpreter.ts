@@ -185,7 +185,6 @@ class Interpreter {
                 interpretation.reverted = true
                 // TODO the description and extras should be different for reverted transactions
             }
-            debugger
             interpretation.extra = this.useKeywordMap(
                 interactions,
                 methodSpecificMapping.keywords,
