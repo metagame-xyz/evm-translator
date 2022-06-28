@@ -9,7 +9,7 @@ jest.mock('node-fetch', () => jest.fn())
 jest.useRealTimers();
 
 test('Interpreter', async () => {
-  jest.setTimeout(20 * 1000);
+  jest.setTimeout(200 * 1000);
   const db = new MongooseDatabaseInterface('mongodb://localhost:27017/evm-translator')
   await db.connect()
   const interpreter = new Interpreter(chains.ethereum)
@@ -25,4 +25,4 @@ test('Interpreter', async () => {
   for (const decodedTx of filteredDecodedTxes) {
     expect(interpreter.interpretSingleTx(decodedTx!)).toMatchSnapshot()
   }
-}, 20000)
+}, 200000)
