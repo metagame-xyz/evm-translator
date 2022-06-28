@@ -82,11 +82,11 @@ export default class ABIDecoder {
         console.log('abiSig', abiSig)
         return abiSig
             ? {
-                name: abiSig,
-                type: 'event',
-                inputs: [],
-                anonymous: false,
-            }
+                  name: abiSig,
+                  type: 'event',
+                  inputs: [],
+                  anonymous: false,
+              }
             : undefined
     }
     async getABIFunctionFromExternalSource(hexSignature: string): Promise<ABI_Function | undefined> {
@@ -94,12 +94,12 @@ export default class ABIDecoder {
 
         return contractMethod
             ? {
-                name: contractMethod,
-                type: 'function',
-                inputs: [],
-                outputs: [],
-                stateMutability: undefined,
-            }
+                  name: contractMethod,
+                  type: 'function',
+                  inputs: [],
+                  outputs: [],
+                  stateMutability: undefined,
+              }
             : undefined
     }
 
@@ -176,6 +176,7 @@ export default class ABIDecoder {
                     // first check if it the contract's abi has it
                     let abiItem: ABI_Event | null = this.eventSigs[address] ? this.eventSigs[address][eventID] : null
 
+                    // if it's there, add it as an option
                     let abiItemOptions: ABI_Event[] = []
 
                     // if not, and it's the ambiguous Transfer event, check the contract type
@@ -218,12 +219,11 @@ export default class ABIDecoder {
                         try {
                             decodedData = getDecodedData(logItem, abiItem)
                         } catch (e) {
-                            abiItemOptions = (await this.db.getEventABIsForHexSignature(eventID)) || []
+                            //try again
                         }
-                    }
-                    if (abiItemOptions.length > 0) {
+                    } else if (abiItemOptions.length > 0) {
                         // try all of the options, it'll throw an error if it doesn't match, catch it, try the next one
-                        while ((!decodedData || !Object.keys(decodedData).length) && abiItemOptions.length > 0) {
+                        while (!decodedData && abiItemOptions.length > 0) {
                             abiItem = abiItemOptions.shift() as ABI_Event
                             try {
                                 decodedData = getDecodedData(logItem, abiItem)
@@ -312,13 +312,13 @@ export default class ABIDecoder {
             if (abi.name) {
                 const signature = hash(
                     abi.name +
-                    '(' +
-                    abi.inputs
-                        .map(function (input) {
-                            return input.type
-                        })
-                        .join(',') +
-                    ')',
+                        '(' +
+                        abi.inputs
+                            .map(function (input) {
+                                return input.type
+                            })
+                            .join(',') +
+                        ')',
                 ) as string
                 if (abi.type === 'event') {
                     if (this.methodSigs[signature]) {
