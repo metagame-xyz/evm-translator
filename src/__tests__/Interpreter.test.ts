@@ -5,8 +5,6 @@ import { DecodedTx } from '../interfaces/decoded'
 import dotenv from 'dotenv'
 import { MongooseDatabaseInterface } from 'utils/mongoose'
 
-import { MongooseDatabaseInterface } from 'utils/mongoose'
-
 dotenv.config()
 
 jest.mock('node-fetch', () => jest.fn())
