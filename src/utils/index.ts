@@ -14,6 +14,7 @@ import { Interaction, InteractionEvent } from 'interfaces/decoded'
 import { Interpretation } from 'interfaces/interpreted'
 import { Chain, Chains, ChainSymbol } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
+import { getNativeValueTransferredFromInterpretation } from 'core/DoubleSidedTxInterpreter'
 
 const ethereum: Chain = {
     EVM: true,
@@ -212,7 +213,9 @@ export const retryProviderCall = async <T>(providerPromise: Promise<T>): Promise
 
 export function fillDescriptionTemplate(template: string, interpretation: Interpretation): string {
     const merged = collect(interpretation.extra).merge(interpretation).all()
-
+    if (template.includes("__NATIVEVALUETRANSFERRED_")) {
+        merged.__NATIVEVALUETRANSFERRED_ = getNativeValueTransferredFromInterpretation(interpretation)
+    }
     for (const [key, value] of Object.entries(merged)) {
         if (typeof value === 'string') {
             template = template.replace(`{${key}}`, value)

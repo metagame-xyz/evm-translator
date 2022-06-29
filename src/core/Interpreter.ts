@@ -15,6 +15,7 @@ import { Chain } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
 import { fillDescriptionTemplate, getNativeTokenValueEvents, shortenNamesInString } from 'utils'
+import { getActionFromInterpretation } from './DoubleSidedTxInterpreter'
 
 // Despite most contracts using Open Zeppelin's standard naming convention of "to, from, value", not all do. Most notably, DAI and WETH use "src, dst, wad". These are used rename the keys to match the standard (both for generic and contract-specific interpretations).
 const toKeys = ['to', '_to', 'dst']
@@ -178,7 +179,12 @@ class Interpreter {
 
             // some of these will be arbitrary keys
             interpretation.contractName = interpretationMapping.contractName
-            interpretation.action = methodSpecificMapping.action // TODO: make a dynamic "action" field
+
+            if (methodSpecificMapping.action !== "__NFTSALE__") {
+                interpretation.action = methodSpecificMapping.action
+            } else {
+                interpretation.action = getActionFromInterpretation(interpretation);
+            }
             interpretation.exampleDescription = methodSpecificMapping.exampleDescription
 
             if (decodedData.reverted) {
@@ -191,7 +197,6 @@ class Interpreter {
                 toAddress,
                 userAddress,
             )
-
             interpretation.exampleDescription = fillDescriptionTemplate(
                 interpretationMapping.writeFunctions[methodName].exampleDescriptionTemplate,
                 interpretation,

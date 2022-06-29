@@ -85,27 +85,25 @@
             "exampleDescription": "ammaralinur.eth canceled a bid on OpenSea"
         },
         "atomicMatch_": {
-            "action": "bought",
+            "action": "__NFTSALE__",
             "keywords": {
                 "NFT": {
                     "key": "contractName",
                     "filters": {
-                        "eventName": "Transfer",
-                        "to": "{userAddress}"
+                        "eventName": "Transfer"
                     },
                     "defaultValue": "an unknown NFT"
                 },
                 "tokenId": {
                     "key": "tokenId",
                     "filters": {
-                        "eventName": "Transfer",
-                        "to": "{userAddress}"
+                        "eventName": "Transfer"
                     },
                     "prefix": "#",
                     "defaultValue": "???"
                 }
             },
-            "exampleDescriptionTemplate": "{userName} {action} {NFT} {tokenId} on {contractName} for {nativeValueSent} ETH",
+            "exampleDescriptionTemplate": "{userName} {action} {NFT} {tokenId} on {contractName} for {__NATIVEVALUETRANSFERRED_} ETH",
             "exampleDescription": "brenner.eth bought Blitmap #1115 on OpenSea for 0.01 ETH"
         },
         "transferOwnership": {
