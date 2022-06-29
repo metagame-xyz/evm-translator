@@ -19,7 +19,7 @@ import { getNativeValueTransferredFromInterpretation } from 'core/DoubleSidedTxI
 // Despite most contracts using Open Zeppelin's standard naming convention of "to, from, value", not all do. Most notably, DAI and WETH use "src, dst, wad". These are used rename the keys to match the standard (both for generic and contract-specific interpretations).
 const toKeys = ['to', '_to', 'dst']
 const fromKeys = ['from', '_from', 'src']
-const valueKeys = ['value', 'wad']
+const valueKeys = ['value', 'wad', 'amount']
 const toKey = 'to'
 const fromKey = 'from'
 const valueKey = 'value'

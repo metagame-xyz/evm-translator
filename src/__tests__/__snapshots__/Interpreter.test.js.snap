@@ -470,3 +470,89 @@ Object {
   "userName": "0x7691",
 }
 `;
+
+exports[`Interpreter 13`] = `
+Object {
+  "action": "swapped",
+  "chainSymbol": "ETH",
+  "contractAddress": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "0x613a swapped 2127028966431723238 WETH for 200000000000000000000 Metis on Uniswap V3",
+  "extra": Object {
+    "tokenAmount0": "2127028966431723238",
+    "tokenAmount1": "200000000000000000000",
+    "tokenName0": "WETH",
+    "tokenName1": "Metis",
+  },
+  "gasPaid": "0.00946193638459496",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1654095700,
+  "tokensReceived": Array [
+    Object {
+      "address": "0x9e32b13ce7f2e80a01932b42553652e053d6ed8e",
+      "amount": "200000000000000000000",
+      "name": "Metis Token",
+      "symbol": "Metis",
+      "type": "ERC20",
+    },
+  ],
+  "tokensSent": Array [
+    Object {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "amount": "2127028966431723238",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "unknown",
+    },
+  ],
+  "txHash": "0xce57de79e8898075e6512492b47661abd8e74eeffe4760cd43c054b53480b583",
+  "userAddress": "0x613a3870f58893d760e942d0f9ec2e3f1772d336",
+  "userName": "0x613a",
+}
+`;
+
+exports[`Interpreter 14`] = `
+Object {
+  "action": "swapped",
+  "chainSymbol": "ETH",
+  "contractAddress": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "0x5c4f swapped 1767773 USDT for 100000000000000000 UNI on Uniswap V3",
+  "extra": Object {
+    "tokenAmount0": "1767773",
+    "tokenAmount1": "100000000000000000",
+    "tokenName0": "USDT",
+    "tokenName1": "UNI",
+  },
+  "gasPaid": "0.017258154195087624",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1642499895,
+  "tokensReceived": Array [
+    Object {
+      "address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "amount": "100000000000000000",
+      "name": "Uniswap",
+      "symbol": "UNI",
+      "type": "unknown",
+    },
+  ],
+  "tokensSent": Array [
+    Object {
+      "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "amount": "1767773",
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "type": "ERC20",
+    },
+  ],
+  "txHash": "0x26854093b17b25f74bcdb8728a6c8d113e68aa69f2ae2463f9c14788df53aa45",
+  "userAddress": "0x5c4f3b99c6c7be04bb2eac3f7bed560da85e0797",
+  "userName": "0x5c4f",
+}
+`;
