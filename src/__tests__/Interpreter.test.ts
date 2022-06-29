@@ -1,4 +1,4 @@
-import testTxHashes, { flattenTxHashes } from '../__tests__/testTxHashes.js'
+import testTxHashes, { flattenTxHashes, multiSidedTxMap } from '../__tests__/testTxHashes.js'
 import Interpreter from '../core/Interpreter'
 import { chains } from '../index'
 import { DecodedTx } from '../interfaces/decoded'
@@ -29,7 +29,13 @@ test('Interpreter', async () => {
         .map(([, decodedTx]) => decodedTx)
 
     for (const decodedTx of filteredDecodedTxes) {
-        expect(interpreter.interpretSingleTx(decodedTx!)).toMatchSnapshot()
+        if (multiSidedTxMap[decodedTx.txHash]) {
+            for (const participant of multiSidedTxMap[decodedTx.txHash]) {
+                expect(interpreter.interpretSingleTx(decodedTx!, participant)).toMatchSnapshot()
+            }
+        } else {
+            expect(interpreter.interpretSingleTx(decodedTx!)).toMatchSnapshot()
+        }
     }
     await db.closeConnection()
 }, 200000)

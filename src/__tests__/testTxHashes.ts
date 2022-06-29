@@ -17,6 +17,13 @@ const testTxHashes = {
     },
 }
 
+// test multiple roles for a single tx
+export const multiSidedTxMap = {
+    '0xc814cb6b61222beda8a9bcc359e776e72ae732a1c29df572099ecef27c8461e4': [
+        '0x96a675775b8546a8602a1015efaacbc87358e478', '0x83eb387c8f7c8903f2be1ca367197fc4b3cb573e'
+    ]
+}
+
 export function flattenTxHashes() {
     const testTxHashesArr = Object.values(testTxHashes)
     const flattenedTxHashes = testTxHashesArr.reduce((prev: string[], cur) => [...prev, ...Object.values(cur)], [])
