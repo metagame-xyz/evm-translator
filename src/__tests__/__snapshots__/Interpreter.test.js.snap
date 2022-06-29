@@ -665,3 +665,45 @@ Object {
   "userName": "0xb738",
 }
 `;
+
+exports[`Interpreter 18`] = `
+Object {
+  "action": "added liquidity",
+  "chainSymbol": "ETH",
+  "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "0x6dd9 added liquidity to 0xc364 using 6305593205049249187 gOHM and 70956438934 BTRFLY",
+  "extra": Object {
+    "tokenAmount0": "6305593205049249187",
+    "tokenAmount1": "70956438934",
+    "tokenName0": "gOHM",
+    "tokenName1": "BTRFLY",
+  },
+  "gasPaid": "0.00551313628814904",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1653349230,
+  "tokensReceived": Array [],
+  "tokensSent": Array [
+    Object {
+      "address": "0x0ab87046fbb341d058f17cbc4c1133f25a20a52f",
+      "amount": "6305593205049249187",
+      "name": "Governance OHM",
+      "symbol": "gOHM",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xc0d4ceb216b3ba9c3701b291766fdcba977cec3a",
+      "amount": "70956438934",
+      "name": "BTRFLY",
+      "symbol": "BTRFLY",
+      "type": "ERC20",
+    },
+  ],
+  "txHash": "0xba7e346f46b1f5fa3bbff9868f1b6bf170b8fc8d212d2ad8e6f9fc84acdf30a1",
+  "userAddress": "0x6dd91bdab368282dc4ea4f4befc831b78a7c38c0",
+  "userName": "0x6dd9",
+}
+`;
