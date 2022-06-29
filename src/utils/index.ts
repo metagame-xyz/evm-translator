@@ -375,3 +375,9 @@ export function checkMultipleKeys(
 
     return valueToFind ? false : ''
 }
+
+export function flattenEventsFromInteractions(filteredInteractions: Interaction[]): InteractionEvent[] {
+    return filteredInteractions.reduce((prev: InteractionEvent[], cur: Interaction): InteractionEvent[] => {
+        return [...prev, ...cur.events]
+    }, [])
+}

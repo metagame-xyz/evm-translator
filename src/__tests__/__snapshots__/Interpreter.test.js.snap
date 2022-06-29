@@ -623,3 +623,45 @@ Object {
   "userName": "0x0b96",
 }
 `;
+
+exports[`Interpreter 17`] = `
+Object {
+  "action": "collected",
+  "chainSymbol": "ETH",
+  "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "leotheprocess.eth collected 320644118148 HEX and 305165646 USDC in fees from Uniswap V3",
+  "extra": Object {
+    "tokenAmount0": "320644118148",
+    "tokenAmount1": "305165646",
+    "tokenName0": "HEX",
+    "tokenName1": "USDC",
+  },
+  "gasPaid": "0.006987365045529792",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1646028442,
+  "tokensReceived": Array [
+    Object {
+      "address": "0x2b591e99afe9f32eaa6214f7b7629768c40eeb39",
+      "amount": "320644118148",
+      "name": "HEX",
+      "symbol": "HEX",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "305165646",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "tokensSent": Array [],
+  "txHash": "0x8d696e7ac40e22c25207a6eb3060d840fe4b1b4663fb988500f3bfc311da2a39",
+  "userAddress": "0xb7387207cefaeee263817780c60deb9b9742b3c8",
+  "userName": "0xb738",
+}
+`;

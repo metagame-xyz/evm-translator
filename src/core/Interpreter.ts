@@ -14,7 +14,7 @@ import { Action, Interpretation, Token, TokenType } from 'interfaces/interpreted
 import { Chain } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
-import { checkMultipleKeys, fillDescriptionTemplate, getNativeTokenValueEvents, shortenNamesInString, toOrFromUser } from 'utils'
+import { checkMultipleKeys, fillDescriptionTemplate, flattenEventsFromInteractions, getNativeTokenValueEvents, shortenNamesInString, toOrFromUser } from 'utils'
 import { getActionFromInterpretation } from './DoubleSidedTxInterpreter'
 
 function deepCopy<T>(obj: T): T {
@@ -231,6 +231,7 @@ class Interpreter {
         userAddress: string,
         contractAddress: string,
     ): string | string[] {
+        debugger
         const filters = keyMapping.filters || {}
         const index = keyMapping.index || 0
         const array = keyMapping.array || false
@@ -270,7 +271,15 @@ class Interpreter {
         if (!array) {
             const interaction = filteredInteractions[index]
             const prefix = keyMapping.prefix || ''
-            const str = checkMultipleKeys(interaction?.events[index], keyMapping.key) || (interaction as any)?.[keyMapping.key] || interaction?.events[index]?.params[keyMapping.key]
+            let str;
+            // unclear if "index" refers specifies an interaction or an event
+            // this logic figures that out
+            if ((interaction as any)?.[keyMapping.key]) {
+                str = (interaction as any)?.[keyMapping.key]
+            } else {
+                const flattenedEvents = flattenEventsFromInteractions(filteredInteractions)
+                str = checkMultipleKeys(flattenedEvents[index], keyMapping.key) || flattenedEvents[index]?.params[keyMapping.key]
+            }
             const postfix = keyMapping.postfix || ''
             value = str ? prefix + str + postfix : keyMapping.defaultValue
         } else {

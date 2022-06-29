@@ -19,14 +19,43 @@
       }
     },
     "collect": {
-      "action": "______TODO______",
-      "exampleDescriptionTemplate": "______TODO______",
-      "exampleDescription": "______TODO______",
+      "action": "collected",
+      "exampleDescriptionTemplate": "leotheprocess.eth collected {tokenAmount0} {tokenName0} and {tokenAmount1} {tokenName1} in fees from {contractName}",
+      "exampleDescription": "leotheprocess.eth collected 3206 HEX and 305 USDC in fees from Uniswap V3",
       "keywords": {
-        "__EXAMPLE_KEYWORD__": {
-          "key": "______TODO______",
-          "filters": {},
-          "defaultValue": "______TODO______"
+        "tokenName0": {
+          "key": "contractSymbol",
+          "filters": {
+            "eventName": "Transfer",
+            "to": "{userAddress}"
+          },
+          "defaultValue": "an unknown token"
+        },
+        "tokenAmount0": {
+          "key": "value",
+          "filters": {
+            "eventName": "Transfer",
+            "to": "{userAddress}"
+          },
+          "defaultValue": "an unknown amount of"
+        },
+        "tokenName1": {
+          "key": "contractSymbol",
+          "filters": {
+            "eventName": "Transfer",
+            "to": "{userAddress}"
+          },
+          "index": 1,
+          "defaultValue": "an unknown token"
+        },
+        "tokenAmount1": {
+          "key": "value",
+          "filters": {
+            "eventName": "Transfer",
+            "to": "{userAddress}"
+          },
+          "index": 1,
+          "defaultValue": "an unknown amount of"
         }
       }
     },
