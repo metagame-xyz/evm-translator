@@ -352,7 +352,9 @@ export function checkMultipleKeys(
     key: string,
     valueToFind: string | null = null,
 ): any {
-
+    if (!interactionEvent) {
+        return valueToFind ? false : ''
+    }
     const keyMapping: Record<string, string[]> = {
         [toKey]: toKeys,
         [fromKey]: fromKeys,

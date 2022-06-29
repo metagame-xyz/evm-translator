@@ -159,14 +159,39 @@
       }
     },
     "multicall": {
-      "action": "______TODO______",
-      "exampleDescriptionTemplate": "______TODO______",
-      "exampleDescription": "______TODO______",
+      "action": "swapped",
+      "exampleDescriptionTemplate": "{userAddress} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
+      "exampleDescription": "leotheprocess.eth swapped 500 DAI for 1600 USDC on Uniswap V3",
       "keywords": {
-        "__EXAMPLE_KEYWORD__": {
-          "key": "______TODO______",
-          "filters": {},
-          "defaultValue": "______TODO______"
+        "tokenName0": {
+          "key": "contractSymbol",
+          "filters": {
+            "eventName": "Transfer",
+            "from": "{userAddress}"
+          },
+          "defaultValue": "an unknown token"
+        },
+        "tokenAmount0": {
+          "key": "value",
+          "filters": {
+            "eventName": "Transfer",
+            "from": "{userAddress}"
+          },
+          "defaultValue": "an unknown amount of"
+        },
+        "tokenName1": {
+          "key": "contractSymbol",
+          "filters": {
+            "eventName": "Withdrawal"
+          },
+          "defaultValue": "an unknown token"
+        },
+        "tokenAmount1": {
+          "key": "value",
+          "filters": {
+            "eventName": "Withdrawal"
+          },
+          "defaultValue": "an unknown amount of"
         }
       }
     },
