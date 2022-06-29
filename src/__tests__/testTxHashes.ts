@@ -15,10 +15,14 @@ const testTxHashes = {
         repay: '0xdf2f782ab0296121318cca140ef069f9f074c51ff4b11f0c677bcb01126f81de',
         deposit: '0x24ee705da17a6061091880f47335d92950c72398980e271cdb9c69e8502827f4',
     },
+    UniswapV3: {
+        exactInputSingle: '0xe4737f2b6174dfcc9482a50aacdc0a919f12c14ede767d6dbfc2cd502747e4f5',
+        exactInput: '0xf41a45f5347db0d95bfac48325f8272dce56782574e91083e5025324928bc40c',
+    }
 }
 
 // test multiple roles for a single tx
-export const multiSidedTxMap = {
+export const multiSidedTxMap: Record<string, string[]> = {
     '0xc814cb6b61222beda8a9bcc359e776e72ae732a1c29df572099ecef27c8461e4': [
         '0x96a675775b8546a8602a1015efaacbc87358e478', '0x83eb387c8f7c8903f2be1ca367197fc4b3cb573e'
     ]

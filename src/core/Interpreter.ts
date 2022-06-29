@@ -8,20 +8,14 @@ import interpretGenericTransfer from './genericInterpreters/transfer'
 import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 
-import { InterpreterMap } from 'interfaces/contractInterpreter'
+import { InterpreterMap, MethodMap } from 'interfaces/contractInterpreter'
 import { ContractType, DecodedTx, Interaction, InteractionEvent, TxType } from 'interfaces/decoded'
 import { Action, Interpretation, Token, TokenType } from 'interfaces/interpreted'
 import { Chain } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
-import { fillDescriptionTemplate, getNativeTokenValueEvents, shortenNamesInString } from 'utils'
+import { checkMultipleKeys, fillDescriptionTemplate, getNativeTokenValueEvents, shortenNamesInString, toOrFromUser } from 'utils'
 import { getActionFromInterpretation } from './DoubleSidedTxInterpreter'
-
-// Despite most contracts using Open Zeppelin's standard naming convention of "to, from, value", not all do. Most notably, DAI and WETH use "src, dst, wad". These are used rename the keys to match the standard (both for generic and contract-specific interpretations).
-const toKeys = ['to', '_to', 'dst']
-const fromKeys = ['from', '_from', 'src']
-const toKey = 'to'
-const fromKey = 'from'
 
 function deepCopy<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj))
@@ -153,8 +147,8 @@ class Interpreter {
             // TODO the description and extras should be different for reverted transactions
         }
 
-        const interpretationMapping = (toAddress && this.contractSpecificInterpreters[toAddress]) || null
-        const methodSpecificMapping = (methodName && interpretationMapping?.writeFunctions[methodName]) || null
+        const interpretationMapping: InterpreterMap | null = (toAddress && this.contractSpecificInterpreters[toAddress.toLowerCase()]) || null
+        const methodSpecificMapping: MethodMap | null = (methodName && interpretationMapping?.writeFunctions[methodName]) || null
 
         // if there's no contract-specific mapping, try to use the fallback mapping
         if (decodedData.txType === TxType.CONTRACT_DEPLOY) {
@@ -250,30 +244,6 @@ class Interpreter {
             if (value === '{userAddress}') valueToFind = userAddress
             if (value === '{contractAddress}') valueToFind = contractAddress
 
-            // for example, DAI's Transfer event uses "dst" instead of "to", so we need to check for "dst" as well, even if the interpreter map uses "to". As we find more of these, we'll have to add them to the "toKeys" array. We mig
-            const checkMultipleKeys = (
-                interactionEvent: InteractionEvent,
-                key: string,
-                valueToFind: string,
-            ): boolean => {
-                const keyMapping: Record<string, string[]> = {
-                    [toKey]: toKeys,
-                    [fromKey]: fromKeys,
-                }
-
-                const keys = [...(keyMapping[key] || []), key]
-
-                if (keys) {
-                    for (const keyToCheck of keys) {
-                        if (interactionEvent.params[keyToCheck] === valueToFind) {
-                            return true
-                        }
-                    }
-                }
-
-                return false
-            }
-
             // filter out by events that don't have the keys we want
             for (const interaction of filteredInteractions) {
                 if (!includes(topLevelInteractionKeys, key)) {
@@ -300,7 +270,7 @@ class Interpreter {
         if (!array) {
             const interaction = filteredInteractions[index]
             const prefix = keyMapping.prefix || ''
-            const str = (interaction as any)?.[keyMapping.key] || interaction?.events[index]?.params[keyMapping.key]
+            const str = checkMultipleKeys(interaction?.events[index], keyMapping.key) || (interaction as any)?.[keyMapping.key] || interaction?.events[index]?.params[keyMapping.key]
             const postfix = keyMapping.postfix || ''
             value = str ? prefix + str + postfix : keyMapping.defaultValue
         } else {
@@ -380,11 +350,6 @@ class Interpreter {
             }
 
             return tokenType
-        }
-
-        function toOrFromUser(event: InteractionEvent, direction: 'to' | 'from', userAddress: string) {
-            const directionArr = direction === 'to' ? toKeys : fromKeys
-            return directionArr.filter((key) => event.params[key] === userAddress).length > 0
         }
 
         // each transfer event can have a token in it. for example, minting multiple NFTs

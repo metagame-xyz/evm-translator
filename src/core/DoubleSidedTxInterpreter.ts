@@ -1,10 +1,10 @@
-import { Interpretation } from 'interfaces/interpreted'
+import { Action, Interpretation } from 'interfaces/interpreted'
 
-export function getActionFromInterpretation(interpretation: Interpretation): string {
+export function getActionFromInterpretation(interpretation: Interpretation): Action {
   if (interpretation.nativeValueSent !== '0' && interpretation.tokensReceived.length) {
-    return "bought"
+    return Action.bought
   } else if (interpretation.nativeValueReceived !== '0' && interpretation.tokensSent.length) {
-    return "sold"
+    return Action.sold
   } else {
     throw new Error(`Invalid NFT sale: received ${interpretation.nativeValueReceived} ETH and ${interpretation.tokensReceived.length} tokens, sent ${interpretation.nativeValueSent} ETH and ${interpretation.tokensSent.length} tokens`)
   }

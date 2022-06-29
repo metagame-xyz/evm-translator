@@ -29,8 +29,9 @@ test('Interpreter', async () => {
         .map(([, decodedTx]) => decodedTx)
 
     for (const decodedTx of filteredDecodedTxes) {
-        if (multiSidedTxMap[decodedTx.txHash]) {
-            for (const participant of multiSidedTxMap[decodedTx.txHash]) {
+        if (multiSidedTxMap[decodedTx!.txHash]) {
+            // test multiple roles for a single tx
+            for (const participant of multiSidedTxMap[decodedTx!.txHash]) {
                 expect(interpreter.interpretSingleTx(decodedTx!, participant)).toMatchSnapshot()
             }
         } else {

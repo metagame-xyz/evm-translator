@@ -1,0 +1,228 @@
+{
+  "contractOfficialName": "SwapRouter",
+  "contractName": "Uniswap V3",
+  "writeFunctions": {
+    "exactInput": {
+      "action": "swapped",
+      "exampleDescriptionTemplate": "{userAddress} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
+      "exampleDescription": "leotheprocess.eth swapped 500 DAI for 1600 USDC on Uniswap V3",
+      "keywords": {
+        "tokenName0": {
+          "key": "contractSymbol",
+          "filters": {
+            "eventName": "Transfer",
+            "from": "{userAddress}"
+          },
+          "defaultValue": "an unknown token"
+        },
+        "tokenAmount0": {
+          "key": "value",
+          "filters": {
+            "eventName": "Transfer",
+            "from": "{userAddress}"
+          },
+          "defaultValue": "an unknown amount of"
+        },
+        "tokenName1": {
+          "key": "contractSymbol",
+          "filters": {
+            "eventName": "Transfer",
+            "to": "{userAddress}"
+          },
+          "defaultValue": "an unknown token"
+        },
+        "tokenAmount1": {
+          "key": "value",
+          "filters": {
+            "eventName": "Transfer",
+            "to": "{userAddress}"
+          },
+          "defaultValue": "an unknown amount of"
+        }
+      }
+    },
+    "exactInputSingle": {
+      "action": "swapped",
+      "exampleDescriptionTemplate": "{userAddress} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
+      "exampleDescription": "leotheprocess.eth swapped 500 DAI for 1600 USDC on Uniswap V3",
+      "keywords": {
+        "tokenName0": {
+          "key": "contractSymbol",
+          "filters": {
+            "eventName": "Transfer",
+            "from": "{userAddress}"
+          },
+          "defaultValue": "an unknown token"
+        },
+        "tokenAmount0": {
+          "key": "value",
+          "filters": {
+            "eventName": "Transfer",
+            "from": "{userAddress}"
+          },
+          "defaultValue": "an unknown amount of"
+        },
+        "tokenName1": {
+          "key": "contractSymbol",
+          "filters": {
+            "eventName": "Transfer",
+            "to": "{userAddress}"
+          },
+          "defaultValue": "an unknown token"
+        },
+        "tokenAmount1": {
+          "key": "value",
+          "filters": {
+            "eventName": "Transfer",
+            "to": "{userAddress}"
+          },
+          "defaultValue": "an unknown amount of"
+        }
+      }
+    },
+    "exactOutput": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    },
+    "exactOutputSingle": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    },
+    "multicall": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    },
+    "refundETH": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    },
+    "selfPermit": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    },
+    "selfPermitAllowed": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    },
+    "selfPermitAllowedIfNecessary": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    },
+    "selfPermitIfNecessary": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    },
+    "sweepToken": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    },
+    "sweepTokenWithFee": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    },
+    "unwrapWETH9": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    },
+    "unwrapWETH9WithFee": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    }
+  }
+}

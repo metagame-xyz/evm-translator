@@ -16,6 +16,14 @@ import { Chain, Chains, ChainSymbol } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 import { getNativeValueTransferredFromInterpretation } from 'core/DoubleSidedTxInterpreter'
 
+// Despite most contracts using Open Zeppelin's standard naming convention of "to, from, value", not all do. Most notably, DAI and WETH use "src, dst, wad". These are used rename the keys to match the standard (both for generic and contract-specific interpretations).
+const toKeys = ['to', '_to', 'dst']
+const fromKeys = ['from', '_from', 'src']
+const valueKeys = ['value', 'wad']
+const toKey = 'to'
+const fromKey = 'from'
+const valueKey = 'value'
+
 const ethereum: Chain = {
     EVM: true,
     id: 1,
@@ -212,7 +220,7 @@ export const retryProviderCall = async <T>(providerPromise: Promise<T>): Promise
 }
 
 export function fillDescriptionTemplate(template: string, interpretation: Interpretation): string {
-    const merged = collect(interpretation.extra).merge(interpretation).all()
+    const merged: Record<string, any> = collect(interpretation.extra).merge(interpretation).all()
     if (template.includes("__NATIVEVALUETRANSFERRED_")) {
         merged.__NATIVEVALUETRANSFERRED_ = getNativeValueTransferredFromInterpretation(interpretation)
     }
@@ -331,4 +339,37 @@ export async function getProxyAddresses(provider: BaseProvider, addresses: strin
             return null
         }
     })
+}
+
+export function toOrFromUser(event: InteractionEvent, direction: 'to' | 'from', userAddress: string) {
+    const directionArr = direction === 'to' ? toKeys : fromKeys
+    return directionArr.filter((key: string) => event.params[key] === userAddress).length > 0
+}
+
+// for example, DAI's Transfer event uses "dst" instead of "to", so we need to check for "dst" as well, even if the interpreter map uses "to". As we find more of these, we'll have to add them to the "toKeys" array. We mig
+export function checkMultipleKeys(
+    interactionEvent: InteractionEvent,
+    key: string,
+    valueToFind: string | null = null,
+): any {
+
+    const keyMapping: Record<string, string[]> = {
+        [toKey]: toKeys,
+        [fromKey]: fromKeys,
+        [valueKey]: valueKeys,
+    }
+
+    const keys = keyMapping[key]
+
+    if (keys) {
+        for (const keyToCheck of keys) {
+            if (valueToFind && interactionEvent.params[keyToCheck] === valueToFind) {
+                return true
+            } else if (!valueToFind && interactionEvent.params[keyToCheck]) {
+                return interactionEvent.params[keyToCheck]
+            }
+        }
+    }
+
+    return valueToFind ? false : ''
 }

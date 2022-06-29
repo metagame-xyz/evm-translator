@@ -384,3 +384,89 @@ Object {
   "userName": "0x88a9",
 }
 `;
+
+exports[`Interpreter 11`] = `
+Object {
+  "action": "swapped",
+  "chainSymbol": "ETH",
+  "contractAddress": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "0x5596 swapped 280376616698 USDC for 150286887655178993883 WETH on Uniswap V3",
+  "extra": Object {
+    "tokenAmount0": "280376616698",
+    "tokenAmount1": "150286887655178993883",
+    "tokenName0": "USDC",
+    "tokenName1": "WETH",
+  },
+  "gasPaid": "0.07226057005959764",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1654532279,
+  "tokensReceived": Array [
+    Object {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "amount": "150286887655178993883",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "unknown",
+    },
+  ],
+  "tokensSent": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "280376616698",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "txHash": "0xe4737f2b6174dfcc9482a50aacdc0a919f12c14ede767d6dbfc2cd502747e4f5",
+  "userAddress": "0x55961e9fc41c07c13ec0c7103b3d34c0ae32c2eb",
+  "userName": "0x5596",
+}
+`;
+
+exports[`Interpreter 12`] = `
+Object {
+  "action": "swapped",
+  "chainSymbol": "ETH",
+  "contractAddress": "0xe592427a0aece92de3edee1f18e0157c05861564",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "0x7691 swapped 115000000000000000000 BYTES for 189236064 USDC on Uniswap V3",
+  "extra": Object {
+    "tokenAmount0": "115000000000000000000",
+    "tokenAmount1": "189236064",
+    "tokenName0": "BYTES",
+    "tokenName1": "USDC",
+  },
+  "gasPaid": "0.01376121884064768",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1656530683,
+  "tokensReceived": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "189236064",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "tokensSent": Array [
+    Object {
+      "address": "0x7d647b1a0dcd5525e9c6b3d14be58f27674f8c95",
+      "amount": "115000000000000000000",
+      "name": "BYTES",
+      "symbol": "BYTES",
+      "type": "ERC20",
+    },
+  ],
+  "txHash": "0xf41a45f5347db0d95bfac48325f8272dce56782574e91083e5025324928bc40c",
+  "userAddress": "0x76914474c1e922aa1166b1d073373b3b1a2dab47",
+  "userName": "0x7691",
+}
+`;
