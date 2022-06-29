@@ -24,7 +24,8 @@ const contractInterpreters = {
     '0x80a2ae356fc9ef4305676f7a3e2ed04e12c33946': require('./Compound_ERC20.json'), // cYFI
     '0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407': require('./Compound_ERC20.json'), // cZRX
     '0xe592427a0aece92de3edee1f18e0157c05861564': require('./UniswapV3Router.json'),
-    '0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45': require('./UniswapV3Router.json')
+    '0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45': require('./UniswapV3Router.json'),
+    '0xc36442b4a4522e871399cd717abdd847ab11fe88': require('./UniswapV3NonFungiblePositionManager.json')
 
 }
 

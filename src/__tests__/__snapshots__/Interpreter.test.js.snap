@@ -591,3 +591,35 @@ Object {
   "userName": "0xa5c1",
 }
 `;
+
+exports[`Interpreter 16`] = `
+Object {
+  "action": "burned",
+  "chainSymbol": "ETH",
+  "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "0x0b96 burned Uniswap V3 liquidity position NFT #260993",
+  "extra": Object {
+    "tokenId": "260993",
+  },
+  "gasPaid": "0.002506870245171761",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1656483817,
+  "tokensReceived": Array [],
+  "tokensSent": Array [
+    Object {
+      "address": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+      "name": "Uniswap V3 Positions NFT-V1",
+      "symbol": "UNI-V3-POS",
+      "tokenId": "260993",
+      "type": "ERC721",
+    },
+  ],
+  "txHash": "0x1d2e706317c9457e43d4b0dfe6395c55b518f4f05386d1f455dd6ea984e04ae1",
+  "userAddress": "0x0b96c91ab05629be9404746d5a7775f305a4f6a3",
+  "userName": "0x0b96",
+}
+`;

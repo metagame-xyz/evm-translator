@@ -1,0 +1,82 @@
+{
+  "contractAddress": "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
+  "contractOfficialName": "NonfungiblePositionManager",
+  "contractName": "Uniswap V3",
+  "writeFunctions": {
+    "burn": {
+      "action": "burned",
+      "exampleDescriptionTemplate": "{userAddress} {action} {contractName} liquidity position NFT #{tokenId}",
+      "exampleDescription": "leotheprocess.eth burned a liquidity position on Uniswap V3",
+      "keywords": {
+        "tokenId": {
+          "key": "tokenId",
+          "filters": {
+            "eventName": "Transfer",
+            "from": "{userAddress}"
+          },
+          "defaultValue": "???"
+        }
+      }
+    },
+    "collect": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    },
+    "decreaseLiquidity": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    },
+    "increaseLiquidity": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    },
+    "mint": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    },
+    "multicall": {
+      "action": "______TODO______",
+      "exampleDescriptionTemplate": "______TODO______",
+      "exampleDescription": "______TODO______",
+      "keywords": {
+        "__EXAMPLE_KEYWORD__": {
+          "key": "______TODO______",
+          "filters": {},
+          "defaultValue": "______TODO______"
+        }
+      }
+    }
+  }
+}
