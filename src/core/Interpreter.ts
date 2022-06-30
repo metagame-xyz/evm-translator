@@ -231,7 +231,6 @@ class Interpreter {
         userAddress: string,
         contractAddress: string,
     ): string | string[] {
-        debugger
         const filters = keyMapping.filters || {}
         const index = keyMapping.index || 0
         const array = keyMapping.array || false

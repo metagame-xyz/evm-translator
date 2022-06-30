@@ -216,7 +216,7 @@ class Translator {
         rawTxData: RawTxData | RawTxDataWithoutTrace,
         ABIs: Record<string, ABI_Item[]>,
         contractDataMap: Record<string, ContractData>,
-    ): Promise<{ decodedLogs: Interaction[]; decodedCallData: DecodedCallData }> {
+    ): Promise<{ decodedLogs: Interaction[]; decodedCallData: DecodedCallData; decodedTraceData: DecodedCallData[] }> {
         return await this.augmenter.decodeTxData(rawTxData, ABIs, contractDataMap)
     }
 
@@ -327,7 +327,8 @@ class Translator {
 
             const AbiMap = filterABIMap(unfilteredAbiMap)
             logData.functionName = 'decodeTxData'
-            const { decodedLogs, decodedCallData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)
+            debugger
+            const { decodedLogs, decodedCallData, decodedTraceData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)
 
             const allAddresses = this.getAllAddresses(decodedLogs, decodedCallData, contractAddresses)
 
