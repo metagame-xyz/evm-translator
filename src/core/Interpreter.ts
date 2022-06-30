@@ -209,7 +209,10 @@ class Interpreter {
         fromAddress: string,
         userAddress: string,
     ): string {
-        if (fromAddress === userAddress) return Number(formatEther(nativeValueSent || 0)).toString()
+        if (fromAddress === userAddress)
+            return Number(formatEther(nativeValueSent || 0))
+                .toString()
+                .replace(/^(\d+\.\d*?[0-9])0+$/g, '$1')
 
         const nativeTokenEvents = getNativeTokenValueEvents(interactions)
         const nativeTokenEventsReceived = nativeTokenEvents.filter((event) => event.params.from === userAddress)
@@ -217,7 +220,7 @@ class Interpreter {
             (acc, event) => acc + Number(formatEther(event.params.value || 0)),
             0,
         )
-        return val.toFixed(20)
+        return val.toFixed(20).replace(/^(\d+\.\d*?[0-9])0+$/g, '$1')
     }
     getNativeTokenValueReceived(interactions: Interaction[], userAddress: string): string {
         const nativeTokenEvents = getNativeTokenValueEvents(interactions)
@@ -227,7 +230,7 @@ class Interpreter {
             0,
         )
 
-        return val.toFixed(20)
+        return val.toFixed(20).replace(/^(\d+\.\d*?[0-9])0+$/g, '$1')
     }
 
     private findValue(
@@ -432,10 +435,10 @@ class Interpreter {
             }
 
             if (amount) {
-                const decimal = i.contractAddress === this.chain.usdcAddress ? 6 : 18
+                const decimal = [this.chain.usdcAddress, this.chain.usdtAddress].includes(i.contractAddress) ? 6 : 18 // TODO need to store the "decimal()" for all contracts and either store it on decoded, or call the db during interpretations
                 const amountNumber = Number(formatUnits(amount, decimal))
 
-                token.amount = amountNumber > 1 ? amountNumber.toFixed(2) : amountNumber.toFixed(20)
+                token.amount = amountNumber.toFixed(12).replace(/^(\d+\.\d*?[0-9])0+$/g, '$1')
 
                 // token.amount = amount
             }
