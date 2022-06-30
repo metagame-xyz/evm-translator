@@ -140,7 +140,9 @@ export type RawDecodedLog = {
 }
 
 export type RawDecodedCallData = {
-    name: string | null
+    name: string | null,
+    from: string,
+    to: string,
     params: {
         name: string
         type: string

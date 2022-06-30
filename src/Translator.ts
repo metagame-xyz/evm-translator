@@ -327,7 +327,6 @@ class Translator {
 
             const AbiMap = filterABIMap(unfilteredAbiMap)
             logData.functionName = 'decodeTxData'
-            debugger
             const { decodedLogs, decodedCallData, decodedTraceData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)
 
             const allAddresses = this.getAllAddresses(decodedLogs, decodedCallData, contractAddresses)
