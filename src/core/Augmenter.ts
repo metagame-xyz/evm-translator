@@ -99,11 +99,17 @@ export class Augmenter {
             name: null,
             params: [],
         }
-        const rawDecodedTraceData = await decodeRawTxTrace(abiDecoder, (rawTxData as any)?.txTrace || [])
+        const decodedLogs: Interaction[] = transformDecodedLogs(rawDecodedLogs, contractDataMap)
+        const decodedCallData: DecodedCallData = transformDecodedData(rawDecodedCallData)
 
-        const decodedLogs = transformDecodedLogs(rawDecodedLogs, contractDataMap)
-        const decodedCallData = transformDecodedData(rawDecodedCallData)
-        const decodedTraceData = transformTraceData(rawDecodedTraceData)
+        // This is a hack to fix an error that happens when it tries to get 
+        // the trace of non-multicall txs
+        debugger
+        let decodedTraceData: DecodedCallData[] = []
+        if (['multicall'].includes((rawDecodedCallData as any)?.name) && ['0xc36442b4a4522e871399cd717abdd847ab11fe88'].includes((rawTxData.txReceipt as any)?.to)) {
+            const rawDecodedTraceData = await decodeRawTxTrace(abiDecoder, (rawTxData as any)?.txTrace || [])
+            decodedTraceData = transformTraceData(rawDecodedTraceData)
+        }
 
         return { decodedLogs, decodedCallData, decodedTraceData }
     }
@@ -111,6 +117,7 @@ export class Augmenter {
     augmentDecodedData(
         decodedLogs: Interaction[],
         decodedCallData: DecodedCallData,
+        decodedTraceData: DecodedCallData[],
         ensMap: Record<string, string>,
         contractDataMap: Record<string, ContractData>,
         rawTxData: RawTxData | RawTxDataWithoutTrace,
@@ -149,6 +156,7 @@ export class Augmenter {
                 arguments: decodedCallData.params,
                 ...(!decodedCallData.decoded && { decoded: decodedCallData.decoded }),
             },
+            traceCalls: decodedTraceData,
             nativeValueSent: value,
             chainSymbol: this.chain.symbol,
             interactions,

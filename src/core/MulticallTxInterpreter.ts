@@ -20,6 +20,9 @@ const pruneTraceRecursive = (calls: TraceLog[]): TraceLog[] => {
 }
 
 export async function decodeRawTxTrace(abiDecoder: ABIDecoder, txTrace: TraceLog[]): Promise<RawDecodedCallData[]> {
+  if (!txTrace.length) {
+    return new Promise((resolve) => resolve([]))
+  }
   const secondLevelCallsCount = txTrace[0].subtraces
   const secondLevelCalls = []
   let callsToPrune = txTrace.slice(1)
@@ -31,9 +34,11 @@ export async function decodeRawTxTrace(abiDecoder: ABIDecoder, txTrace: TraceLog
   if (callsToPrune.length) {
     throw new Error("This shouldn't happen")
   }
+
   return Promise.all(secondLevelCalls.map((call) =>
-  (abiDecoder.decodeMethod((call.action as any)?.input || '')
-    .then((decodedCall) =>
-      ({ ...decodedCall, from: (call.action as any)?.from, to: (call.action as any)?.to })
-    ))))
+    abiDecoder.decodeMethod((call.action as any)?.input || '')
+      .then((decodedCall) =>
+        ({ ...decodedCall, from: (call.action as any)?.from, to: (call.action as any)?.to })
+      )
+  ))
 }
