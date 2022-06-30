@@ -707,3 +707,53 @@ Object {
   "userName": "0x6dd9",
 }
 `;
+
+exports[`Interpreter 19`] = `
+Object {
+  "action": "minted",
+  "chainSymbol": "ETH",
+  "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "0x57bd minted an NFT for adding 202480816 WBTC and 22999999914 USDC in liquidity to Uniswap V3",
+  "extra": Object {
+    "tokenAmount0": "202480816",
+    "tokenAmount1": "22999999914",
+    "tokenName0": "WBTC",
+    "tokenName1": "USDC",
+  },
+  "gasPaid": "0.012234799351281643",
+  "nativeValueReceived": "0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1656585855,
+  "tokensReceived": Array [
+    Object {
+      "address": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+      "name": "Uniswap V3 Positions NFT-V1",
+      "symbol": "UNI-V3-POS",
+      "tokenId": "261722",
+      "type": "ERC721",
+    },
+  ],
+  "tokensSent": Array [
+    Object {
+      "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+      "amount": "202480816",
+      "name": "Wrapped BTC",
+      "symbol": "WBTC",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "22999999914",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "txHash": "0x8f97a7c09cb73c4da2de03f21bbf17c01f512a615da51a8bf721c4748b5f8475",
+  "userAddress": "0x57bddbe968f67c416b5d97d285c7a48676655dd7",
+  "userName": "0x57bd",
+}
+`;

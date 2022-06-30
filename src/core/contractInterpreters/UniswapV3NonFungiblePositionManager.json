@@ -101,14 +101,43 @@
       }
     },
     "mint": {
-      "action": "______TODO______",
-      "exampleDescriptionTemplate": "______TODO______",
-      "exampleDescription": "______TODO______",
+      "action": "minted",
+      "exampleDescriptionTemplate": "{userAddress} {action} an NFT for adding {tokenAmount0} {tokenName0} and {tokenAmount1} {tokenName1} in liquidity to {contractName}",
+      "exampleDescription": "leotheprocess.eth minted an NFT for adding 2 WBTC and 22999 USDC in liquidity to Uniswap V3",
       "keywords": {
-        "__EXAMPLE_KEYWORD__": {
-          "key": "______TODO______",
-          "filters": {},
-          "defaultValue": "______TODO______"
+        "tokenName0": {
+          "key": "contractSymbol",
+          "filters": {
+            "eventName": "Transfer",
+            "from": "{userAddress}"
+          },
+          "defaultValue": "an unknown token"
+        },
+        "tokenAmount0": {
+          "key": "value",
+          "filters": {
+            "eventName": "Transfer",
+            "from": "{userAddress}"
+          },
+          "defaultValue": "an unknown amount of"
+        },
+        "tokenName1": {
+          "key": "contractSymbol",
+          "filters": {
+            "eventName": "Transfer",
+            "from": "{userAddress}"
+          },
+          "index": 1,
+          "defaultValue": "an unknown token"
+        },
+        "tokenAmount1": {
+          "key": "value",
+          "filters": {
+            "eventName": "Transfer",
+            "from": "{userAddress}"
+          },
+          "index": 1,
+          "defaultValue": "an unknown amount of"
         }
       }
     },
