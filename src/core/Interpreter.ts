@@ -6,7 +6,7 @@ import lastFallback from './genericInterpreters/lastFallback'
 import interpretGenericToken from './genericInterpreters/token'
 import interpretGenericTransfer from './genericInterpreters/transfer'
 import { BigNumber } from 'ethers'
-import { formatEther } from 'ethers/lib/utils'
+import { formatEther, formatUnits } from 'ethers/lib/utils'
 
 import { InterpreterMap } from 'interfaces/contractInterpreter'
 import { ContractType, DecodedTx, Interaction, InteractionEvent, TxType } from 'interfaces/decoded'
@@ -126,13 +126,8 @@ class Interpreter {
             userAddress,
             contractAddress: toAddress,
             action: Action.unknown,
-            nativeValueSent: this.getNativeTokenValueSent(
-                interactions,
-                nativeValueSent,
-                fromAddress,
-                userAddress,
-            ).toString(),
-            nativeValueReceived: this.getNativeTokenValueReceived(interactions, userAddress).toString(),
+            nativeValueSent: this.getNativeTokenValueSent(interactions, nativeValueSent, fromAddress, userAddress),
+            nativeValueReceived: this.getNativeTokenValueReceived(interactions, userAddress),
             tokensReceived: this.getTokensReceived(interactions, userAddress),
             tokensSent: this.getTokensSent(interactions, userAddress),
             chainSymbol: this.chain.symbol,
@@ -213,17 +208,26 @@ class Interpreter {
         nativeValueSent: string | undefined,
         fromAddress: string,
         userAddress: string,
-    ): number {
-        if (fromAddress === userAddress) return Number(formatEther(nativeValueSent || 0))
+    ): string {
+        if (fromAddress === userAddress) return Number(formatEther(nativeValueSent || 0)).toString()
 
         const nativeTokenEvents = getNativeTokenValueEvents(interactions)
         const nativeTokenEventsReceived = nativeTokenEvents.filter((event) => event.params.from === userAddress)
-        return nativeTokenEventsReceived.reduce((acc, event) => acc + Number(formatEther(event.params.value || 0)), 0)
+        const val = nativeTokenEventsReceived.reduce(
+            (acc, event) => acc + Number(formatEther(event.params.value || 0)),
+            0,
+        )
+        return val.toFixed(20)
     }
-    getNativeTokenValueReceived(interactions: Interaction[], userAddress: string): number {
+    getNativeTokenValueReceived(interactions: Interaction[], userAddress: string): string {
         const nativeTokenEvents = getNativeTokenValueEvents(interactions)
         const nativeTokenEventsReceived = nativeTokenEvents.filter((event) => event.params.to === userAddress)
-        return nativeTokenEventsReceived.reduce((acc, event) => acc + Number(formatEther(event.params.value || 0)), 0)
+        const val = nativeTokenEventsReceived.reduce(
+            (acc, event) => acc + Number(formatEther(event.params.value || 0)),
+            0,
+        )
+
+        return val.toFixed(20)
     }
 
     private findValue(
@@ -426,7 +430,16 @@ class Interpreter {
                 symbol: i.contractSymbol,
                 address: AddressZ.parse(i.contractAddress),
             }
-            amount ? (token.amount = amount) : null
+
+            if (amount) {
+                const decimal = i.contractAddress === this.chain.usdcAddress ? 6 : 18
+                const amountNumber = Number(formatUnits(amount, decimal))
+
+                token.amount = amountNumber > 1 ? amountNumber.toFixed(2) : amountNumber.toFixed(20)
+
+                // token.amount = amount
+            }
+
             tokenId ? (token.tokenId = tokenId) : null
 
             return token

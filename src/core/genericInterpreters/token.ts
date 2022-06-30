@@ -310,8 +310,7 @@ function interpretGenericToken(decodedData: DecodedTx, interpretation: Interpret
 
     const tokenEvents = tokenContractInteraction?.events || []
 
-    // maybe something to do with the fact it sends both an  erc20 and an erc721?
-
+    // use TokensReceived and TokensSent to determine the actions (besides mint), not the events. Bought, sold, traded
     interpretation.action = getAction(t, tokenEvents, userAddress, fromAddress)
 
     const token = getTokenInfo(tokenContractInteraction, interpretation)
