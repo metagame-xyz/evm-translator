@@ -14,7 +14,7 @@ Object {
     "tokenName": "KINGDOM",
   },
   "gasPaid": "0.03127220866447174",
-  "nativeValueReceived": "0.3949571157926511",
+  "nativeValueReceived": "0.39495711579265108115",
   "nativeValueSent": "0",
   "reverted": null,
   "timestamp": 1638316845,
@@ -22,7 +22,7 @@ Object {
   "tokensSent": Array [
     Object {
       "address": "0x9273b71cfd60e022c2107d5bcf5ee62a88346550",
-      "amount": "458161051962122",
+      "amount": "0.000458161052",
       "name": "Kingdom Token",
       "symbol": "KINGDOM",
       "type": "ERC20",
@@ -47,14 +47,14 @@ Object {
     "tokenName": "HOGE",
   },
   "gasPaid": "0.023564857708634499",
-  "nativeValueReceived": "0",
+  "nativeValueReceived": "0.0",
   "nativeValueSent": "1",
   "reverted": null,
   "timestamp": 1638316845,
   "tokensReceived": Array [
     Object {
       "address": "0xfad45e47083e4607302aa43c65fb3106f1cd7607",
-      "amount": "11567525892826453",
+      "amount": "0.011567525893",
       "name": "hoge.finance",
       "symbol": "HOGE",
       "type": "ERC20",
@@ -82,14 +82,14 @@ Object {
     "tokenName1": "KINGDOM",
   },
   "gasPaid": "0.026273653630187205",
-  "nativeValueReceived": "0",
+  "nativeValueReceived": "0.0",
   "nativeValueSent": "0",
   "reverted": null,
   "timestamp": 1638316845,
   "tokensReceived": Array [
     Object {
       "address": "0x9273b71cfd60e022c2107d5bcf5ee62a88346550",
-      "amount": "202899041047771",
+      "amount": "0.000202899041",
       "name": "Kingdom Token",
       "symbol": "KINGDOM",
       "type": "ERC20",
@@ -98,7 +98,7 @@ Object {
   "tokensSent": Array [
     Object {
       "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-      "amount": "900000000",
+      "amount": "900.0",
       "name": "USD Coin",
       "symbol": "USDC",
       "type": "ERC20",
@@ -122,14 +122,14 @@ Object {
     "token_0": "ACYC",
   },
   "gasPaid": "0.037819919756787315",
-  "nativeValueReceived": "0",
+  "nativeValueReceived": "0.0",
   "nativeValueSent": "10",
   "reverted": null,
   "timestamp": 1638316877,
   "tokensReceived": Array [
     Object {
       "address": "0xc7b7dac697b03e11e4af085d927f0c9b24b3f27d",
-      "amount": "3162277660168379331997893",
+      "amount": "3162277.660168379545",
       "name": "Uniswap V2",
       "symbol": "UNI-V2",
       "type": "LPToken",
@@ -138,7 +138,7 @@ Object {
   "tokensSent": Array [
     Object {
       "address": "0xb56a1f3310578f23120182fb2e58c087efe6e147",
-      "amount": "1000000000000000000000000000000",
+      "amount": "1000000000000.0",
       "name": "AllCoinsYieldCapital",
       "symbol": "ACYC",
       "type": "ERC20",
@@ -163,21 +163,21 @@ Object {
     "token_1": "WETH",
   },
   "gasPaid": "0.029644983060867926",
-  "nativeValueReceived": "0",
+  "nativeValueReceived": "0.0",
   "nativeValueSent": "0",
   "reverted": null,
   "timestamp": 1638318188,
   "tokensReceived": Array [
     Object {
       "address": "0xb7b284c2ea09c637daa2f128a8756280a9bd9091",
-      "amount": "1868562427769924",
+      "amount": "0.001868562428",
       "name": "Kakashi",
       "symbol": "KAKASHI",
       "type": "ERC20",
     },
     Object {
       "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-      "amount": "4356835431801684676",
+      "amount": "4.356835431802",
       "name": "Wrapped Ether",
       "symbol": "WETH",
       "type": "unknown",
@@ -186,7 +186,7 @@ Object {
   "tokensSent": Array [
     Object {
       "address": "0xbe2cee7429e427c262e73ea074bef59c6ad1d93b",
-      "amount": "93937438884835667",
+      "amount": "0.093937438885",
       "name": "Uniswap V2",
       "symbol": "UNI-V2",
       "type": "LPToken",
@@ -211,14 +211,14 @@ Object {
     "token_0": "SAND",
   },
   "gasPaid": "0.032858980114895286",
-  "nativeValueReceived": "6.538029747179976",
+  "nativeValueReceived": "6.53802974717997642529",
   "nativeValueSent": "0",
   "reverted": null,
   "timestamp": 1638318377,
   "tokensReceived": Array [
     Object {
       "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
-      "amount": "4456803721261159794400",
+      "amount": "4456.80372126116",
       "name": "SAND",
       "symbol": "SAND",
       "type": "ERC20",
@@ -227,7 +227,7 @@ Object {
   "tokensSent": Array [
     Object {
       "address": "0x3dd49f67e9d5bc4c5e6634b3f70bfd9dc1b6bd74",
-      "amount": "123932818358485202218",
+      "amount": "123.932818358485",
       "name": "Uniswap V2",
       "symbol": "UNI-V2",
       "type": "LPToken",
@@ -252,7 +252,7 @@ Object {
     "tokenId": "#228",
   },
   "gasPaid": "0.00837078350034528",
-  "nativeValueReceived": "0",
+  "nativeValueReceived": "0.0",
   "nativeValueSent": "0.05",
   "reverted": null,
   "timestamp": 1656089719,
@@ -318,7 +318,7 @@ Object {
     "tokenSymbol": "CRV",
   },
   "gasPaid": "0.012144212798965408",
-  "nativeValueReceived": "0",
+  "nativeValueReceived": "0.0",
   "nativeValueSent": "0",
   "reverted": null,
   "timestamp": 1656357349,
@@ -326,7 +326,7 @@ Object {
   "tokensSent": Array [
     Object {
       "address": "0x00ad8ebf64f141f1c81e9f8f792d3d1631c6c684",
-      "amount": "314305817611832341382659",
+      "amount": "314305.817611832346",
       "name": "Aave variable debt bearing CRV",
       "symbol": "variableDebtCRV",
       "type": "ERC20",
@@ -357,14 +357,14 @@ Object {
     "tokenSymbol": "USDT",
   },
   "gasPaid": "0.015157096544929638",
-  "nativeValueReceived": "0",
+  "nativeValueReceived": "0.0",
   "nativeValueSent": "0",
   "reverted": null,
   "timestamp": 1656358062,
   "tokensReceived": Array [
     Object {
       "address": "0x3ed3b47dd13ec9a98b44e6204a523e766b225811",
-      "amount": "2800000000",
+      "amount": "0.0000000028",
       "name": "Aave interest bearing USDT",
       "symbol": "aUSDT",
       "type": "ERC20",
@@ -373,7 +373,7 @@ Object {
   "tokensSent": Array [
     Object {
       "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
-      "amount": "2800000000",
+      "amount": "2800.0",
       "name": "Tether USD",
       "symbol": "USDT",
       "type": "ERC20",
