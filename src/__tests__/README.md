@@ -26,4 +26,4 @@ Note: you will have to complete this step every time the `testTxHashArr.json` fi
 2. Make sure you have followed the above steps to store decoded transactions in your local DB. Keep the local DB instance up and running.
 
 3. Run `yarn test`. If this fails, you know the interpreter broke. If it failed but you'd like to update the snapshot so that this new
-intepretations is the "answer" going forward, run `yarn test -u`. Then run `yarn test` again to rewrite the snapshots.
+intepretations is the "answer" going forward, run `yarn test -u`. Then run `yarn test` again to rewrite the snapshots. 
