@@ -798,13 +798,19 @@ Object {
 
 exports[`Interpreter 20`] = `
 Object {
-  "action": "______TODO______",
+  "action": Array [
+    "removed liquidity",
+    "collected",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
-  "contractName": null,
+  "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "mrbayc.eth ______TODO______ ???",
-  "extra": Object {},
+  "exampleDescription": "0x6b92 executed a multicall transaction on Uniswap V3",
+  "extra": Object {
+    "tokenName0": "an unknown token",
+    "tokenName1": "an unknown token",
+  },
   "gasPaid": "0.0102171187901338",
   "nativeValueReceived": "802.57273439268180936779",
   "nativeValueSent": "0",
@@ -828,13 +834,20 @@ Object {
 
 exports[`Interpreter 21`] = `
 Object {
-  "action": "minted",
+  "action": Array [
+    "minted",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
-  "contractName": null,
+  "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0x0950 minted UNI-V3-POS #261805 from Uniswap V3 Positions NFT-V1",
-  "extra": Object {},
+  "exampleDescription": "0x0950 minted on Uniswap V3",
+  "extra": Object {
+    "tokenAmount0": "195105855360",
+    "tokenAmount1": "an unknown amount of",
+    "tokenName0": "USDC",
+    "tokenName1": "an unknown token",
+  },
   "gasPaid": "0.02896727102188826",
   "nativeValueReceived": "0.0",
   "nativeValueSent": "186.99999999983515",
