@@ -5,6 +5,8 @@ export const addressRegex = new RegExp(/^0x[a-fA-F0-9]{40}$/)
 export const hashRegex = new RegExp(/^0x[a-fA-F0-9]*$/)
 export const toLowercaseFn = (x: string) => x.toLowerCase()
 
+export const multicallFunctionNames = ['multicall']
+export const multicallContractAddresses = ['0xc36442b4a4522e871399cd717abdd847ab11fe88']
 export const number = z.number()
 export const int = z.number().int()
 export const nullableInt = number.int().nullable()

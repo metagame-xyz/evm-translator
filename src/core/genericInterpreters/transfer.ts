@@ -30,7 +30,7 @@ function interpretGenericTransfer(decodedData: DecodedTx, interpretation: Interp
 
     const exampleDescription = `${userName} ${action} ${nativeValueSent} ${chainSymbol} ${direction} ${counterpartyName}`
 
-    interpretation.action = action
+    interpretation.action = [action]
     interpretation.exampleDescription = exampleDescription
     interpretation.extra = {}
 

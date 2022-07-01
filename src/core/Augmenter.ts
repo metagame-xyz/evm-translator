@@ -17,7 +17,7 @@ import {
     TxType,
 } from 'interfaces/decoded'
 import { CallTraceLog, RawTxData, RawTxDataWithoutTrace, TraceLog, TraceType } from 'interfaces/rawData'
-import { Chain } from 'interfaces/utils'
+import { Chain, multicallContractAddresses, multicallFunctionNames } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
 import {
@@ -105,7 +105,7 @@ export class Augmenter {
         // This is a hack to fix an error that happens when it tries to get 
         // the trace of non-multicall txs
         let decodedTraceData: DecodedCallData[] = []
-        if (['multicall'].includes((rawDecodedCallData as any)?.name) && ['0xc36442b4a4522e871399cd717abdd847ab11fe88'].includes((rawTxData.txReceipt as any)?.to)) {
+        if (multicallFunctionNames.includes((rawDecodedCallData as any)?.name) && multicallContractAddresses.includes((rawTxData.txReceipt as any)?.to)) {
             const rawDecodedTraceData = await decodeRawTxTrace(abiDecoder, (rawTxData as any)?.txTrace || [])
             decodedTraceData = transformTraceData(rawDecodedTraceData)
         }

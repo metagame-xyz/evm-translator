@@ -61,8 +61,8 @@
     },
     "increaseLiquidity": {
       "action": "added liquidity",
-      "exampleDescriptionTemplate": "{userAddress} {action} to {contractAddress} using {tokenAmount0} {tokenName0} and {tokenAmount1} {tokenName1}",
-      "exampleDescription": "leotheprocess.eth added liquidity to Uniswap V3 using 6.3 gOHM and 70.9 BTRFLY",
+      "exampleDescriptionTemplate": "{userAddress} {action} to the {tokenName0}-{tokenName1} pool on {contractName} ",
+      "exampleDescription": "leotheprocess.eth added liquidity to the gOHM-BTRFLY pool on Uniswap V3",
       "keywords": {
         "tokenName0": {
           "key": "contractSymbol",
@@ -138,6 +138,24 @@
           },
           "index": 1,
           "defaultValue": "an unknown amount of"
+        }
+      }
+    },
+    "decreaseLiquidity": {
+      "action": "removed liquidity",
+      "exampleDescriptionTemplate": "{userAddress} {action} from the {tokenName0}-{tokenName1} pool on {contractAddress}",
+      "exampleDescription": "leotheprocess.eth removed liquidity from the DAI-USDC pool on Uniswap V3",
+      "keywords": {
+        "tokenName0": {
+          "key": "__TODO__",
+          "filters": {},
+          "defaultValue": "an unknown token"
+        },
+        "tokenName1": {
+          "key": "__TODO__",
+          "filters": {},
+          "index": 1,
+          "defaultValue": "an unknown token"
         }
       }
     },

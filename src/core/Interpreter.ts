@@ -11,7 +11,7 @@ import { formatEther, formatUnits } from 'ethers/lib/utils'
 import { InterpreterMap, MethodMap } from 'interfaces/contractInterpreter'
 import { ContractType, DecodedTx, Interaction, InteractionEvent, TxType } from 'interfaces/decoded'
 import { Action, Interpretation, Token, TokenType } from 'interfaces/interpreted'
-import { Chain } from 'interfaces/utils'
+import { Chain, multicallContractAddresses, multicallFunctionNames } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
 import { checkMultipleKeys, fillDescriptionTemplate, flattenEventsFromInteractions, getNativeTokenValueEvents, shortenNamesInString, toOrFromUser } from 'utils'
@@ -87,6 +87,7 @@ class Interpreter {
         // Prep data coming in from 'decodedData'
         const {
             methodCall: { name: methodName },
+            traceCalls,
             interactions,
             fromAddress,
             toAddress,
@@ -120,7 +121,7 @@ class Interpreter {
             txHash,
             userAddress,
             contractAddress: toAddress,
-            action: Action.unknown,
+            action: [],
             nativeValueSent: this.getNativeTokenValueSent(interactions, nativeValueSent, fromAddress, userAddress),
             nativeValueReceived: this.getNativeTokenValueReceived(interactions, userAddress),
             tokensReceived: this.getTokensReceived(interactions, userAddress),
@@ -143,12 +144,22 @@ class Interpreter {
         }
 
         const interpretationMapping: InterpreterMap | null = (toAddress && this.contractSpecificInterpreters[toAddress.toLowerCase()]) || null
-        const methodSpecificMapping: MethodMap | null = (methodName && interpretationMapping?.writeFunctions[methodName]) || null
+
+        let methodSpecificMappings: MethodMap[] = [];
+        if (multicallFunctionNames.includes(methodName || '') && multicallContractAddresses.includes(toAddress || '')) {
+            traceCalls?.forEach((call) => {
+                if (interpretationMapping?.writeFunctions[call.name || '']) {
+                    methodSpecificMappings.push(interpretationMapping?.writeFunctions[call.name || ''])
+                }
+            })
+        } else {
+            methodSpecificMappings = (methodName && interpretationMapping?.writeFunctions[methodName]) ? [interpretationMapping.writeFunctions[methodName]] : []
+        }
 
         // if there's no contract-specific mapping, try to use the fallback mapping
         if (decodedData.txType === TxType.CONTRACT_DEPLOY) {
             // Contract deploy
-            interpretation.action = Action.deployed
+            interpretation.action = [Action.deployed]
             interpretation.exampleDescription = contractDeployInterpreter.exampleDescription
 
             interpretation.extra = {
@@ -163,18 +174,21 @@ class Interpreter {
         } else if (decodedData.txType === TxType.TRANSFER) {
             // Generic transfer
             interpretGenericTransfer(decodedData, interpretation)
-        } else if (interpretationMapping && methodSpecificMapping && methodName && toAddress) {
+        } else if (interpretationMapping && methodSpecificMappings.length && methodName && toAddress) {
             // Contract-specific interpretation
 
             // some of these will be arbitrary keys
             interpretation.contractName = interpretationMapping.contractName
 
-            if (methodSpecificMapping.action !== "__NFTSALE__") {
-                interpretation.action = methodSpecificMapping.action
-            } else {
-                interpretation.action = getActionFromInterpretation(interpretation);
+            for (const methodSpecificMapping of methodSpecificMappings) {
+                if (methodSpecificMapping.action !== "__NFTSALE__") {
+                    interpretation.action.push(methodSpecificMapping.action)
+                } else {
+                    interpretation.action.push(getActionFromInterpretation(interpretation));
+                }
             }
-            interpretation.exampleDescription = methodSpecificMapping.exampleDescription
+
+            interpretation.exampleDescription = methodSpecificMappings[0].exampleDescription
 
             if (decodedData.reverted) {
                 interpretation.reverted = true
@@ -182,7 +196,7 @@ class Interpreter {
             }
             interpretation.extra = this.useKeywordMap(
                 interactions,
-                methodSpecificMapping.keywords,
+                methodSpecificMappings[0].keywords,
                 toAddress,
                 userAddress,
             )

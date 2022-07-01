@@ -2,7 +2,9 @@
 
 exports[`Interpreter 1`] = `
 Object {
-  "action": "sold",
+  "action": Array [
+    "sold",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
   "contractName": "Uniswap V2",
@@ -36,7 +38,9 @@ Object {
 
 exports[`Interpreter 2`] = `
 Object {
-  "action": "bought",
+  "action": Array [
+    "bought",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
   "contractName": "Uniswap V2",
@@ -69,7 +73,9 @@ Object {
 
 exports[`Interpreter 3`] = `
 Object {
-  "action": "swapped",
+  "action": Array [
+    "swapped",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
   "contractName": "Uniswap V2",
@@ -112,7 +118,9 @@ Object {
 
 exports[`Interpreter 4`] = `
 Object {
-  "action": "added liquidity",
+  "action": Array [
+    "added liquidity",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
   "contractName": "Uniswap V2",
@@ -152,7 +160,9 @@ Object {
 
 exports[`Interpreter 5`] = `
 Object {
-  "action": "removed liquidity",
+  "action": Array [
+    "removed liquidity",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
   "contractName": "Uniswap V2",
@@ -200,7 +210,9 @@ Object {
 
 exports[`Interpreter 6`] = `
 Object {
-  "action": "removed liquidity",
+  "action": Array [
+    "removed liquidity",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
   "contractName": "Uniswap V2",
@@ -241,7 +253,9 @@ Object {
 
 exports[`Interpreter 7`] = `
 Object {
-  "action": "bought",
+  "action": Array [
+    "bought",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0x7f268357a8c2552623316e2562d90e642bb538e5",
   "contractName": "OpenSea",
@@ -274,19 +288,21 @@ Object {
 
 exports[`Interpreter 8`] = `
 Object {
-  "action": "sold",
+  "action": Array [
+    "sold",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0x7f268357a8c2552623316e2562d90e642bb538e5",
   "contractName": "OpenSea",
   "counterpartyName": null,
-  "exampleDescription": "0x83eb sold The Ninja Hideout #228 on OpenSea for 0.04625 ETH",
+  "exampleDescription": "0x83eb sold The Ninja Hideout #228 on OpenSea for 0.04624999999999999944 ETH",
   "extra": Object {
     "NFT": "The Ninja Hideout",
     "tokenId": "#228",
   },
   "gasPaid": "0.00837078350034528",
-  "nativeValueReceived": "0.04625",
-  "nativeValueSent": "0",
+  "nativeValueReceived": "0.04624999999999999944",
+  "nativeValueSent": "0.0",
   "reverted": null,
   "timestamp": 1656089719,
   "tokensReceived": Array [],
@@ -307,7 +323,9 @@ Object {
 
 exports[`Interpreter 9`] = `
 Object {
-  "action": "repaid",
+  "action": Array [
+    "repaid",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
   "contractName": "Aave V2",
@@ -346,7 +364,9 @@ Object {
 
 exports[`Interpreter 10`] = `
 Object {
-  "action": "deposited",
+  "action": Array [
+    "deposited",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
   "contractName": "Aave V2",
@@ -387,7 +407,9 @@ Object {
 
 exports[`Interpreter 11`] = `
 Object {
-  "action": "swapped",
+  "action": Array [
+    "swapped",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
   "contractName": "Uniswap V3",
@@ -400,14 +422,14 @@ Object {
     "tokenName1": "WETH",
   },
   "gasPaid": "0.07226057005959764",
-  "nativeValueReceived": "0",
+  "nativeValueReceived": "0.0",
   "nativeValueSent": "0",
   "reverted": null,
   "timestamp": 1654532279,
   "tokensReceived": Array [
     Object {
       "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-      "amount": "150286887655178993883",
+      "amount": "150.286887655179",
       "name": "Wrapped Ether",
       "symbol": "WETH",
       "type": "unknown",
@@ -416,7 +438,7 @@ Object {
   "tokensSent": Array [
     Object {
       "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-      "amount": "280376616698",
+      "amount": "280376.616697999998",
       "name": "USD Coin",
       "symbol": "USDC",
       "type": "ERC20",
@@ -430,7 +452,9 @@ Object {
 
 exports[`Interpreter 12`] = `
 Object {
-  "action": "swapped",
+  "action": Array [
+    "swapped",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0xe592427a0aece92de3edee1f18e0157c05861564",
   "contractName": "Uniswap V3",
@@ -443,14 +467,14 @@ Object {
     "tokenName1": "USDC",
   },
   "gasPaid": "0.01376121884064768",
-  "nativeValueReceived": "0",
+  "nativeValueReceived": "0.0",
   "nativeValueSent": "0",
   "reverted": null,
   "timestamp": 1656530683,
   "tokensReceived": Array [
     Object {
       "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-      "amount": "189236064",
+      "amount": "189.236064",
       "name": "USD Coin",
       "symbol": "USDC",
       "type": "ERC20",
@@ -459,7 +483,7 @@ Object {
   "tokensSent": Array [
     Object {
       "address": "0x7d647b1a0dcd5525e9c6b3d14be58f27674f8c95",
-      "amount": "115000000000000000000",
+      "amount": "115.0",
       "name": "BYTES",
       "symbol": "BYTES",
       "type": "ERC20",
@@ -473,7 +497,9 @@ Object {
 
 exports[`Interpreter 13`] = `
 Object {
-  "action": "swapped",
+  "action": Array [
+    "swapped",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
   "contractName": "Uniswap V3",
@@ -486,14 +512,14 @@ Object {
     "tokenName1": "Metis",
   },
   "gasPaid": "0.00946193638459496",
-  "nativeValueReceived": "0",
+  "nativeValueReceived": "0.0",
   "nativeValueSent": "0",
   "reverted": null,
   "timestamp": 1654095700,
   "tokensReceived": Array [
     Object {
       "address": "0x9e32b13ce7f2e80a01932b42553652e053d6ed8e",
-      "amount": "200000000000000000000",
+      "amount": "200.0",
       "name": "Metis Token",
       "symbol": "Metis",
       "type": "ERC20",
@@ -502,7 +528,7 @@ Object {
   "tokensSent": Array [
     Object {
       "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-      "amount": "2127028966431723238",
+      "amount": "2.127028966432",
       "name": "Wrapped Ether",
       "symbol": "WETH",
       "type": "unknown",
@@ -516,7 +542,9 @@ Object {
 
 exports[`Interpreter 14`] = `
 Object {
-  "action": "swapped",
+  "action": Array [
+    "swapped",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
   "contractName": "Uniswap V3",
@@ -529,14 +557,14 @@ Object {
     "tokenName1": "UNI",
   },
   "gasPaid": "0.017258154195087624",
-  "nativeValueReceived": "0",
+  "nativeValueReceived": "0.0",
   "nativeValueSent": "0",
   "reverted": null,
   "timestamp": 1642499895,
   "tokensReceived": Array [
     Object {
       "address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
-      "amount": "100000000000000000",
+      "amount": "0.1",
       "name": "Uniswap",
       "symbol": "UNI",
       "type": "unknown",
@@ -545,7 +573,7 @@ Object {
   "tokensSent": Array [
     Object {
       "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
-      "amount": "1767773",
+      "amount": "1.767773",
       "name": "Tether USD",
       "symbol": "USDT",
       "type": "ERC20",
@@ -559,7 +587,9 @@ Object {
 
 exports[`Interpreter 15`] = `
 Object {
-  "action": "swapped",
+  "action": Array [
+    "swapped",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0xe592427a0aece92de3edee1f18e0157c05861564",
   "contractName": "Uniswap V3",
@@ -572,7 +602,7 @@ Object {
     "tokenName1": "WETH",
   },
   "gasPaid": "0.0150073576790652",
-  "nativeValueReceived": "0.38916226204018606",
+  "nativeValueReceived": "0.38916226204018605772",
   "nativeValueSent": "0",
   "reverted": null,
   "timestamp": 1656531693,
@@ -580,7 +610,7 @@ Object {
   "tokensSent": Array [
     Object {
       "address": "0xe5a3229ccb22b6484594973a03a3851dcd948756",
-      "amount": "340459702100000000000",
+      "amount": "340.4597021",
       "name": "RAE Token",
       "symbol": "RAE",
       "type": "ERC20",
@@ -594,7 +624,9 @@ Object {
 
 exports[`Interpreter 16`] = `
 Object {
-  "action": "burned",
+  "action": Array [
+    "burned",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
   "contractName": "Uniswap V3",
@@ -604,7 +636,7 @@ Object {
     "tokenId": "260993",
   },
   "gasPaid": "0.002506870245171761",
-  "nativeValueReceived": "0",
+  "nativeValueReceived": "0.0",
   "nativeValueSent": "0",
   "reverted": null,
   "timestamp": 1656483817,
@@ -626,7 +658,9 @@ Object {
 
 exports[`Interpreter 17`] = `
 Object {
-  "action": "collected",
+  "action": Array [
+    "collected",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
   "contractName": "Uniswap V3",
@@ -639,21 +673,21 @@ Object {
     "tokenName1": "USDC",
   },
   "gasPaid": "0.006987365045529792",
-  "nativeValueReceived": "0",
+  "nativeValueReceived": "0.0",
   "nativeValueSent": "0",
   "reverted": null,
   "timestamp": 1646028442,
   "tokensReceived": Array [
     Object {
       "address": "0x2b591e99afe9f32eaa6214f7b7629768c40eeb39",
-      "amount": "320644118148",
+      "amount": "0.000000320644",
       "name": "HEX",
       "symbol": "HEX",
       "type": "ERC20",
     },
     Object {
       "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-      "amount": "305165646",
+      "amount": "305.165646",
       "name": "USD Coin",
       "symbol": "USDC",
       "type": "ERC20",
@@ -668,12 +702,14 @@ Object {
 
 exports[`Interpreter 18`] = `
 Object {
-  "action": "added liquidity",
+  "action": Array [
+    "added liquidity",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0x6dd9 added liquidity to 0xc364 using 6305593205049249187 gOHM and 70956438934 BTRFLY",
+  "exampleDescription": "0x6dd9 added liquidity to the gOHM-BTRFLY pool on Uniswap V3 ",
   "extra": Object {
     "tokenAmount0": "6305593205049249187",
     "tokenAmount1": "70956438934",
@@ -681,7 +717,7 @@ Object {
     "tokenName1": "BTRFLY",
   },
   "gasPaid": "0.00551313628814904",
-  "nativeValueReceived": "0",
+  "nativeValueReceived": "0.0",
   "nativeValueSent": "0",
   "reverted": null,
   "timestamp": 1653349230,
@@ -689,14 +725,14 @@ Object {
   "tokensSent": Array [
     Object {
       "address": "0x0ab87046fbb341d058f17cbc4c1133f25a20a52f",
-      "amount": "6305593205049249187",
+      "amount": "6.305593205049",
       "name": "Governance OHM",
       "symbol": "gOHM",
       "type": "ERC20",
     },
     Object {
       "address": "0xc0d4ceb216b3ba9c3701b291766fdcba977cec3a",
-      "amount": "70956438934",
+      "amount": "0.000000070956",
       "name": "BTRFLY",
       "symbol": "BTRFLY",
       "type": "ERC20",
@@ -710,7 +746,9 @@ Object {
 
 exports[`Interpreter 19`] = `
 Object {
-  "action": "minted",
+  "action": Array [
+    "minted",
+  ],
   "chainSymbol": "ETH",
   "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
   "contractName": "Uniswap V3",
@@ -723,7 +761,7 @@ Object {
     "tokenName1": "USDC",
   },
   "gasPaid": "0.012234799351281643",
-  "nativeValueReceived": "0",
+  "nativeValueReceived": "0.0",
   "nativeValueSent": "0",
   "reverted": null,
   "timestamp": 1656585855,
@@ -739,14 +777,14 @@ Object {
   "tokensSent": Array [
     Object {
       "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
-      "amount": "202480816",
+      "amount": "0.000000000202",
       "name": "Wrapped BTC",
       "symbol": "WBTC",
       "type": "ERC20",
     },
     Object {
       "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-      "amount": "22999999914",
+      "amount": "22999.999914",
       "name": "USD Coin",
       "symbol": "USDC",
       "type": "ERC20",
@@ -755,5 +793,73 @@ Object {
   "txHash": "0x8f97a7c09cb73c4da2de03f21bbf17c01f512a615da51a8bf721c4748b5f8475",
   "userAddress": "0x57bddbe968f67c416b5d97d285c7a48676655dd7",
   "userName": "0x57bd",
+}
+`;
+
+exports[`Interpreter 20`] = `
+Object {
+  "action": "______TODO______",
+  "chainSymbol": "ETH",
+  "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+  "contractName": null,
+  "counterpartyName": null,
+  "exampleDescription": "mrbayc.eth ______TODO______ ???",
+  "extra": Object {},
+  "gasPaid": "0.0102171187901338",
+  "nativeValueReceived": "802.57273439268180936779",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1656597816,
+  "tokensReceived": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "287.925265",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "tokensSent": Array [],
+  "txHash": "0xb38f55471c5a8539a605287b4116a4bf83a58261b3cfe00bc53337298003b9ae",
+  "userAddress": "0x6b92686c40747c85809a6772d0eda8e22a77c60c",
+  "userName": "mrbayc.eth",
+}
+`;
+
+exports[`Interpreter 21`] = `
+Object {
+  "action": "minted",
+  "chainSymbol": "ETH",
+  "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+  "contractName": null,
+  "counterpartyName": null,
+  "exampleDescription": "0x0950 minted UNI-V3-POS #261805 from Uniswap V3 Positions NFT-V1",
+  "extra": Object {},
+  "gasPaid": "0.02896727102188826",
+  "nativeValueReceived": "0.0",
+  "nativeValueSent": "186.99999999983515",
+  "reverted": null,
+  "timestamp": 1656597626,
+  "tokensReceived": Array [
+    Object {
+      "address": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+      "name": "Uniswap V3 Positions NFT-V1",
+      "symbol": "UNI-V3-POS",
+      "tokenId": "261805",
+      "type": "ERC721",
+    },
+  ],
+  "tokensSent": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "195105.855359999987",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "txHash": "0x8dbab0967c491942e748c7fc305a3f9a3b2eb6c54c0dc48e1ba7f43babfc636a",
+  "userAddress": "0x0950541696888bcfac9af6a5c479871d3e583cac",
+  "userName": "0x0950",
 }
 `;

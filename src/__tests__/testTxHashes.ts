@@ -27,6 +27,8 @@ const testTxHashes = {
         collect: '0x8d696e7ac40e22c25207a6eb3060d840fe4b1b4663fb988500f3bfc311da2a39',
         increaseLiquidity: '0xba7e346f46b1f5fa3bbff9868f1b6bf170b8fc8d212d2ad8e6f9fc84acdf30a1',
         mint: '0x8f97a7c09cb73c4da2de03f21bbf17c01f512a615da51a8bf721c4748b5f8475',
+        multicall: '0xb38f55471c5a8539a605287b4116a4bf83a58261b3cfe00bc53337298003b9ae',
+        multicall_2: '0x8dbab0967c491942e748c7fc305a3f9a3b2eb6c54c0dc48e1ba7f43babfc636a',
     }
 }
 

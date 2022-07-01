@@ -224,6 +224,9 @@ export function fillDescriptionTemplate(template: string, interpretation: Interp
     if (template.includes("__NATIVEVALUETRANSFERRED_")) {
         merged.__NATIVEVALUETRANSFERRED_ = getNativeValueTransferredFromInterpretation(interpretation)
     }
+
+    // Handle actions being an array
+    merged.action = merged.action.length ? merged.action[0] : 'unknown'
     for (const [key, value] of Object.entries(merged)) {
         if (typeof value === 'string') {
             template = template.replace(`{${key}}`, value)

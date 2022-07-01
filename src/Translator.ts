@@ -276,10 +276,11 @@ class Translator {
         const ensMap = await this.getENSNames(addresses)
         const contractDataMap = await this.getContractsData(AbiMap, officialContractNamesMap, proxyAddressMap)
 
-        const { decodedLogs, decodedCallData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)
+        const { decodedLogs, decodedCallData, decodedTraceData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)
         const decodedWithAugmentation = this.augmentDecodedData(
             decodedLogs,
             decodedCallData,
+            decodedTraceData,
             ensMap,
             contractDataMap,
             rawTxData,
