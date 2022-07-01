@@ -20,7 +20,7 @@
     },
     "collect": {
       "action": "collected",
-      "exampleDescriptionTemplate": "leotheprocess.eth collected {tokenAmount0} {tokenName0} and {tokenAmount1} {tokenName1} in fees from {contractName}",
+      "exampleDescriptionTemplate": "{userAddress} collected {tokenAmount0} {tokenName0} and {tokenAmount1} {tokenName1} in fees from {contractName}",
       "exampleDescription": "leotheprocess.eth collected 3206 HEX and 305 USDC in fees from Uniswap V3",
       "keywords": {
         "tokenName0": {
