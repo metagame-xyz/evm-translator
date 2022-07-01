@@ -12,17 +12,19 @@
           "key": "value",
           "filters": {
             "eventName": "Transfer",
-            "from": "{userAddress}"
+            "to": "{userAddress}"
           },
-          "defaultValue": "an unknown amount of"
+          "defaultValue": "an unknown amount of",
+          "index": 1
         },
         "tokenSymbol": {
           "key": "contractSymbol",
           "filters": {
             "eventName": "Transfer",
-            "from": "{userAddress}"
+            "to": "{userAddress}"
           },
-          "defaultValue": "an unknown token"
+          "defaultValue": "an unknown token",
+          "index": 1
         }
       }
     },
