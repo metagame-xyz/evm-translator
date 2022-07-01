@@ -243,6 +243,8 @@ All other values come from generic interpretations.
 
 Some transactions like an NFT sale should have very different interpretations based on the perspective we view it from. The `getActionFromInterpretation` function within `/src/core/DoubleSidedInterpreter.ts` uses the `tokensSent` and `tokensReceived` fields from the interpretation to deduce the `action`.
 
+Within the contract specific interpreter JSON files that handle such transactions, the `"action": "__NFTSALE__"` is used to denote an action that varies on the perspective of the user. Also `{__NATIVEVALUETRANSFERRED__}` denotes the selling price of the NFT when we are unsure if we should use `nativeValueSent` or `nativeValueReceived`.
+
 See `0xc814cb6b61222beda8a9bcc359e776e72ae732a1c29df572099ecef27c8461e4` as an example of such a transaction.
 
 ### Multicall transactions

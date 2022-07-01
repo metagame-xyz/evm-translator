@@ -204,7 +204,6 @@ class Interpreter {
                 interpretation,
             )
         } else {
-            console.log('uh oh', interpretationMapping, methodSpecificMappings.length, methodName, toAddress)
             if (decodedData.contractType === ContractType.GNOSIS) {
                 interpretGnosisExecution(decodedData, interpretation)
             } else if (decodedData.contractType !== ContractType.OTHER) {
