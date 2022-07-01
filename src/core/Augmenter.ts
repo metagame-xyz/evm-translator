@@ -104,7 +104,6 @@ export class Augmenter {
 
         // This is a hack to fix an error that happens when it tries to get 
         // the trace of non-multicall txs
-        debugger
         let decodedTraceData: DecodedCallData[] = []
         if (['multicall'].includes((rawDecodedCallData as any)?.name) && ['0xc36442b4a4522e871399cd717abdd847ab11fe88'].includes((rawTxData.txReceipt as any)?.to)) {
             const rawDecodedTraceData = await decodeRawTxTrace(abiDecoder, (rawTxData as any)?.txTrace || [])
