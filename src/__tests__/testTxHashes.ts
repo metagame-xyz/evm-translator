@@ -29,6 +29,17 @@ const testTxHashes = {
         mint: '0x8f97a7c09cb73c4da2de03f21bbf17c01f512a615da51a8bf721c4748b5f8475',
         multicall: '0xb38f55471c5a8539a605287b4116a4bf83a58261b3cfe00bc53337298003b9ae',
         multicall_2: '0x8dbab0967c491942e748c7fc305a3f9a3b2eb6c54c0dc48e1ba7f43babfc636a',
+    },
+    CompoundETH: {
+        mint: '0xbbb448dcb3b7e7216c609a97346d9f0553a29cdc8917a286c2aa00a1ba3fccde',
+        borrow: '0x5ced82f63bdbe55eaee49392afca90bf23473ba93d43eb5159e586fa8d343986',
+        redeem: '0xdaf683d90248db147b1fb22b3979c1902e7ad57ae1c46bc1f8293601cfa5e154',
+    },
+    CompoundERC20: {
+        mint: '0x37182c6beeed11222cd8a4f81fb897ae6fefb31c64c634fea3a277afdba9dd11',
+        borrow: '0x669b67fa88c60b07d892f09a87c24dd7bd691bdcbd7b1eb0efd969096067f1a6',
+        redeem: '0x63a27f1f7e10fd37477e3e4c35986adb58daaa4b8ab541909a54cb43b0aed5aa',
+        repayBorrow: '0xc5380c861d5817a30b42442f32f93cdc91e1ca395b607ec4ecd9e9cf5fc3c2b9'
     }
 }
 
