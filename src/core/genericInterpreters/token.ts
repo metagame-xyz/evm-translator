@@ -145,30 +145,37 @@ function getAction(t: TokenVars, events: InteractionEvent[], userAddress: string
 
 function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Interpretation): Token {
     const { action, tokensReceived, tokensSent } = interpretation
-
-    switch (action) {
-        case 'minted':
-        case 'got airdropped':
-        case 'received':
-            return tokensReceived[0]
-        case 'sent':
-            return tokensSent[0]
-        case 'approved': {
-            return {
-                type: TokenType.ERC721, // TODO this is a hack for now, we should add tokenType to each interaction
-                name: tokenContractInteraction?.contractName,
-                symbol: tokenContractInteraction?.contractSymbol,
-                address: tokenContractInteraction?.contractAddress,
+    if (action.length) {
+        switch (action[0]) {
+            case 'minted':
+            case 'got airdropped':
+            case 'received':
+                return tokensReceived[0]
+            case 'sent':
+                return tokensSent[0]
+            case 'approved': {
+                return {
+                    type: TokenType.ERC721, // TODO this is a hack for now, we should add tokenType to each interaction
+                    name: tokenContractInteraction?.contractName,
+                    symbol: tokenContractInteraction?.contractSymbol,
+                    address: tokenContractInteraction?.contractAddress,
+                }
             }
+            default:
+                // console.log('getTokenInfo action not supported: ')
+                return {
+                    type: TokenType.DEFAULT,
+                    name: '',
+                    symbol: '',
+                    address: '0x',
+                }
         }
-        default:
-            // console.log('getTokenInfo action not supported: ')
-            return {
-                type: TokenType.DEFAULT,
-                name: '',
-                symbol: '',
-                address: '0x',
-            }
+    }
+    return {
+        type: TokenType.DEFAULT,
+        name: '',
+        symbol: '',
+        address: '0x',
     }
 }
 
@@ -179,14 +186,16 @@ function addUserName(
     userAddress: string,
 ) {
     let userName = interpretation.userName
-    switch (interpretation.action) {
-        case 'received':
-            userName = tokenEvents
-                .filter((e) => isReceiveEvent(t, e, userAddress))
-                .map((e) => e.params[t.toENS] || (e.params[t.to] as string))[0]
-            break
-        default:
-            break
+    if (interpretation.action.length) {
+        switch (interpretation.action[0]) {
+            case 'received':
+                userName = tokenEvents
+                    .filter((e) => isReceiveEvent(t, e, userAddress))
+                    .map((e) => e.params[t.toENS] || (e.params[t.to] as string))[0]
+                break
+            default:
+                break
+        }
     }
     interpretation.userName = shortenName(userName)
 }
@@ -199,28 +208,29 @@ function addCounterpartyNames(
     fromAddress: string,
 ) {
     let counterpartyNames: string[] = []
-
-    switch (interpretation.action) {
-        case 'received':
-            counterpartyNames = tokenEvents
-                .filter((e) => isReceiveEvent(t, e, userAddress))
-                .map((e) => e.params[t.fromENS] || (e.params[t.from] as string))
-            break
-        case 'sent':
-            counterpartyNames = tokenEvents
-                .filter((e) => isSendEvent(t, e, userAddress))
-                .map((e) => e.params[t.toENS] || (e.params[t.to] as string))
-            break
-        case 'approved':
-            counterpartyNames = tokenEvents
-                .filter((e) => isApprovalEvent(t, e, userAddress))
-                .map((e) => e.params[t.operatorENS] || (e.params[t.operator] as string))
-            break
-        case 'got airdropped':
-            counterpartyNames = [fromAddress]
-            break
-        default:
-            break
+    if (interpretation.action.length) {
+        switch (interpretation.action[0]) {
+            case 'received':
+                counterpartyNames = tokenEvents
+                    .filter((e) => isReceiveEvent(t, e, userAddress))
+                    .map((e) => e.params[t.fromENS] || (e.params[t.from] as string))
+                break
+            case 'sent':
+                counterpartyNames = tokenEvents
+                    .filter((e) => isSendEvent(t, e, userAddress))
+                    .map((e) => e.params[t.toENS] || (e.params[t.to] as string))
+                break
+            case 'approved':
+                counterpartyNames = tokenEvents
+                    .filter((e) => isApprovalEvent(t, e, userAddress))
+                    .map((e) => e.params[t.operatorENS] || (e.params[t.operator] as string))
+                break
+            case 'got airdropped':
+                counterpartyNames = [fromAddress]
+                break
+            default:
+                break
+        }
     }
 
     counterpartyNames = counterpartyNames.map((n) => shortenName(n))
@@ -250,31 +260,32 @@ function addExampleDescription(interpretation: Interpretation, token: Token) {
     let counterpartyName = i.extra.counterpartyNames?.length ? i.extra.counterpartyNames[0] : i.counterpartyName || ''
     counterpartyName = counterpartyName ? ' ' + counterpartyName : ''
     let direction = ''
-
-    switch (action) {
-        case Action.minted: {
-            tokenId = receivedSingle ? tokenId : ''
-            tokenCount = i.tokensReceived.filter((t) => t.address === token.address).length
-            counterpartyName = ' ' + tokenName
-            direction = ' from'
-            break
+    if (interpretation.action.length) {
+        switch (action[0]) {
+            case Action.minted: {
+                tokenId = receivedSingle ? tokenId : ''
+                tokenCount = i.tokensReceived.filter((t) => t.address === token.address).length
+                counterpartyName = ' ' + tokenName
+                direction = ' from'
+                break
+            }
+            case Action.received:
+            case Action.gotAirdropped:
+                tokenId = receivedSingle ? tokenId : ''
+                tokenCount = i.tokensReceived.length
+                direction = ' from'
+                break
+            case Action.sent:
+                tokenId = sentSingle ? tokenId : ''
+                tokenCount = i.tokensSent.length
+                direction = ' to'
+                break
+            case Action.approved:
+                direction = ' to be managed by'
+                break
+            default:
+                break
         }
-        case Action.received:
-        case Action.gotAirdropped:
-            tokenId = receivedSingle ? tokenId : ''
-            tokenCount = i.tokensReceived.length
-            direction = ' from'
-            break
-        case Action.sent:
-            tokenId = sentSingle ? tokenId : ''
-            tokenCount = i.tokensSent.length
-            direction = ' to'
-            break
-        case Action.approved:
-            direction = ' to be managed by'
-            break
-        default:
-            break
     }
 
     tokenCount = tokenCount > 1 ? ' ' + tokenCount : ''
@@ -311,7 +322,7 @@ function interpretGenericToken(decodedData: DecodedTx, interpretation: Interpret
     const tokenEvents = tokenContractInteraction?.events || []
 
     // use TokensReceived and TokensSent to determine the actions (besides mint), not the events. Bought, sold, traded
-    interpretation.action = getAction(t, tokenEvents, userAddress, fromAddress)
+    interpretation.action.push(getAction(t, tokenEvents, userAddress, fromAddress))
 
     const token = getTokenInfo(tokenContractInteraction, interpretation)
 

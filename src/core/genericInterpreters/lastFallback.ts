@@ -111,7 +111,6 @@ function getAction(interpretation: Interpretation, userAddress: string, fromAddr
     } else if (isSwapped(interpretation)) {
         return Action.swapped
     }
-
     return Action.______TODO______
 }
 
@@ -120,7 +119,7 @@ function lastFallback(decodedData: DecodedTx, interpretation: Interpretation) {
     const { nativeValueReceived, nativeValueSent, chainSymbol, userAddress, tokensReceived, tokensSent } =
         interpretation
 
-    interpretation.action = getAction(interpretation, userAddress, fromAddress)
+    interpretation.action.push(getAction(interpretation, userAddress, fromAddress))
 
     const valueSent =
         Number(nativeValueSent) > 0 ? nativeValueSent : tokensSent[0]?.amount || `#${tokensSent[0]?.tokenId}`
@@ -134,20 +133,21 @@ function lastFallback(decodedData: DecodedTx, interpretation: Interpretation) {
 
     const symbolReceived = tokensReceived[0]?.symbol || chainSymbol
 
-    if (interpretation.action === Action.gotAirdropped) {
+    if (interpretation.action.length && interpretation.action[0] === Action.gotAirdropped) {
         interpretation.counterpartyName = fromAddress
         interpretation.exampleDescription = `${interpretation.userName} ${interpretation.action} ${interpretation.tokensReceived[0].symbol} from ${interpretation.counterpartyName}`
     } else if (
-        interpretation.action === Action.received ||
-        interpretation.action === Action.bought ||
-        interpretation.action === Action.claimed
+        interpretation.action.length &&
+        (interpretation.action[0] === Action.received ||
+            interpretation.action[0] === Action.bought ||
+            interpretation.action[0] === Action.claimed)
     ) {
         interpretation.counterpartyName = toAddress
         interpretation.exampleDescription = `${interpretation.userName} ${interpretation.action} ${valueReceived} ${symbolReceived} from ${interpretation.counterpartyName}`
-    } else if (interpretation.action === Action.sold || interpretation.action === Action.sent) {
+    } else if (interpretation.action.length && (interpretation.action[0] === Action.sold || interpretation.action[0] === Action.sent)) {
         interpretation.counterpartyName = toAddress
         interpretation.exampleDescription = `${interpretation.userName} ${interpretation.action} ${valueSent} ${symbolSent} to ${interpretation.counterpartyName}`
-    } else if (interpretation.action === Action.traded) {
+    } else if (interpretation.action.length && interpretation.action[0] === Action.traded) {
         interpretation.counterpartyName = toAddress
         interpretation.exampleDescription = `${interpretation.userName} ${interpretation.action} ${valueSent} ${symbolSent} for ${valueReceived} ${symbolReceived} with ${interpretation.counterpartyName}`
     }

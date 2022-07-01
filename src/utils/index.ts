@@ -11,7 +11,7 @@ import traverse from 'traverse'
 
 import { ABI_Item, ABI_ItemUnfiltered, ABI_Row, ABI_RowZ, ABI_Type } from 'interfaces/abi'
 import { Interaction, InteractionEvent } from 'interfaces/decoded'
-import { Interpretation } from 'interfaces/interpreted'
+import { Action, Interpretation } from 'interfaces/interpreted'
 import { Chain, Chains, ChainSymbol } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 import { getNativeValueTransferredFromInterpretation } from 'core/DoubleSidedTxInterpreter'
@@ -226,7 +226,14 @@ export function fillDescriptionTemplate(template: string, interpretation: Interp
     }
 
     // Handle actions being an array
-    merged.action = merged.action.length ? merged.action[0] : 'unknown'
+    if (merged.action.length > 1) {
+        merged.action = Action.multicall
+    } else if (merged.action.length) {
+        merged.action = merged.action[0]
+    } else {
+        merged.action = Action.unknown
+    }
+
     for (const [key, value] of Object.entries(merged)) {
         if (typeof value === 'string') {
             template = template.replace(`{${key}}`, value)

@@ -146,6 +146,7 @@ class Interpreter {
         const interpretationMapping: InterpreterMap | null = (toAddress && this.contractSpecificInterpreters[toAddress.toLowerCase()]) || null
 
         let methodSpecificMappings: MethodMap[] = [];
+
         if (multicallFunctionNames.includes(methodName || '') && multicallContractAddresses.includes(toAddress || '')) {
             traceCalls?.forEach((call) => {
                 if (interpretationMapping?.writeFunctions[call.name || '']) {
@@ -153,7 +154,7 @@ class Interpreter {
                 }
             })
         } else {
-            methodSpecificMappings = (methodName && interpretationMapping?.writeFunctions[methodName]) ? [interpretationMapping.writeFunctions[methodName]] : []
+            methodSpecificMappings = interpretationMapping?.writeFunctions[methodName || ''] ? [interpretationMapping.writeFunctions[methodName || '']] : []
         }
 
         // if there's no contract-specific mapping, try to use the fallback mapping
@@ -353,7 +354,6 @@ class Interpreter {
                 ).length > 0, // filters out interactions that don't have any events objects left
         )
 
-        // console.log('filteredInteractions', filteredInteractions[0].events)
         const flattenedInteractions = flattenEvents(filteredInteractions)
 
         function getTokenType(interaction: FlattenedInteraction): TokenType {
@@ -406,7 +406,6 @@ class Interpreter {
                         flattenedInteractions.push(flattenedInteraction)
                     }
                 }
-                // console.log('flattenedInteraction', flattenedInteraction)
             }
 
             return flattenedInteractions

@@ -252,10 +252,9 @@ class Translator {
         userAddress: string | null = null,
         userName: string | null = null,
     ): (Interpretation | null)[] {
-        return decodedTxArr.map((decodedTx) => {
-            console.log('decodedTx', decodedTx)
-            return decodedTx ? this.interpretDecodedTx(decodedTx, userAddress, userName) : null
-        })
+        return decodedTxArr.map((decodedTx) =>
+            decodedTx ? this.interpretDecodedTx(decodedTx, userAddress, userName) : null
+        )
     }
 
     // If we do this after we've created the example description, we'll have to figure out how to parse any addresses we've turned into a shorter name or onoma name
@@ -330,6 +329,7 @@ class Translator {
             const AbiMap = filterABIMap(unfilteredAbiMap)
             logData.functionName = 'decodeTxData'
             const { decodedLogs, decodedCallData, decodedTraceData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)
+
             const allAddresses = this.getAllAddresses(decodedLogs, decodedCallData, contractAddresses)
 
             logData.functionName = 'getENSNames'
@@ -343,6 +343,7 @@ class Translator {
                 contractDataMap,
                 rawTxData,
             )
+
 
             const userName = ensMap[userAddress || ''] || null
 

@@ -160,16 +160,10 @@
       }
     },
     "multicall": {
-      "action": "______TODO______",
-      "exampleDescriptionTemplate": "______TODO______",
-      "exampleDescription": "______TODO______",
-      "keywords": {
-        "__EXAMPLE_KEYWORD__": {
-          "key": "______TODO______",
-          "filters": {},
-          "defaultValue": "______TODO______"
-        }
-      }
+      "action": "executed multiple transactions",
+      "exampleDescriptionTemplate": "{userAddress} {action} on {contractName}",
+      "exampleDescription": "leotheprocess.eth executed multiple transactions on Uniswap V3",
+      "keywords": {}
     }
   }
 }
