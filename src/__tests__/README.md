@@ -1,6 +1,6 @@
 # Interpreter testing flow
 
-Note that this entire flow is performed automatically by the GitHub actions every time code is pushed to any branch. Follow these steps to do it on your own...
+Note that this entire flow is performed automatically by the GitHub actions every time code is pushed to any branch. If the snapshot tests are failing within the actions and you'd like to update the snapshot, run `yarn test -u` and then push again. Follow these steps to do perform the testing locally...
 
 ## Storing decoded transations in local DB
 
