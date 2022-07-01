@@ -144,7 +144,6 @@ class Interpreter {
         }
 
         const interpretationMapping: InterpreterMap | null = (toAddress && this.contractSpecificInterpreters[toAddress.toLowerCase()]) || null
-
         let methodSpecificMappings: MethodMap[] = [];
 
         if (multicallFunctionNames.includes(methodName || '') && multicallContractAddresses.includes(toAddress || '')) {
@@ -177,7 +176,6 @@ class Interpreter {
             interpretGenericTransfer(decodedData, interpretation)
         } else if (interpretationMapping && methodSpecificMappings.length && methodName && toAddress) {
             // Contract-specific interpretation
-
             // some of these will be arbitrary keys
             interpretation.contractName = interpretationMapping.contractName
 
@@ -206,6 +204,7 @@ class Interpreter {
                 interpretation,
             )
         } else {
+            console.log('uh oh', interpretationMapping, methodSpecificMappings.length, methodName, toAddress)
             if (decodedData.contractType === ContractType.GNOSIS) {
                 interpretGnosisExecution(decodedData, interpretation)
             } else if (decodedData.contractType !== ContractType.OTHER) {

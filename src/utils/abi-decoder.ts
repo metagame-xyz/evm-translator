@@ -112,18 +112,21 @@ export default class ABIDecoder {
         // const abiItem = await this.getABIFunctionFromExternalSource(methodID)
         const abiResult = this.methodSigs[methodID] || (await this.db.getFirstABIForHexSignature(methodID))
         const abiItem = abiResult ? ABI_FunctionZ.parse(abiResult) : null
-
         if (abiItem) {
-            const decoded = abiCoder.decodeParameters(abiItem.inputs, data.slice(10))
+            let decoded = {};
+            try {
+                decoded = abiCoder.decodeParameters(abiItem.inputs, data.slice(10))
+            } catch {
+                // TODO: log this error
+            }
 
             const retData: RawDecodedCallData = {
                 name: abiItem.name,
                 params: [],
             }
-
             for (let i = 0; i < Object.keys(decoded).length; i++) {
                 // for (let i = 0; i < decoded.__length__; i++) {
-                const param = decoded[i]
+                const param = (decoded as any)[i]
                 let parsedParam = param
                 const isUint = abiItem.inputs[i].type.indexOf('uint') === 0
                 const isInt = abiItem.inputs[i].type.indexOf('int') === 0

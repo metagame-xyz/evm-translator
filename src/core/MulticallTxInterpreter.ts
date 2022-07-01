@@ -34,7 +34,6 @@ export async function decodeRawTxTrace(abiDecoder: ABIDecoder, txTrace: TraceLog
   if (callsToPrune.length) {
     throw new Error("This shouldn't happen")
   }
-
   return Promise.all(secondLevelCalls.map((call) =>
     abiDecoder.decodeMethod((call.action as any)?.input || '')
       .then((decodedCall) =>
