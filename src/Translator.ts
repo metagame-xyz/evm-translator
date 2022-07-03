@@ -64,7 +64,7 @@ class Translator {
 
         this.rawDataFetcher = new RawDataFetcher(this.provider)
         this.augmenter = new Augmenter(this.provider, null, this.etherscan, this.databaseInterface)
-        this.interpreter = new Interpreter(config.chain)
+        this.interpreter = new Interpreter(config.chain, null, this.databaseInterface)
         this.covalent = config.covalentAPIKey ? new Covalent(config.covalentAPIKey, config.chain.id) : null
     }
 
@@ -238,23 +238,25 @@ class Translator {
     /******          INTERPRETING          ********/
     /**********************************************/
 
-    interpretDecodedTx(
+    async interpretDecodedTx(
         decoded: DecodedTx,
         userAddress: string | null = null,
         userName: string | null = null,
-    ): Interpretation {
-        return this.interpreter.interpretSingleTx(decoded, userAddress, userName)
+    ): Promise<Interpretation> {
+        return await this.interpreter.interpretSingleTx(decoded, userAddress, userName)
     }
 
-    interpretDecodedTxArr(
+    async interpretDecodedTxArr(
         decodedTxArr: (DecodedTx | null)[],
         userAddress: string | null = null,
         userName: string | null = null,
-    ): (Interpretation | null)[] {
-        return decodedTxArr.map((decodedTx) => {
-            console.log('decodedTx', decodedTx)
-            return decodedTx ? this.interpretDecodedTx(decodedTx, userAddress, userName) : null
-        })
+    ): Promise<(Interpretation | null)[]> {
+        return Promise.all(
+            decodedTxArr.map(async (decodedTx) => {
+                console.log('decodedTx', decodedTx)
+                return decodedTx ? await this.interpretDecodedTx(decodedTx, userAddress, userName) : null
+            }),
+        )
     }
 
     // If we do this after we've created the example description, we'll have to figure out how to parse any addresses we've turned into a shorter name or onoma name
@@ -344,7 +346,7 @@ class Translator {
 
             const userName = ensMap[userAddress || ''] || null
 
-            const interpretation = this.interpretDecodedTx(decodedWithAugmentation, userAddress, userName)
+            const interpretation = await this.interpretDecodedTx(decodedWithAugmentation, userAddress, userName)
 
             return { interpretedData: interpretation, decodedTx: decodedWithAugmentation, rawTxData }
         } catch (error) {

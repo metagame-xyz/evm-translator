@@ -29,7 +29,7 @@ test('Interpreter', async () => {
         .map(([, decodedTx]) => decodedTx)
 
     for (const decodedTx of filteredDecodedTxes) {
-        expect(interpreter.interpretSingleTx(decodedTx!)).toMatchSnapshot()
+        expect(await interpreter.interpretSingleTx(decodedTx!)).toMatchSnapshot()
     }
     await db.closeConnection()
 }, 200000)

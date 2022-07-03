@@ -31,6 +31,8 @@ export abstract class DatabaseInterface {
     // abstract addOrUpdateDecodedTx(decodedData: DecodedTx): Promise<void>
     abstract addOrUpdateManyDecodedTx(decodedDataArr: DecodedTx[]): Promise<void>
 
+    abstract getEntityByAddress(address: string): Promise<string | null>
+
     // abstract addOrUpdateInterpretedData(interpretedData: Interpretation): Promise<void>
     // abstract addOrUpdateManyInterpretedData(interpretedDataArr: Interpretation[]): Promise<void>
 
@@ -100,6 +102,10 @@ export class NullDatabaseInterface extends DatabaseInterface {
     }
 
     async getFirstABIRowForHexSignature(hexSignature: string): Promise<ABI_Row | null> {
+        return Promise.resolve(null)
+    }
+
+    async getEntityByAddress(address: string): Promise<string | null> {
         return Promise.resolve(null)
     }
 
