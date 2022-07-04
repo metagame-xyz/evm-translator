@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ABI_Event, ABI_ItemUnfiltered, ABI_Row } from 'interfaces/abi'
+import { ABI_Event, ABI_Function, ABI_ItemUnfiltered, ABI_Row } from 'interfaces/abi'
 import { ContractData, DecodedTx } from 'interfaces/decoded'
 import { Interpretation } from 'interfaces/interpreted'
 
@@ -19,6 +19,7 @@ export abstract class DatabaseInterface {
     abstract getABIsForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered[]>
     abstract getFirstABIForHexSignature(hexSignature: string): Promise<ABI_ItemUnfiltered | null>
     abstract getEventABIsForHexSignature(hexSignature: string): Promise<ABI_Event[]>
+    abstract getFunctionABIsForHexSignature(hexSignature: string): Promise<ABI_Function[]>
 
     // abstract getABIRowsForHexSignature(hexSignature: string): Promise<ABI_Row[] | null>
     // abstract getFirstABIRowForHexSignature(hexSignature: string): Promise<ABI_Row | null>
@@ -90,6 +91,10 @@ export class NullDatabaseInterface extends DatabaseInterface {
     }
 
     async getEventABIsForHexSignature(hexSignature: string): Promise<ABI_Event[]> {
+        return Promise.resolve([])
+    }
+
+    async getFunctionABIsForHexSignature(hexSignature: string): Promise<ABI_Function[]> {
         return Promise.resolve([])
     }
 

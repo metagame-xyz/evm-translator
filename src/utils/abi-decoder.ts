@@ -110,11 +110,34 @@ export default class ABIDecoder {
         // const abiItem = this.methodSigs[methodID] || (await this.db.getABIsForHexSignature(methodID))?.[0]
         // const abiItem = this.methodSigs[methodID] || (await this.getABIFunctionFromExternalSource(methodID))
         // const abiItem = await this.getABIFunctionFromExternalSource(methodID)
-        const abiResult = this.methodSigs[methodID] || (await this.db.getFirstABIForHexSignature(methodID))
-        const abiItem = abiResult ? ABI_FunctionZ.parse(abiResult) : null
+        const abiResult = this.methodSigs[methodID]
+        let abiItem = abiResult ? ABI_FunctionZ.parse(abiResult) : null
+
+        let abiItemOptions: ABI_Function[] = []
+
+        if (!abiItem) {
+            abiItemOptions = await this.db.getFunctionABIsForHexSignature(methodID)
+        }
 
         if (abiItem) {
-            const decoded = abiCoder.decodeParameters(abiItem.inputs, data.slice(10))
+            let decoded
+            try {
+                decoded = abiCoder.decodeParameters(abiItem.inputs, data.slice(10))
+            } catch {
+                abiItemOptions = await this.db.getFunctionABIsForHexSignature(methodID)
+            }
+
+            if (abiItemOptions.length > 0) {
+                // try all of the options, it'll throw an error if it doesn't match, catch it, try the next one
+                while ((!decoded || !Object.keys(decoded).length) && abiItemOptions.length > 0) {
+                    abiItem = abiItemOptions.shift() as ABI_Function
+                    try {
+                        decoded = abiCoder.decodeParameters(abiItem.inputs, data.slice(10))
+                    } catch (e) {
+                        //try again
+                    }
+                }
+            }
 
             const retData: RawDecodedCallData = {
                 name: abiItem.name,

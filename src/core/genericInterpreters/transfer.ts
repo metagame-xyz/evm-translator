@@ -12,7 +12,7 @@ function interpretGenericTransfer(
     toName: string,
 ) {
     const { fromAddress, toAddress, interactions } = decodedData
-    const { userAddress, nativeValueSent, chainSymbol, userName } = interpretation
+    const { userAddress, nativeValueSent, nativeValueReceived, chainSymbol, userName } = interpretation
     const sending = fromAddress === userAddress
 
     const action: Action = sending ? Action.sent : Action.received
@@ -24,6 +24,7 @@ function interpretGenericTransfer(
     const isSafeReceived = tokenEvents.find((e) => isSafeReceivedEvent(e, userAddress))
 
     let counterpartyName = null
+    let amountSent = nativeValueSent
     if (isSafeReceived && sending) {
         // TODO confirm safeReceived is decoded
         counterpartyName = `Gnosis Safe ${decodedData.toENS || toName}`
@@ -31,9 +32,10 @@ function interpretGenericTransfer(
         counterpartyName = decodedData.toENS || toName
     } else {
         counterpartyName = decodedData.fromENS || fromName
+        amountSent = nativeValueReceived
     }
 
-    const exampleDescription = `${userName} ${action} ${nativeValueSent} ${chainSymbol} ${direction} ${counterpartyName}`
+    const exampleDescription = `${userName} ${action} ${amountSent} ${chainSymbol} ${direction} ${counterpartyName}`
 
     interpretation.action = action
     interpretation.exampleDescription = exampleDescription

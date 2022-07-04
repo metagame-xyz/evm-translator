@@ -4,9 +4,17 @@ import { DecodedTxModel } from './models/decodedTx'
 import { BulkResult } from 'mongodb'
 import { connect, connection, Document, Types } from 'mongoose'
 
-import { ABI_Event, ABI_EventZ, ABI_ItemUnfiltered, ABI_Row, ABI_RowZ, ABI_Type } from 'interfaces/abi'
+import {
+    ABI_Event,
+    ABI_EventZ,
+    ABI_Function,
+    ABI_FunctionZ,
+    ABI_ItemUnfiltered,
+    ABI_Row,
+    ABI_RowZ,
+    ABI_Type,
+} from 'interfaces/abi'
 import { AddressNameData, ContractData, DecodedTx } from 'interfaces/decoded'
-import { AddressZ } from 'interfaces/utils'
 
 import { DatabaseInterface } from 'utils/DatabaseInterface'
 import { logInfo } from 'utils/logging'
@@ -111,6 +119,15 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         const abis = abisRows.map((abi) => abi.abiJSON)
         const events = abis.filter((abi) => abi.type === ABI_Type.enum.event)
         return events.map((event) => ABI_EventZ.parse(event))
+    }
+
+    async getFunctionABIsForHexSignature(hexSignature: string): Promise<ABI_Function[]> {
+        const abiModels = await ABI_RowModel.find({ hashedSignature: hexSignature })
+        const abisRows = abiModels.map((abi) => ABI_RowZ.parse(abi.toObject()))
+        abisRows.sort((a, b) => Number(b.default || false) - Number(a.default || false)) // get default(s) first
+        const abis = abisRows.map((abi) => abi.abiJSON)
+        const events = abis.filter((abi) => abi.type === ABI_Type.enum.function)
+        return events.map((event) => ABI_FunctionZ.parse(event))
     }
 
     async addOrUpdateManyDecodedTx(decodedTxArr: DecodedTx[]): Promise<void> {
