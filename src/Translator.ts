@@ -253,7 +253,6 @@ class Translator {
     ): Promise<(Interpretation | null)[]> {
         return Promise.all(
             decodedTxArr.map(async (decodedTx) => {
-                console.log('decodedTx', decodedTx)
                 return decodedTx ? await this.interpretDecodedTx(decodedTx, userAddress, userName) : null
             }),
         )

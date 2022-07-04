@@ -101,6 +101,7 @@ class Interpreter {
             timestamp,
             nativeValueSent,
             txHash,
+            contractName,
             officialContractName,
         } = decodedData
 
@@ -145,7 +146,7 @@ class Interpreter {
             extra: {},
             exampleDescription: 'no example description defined',
             reverted: decodedData.reverted ? true : null,
-            contractName: officialContractName,
+            contractName: contractName || officialContractName,
             counterpartyName: null,
             timestamp,
         }

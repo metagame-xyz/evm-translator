@@ -113,8 +113,12 @@ function isSendEvent(t: TokenVars, event: InteractionEvent, userAddress: string)
     )
 }
 
-function isReceiveEvent(t: TokenVars, event: InteractionEvent, userAddress: string) {
-    return event.eventName === t.transfer && event.params[t.to] === userAddress
+function isReceiveEvent(t: TokenVars, event: InteractionEvent, userAddress: string, fromAddress: string) {
+    return event.eventName === t.transfer && event.params[t.to] === userAddress && fromAddress !== userAddress
+}
+
+function isClaimEvent(t: TokenVars, event: InteractionEvent, userAddress: string, fromAddress: string) {
+    return event.eventName === t.transfer && event.params[t.to] === userAddress && fromAddress === userAddress
 }
 
 function isApprovalEvent(t: TokenVars, event: InteractionEvent, userAddress: string) {
@@ -125,7 +129,8 @@ function getAction(t: TokenVars, events: InteractionEvent[], userAddress: string
     const isMint = events.find((e) => isMintEvent(t, e, userAddress, fromAddress))
     const isAirdrop = events.find((e) => isAirdropEvent(t, e, userAddress, fromAddress))
     const isSend = events.find((e) => isSendEvent(t, e, userAddress))
-    const isReceive = events.find((e) => isReceiveEvent(t, e, userAddress))
+    const isReceive = events.find((e) => isReceiveEvent(t, e, userAddress, fromAddress))
+    const isClaim = events.find((e) => isReceiveEvent(t, e, userAddress, fromAddress))
     const isApproved = events.find((e) => isApprovalEvent(t, e, userAddress))
 
     if (isMint) {
@@ -136,6 +141,8 @@ function getAction(t: TokenVars, events: InteractionEvent[], userAddress: string
         return Action.sent
     } else if (isReceive) {
         return Action.received
+    } else if (isClaim) {
+        return Action.claimed
     } else if (isApproved) {
         return Action.approved
     }
@@ -177,12 +184,13 @@ function addUserName(
     interpretation: Interpretation,
     tokenEvents: InteractionEvent[],
     userAddress: string,
+    fromAddress: string,
 ) {
     let userName = interpretation.userName
     switch (interpretation.action) {
         case 'received':
             userName = tokenEvents
-                .filter((e) => isReceiveEvent(t, e, userAddress))
+                .filter((e) => isReceiveEvent(t, e, userAddress, fromAddress))
                 .map((e) => e.params[t.toENS] || (e.params[t.to] as string))[0]
             break
         default:
@@ -203,7 +211,7 @@ function addCounterpartyNames(
     switch (interpretation.action) {
         case 'received':
             counterpartyNames = tokenEvents
-                .filter((e) => isReceiveEvent(t, e, userAddress))
+                .filter((e) => isReceiveEvent(t, e, userAddress, fromAddress))
                 .map((e) => e.params[t.fromENS] || (e.params[t.from] as string))
             break
         case 'sent':
@@ -315,7 +323,7 @@ function interpretGenericToken(decodedData: DecodedTx, interpretation: Interpret
 
     const token = getTokenInfo(tokenContractInteraction, interpretation)
 
-    addUserName(t, interpretation, tokenEvents, userAddress)
+    addUserName(t, interpretation, tokenEvents, userAddress, fromAddress)
     addCounterpartyNames(t, interpretation, tokenEvents, userAddress, fromAddress)
     addExampleDescription(interpretation, token)
 }

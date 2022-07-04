@@ -214,10 +214,11 @@ export default class ABIDecoder {
                     let decodedData: any = null
                     let dataIndex = 0
                     let topicsIndex = 1
+                    const logData = logItem.data.slice(2)
+                    const topicsCount = logItem.topics.length - 1
+                    let indexedCount = 0
 
-                    function getDecodedData(logItem: Log, abiItem: ABI_Event) {
-                        const logData = logItem.data.slice(2)
-
+                    function getDecodedData(logData: string, abiItem: ABI_Event) {
                         const dataTypes: any[] = []
                         abiItem.inputs.map(function (input) {
                             if (!input.indexed) {
@@ -230,7 +231,7 @@ export default class ABIDecoder {
                     // if we found a match, try to decode. if it doesn't fit, or we don't have a match, get options from the db
                     if (abiItem) {
                         try {
-                            decodedData = getDecodedData(logItem, abiItem)
+                            decodedData = getDecodedData(logData, abiItem)
                         } catch (e) {
                             abiItemOptions = (await this.db.getEventABIsForHexSignature(eventID)) || []
                         }
@@ -240,10 +241,13 @@ export default class ABIDecoder {
 
                     if (abiItemOptions.length > 0) {
                         // try all of the options, it'll throw an error if it doesn't match, catch it, try the next one
-                        while ((!decodedData || !Object.keys(decodedData).length) && abiItemOptions.length > 0) {
+                        while (!(decodedData || abiItemOptions.length === 0 || topicsCount == indexedCount)) {
+                            console.log('decodedData', decodedData, 'logData', logData)
                             abiItem = abiItemOptions.shift() as ABI_Event
+                            indexedCount = abiItem.inputs.filter((_) => _.indexed).length
+
                             try {
-                                decodedData = getDecodedData(logItem, abiItem)
+                                decodedData = getDecodedData(logData, abiItem)
                             } catch (e) {
                                 //try again
                             }
