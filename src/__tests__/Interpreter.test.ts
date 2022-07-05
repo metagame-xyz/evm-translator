@@ -32,10 +32,10 @@ test('Interpreter', async () => {
         if (multiSidedTxMap[decodedTx!.txHash]) {
             // test multiple roles for a single tx
             for (const participant of multiSidedTxMap[decodedTx!.txHash]) {
-                expect(interpreter.interpretSingleTx(decodedTx!, participant)).toMatchSnapshot()
+                await expect(interpreter.interpretSingleTx(decodedTx!, participant)).resolves.toMatchSnapshot()
             }
         } else {
-            expect(interpreter.interpretSingleTx(decodedTx!)).toMatchSnapshot()
+            await expect(interpreter.interpretSingleTx(decodedTx!)).resolves.toMatchSnapshot()
         }
     }
     await db.closeConnection()
