@@ -223,7 +223,7 @@ function addUserName(
                 break
         }
     }
-    
+
     interpretation.userName = shortenName(userName)
 }
 
