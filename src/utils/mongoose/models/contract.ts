@@ -5,7 +5,7 @@ import { ContractData } from 'interfaces/decoded'
 type ContractModelType = Model<ContractData>
 
 const ContractSchema = new Schema<ContractData, ContractModelType>({
-    address: { type: String, required: true },
+    address: { type: String, required: true, lowercase: true },
     type: { type: String, required: true }, // TODO: add the enum
     tokenName: { type: String, required: false },
     tokenSymbol: { type: String, required: false },

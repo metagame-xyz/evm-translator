@@ -63,9 +63,6 @@ export class Augmenter {
     rawTxDataArr!: RawTxData[]
     decodedArr!: DecodedTx[]
 
-    covalentData?: CovalentTxData
-    covalentDataArr: CovalentTxData[] = []
-
     fnSigCache: Record<string, string> = {}
     ensCache: Record<string, string> = {}
 
@@ -161,21 +158,6 @@ export class Augmenter {
         const transformedAugmentedData = Augmenter.augmentENSNames(transformedData, ensMap)
 
         return transformedAugmentedData
-    }
-
-    // TODO need to get it from contract JSON, ABI, and/or TinTin too, instead of Covalent
-    private augmentOfficialContractNames() {
-        if (this.covalentDataArr.length) {
-            this.covalentDataArr.forEach((covalentData, index) => {
-                this.decodedArr[index].officialContractName = covalentData.to_address_label || null
-            })
-        }
-    }
-
-    private augmentTimestampWithCovalent() {
-        this.covalentDataArr.forEach((covalentData, index) => {
-            this.decodedArr[index].timestamp = Number(covalentData.block_signed_at)
-        })
     }
 
     static augmentTraceLogs(interactionsWithoutNativeTransfers: Interaction[], traceLogs: TraceLog[]): Interaction[] {
@@ -452,7 +434,7 @@ export class Augmenter {
         const contractDataMap: Record<string, ContractData> = {}
         const filteredABIs = filterABIMap(contractToAbiMap)
 
-        const addresses = getKeys(contractToAbiMap)
+        const addresses = getKeys(contractToAbiMap).map((address) => AddressZ.parse(address))
 
         const contractDataMapFromDB = await this.db.getManyContractDataMap(addresses)
 

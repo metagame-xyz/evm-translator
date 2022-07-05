@@ -3,6 +3,7 @@ import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import { abiArrToAbiRows, filterABI } from 'utils'
 import erc20 from 'utils/ABIs/erc20.json'
 import erc721 from 'utils/ABIs/erc721.json'
+import openZeppelin from 'utils/ABIs/openZeppelin.json'
 import { MongooseDatabaseInterface } from 'utils/mongoose'
 
 async function run() {
@@ -11,6 +12,7 @@ async function run() {
 
     const erc20rows = abiArrToAbiRows(filterABI(erc20 as ABI_ItemUnfiltered[]) as ABI_Item[])
     const erc721rows = abiArrToAbiRows(filterABI(erc721 as ABI_ItemUnfiltered[]) as ABI_Item[])
+    const openZeppelinRows = abiArrToAbiRows(filterABI(openZeppelin as ABI_ItemUnfiltered[]) as ABI_Item[])
 
     const erc20rowsWithDefaults = erc20rows.map((row) => {
         row.default = true
@@ -20,9 +22,14 @@ async function run() {
         row.default = true
         return row
     })
+    const openZeppelinRowsWithDefaults = openZeppelinRows.map((row) => {
+        row.default = true
+        return row
+    })
 
     await db.addOrUpdateManyABI(erc20rowsWithDefaults)
     await db.addOrUpdateManyABI(erc721rowsWithDefaults)
+    await db.addOrUpdateManyABI(openZeppelinRowsWithDefaults)
 
     console.log('done')
     db.closeConnection()
