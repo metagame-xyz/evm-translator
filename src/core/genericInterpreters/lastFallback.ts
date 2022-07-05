@@ -138,16 +138,11 @@ function lastFallback(decodedData: DecodedTx, interpretation: Interpretation) {
         interpretation.exampleDescription = `${interpretation.userName} ${interpretation.actions} ${interpretation.tokensReceived[0].symbol} from ${interpretation.counterpartyName}`
     } else if (
         interpretation.actions.length &&
-        (action === Action.received ||
-            action === Action.bought ||
-            action === Action.claimed)
+        (action === Action.received || action === Action.bought || action === Action.claimed)
     ) {
         interpretation.counterpartyName = toAddress
         interpretation.exampleDescription = `${interpretation.userName} ${interpretation.actions} ${valueReceived} ${symbolReceived} from ${interpretation.counterpartyName}`
-    } else if (
-        interpretation.actions.length &&
-        (action === Action.sold || action === Action.sent)
-    ) {
+    } else if (interpretation.actions.length && (action === Action.sold || action === Action.sent)) {
         interpretation.counterpartyName = toAddress
         interpretation.exampleDescription = `${interpretation.userName} ${interpretation.actions} ${valueSent} ${symbolSent} to ${interpretation.counterpartyName}`
     } else if (interpretation.actions.length && action === Action.traded) {

@@ -241,7 +241,6 @@ export default class ABIDecoder {
                     if (abiItemOptions.length > 0) {
                         // try all of the options, it'll throw an error if it doesn't match, catch it, try the next one
                         while (!(decodedData || abiItemOptions.length === 0 || topicsCount == indexedCount)) {
-                            console.log('decodedData', decodedData, 'logData', logData)
                             abiItem = abiItemOptions.shift() as ABI_Event
                             indexedCount = abiItem.inputs.filter((_) => _.indexed).length
 

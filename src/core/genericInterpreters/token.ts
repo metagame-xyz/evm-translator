@@ -179,7 +179,7 @@ function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Int
             case Action.sent:
             case Action.burned:
                 return tokensSent[0]
-            case Action.approved: 
+            case Action.approved:
                 return {
                     type: TokenType.ERC721, // TODO this is a hack for now, we should add tokenType to each interaction
                     name: tokenContractInteraction?.contractName,
@@ -194,7 +194,6 @@ function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Int
                     symbol: '',
                     address: '0x',
                 }
-            
         }
     }
     return {
@@ -224,7 +223,7 @@ function addUserName(
                 break
         }
     }
-    
+
     interpretation.userName = shortenName(userName)
 }
 
