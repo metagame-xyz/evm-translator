@@ -9,7 +9,7 @@
       "action": "borrowed",
       "keywords": {
         "tokenAmount": {
-          "key": "amount",
+          "key": "value",
           "filters": {
             "eventName": "Transfer",
             "to": "{userAddress}"
