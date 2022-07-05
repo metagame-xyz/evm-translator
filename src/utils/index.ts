@@ -227,7 +227,7 @@ export function fillDescriptionTemplate(template: string, interpretation: Interp
         merged.__NATIVEVALUETRANSFERRED__ = getNativeValueTransferredForDoubleSidedTx(interpretation)
     }
 
-    // Handle actions being an array
+    // Handle actions being an array --> simplify to a single action
     if (merged.actions.length > 1) {
         merged.action = Action.multicall
     } else if (merged.actions.length) {
