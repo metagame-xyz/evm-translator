@@ -37,13 +37,11 @@ export async function decodeRawTxTrace(abiDecoder: ABIDecoder, txTrace: TraceLog
     }
     return Promise.all(
         secondLevelCalls.map((call) =>
-            abiDecoder
-                .decodeMethod((call.action as any)?.input || '')
-                .then((decodedCall) => ({
-                    ...decodedCall,
-                    from: (call.action as any)?.from,
-                    to: (call.action as any)?.to,
-                })),
+            abiDecoder.decodeMethod((call.action as any)?.input || '').then((decodedCall) => ({
+                ...decodedCall,
+                from: (call.action as any)?.from,
+                to: (call.action as any)?.to,
+            })),
         ),
     )
 }

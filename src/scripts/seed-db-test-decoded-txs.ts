@@ -1,5 +1,4 @@
 import { flattenTxHashes } from '../__tests__/testTxHashes'
-// prettier-ignore
 import './setupEnv'
 import getTranslator from '../utils/translator'
 

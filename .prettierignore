@@ -4,3 +4,4 @@ coverage
 .next
 node_modules
 /lib
+/src/scripts/seed-db-test-decoded-txs.ts
