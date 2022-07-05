@@ -2,7 +2,7 @@
 
 exports[`Interpreter 1`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "sold",
   ],
   "chainSymbol": "ETH",
@@ -38,7 +38,7 @@ Object {
 
 exports[`Interpreter 2`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "bought",
   ],
   "chainSymbol": "ETH",
@@ -73,7 +73,7 @@ Object {
 
 exports[`Interpreter 3`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "swapped",
   ],
   "chainSymbol": "ETH",
@@ -118,7 +118,7 @@ Object {
 
 exports[`Interpreter 4`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "added liquidity",
   ],
   "chainSymbol": "ETH",
@@ -160,7 +160,7 @@ Object {
 
 exports[`Interpreter 5`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "removed liquidity",
   ],
   "chainSymbol": "ETH",
@@ -210,7 +210,7 @@ Object {
 
 exports[`Interpreter 6`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "removed liquidity",
   ],
   "chainSymbol": "ETH",
@@ -253,7 +253,7 @@ Object {
 
 exports[`Interpreter 7`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "bought",
   ],
   "chainSymbol": "ETH",
@@ -288,7 +288,7 @@ Object {
 
 exports[`Interpreter 8`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "sold",
   ],
   "chainSymbol": "ETH",
@@ -323,7 +323,7 @@ Object {
 
 exports[`Interpreter 9`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "repaid",
   ],
   "chainSymbol": "ETH",
@@ -364,7 +364,7 @@ Object {
 
 exports[`Interpreter 10`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "deposited",
   ],
   "chainSymbol": "ETH",
@@ -407,7 +407,7 @@ Object {
 
 exports[`Interpreter 11`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "swapped",
   ],
   "chainSymbol": "ETH",
@@ -452,7 +452,7 @@ Object {
 
 exports[`Interpreter 12`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "swapped",
   ],
   "chainSymbol": "ETH",
@@ -497,7 +497,7 @@ Object {
 
 exports[`Interpreter 13`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "swapped",
   ],
   "chainSymbol": "ETH",
@@ -542,7 +542,7 @@ Object {
 
 exports[`Interpreter 14`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "swapped",
   ],
   "chainSymbol": "ETH",
@@ -587,7 +587,7 @@ Object {
 
 exports[`Interpreter 15`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "swapped",
   ],
   "chainSymbol": "ETH",
@@ -624,7 +624,7 @@ Object {
 
 exports[`Interpreter 16`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "burned",
   ],
   "chainSymbol": "ETH",
@@ -658,7 +658,7 @@ Object {
 
 exports[`Interpreter 17`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "collected",
   ],
   "chainSymbol": "ETH",
@@ -702,7 +702,7 @@ Object {
 
 exports[`Interpreter 18`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "added liquidity",
   ],
   "chainSymbol": "ETH",
@@ -746,7 +746,7 @@ Object {
 
 exports[`Interpreter 19`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "minted",
   ],
   "chainSymbol": "ETH",
@@ -798,7 +798,7 @@ Object {
 
 exports[`Interpreter 20`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "removed liquidity",
     "collected",
   ],
@@ -834,7 +834,7 @@ Object {
 
 exports[`Interpreter 21`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "minted",
   ],
   "chainSymbol": "ETH",
@@ -879,7 +879,7 @@ Object {
 
 exports[`Interpreter 22`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "minted",
   ],
   "chainSymbol": "ETH",
@@ -914,7 +914,7 @@ Object {
 
 exports[`Interpreter 23`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "borrowed",
   ],
   "chainSymbol": "ETH",
@@ -940,7 +940,7 @@ Object {
 
 exports[`Interpreter 24`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "redeemed",
   ],
   "chainSymbol": "ETH",
@@ -975,7 +975,7 @@ Object {
 
 exports[`Interpreter 25`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "minted",
   ],
   "chainSymbol": "ETH",
@@ -1020,7 +1020,7 @@ Object {
 
 exports[`Interpreter 26`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "borrowed",
   ],
   "chainSymbol": "ETH",
@@ -1055,7 +1055,7 @@ Object {
 
 exports[`Interpreter 27`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "redeemed",
   ],
   "chainSymbol": "ETH",
@@ -1100,7 +1100,7 @@ Object {
 
 exports[`Interpreter 28`] = `
 Object {
-  "action": Array [
+  "actions": Array [
     "repaid",
   ],
   "chainSymbol": "ETH",
