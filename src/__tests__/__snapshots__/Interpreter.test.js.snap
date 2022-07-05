@@ -408,6 +408,91 @@ Object {
 exports[`Interpreter 11`] = `
 Object {
   "actions": Array [
+    "withdrew",
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
+  "contractName": "Aave V2",
+  "counterpartyName": null,
+  "exampleDescription": "0xf8fb withdrew 666977520147507670024 LINK from Aave V2",
+  "extra": Object {
+    "tokenAmount": "666977520147507670024",
+    "tokenSymbol": "LINK",
+  },
+  "gasPaid": "0.018113192687317666",
+  "nativeValueReceived": "0.0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1657056840,
+  "tokensReceived": Array [
+    Object {
+      "address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+      "amount": "666.977520147508",
+      "name": "ChainLink Token",
+      "symbol": "LINK",
+      "type": "ERC20",
+    },
+  ],
+  "tokensSent": Array [
+    Object {
+      "address": "0xa06bc25b5805d5f8d82847d191cb4af5a3e873e0",
+      "amount": "666.977520147508",
+      "name": "Aave interest bearing LINK",
+      "symbol": "aLINK",
+      "type": "ERC20",
+    },
+  ],
+  "txHash": "0x8df7e436048d687edfaf351e913783729eeaa9ece741391b2a8428d6b7762fe1",
+  "userAddress": "0xf8fb4a59846217eea1a15f5b776bf0b76b28ee67",
+  "userName": "0xf8fb",
+}
+`;
+
+exports[`Interpreter 12`] = `
+Object {
+  "actions": Array [
+    "borrowed",
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
+  "contractName": "Aave V2",
+  "counterpartyName": null,
+  "exampleDescription": "0x7ca2 borrowed 2500000000 USDC from Aave V2",
+  "extra": Object {
+    "tokenAmount": "2500000000",
+    "tokenSymbol": "USDC",
+  },
+  "gasPaid": "0.008698857193849088",
+  "nativeValueReceived": "0.0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1657056614,
+  "tokensReceived": Array [
+    Object {
+      "address": "0x619beb58998ed2278e08620f97007e1116d5d25b",
+      "amount": "0.0000000025",
+      "name": "Aave variable debt bearing USDC",
+      "symbol": "variableDebtUSDC",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "2500.0",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "tokensSent": Array [],
+  "txHash": "0x564544c9aef01836615254504677b91a9ef96d5ae15eac50d98e08774ed1096c",
+  "userAddress": "0x7ca2491e5aec98fa36d917ffa57f599c530564b8",
+  "userName": "0x7ca2",
+}
+`;
+
+exports[`Interpreter 13`] = `
+Object {
+  "actions": Array [
     "swapped",
   ],
   "chainSymbol": "ETH",
@@ -450,7 +535,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 12`] = `
+exports[`Interpreter 14`] = `
 Object {
   "actions": Array [
     "swapped",
@@ -495,7 +580,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 13`] = `
+exports[`Interpreter 15`] = `
 Object {
   "actions": Array [
     "swapped",
@@ -540,7 +625,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 14`] = `
+exports[`Interpreter 16`] = `
 Object {
   "actions": Array [
     "swapped",
@@ -585,7 +670,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 15`] = `
+exports[`Interpreter 17`] = `
 Object {
   "actions": Array [
     "swapped",
@@ -622,7 +707,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 16`] = `
+exports[`Interpreter 18`] = `
 Object {
   "actions": Array [
     "burned",
@@ -656,7 +741,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 17`] = `
+exports[`Interpreter 19`] = `
 Object {
   "actions": Array [
     "collected",
@@ -700,7 +785,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 18`] = `
+exports[`Interpreter 20`] = `
 Object {
   "actions": Array [
     "added liquidity",
@@ -744,7 +829,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 19`] = `
+exports[`Interpreter 21`] = `
 Object {
   "actions": Array [
     "minted",
@@ -796,7 +881,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 20`] = `
+exports[`Interpreter 22`] = `
 Object {
   "actions": Array [
     "removed liquidity",
@@ -832,7 +917,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 21`] = `
+exports[`Interpreter 23`] = `
 Object {
   "actions": Array [
     "minted",
@@ -877,7 +962,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 22`] = `
+exports[`Interpreter 24`] = `
 Object {
   "actions": Array [
     "minted",
@@ -912,7 +997,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 23`] = `
+exports[`Interpreter 25`] = `
 Object {
   "actions": Array [
     "borrowed",
@@ -938,7 +1023,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 24`] = `
+exports[`Interpreter 26`] = `
 Object {
   "actions": Array [
     "redeemed",
@@ -973,7 +1058,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 25`] = `
+exports[`Interpreter 27`] = `
 Object {
   "actions": Array [
     "minted",
@@ -1018,7 +1103,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 26`] = `
+exports[`Interpreter 28`] = `
 Object {
   "actions": Array [
     "borrowed",
@@ -1027,9 +1112,9 @@ Object {
   "contractAddress": "0xface851a4921ce59e912d19329929ce6da6eb0c7",
   "contractName": "Compound",
   "counterpartyName": null,
-  "exampleDescription": "0x0aff borrowed an unknown amount of LINK from Compound",
+  "exampleDescription": "0x0aff borrowed 20000000000000000000000 LINK from Compound",
   "extra": Object {
-    "tokenAmount": "an unknown amount of",
+    "tokenAmount": "20000000000000000000000",
     "tokenSymbol": "LINK",
   },
   "gasPaid": "0.036063082766711096",
@@ -1053,7 +1138,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 27`] = `
+exports[`Interpreter 29`] = `
 Object {
   "actions": Array [
     "redeemed",
@@ -1098,7 +1183,7 @@ Object {
 }
 `;
 
-exports[`Interpreter 28`] = `
+exports[`Interpreter 30`] = `
 Object {
   "actions": Array [
     "repaid",
