@@ -2,7 +2,7 @@ import { ContractType, DecodedTx, Interaction, InteractionEvent } from 'interfac
 import { Action, Interpretation, Token, TokenType } from 'interfaces/interpreted'
 
 import { shortenName } from 'utils'
-import { blackholeAddress } from 'utils/constants'
+import { blackholeAddress, blackholeAddresses } from 'utils/constants'
 
 type TokenVars = {
     type: TokenType
@@ -113,29 +113,53 @@ function isSendEvent(t: TokenVars, event: InteractionEvent, userAddress: string)
     )
 }
 
-function isReceiveEvent(t: TokenVars, event: InteractionEvent, userAddress: string) {
-    return event.eventName === t.transfer && event.params[t.to] === userAddress
+function isReceiveEvent(t: TokenVars, event: InteractionEvent, userAddress: string, fromAddress: string) {
+    return event.eventName === t.transfer && event.params[t.to] === userAddress && fromAddress !== userAddress
+}
+
+function isClaimEvent(t: TokenVars, event: InteractionEvent, userAddress: string, fromAddress: string) {
+    return event.eventName === t.transfer && event.params[t.to] === userAddress && fromAddress === userAddress
 }
 
 function isApprovalEvent(t: TokenVars, event: InteractionEvent, userAddress: string) {
     return event.eventName === t.approval && event.params[t.owner] === userAddress && event.params[t.approved] == true
 }
 
-function getAction(t: TokenVars, events: InteractionEvent[], userAddress: string, fromAddress: string): Action {
+function isBurnEvent(t: TokenVars, event: InteractionEvent, userAddress: string) {
+    return (
+        event.eventName === t.transfer &&
+        event.params[t.from] === userAddress &&
+        blackholeAddresses.includes(event.params[t.to] as string)
+    )
+}
+
+function getAction(
+    t: TokenVars,
+    events: InteractionEvent[],
+    userAddress: string,
+    fromAddress: string,
+    toAddress: string | null,
+): Action {
     const isMint = events.find((e) => isMintEvent(t, e, userAddress, fromAddress))
     const isAirdrop = events.find((e) => isAirdropEvent(t, e, userAddress, fromAddress))
     const isSend = events.find((e) => isSendEvent(t, e, userAddress))
-    const isReceive = events.find((e) => isReceiveEvent(t, e, userAddress))
+    const isReceive = events.find((e) => isReceiveEvent(t, e, userAddress, fromAddress))
+    const isClaim = events.find((e) => isClaimEvent(t, e, userAddress, fromAddress))
     const isApproved = events.find((e) => isApprovalEvent(t, e, userAddress))
+    const isBurn = events.find((e) => isBurnEvent(t, e, userAddress))
 
     if (isMint) {
         return Action.minted
+    } else if (isBurn) {
+        return Action.burned
     } else if (isAirdrop) {
         return Action.gotAirdropped
     } else if (isSend) {
         return Action.sent
     } else if (isReceive) {
         return Action.received
+    } else if (isClaim) {
+        return Action.claimed
     } else if (isApproved) {
         return Action.approved
     }
@@ -144,23 +168,24 @@ function getAction(t: TokenVars, events: InteractionEvent[], userAddress: string
 }
 
 function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Interpretation): Token {
-    const { actions: action, tokensReceived, tokensSent } = interpretation
-    if (action.length) {
-        switch (action[0]) {
-            case 'minted':
-            case 'got airdropped':
-            case 'received':
+    const { actions, tokensReceived, tokensSent } = interpretation
+    if (actions.length) {
+        switch (actions[0]) {
+            case Action.minted:
+            case Action.gotAirdropped:
+            case Action.received:
+            case Action.claimed:
                 return tokensReceived[0]
-            case 'sent':
+            case Action.sent:
+            case Action.burned:
                 return tokensSent[0]
-            case 'approved': {
+            case Action.approved: 
                 return {
                     type: TokenType.ERC721, // TODO this is a hack for now, we should add tokenType to each interaction
                     name: tokenContractInteraction?.contractName,
                     symbol: tokenContractInteraction?.contractSymbol,
                     address: tokenContractInteraction?.contractAddress,
                 }
-            }
             default:
                 // console.log('getTokenInfo action not supported: ')
                 return {
@@ -169,6 +194,7 @@ function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Int
                     symbol: '',
                     address: '0x',
                 }
+            
         }
     }
     return {
@@ -184,19 +210,21 @@ function addUserName(
     interpretation: Interpretation,
     tokenEvents: InteractionEvent[],
     userAddress: string,
+    fromAddress: string,
 ) {
     let userName = interpretation.userName
     if (interpretation.actions.length) {
         switch (interpretation.actions[0]) {
             case 'received':
                 userName = tokenEvents
-                    .filter((e) => isReceiveEvent(t, e, userAddress))
+                    .filter((e) => isReceiveEvent(t, e, userAddress, fromAddress))
                     .map((e) => e.params[t.toENS] || (e.params[t.to] as string))[0]
                 break
             default:
                 break
         }
     }
+    
     interpretation.userName = shortenName(userName)
 }
 
@@ -212,7 +240,7 @@ function addCounterpartyNames(
         switch (interpretation.actions[0]) {
             case 'received':
                 counterpartyNames = tokenEvents
-                    .filter((e) => isReceiveEvent(t, e, userAddress))
+                    .filter((e) => isReceiveEvent(t, e, userAddress, fromAddress))
                     .map((e) => e.params[t.fromENS] || (e.params[t.from] as string))
                 break
             case 'sent':
@@ -322,11 +350,11 @@ function interpretGenericToken(decodedData: DecodedTx, interpretation: Interpret
     const tokenEvents = tokenContractInteraction?.events || []
 
     // use TokensReceived and TokensSent to determine the actions (besides mint), not the events. Bought, sold, traded
-    interpretation.actions.push(getAction(t, tokenEvents, userAddress, fromAddress))
+    interpretation.actions.push(getAction(t, tokenEvents, userAddress, fromAddress, toAddress))
 
     const token = getTokenInfo(tokenContractInteraction, interpretation)
 
-    addUserName(t, interpretation, tokenEvents, userAddress)
+    addUserName(t, interpretation, tokenEvents, userAddress, fromAddress)
     addCounterpartyNames(t, interpretation, tokenEvents, userAddress, fromAddress)
     addExampleDescription(interpretation, token)
 }

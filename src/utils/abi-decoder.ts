@@ -110,12 +110,36 @@ export default class ABIDecoder {
         // const abiItem = this.methodSigs[methodID] || (await this.db.getABIsForHexSignature(methodID))?.[0]
         // const abiItem = this.methodSigs[methodID] || (await this.getABIFunctionFromExternalSource(methodID))
         // const abiItem = await this.getABIFunctionFromExternalSource(methodID)
-        const abiResult = this.methodSigs[methodID] || (await this.db.getFirstABIForHexSignature(methodID))
-        const abiItem = abiResult ? ABI_FunctionZ.parse(abiResult) : null
+        const abiResult = this.methodSigs[methodID]
+        let abiItem = abiResult ? ABI_FunctionZ.parse(abiResult) : null
+
+        let abiItemOptions: ABI_Function[] = []
+        let decoded
+
+        // if we have a match, try decoding it. if it doesn't fit, or we don't have a match, get options from the db
         if (abiItem) {
-            const decoded: Record<any, any> = abiCoder.decodeParameters(abiItem.inputs, data.slice(10))
+            try {
+                decoded = abiCoder.decodeParameters(abiItem.inputs, data.slice(10))
+            } catch {
+                abiItemOptions = await this.db.getFunctionABIsForHexSignature(methodID)
+            }
+        } else {
+            abiItemOptions = await this.db.getFunctionABIsForHexSignature(methodID)
+        }
 
+        if (abiItemOptions.length > 0) {
+            // try all of the options, it'll throw an error if it doesn't match, catch it, try the next one
+            while ((!decoded || !Object.keys(decoded).length) && abiItemOptions.length > 0) {
+                abiItem = abiItemOptions.shift() as ABI_Function
+                try {
+                    decoded = abiCoder.decodeParameters(abiItem.inputs, data.slice(10))
+                } catch (e) {
+                    //try again
+                }
+            }
+        }
 
+        if (abiItem && decoded) {
             const retData: RawDecodedCallData = {
                 name: abiItem.name,
                 params: [],
@@ -186,23 +210,14 @@ export default class ABIDecoder {
                         abiItem = getABIForApprovalEvent(contractDataMap[address].type)
                     }
 
-                    // if not, check if we have any matches in the database
-                    if (!abiItem) {
-                        abiItemOptions = (await this.db.getEventABIsForHexSignature(eventID)) || []
-                        // abiItem = abiItemOptions?.[0] || null
-                    }
-
-                    // console.log('eventId', eventID)
-                    // console.log('logItem', logItem)
-                    // console.log('abiItem', abiItem)
-
                     let decodedData: any = null
                     let dataIndex = 0
                     let topicsIndex = 1
+                    const logData = logItem.data.slice(2)
+                    const topicsCount = logItem.topics.length - 1
+                    let indexedCount = 0
 
-                    function getDecodedData(logItem: Log, abiItem: ABI_Event) {
-                        const logData = logItem.data.slice(2)
-
+                    function getDecodedData(logData: string, abiItem: ABI_Event) {
                         const dataTypes: any[] = []
                         abiItem.inputs.map(function (input) {
                             if (!input.indexed) {
@@ -212,20 +227,26 @@ export default class ABIDecoder {
                         return abiCoder.decodeParameters(dataTypes, logData)
                     }
 
-                    // if we found any matches, try to decode
+                    // if we found a match, try to decode. if it doesn't fit, or we don't have a match, get options from the db
                     if (abiItem) {
                         try {
-                            decodedData = getDecodedData(logItem, abiItem)
+                            decodedData = getDecodedData(logData, abiItem)
                         } catch (e) {
                             abiItemOptions = (await this.db.getEventABIsForHexSignature(eventID)) || []
                         }
+                    } else {
+                        abiItemOptions = (await this.db.getEventABIsForHexSignature(eventID)) || []
                     }
+
                     if (abiItemOptions.length > 0) {
                         // try all of the options, it'll throw an error if it doesn't match, catch it, try the next one
-                        while ((!decodedData || !Object.keys(decodedData).length) && abiItemOptions.length > 0) {
+                        while (!(decodedData || abiItemOptions.length === 0 || topicsCount == indexedCount)) {
+                            console.log('decodedData', decodedData, 'logData', logData)
                             abiItem = abiItemOptions.shift() as ABI_Event
+                            indexedCount = abiItem.inputs.filter((_) => _.indexed).length
+
                             try {
-                                decodedData = getDecodedData(logItem, abiItem)
+                                decodedData = getDecodedData(logData, abiItem)
                             } catch (e) {
                                 //try again
                             }

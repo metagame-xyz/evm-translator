@@ -44,6 +44,13 @@ export const enum ContractType {
     OTHER = 'OTHER',
 }
 
+export type AddressNameData = {
+    address: string
+    name: string
+    entity: string
+    ancestorAddress: string
+}
+
 //  100% objective additional info (data taken from a blockchain)
 export type DecodedTx = {
     /** The transaction's unique hash */

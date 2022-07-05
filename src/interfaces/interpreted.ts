@@ -13,6 +13,8 @@ export type Interpretation = {
     contractName: string | null
     contractAddress: string | null
     actions: Action[]
+    fromName?: string
+    toName?: string
     exampleDescription: string
     tokensSent: Token[] // usually just one token
     tokensReceived: Token[] // usually just one token

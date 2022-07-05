@@ -24,6 +24,7 @@ import {
     toOrFromUser,
 } from 'utils'
 import { multicallContractAddresses, multicallFunctionNames } from 'utils/constants'
+import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 
 function deepCopy<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj))
@@ -57,10 +58,12 @@ class Interpreter {
     // fallbackInterpreters: Array<Inspector> = []
     userAddress: string | null
     chain: Chain
+    db: DatabaseInterface
 
-    constructor(chain: Chain, userAddress: string | null = null) {
+    constructor(chain: Chain, userAddress: string | null = null, db: DatabaseInterface | null = null) {
         this.chain = chain
         this.userAddress = (userAddress && AddressZ.parse(userAddress)) || null
+        this.db = db || new NullDatabaseInterface()
 
         for (const [address, map] of Object.entries(contractInterpreters)) {
             this.contractSpecificInterpreters[address] = map as InterpreterMap
@@ -75,23 +78,23 @@ class Interpreter {
         this.chain = chain
     }
 
-    public interpret(decodedDataArr: DecodedTx[]): Interpretation[] {
+    async interpret(decodedDataArr: DecodedTx[]): Promise<Interpretation[]> {
         const interpretations: Interpretation[] = []
 
         for (let i = 0; i < decodedDataArr.length; i++) {
             const decodedData = decodedDataArr[i]
-            const interpretation = this.interpretSingleTx(decodedData)
+            const interpretation = await this.interpretSingleTx(decodedData)
             interpretations.push(interpretation)
         }
 
         return interpretations
     }
 
-    public interpretSingleTx(
+    async interpretSingleTx(
         decodedData: DecodedTx,
         userAddressFromInput: string | null = null,
         userNameFromInput: string | null = null,
-    ): Interpretation {
+    ): Promise<Interpretation> {
         // Prep data coming in from 'decodedData'
         const {
             methodCall: { name: methodName },
@@ -102,6 +105,7 @@ class Interpreter {
             timestamp,
             nativeValueSent,
             txHash,
+            contractName,
             officialContractName,
         } = decodedData
 
@@ -113,14 +117,20 @@ class Interpreter {
 
         const userAddress = parsedAddress.success ? parsedAddress.data : this.userAddress || fromAddress
 
-        let userName = userNameFromInput || userAddress.substring(0, 6)
+        let userName = null
 
         if (fromAddress === userAddress) {
-            userName = decodedData.fromENS || userName
+            userName = decodedData.fromENS
         }
         if (toAddress === userAddress) {
-            userName = decodedData.toENS || userName
+            userName = decodedData.toENS
         }
+
+        userName =
+            userName ||
+            userNameFromInput ||
+            (await this.db.getEntityByAddress(userAddress)) ||
+            userAddress.substring(0, 6)
 
         // TODO generalize this so it'll get any ENS (ex: _operatorENS)
 
@@ -140,10 +150,19 @@ class Interpreter {
             extra: {},
             exampleDescription: 'no example description defined',
             reverted: decodedData.reverted ? true : null,
-            contractName: officialContractName,
+            contractName: contractName || officialContractName,
             counterpartyName: null,
             timestamp,
         }
+
+        let fromName = await this.db.getEntityByAddress(fromAddress)
+        let toName = await this.db.getEntityByAddress(toAddress || '')
+
+        if (fromName) interpretation.fromName = fromName
+        if (toName) interpretation.toName = toName
+
+        fromName = fromName || fromAddress.substring(0, 6)
+        toName = toName || (toAddress || '').substring(0, 6)
 
         if (interpretation.reverted) {
             interpretation.exampleDescription = 'transaction reverted'
@@ -188,7 +207,7 @@ class Interpreter {
             )
         } else if (decodedData.txType === TxType.TRANSFER) {
             // Generic transfer
-            interpretGenericTransfer(decodedData, interpretation)
+            interpretGenericTransfer(decodedData, interpretation, fromName, toName)
         } else if (interpretationMapping && methodSpecificMappings.length && methodName && toAddress) {
             // Contract-specific interpretation
             // some of these will be arbitrary keys
