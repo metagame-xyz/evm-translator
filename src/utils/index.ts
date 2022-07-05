@@ -228,10 +228,10 @@ export function fillDescriptionTemplate(template: string, interpretation: Interp
     }
 
     // Handle actions being an array
-    if (merged.action.length > 1) {
+    if (merged.actions.length > 1) {
         merged.action = Action.multicall
-    } else if (merged.action.length) {
-        merged.action = merged.action[0]
+    } else if (merged.actions.length) {
+        merged.action = merged.actions[0]
     } else {
         merged.action = Action.unknown
     }
