@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import contractInterpreters from './contractInterpreters'
-import { getActionFromInterpretation } from './DoubleSidedTxInterpreter'
+import { getActionForDoubleSidedTx } from './DoubleSidedTxInterpreter'
 import contractDeployInterpreter from './genericInterpreters/ContractDeploy.json'
 import interpretGnosisExecution from './genericInterpreters/gnosis'
 import lastFallback from './genericInterpreters/lastFallback'
@@ -129,7 +129,7 @@ class Interpreter {
             txHash,
             userAddress,
             contractAddress: toAddress,
-            action: [],
+            actions: [],
             nativeValueSent: this.getNativeTokenValueSent(interactions, nativeValueSent, fromAddress, userAddress),
             nativeValueReceived: this.getNativeTokenValueReceived(interactions, userAddress),
             tokensReceived: this.getTokensReceived(interactions, userAddress),
@@ -153,24 +153,28 @@ class Interpreter {
 
         const interpretationMapping: InterpreterMap | null =
             (toAddress && this.contractSpecificInterpreters[toAddress.toLowerCase()]) || null
-        let methodSpecificMappings: MethodMap[] = []
+        const methodSpecificMappings: MethodMap[] = []
 
+        // If multicall, use trace calls to get method speicifc mappings and actions
+        // If not, use main method call
         if (multicallFunctionNames.includes(methodName || '') && multicallContractAddresses.includes(toAddress || '')) {
             traceCalls?.forEach((call) => {
-                if (interpretationMapping?.writeFunctions[call.name || '']) {
-                    methodSpecificMappings.push(interpretationMapping?.writeFunctions[call.name || ''])
+                const newMethodSpecificMapping = interpretationMapping?.writeFunctions[call.name || '']
+                if (newMethodSpecificMapping) {
+                    methodSpecificMappings.push(newMethodSpecificMapping)
                 }
             })
         } else {
-            methodSpecificMappings = interpretationMapping?.writeFunctions[methodName || '']
-                ? [interpretationMapping.writeFunctions[methodName || '']]
-                : []
+            const newMethodSpecificMapping = interpretationMapping?.writeFunctions[methodName || '']
+            if (newMethodSpecificMapping) {
+                methodSpecificMappings.push(newMethodSpecificMapping)
+            }
         }
 
         // if there's no contract-specific mapping, try to use the fallback mapping
         if (decodedData.txType === TxType.CONTRACT_DEPLOY) {
             // Contract deploy
-            interpretation.action = [Action.deployed]
+            interpretation.actions = [Action.deployed]
             interpretation.exampleDescription = contractDeployInterpreter.exampleDescription
 
             interpretation.extra = {
@@ -191,10 +195,10 @@ class Interpreter {
             interpretation.contractName = interpretationMapping.contractName
 
             for (const methodSpecificMapping of methodSpecificMappings) {
-                if (methodSpecificMapping.action !== '__NFTSALE__') {
-                    interpretation.action.push(methodSpecificMapping.action)
+                if (methodSpecificMapping.action !== Action.__NFTSALE__) {
+                    interpretation.actions.push(methodSpecificMapping.action)
                 } else {
-                    interpretation.action.push(getActionFromInterpretation(interpretation))
+                    interpretation.actions.push(getActionForDoubleSidedTx(interpretation))
                 }
             }
 

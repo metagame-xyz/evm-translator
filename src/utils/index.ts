@@ -15,7 +15,7 @@ import { Action, Interpretation } from 'interfaces/interpreted'
 import { Chain, Chains, ChainSymbol } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
-import { getNativeValueTransferredFromInterpretation } from 'core/DoubleSidedTxInterpreter'
+import { getNativeValueTransferredForDoubleSidedTx } from 'core/DoubleSidedTxInterpreter'
 
 // Despite most contracts using Open Zeppelin's standard naming convention of "to, from, value", not all do. Most notably, DAI and WETH use "src, dst, wad". These are used rename the keys to match the standard (both for generic and contract-specific interpretations).
 const toKeys = ['to', '_to', 'dst']
@@ -222,8 +222,9 @@ export const retryProviderCall = async <T>(providerPromise: Promise<T>): Promise
 
 export function fillDescriptionTemplate(template: string, interpretation: Interpretation): string {
     const merged: Record<string, any> = collect(interpretation.extra).merge(interpretation).all()
-    if (template.includes('__NATIVEVALUETRANSFERRED_')) {
-        merged.__NATIVEVALUETRANSFERRED_ = getNativeValueTransferredFromInterpretation(interpretation)
+    // If transaction is 2-sided, we need to get sale price from either nativeValueSent or nativeValueReceived
+    if (template.includes('__NATIVEVALUETRANSFERRED__')) {
+        merged.__NATIVEVALUETRANSFERRED__ = getNativeValueTransferredForDoubleSidedTx(interpretation)
     }
 
     // Handle actions being an array

@@ -113,7 +113,7 @@ export default class ABIDecoder {
         const abiResult = this.methodSigs[methodID] || (await this.db.getFirstABIForHexSignature(methodID))
         const abiItem = abiResult ? ABI_FunctionZ.parse(abiResult) : null
         if (abiItem) {
-            let decoded = {}
+            let decoded: Record<any, any> = {}
             try {
                 decoded = abiCoder.decodeParameters(abiItem.inputs, data.slice(10))
             } catch {
@@ -126,7 +126,7 @@ export default class ABIDecoder {
             }
             for (let i = 0; i < Object.keys(decoded).length; i++) {
                 // for (let i = 0; i < decoded.__length__; i++) {
-                const param = (decoded as any)[i]
+                const param = decoded[i]
                 let parsedParam = param
                 const isUint = abiItem.inputs[i].type.indexOf('uint') === 0
                 const isInt = abiItem.inputs[i].type.indexOf('int') === 0

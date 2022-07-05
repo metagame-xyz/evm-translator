@@ -144,7 +144,7 @@ function getAction(t: TokenVars, events: InteractionEvent[], userAddress: string
 }
 
 function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Interpretation): Token {
-    const { action, tokensReceived, tokensSent } = interpretation
+    const { actions: action, tokensReceived, tokensSent } = interpretation
     if (action.length) {
         switch (action[0]) {
             case 'minted':
@@ -186,8 +186,8 @@ function addUserName(
     userAddress: string,
 ) {
     let userName = interpretation.userName
-    if (interpretation.action.length) {
-        switch (interpretation.action[0]) {
+    if (interpretation.actions.length) {
+        switch (interpretation.actions[0]) {
             case 'received':
                 userName = tokenEvents
                     .filter((e) => isReceiveEvent(t, e, userAddress))
@@ -208,8 +208,8 @@ function addCounterpartyNames(
     fromAddress: string,
 ) {
     let counterpartyNames: string[] = []
-    if (interpretation.action.length) {
-        switch (interpretation.action[0]) {
+    if (interpretation.actions.length) {
+        switch (interpretation.actions[0]) {
             case 'received':
                 counterpartyNames = tokenEvents
                     .filter((e) => isReceiveEvent(t, e, userAddress))
@@ -246,7 +246,7 @@ function addExampleDescription(interpretation: Interpretation, token: Token) {
     const { tokensReceived, tokensSent } = interpretation
     let exampleDescription = ''
     const i = interpretation
-    const { userName, action } = i
+    const { userName, actions: action } = i
     const { name: tokenName } = token
 
     const receivedSingle = tokensReceived.length === 1
@@ -260,7 +260,7 @@ function addExampleDescription(interpretation: Interpretation, token: Token) {
     let counterpartyName = i.extra.counterpartyNames?.length ? i.extra.counterpartyNames[0] : i.counterpartyName || ''
     counterpartyName = counterpartyName ? ' ' + counterpartyName : ''
     let direction = ''
-    if (interpretation.action.length) {
+    if (interpretation.actions.length) {
         switch (action[0]) {
             case Action.minted: {
                 tokenId = receivedSingle ? tokenId : ''
@@ -322,7 +322,7 @@ function interpretGenericToken(decodedData: DecodedTx, interpretation: Interpret
     const tokenEvents = tokenContractInteraction?.events || []
 
     // use TokensReceived and TokensSent to determine the actions (besides mint), not the events. Bought, sold, traded
-    interpretation.action.push(getAction(t, tokenEvents, userAddress, fromAddress))
+    interpretation.actions.push(getAction(t, tokenEvents, userAddress, fromAddress))
 
     const token = getTokenInfo(tokenContractInteraction, interpretation)
 
