@@ -232,7 +232,14 @@ class Translator {
         contractDataMap: Record<string, ContractData>,
         rawTxData: RawTxData | RawTxDataWithoutTrace,
     ): DecodedTx {
-        return this.augmenter.augmentDecodedData(decodedLogs, decodedCallData, decodedTraceData, ensMap, contractDataMap, rawTxData)
+        return this.augmenter.augmentDecodedData(
+            decodedLogs,
+            decodedCallData,
+            decodedTraceData,
+            ensMap,
+            contractDataMap,
+            rawTxData,
+        )
     }
 
     /**********************************************/
@@ -253,7 +260,7 @@ class Translator {
         userName: string | null = null,
     ): (Interpretation | null)[] {
         return decodedTxArr.map((decodedTx) =>
-            decodedTx ? this.interpretDecodedTx(decodedTx, userAddress, userName) : null
+            decodedTx ? this.interpretDecodedTx(decodedTx, userAddress, userName) : null,
         )
     }
 
@@ -275,7 +282,11 @@ class Translator {
         const ensMap = await this.getENSNames(addresses)
         const contractDataMap = await this.getContractsData(AbiMap, officialContractNamesMap, proxyAddressMap)
 
-        const { decodedLogs, decodedCallData, decodedTraceData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)
+        const { decodedLogs, decodedCallData, decodedTraceData } = await this.decodeTxData(
+            rawTxData,
+            AbiMap,
+            contractDataMap,
+        )
         const decodedWithAugmentation = this.augmentDecodedData(
             decodedLogs,
             decodedCallData,
@@ -328,7 +339,11 @@ class Translator {
 
             const AbiMap = filterABIMap(unfilteredAbiMap)
             logData.functionName = 'decodeTxData'
-            const { decodedLogs, decodedCallData, decodedTraceData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)
+            const { decodedLogs, decodedCallData, decodedTraceData } = await this.decodeTxData(
+                rawTxData,
+                AbiMap,
+                contractDataMap,
+            )
             const allAddresses = this.getAllAddresses(decodedLogs, decodedCallData, contractAddresses)
 
             logData.functionName = 'getENSNames'
@@ -342,7 +357,6 @@ class Translator {
                 contractDataMap,
                 rawTxData,
             )
-
 
             const userName = ensMap[userAddress || ''] || null
 

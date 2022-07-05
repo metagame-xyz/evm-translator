@@ -1,3 +1,4 @@
+import { decodeRawTxTrace } from './MulticallTxInterpreter'
 import { transformDecodedData, transformDecodedLogs, transformTraceData } from './transformDecodedLogs'
 import { AlchemyProvider, Formatter } from '@ethersproject/providers'
 import axios from 'axios'
@@ -17,7 +18,7 @@ import {
     TxType,
 } from 'interfaces/decoded'
 import { CallTraceLog, RawTxData, RawTxDataWithoutTrace, TraceLog, TraceType } from 'interfaces/rawData'
-import { Chain, multicallContractAddresses, multicallFunctionNames } from 'interfaces/utils'
+import { Chain } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
 import {
@@ -42,7 +43,6 @@ import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterfac
 import getTypeFromABI from 'utils/getTypeFromABI'
 import isGnosisSafeMaybe from 'utils/isGnosisSafeMaybe'
 import { logDebug } from 'utils/logging'
-import { decodeRawTxTrace } from './MulticallTxInterpreter'
 
 export type DecoderConfig = {
     covalentData?: CovalentTxData
@@ -88,7 +88,7 @@ export class Augmenter {
         rawTxData: RawTxData | RawTxDataWithoutTrace,
         abiMap: Record<string, ABI_Item[]>,
         contractDataMap: Record<string, ContractData>,
-    ): Promise<{ decodedLogs: Interaction[]; decodedCallData: DecodedCallData, decodedTraceData: DecodedCallData[] }> {
+    ): Promise<{ decodedLogs: Interaction[]; decodedCallData: DecodedCallData; decodedTraceData: DecodedCallData[] }> {
         const abiDecoder = new ABIDecoder(this.db)
 
         abiDecoder.addABI(abiMap)
@@ -488,7 +488,7 @@ export class Augmenter {
 
                 // commented this out to make sure we get the token name/symbol from the contract. we'll end up always doing this call no matter what now but we can optimize later (WARNING)
                 // if (!contractName) {
-                ; ({ tokenName, tokenSymbol, contractName } = await this.getNameAndSymbol(address, contractType))
+                ;({ tokenName, tokenSymbol, contractName } = await this.getNameAndSymbol(address, contractType))
                 // }
 
                 // const contractName = await this.getContractName(address)

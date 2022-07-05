@@ -144,7 +144,10 @@ function lastFallback(decodedData: DecodedTx, interpretation: Interpretation) {
     ) {
         interpretation.counterpartyName = toAddress
         interpretation.exampleDescription = `${interpretation.userName} ${interpretation.action} ${valueReceived} ${symbolReceived} from ${interpretation.counterpartyName}`
-    } else if (interpretation.action.length && (interpretation.action[0] === Action.sold || interpretation.action[0] === Action.sent)) {
+    } else if (
+        interpretation.action.length &&
+        (interpretation.action[0] === Action.sold || interpretation.action[0] === Action.sent)
+    ) {
         interpretation.counterpartyName = toAddress
         interpretation.exampleDescription = `${interpretation.userName} ${interpretation.action} ${valueSent} ${symbolSent} to ${interpretation.counterpartyName}`
     } else if (interpretation.action.length && interpretation.action[0] === Action.traded) {

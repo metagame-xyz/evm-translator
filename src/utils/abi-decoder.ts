@@ -82,11 +82,11 @@ export default class ABIDecoder {
         console.log('abiSig', abiSig)
         return abiSig
             ? {
-                name: abiSig,
-                type: 'event',
-                inputs: [],
-                anonymous: false,
-            }
+                  name: abiSig,
+                  type: 'event',
+                  inputs: [],
+                  anonymous: false,
+              }
             : undefined
     }
     async getABIFunctionFromExternalSource(hexSignature: string): Promise<ABI_Function | undefined> {
@@ -94,12 +94,12 @@ export default class ABIDecoder {
 
         return contractMethod
             ? {
-                name: contractMethod,
-                type: 'function',
-                inputs: [],
-                outputs: [],
-                stateMutability: undefined,
-            }
+                  name: contractMethod,
+                  type: 'function',
+                  inputs: [],
+                  outputs: [],
+                  stateMutability: undefined,
+              }
             : undefined
     }
 
@@ -113,7 +113,7 @@ export default class ABIDecoder {
         const abiResult = this.methodSigs[methodID] || (await this.db.getFirstABIForHexSignature(methodID))
         const abiItem = abiResult ? ABI_FunctionZ.parse(abiResult) : null
         if (abiItem) {
-            let decoded = {};
+            let decoded = {}
             try {
                 decoded = abiCoder.decodeParameters(abiItem.inputs, data.slice(10))
             } catch {
@@ -315,13 +315,13 @@ export default class ABIDecoder {
             if (abi.name) {
                 const signature = hash(
                     abi.name +
-                    '(' +
-                    abi.inputs
-                        .map(function (input) {
-                            return input.type
-                        })
-                        .join(',') +
-                    ')',
+                        '(' +
+                        abi.inputs
+                            .map(function (input) {
+                                return input.type
+                            })
+                            .join(',') +
+                        ')',
                 ) as string
                 if (abi.type === 'event') {
                     if (this.methodSigs[signature]) {

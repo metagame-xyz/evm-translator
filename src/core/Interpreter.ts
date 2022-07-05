@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import contractInterpreters from './contractInterpreters'
+import { getActionFromInterpretation } from './DoubleSidedTxInterpreter'
 import contractDeployInterpreter from './genericInterpreters/ContractDeploy.json'
 import interpretGnosisExecution from './genericInterpreters/gnosis'
 import lastFallback from './genericInterpreters/lastFallback'
@@ -11,11 +12,18 @@ import { formatEther, formatUnits } from 'ethers/lib/utils'
 import { InterpreterMap, MethodMap } from 'interfaces/contractInterpreter'
 import { ContractType, DecodedTx, Interaction, InteractionEvent, TxType } from 'interfaces/decoded'
 import { Action, Interpretation, Token, TokenType } from 'interfaces/interpreted'
-import { Chain, multicallContractAddresses, multicallFunctionNames } from 'interfaces/utils'
+import { Chain } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
-import { checkMultipleKeys, fillDescriptionTemplate, flattenEventsFromInteractions, getNativeTokenValueEvents, shortenNamesInString, toOrFromUser } from 'utils'
-import { getActionFromInterpretation } from './DoubleSidedTxInterpreter'
+import {
+    checkMultipleKeys,
+    fillDescriptionTemplate,
+    flattenEventsFromInteractions,
+    getNativeTokenValueEvents,
+    shortenNamesInString,
+    toOrFromUser,
+} from 'utils'
+import { multicallContractAddresses, multicallFunctionNames } from 'utils/constants'
 
 function deepCopy<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj))
@@ -143,8 +151,9 @@ class Interpreter {
             // TODO the description and extras should be different for reverted transactions
         }
 
-        const interpretationMapping: InterpreterMap | null = (toAddress && this.contractSpecificInterpreters[toAddress.toLowerCase()]) || null
-        let methodSpecificMappings: MethodMap[] = [];
+        const interpretationMapping: InterpreterMap | null =
+            (toAddress && this.contractSpecificInterpreters[toAddress.toLowerCase()]) || null
+        let methodSpecificMappings: MethodMap[] = []
 
         if (multicallFunctionNames.includes(methodName || '') && multicallContractAddresses.includes(toAddress || '')) {
             traceCalls?.forEach((call) => {
@@ -153,7 +162,9 @@ class Interpreter {
                 }
             })
         } else {
-            methodSpecificMappings = interpretationMapping?.writeFunctions[methodName || ''] ? [interpretationMapping.writeFunctions[methodName || '']] : []
+            methodSpecificMappings = interpretationMapping?.writeFunctions[methodName || '']
+                ? [interpretationMapping.writeFunctions[methodName || '']]
+                : []
         }
 
         // if there's no contract-specific mapping, try to use the fallback mapping
@@ -180,10 +191,10 @@ class Interpreter {
             interpretation.contractName = interpretationMapping.contractName
 
             for (const methodSpecificMapping of methodSpecificMappings) {
-                if (methodSpecificMapping.action !== "__NFTSALE__") {
+                if (methodSpecificMapping.action !== '__NFTSALE__') {
                     interpretation.action.push(methodSpecificMapping.action)
                 } else {
-                    interpretation.action.push(getActionFromInterpretation(interpretation));
+                    interpretation.action.push(getActionFromInterpretation(interpretation))
                 }
             }
 
@@ -290,14 +301,16 @@ class Interpreter {
         if (!array) {
             const interaction = filteredInteractions[index]
             const prefix = keyMapping.prefix || ''
-            let str;
+            let str
             // unclear if "index" refers specifies an interaction or an event
             // this logic figures that out
             if ((interaction as any)?.[keyMapping.key]) {
                 str = (interaction as any)?.[keyMapping.key]
             } else {
                 const flattenedEvents = flattenEventsFromInteractions(filteredInteractions)
-                str = checkMultipleKeys(flattenedEvents[index], keyMapping.key) || flattenedEvents[index]?.params[keyMapping.key]
+                str =
+                    checkMultipleKeys(flattenedEvents[index], keyMapping.key) ||
+                    flattenedEvents[index]?.params[keyMapping.key]
             }
             const postfix = keyMapping.postfix || ''
             value = str ? prefix + str + postfix : keyMapping.defaultValue

@@ -39,15 +39,16 @@ const testTxHashes = {
         mint: '0x37182c6beeed11222cd8a4f81fb897ae6fefb31c64c634fea3a277afdba9dd11',
         borrow: '0x669b67fa88c60b07d892f09a87c24dd7bd691bdcbd7b1eb0efd969096067f1a6',
         redeem: '0x63a27f1f7e10fd37477e3e4c35986adb58daaa4b8ab541909a54cb43b0aed5aa',
-        repayBorrow: '0xc5380c861d5817a30b42442f32f93cdc91e1ca395b607ec4ecd9e9cf5fc3c2b9'
-    }
+        repayBorrow: '0xc5380c861d5817a30b42442f32f93cdc91e1ca395b607ec4ecd9e9cf5fc3c2b9',
+    },
 }
 
 // test multiple roles for a single tx
 export const multiSidedTxMap: Record<string, string[]> = {
     '0xc814cb6b61222beda8a9bcc359e776e72ae732a1c29df572099ecef27c8461e4': [
-        '0x96a675775b8546a8602a1015efaacbc87358e478', '0x83eb387c8f7c8903f2be1ca367197fc4b3cb573e'
-    ]
+        '0x96a675775b8546a8602a1015efaacbc87358e478',
+        '0x83eb387c8f7c8903f2be1ca367197fc4b3cb573e',
+    ],
 }
 
 export function flattenTxHashes() {

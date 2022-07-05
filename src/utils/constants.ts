@@ -13,3 +13,6 @@ export const ALCHEMY_PROJECT_ID = process.env.NEXT_PUBLIC_ALCHEMY_PROJECT_ID
 export const COVALENT_API_KEY = process.env.COVALENT_API_KEY
 export const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
 export const EVM_TRANSLATOR_CONNECTION_STRING = process.env.EVM_TRANSLATOR_CONNECTION_STRING
+
+export const multicallFunctionNames = ['multicall']
+export const multicallContractAddresses = ['0xc36442b4a4522e871399cd717abdd847ab11fe88']
