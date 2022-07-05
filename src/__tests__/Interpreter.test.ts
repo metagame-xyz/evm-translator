@@ -1,4 +1,4 @@
-import testTxHashes, { flattenTxHashes } from '../__tests__/testTxHashes.js'
+import testTxHashes, { flattenTxHashes, multiSidedTxMap } from '../__tests__/testTxHashes.js'
 import Interpreter from '../core/Interpreter'
 import { chains } from '../index'
 import { DecodedTx } from '../interfaces/decoded'
@@ -29,7 +29,14 @@ test('Interpreter', async () => {
         .map(([, decodedTx]) => decodedTx)
 
     for (const decodedTx of filteredDecodedTxes) {
-        expect(await interpreter.interpretSingleTx(decodedTx!)).toMatchSnapshot()
+        if (multiSidedTxMap[decodedTx!.txHash]) {
+            // test multiple roles for a single tx
+            for (const participant of multiSidedTxMap[decodedTx!.txHash]) {
+                await expect(interpreter.interpretSingleTx(decodedTx!, participant)).resolves.toMatchSnapshot()
+            }
+        } else {
+            await expect(interpreter.interpretSingleTx(decodedTx!)).resolves.toMatchSnapshot()
+        }
     }
     await db.closeConnection()
 }, 200000)

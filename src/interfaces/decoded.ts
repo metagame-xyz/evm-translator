@@ -61,6 +61,7 @@ export type DecodedTx = {
     contractType: ContractType
     /** the name of the function that initiated the transaction. If not decoded, null  */
     methodCall: MethodCall
+    traceCalls: DecodedCallData[]
     // contractMethod: string | null
     // contractMethodArguments: Record<string, MostTypes>
     contractName: string | null
@@ -148,6 +149,8 @@ export type RawDecodedLog = {
 
 export type RawDecodedCallData = {
     name: string | null
+    from?: string
+    to?: string
     params: {
         name: string
         type: string

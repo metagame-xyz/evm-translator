@@ -144,7 +144,6 @@ export default class ABIDecoder {
                 name: abiItem.name,
                 params: [],
             }
-
             for (let i = 0; i < Object.keys(decoded).length; i++) {
                 // for (let i = 0; i < decoded.__length__; i++) {
                 const param = decoded[i]

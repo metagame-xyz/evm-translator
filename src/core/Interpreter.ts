@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import contractInterpreters from './contractInterpreters'
+import { getActionForDoubleSidedTx } from './DoubleSidedTxInterpreter'
 import contractDeployInterpreter from './genericInterpreters/ContractDeploy.json'
 import interpretGnosisExecution from './genericInterpreters/gnosis'
 import lastFallback from './genericInterpreters/lastFallback'
@@ -8,20 +9,22 @@ import interpretGenericTransfer from './genericInterpreters/transfer'
 import { BigNumber } from 'ethers'
 import { formatEther, formatUnits } from 'ethers/lib/utils'
 
-import { InterpreterMap } from 'interfaces/contractInterpreter'
+import { InterpreterMap, MethodMap } from 'interfaces/contractInterpreter'
 import { ContractType, DecodedTx, Interaction, InteractionEvent, TxType } from 'interfaces/decoded'
 import { Action, Interpretation, Token, TokenType } from 'interfaces/interpreted'
 import { Chain } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
-import { fillDescriptionTemplate, getNativeTokenValueEvents, shortenNamesInString } from 'utils'
+import {
+    checkMultipleKeys,
+    fillDescriptionTemplate,
+    flattenEventsFromInteractions,
+    getNativeTokenValueEvents,
+    shortenNamesInString,
+    toOrFromUser,
+} from 'utils'
+import { multicallContractAddresses, multicallFunctionNames } from 'utils/constants'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
-
-// Despite most contracts using Open Zeppelin's standard naming convention of "to, from, value", not all do. Most notably, DAI and WETH use "src, dst, wad". These are used rename the keys to match the standard (both for generic and contract-specific interpretations).
-const toKeys = ['to', '_to', 'dst']
-const fromKeys = ['from', '_from', 'src']
-const toKey = 'to'
-const fromKey = 'from'
 
 function deepCopy<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj))
@@ -95,6 +98,7 @@ class Interpreter {
         // Prep data coming in from 'decodedData'
         const {
             methodCall: { name: methodName },
+            traceCalls,
             interactions,
             fromAddress,
             toAddress,
@@ -135,7 +139,7 @@ class Interpreter {
             txHash,
             userAddress,
             contractAddress: toAddress,
-            action: Action.unknown,
+            actions: [],
             nativeValueSent: this.getNativeTokenValueSent(interactions, nativeValueSent, fromAddress, userAddress),
             nativeValueReceived: this.getNativeTokenValueReceived(interactions, userAddress),
             tokensReceived: this.getTokensReceived(interactions, userAddress),
@@ -166,13 +170,30 @@ class Interpreter {
             // TODO the description and extras should be different for reverted transactions
         }
 
-        const interpretationMapping = (toAddress && this.contractSpecificInterpreters[toAddress]) || null
-        const methodSpecificMapping = (methodName && interpretationMapping?.writeFunctions[methodName]) || null
+        const interpretationMapping: InterpreterMap | null =
+            (toAddress && this.contractSpecificInterpreters[toAddress.toLowerCase()]) || null
+        const methodSpecificMappings: MethodMap[] = []
+
+        // If multicall, use trace calls to get method speicifc mappings and actions
+        // If not, use main method call
+        if (multicallFunctionNames.includes(methodName || '') && multicallContractAddresses.includes(toAddress || '')) {
+            traceCalls?.forEach((call) => {
+                const newMethodSpecificMapping = interpretationMapping?.writeFunctions[call.name || '']
+                if (newMethodSpecificMapping) {
+                    methodSpecificMappings.push(newMethodSpecificMapping)
+                }
+            })
+        } else {
+            const newMethodSpecificMapping = interpretationMapping?.writeFunctions[methodName || '']
+            if (newMethodSpecificMapping) {
+                methodSpecificMappings.push(newMethodSpecificMapping)
+            }
+        }
 
         // if there's no contract-specific mapping, try to use the fallback mapping
         if (decodedData.txType === TxType.CONTRACT_DEPLOY) {
             // Contract deploy
-            interpretation.action = Action.deployed
+            interpretation.actions = [Action.deployed]
             interpretation.exampleDescription = contractDeployInterpreter.exampleDescription
 
             interpretation.extra = {
@@ -186,15 +207,21 @@ class Interpreter {
             )
         } else if (decodedData.txType === TxType.TRANSFER) {
             // Generic transfer
-
             interpretGenericTransfer(decodedData, interpretation, fromName, toName)
-        } else if (interpretationMapping && methodSpecificMapping && methodName && toAddress) {
+        } else if (interpretationMapping && methodSpecificMappings.length && methodName && toAddress) {
             // Contract-specific interpretation
-
             // some of these will be arbitrary keys
             interpretation.contractName = interpretationMapping.contractName
-            interpretation.action = methodSpecificMapping.action // TODO: make a dynamic "action" field
-            interpretation.exampleDescription = methodSpecificMapping.exampleDescription
+
+            for (const methodSpecificMapping of methodSpecificMappings) {
+                if (methodSpecificMapping.action !== Action.__NFTSALE__) {
+                    interpretation.actions.push(methodSpecificMapping.action)
+                } else {
+                    interpretation.actions.push(getActionForDoubleSidedTx(interpretation))
+                }
+            }
+
+            interpretation.exampleDescription = methodSpecificMappings[0].exampleDescription
 
             if (decodedData.reverted) {
                 interpretation.reverted = true
@@ -202,11 +229,10 @@ class Interpreter {
             }
             interpretation.extra = this.useKeywordMap(
                 interactions,
-                methodSpecificMapping.keywords,
+                methodSpecificMappings[0].keywords,
                 toAddress,
                 userAddress,
             )
-
             interpretation.exampleDescription = fillDescriptionTemplate(
                 interpretationMapping.writeFunctions[methodName].exampleDescriptionTemplate,
                 interpretation,
@@ -272,30 +298,6 @@ class Interpreter {
             if (value === '{userAddress}') valueToFind = userAddress
             if (value === '{contractAddress}') valueToFind = contractAddress
 
-            // for example, DAI's Transfer event uses "dst" instead of "to", so we need to check for "dst" as well, even if the interpreter map uses "to". As we find more of these, we'll have to add them to the "toKeys" array. We mig
-            const checkMultipleKeys = (
-                interactionEvent: InteractionEvent,
-                key: string,
-                valueToFind: string,
-            ): boolean => {
-                const keyMapping: Record<string, string[]> = {
-                    [toKey]: toKeys,
-                    [fromKey]: fromKeys,
-                }
-
-                const keys = [...(keyMapping[key] || []), key]
-
-                if (keys) {
-                    for (const keyToCheck of keys) {
-                        if (interactionEvent.params[keyToCheck] === valueToFind) {
-                            return true
-                        }
-                    }
-                }
-
-                return false
-            }
-
             // filter out by events that don't have the keys we want
             for (const interaction of filteredInteractions) {
                 if (!includes(topLevelInteractionKeys, key)) {
@@ -322,7 +324,17 @@ class Interpreter {
         if (!array) {
             const interaction = filteredInteractions[index]
             const prefix = keyMapping.prefix || ''
-            const str = (interaction as any)?.[keyMapping.key] || interaction?.events[index]?.params[keyMapping.key]
+            let str
+            // unclear if "index" refers specifies an interaction or an event
+            // this logic figures that out
+            if ((interaction as any)?.[keyMapping.key]) {
+                str = (interaction as any)?.[keyMapping.key]
+            } else {
+                const flattenedEvents = flattenEventsFromInteractions(filteredInteractions)
+                str =
+                    checkMultipleKeys(flattenedEvents[index], keyMapping.key) ||
+                    flattenedEvents[index]?.params[keyMapping.key]
+            }
             const postfix = keyMapping.postfix || ''
             value = str ? prefix + str + postfix : keyMapping.defaultValue
         } else {
@@ -376,7 +388,6 @@ class Interpreter {
                 ).length > 0, // filters out interactions that don't have any events objects left
         )
 
-        // console.log('filteredInteractions', filteredInteractions[0].events)
         const flattenedInteractions = flattenEvents(filteredInteractions)
 
         function getTokenType(interaction: FlattenedInteraction): TokenType {
@@ -404,11 +415,6 @@ class Interpreter {
             return tokenType
         }
 
-        function toOrFromUser(event: InteractionEvent, direction: 'to' | 'from', userAddress: string) {
-            const directionArr = direction === 'to' ? toKeys : fromKeys
-            return directionArr.filter((key) => event.params[key] === userAddress).length > 0
-        }
-
         // each transfer event can have a token in it. for example, minting multiple NFTs
         function flattenEvents(interactions: Interaction[]) {
             const flattenedInteractions: FlattenedInteraction[] = []
@@ -434,7 +440,6 @@ class Interpreter {
                         flattenedInteractions.push(flattenedInteraction)
                     }
                 }
-                // console.log('flattenedInteraction', flattenedInteraction)
             }
 
             return flattenedInteractions

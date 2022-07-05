@@ -11,9 +11,19 @@ import traverse from 'traverse'
 
 import { ABI_Item, ABI_ItemUnfiltered, ABI_Row, ABI_RowZ, ABI_Type } from 'interfaces/abi'
 import { Interaction, InteractionEvent } from 'interfaces/decoded'
-import { Interpretation } from 'interfaces/interpreted'
+import { Action, Interpretation } from 'interfaces/interpreted'
 import { Chain, Chains, ChainSymbol } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
+
+import { getNativeValueTransferredForDoubleSidedTx } from 'core/DoubleSidedTxInterpreter'
+
+// Despite most contracts using Open Zeppelin's standard naming convention of "to, from, value", not all do. Most notably, DAI and WETH use "src, dst, wad". These are used rename the keys to match the standard (both for generic and contract-specific interpretations).
+const toKeys = ['to', '_to', 'dst']
+const fromKeys = ['from', '_from', 'src']
+const valueKeys = ['value', 'wad', 'amount']
+const toKey = 'to'
+const fromKey = 'from'
+const valueKey = 'value'
 
 const ethereum: Chain = {
     EVM: true,
@@ -211,7 +221,20 @@ export const retryProviderCall = async <T>(providerPromise: Promise<T>): Promise
 }
 
 export function fillDescriptionTemplate(template: string, interpretation: Interpretation): string {
-    const merged = collect(interpretation.extra).merge(interpretation).all()
+    const merged: Record<string, any> = collect(interpretation.extra).merge(interpretation).all()
+    // If transaction is 2-sided, we need to get sale price from either nativeValueSent or nativeValueReceived
+    if (template.includes('__NATIVEVALUETRANSFERRED__')) {
+        merged.__NATIVEVALUETRANSFERRED__ = getNativeValueTransferredForDoubleSidedTx(interpretation)
+    }
+
+    // Handle actions being an array --> simplify to a single action
+    if (merged.actions.length > 1) {
+        merged.action = Action.multicall
+    } else if (merged.actions.length) {
+        merged.action = merged.actions[0]
+    } else {
+        merged.action = Action.unknown
+    }
 
     for (const [key, value] of Object.entries(merged)) {
         if (typeof value === 'string') {
@@ -328,4 +351,45 @@ export async function getProxyAddresses(provider: BaseProvider, addresses: strin
             return null
         }
     })
+}
+
+export function toOrFromUser(event: InteractionEvent, direction: 'to' | 'from', userAddress: string) {
+    const directionArr = direction === 'to' ? toKeys : fromKeys
+    return directionArr.filter((key: string) => event.params[key] === userAddress).length > 0
+}
+
+// for example, DAI's Transfer event uses "dst" instead of "to", so we need to check for "dst" as well, even if the interpreter map uses "to". As we find more of these, we'll have to add them to the "toKeys" array. We mig
+export function checkMultipleKeys(
+    interactionEvent: InteractionEvent,
+    key: string,
+    valueToFind: string | null = null,
+): any {
+    if (!interactionEvent) {
+        return valueToFind ? false : ''
+    }
+    const keyMapping: Record<string, string[]> = {
+        [toKey]: toKeys,
+        [fromKey]: fromKeys,
+        [valueKey]: valueKeys,
+    }
+
+    const keys = keyMapping[key]
+
+    if (keys) {
+        for (const keyToCheck of keys) {
+            if (valueToFind && interactionEvent.params[keyToCheck] === valueToFind) {
+                return true
+            } else if (!valueToFind && interactionEvent.params[keyToCheck]) {
+                return interactionEvent.params[keyToCheck]
+            }
+        }
+    }
+
+    return valueToFind ? false : ''
+}
+
+export function flattenEventsFromInteractions(filteredInteractions: Interaction[]): InteractionEvent[] {
+    return filteredInteractions.reduce((prev: InteractionEvent[], cur: Interaction): InteractionEvent[] => {
+        return [...prev, ...cur.events]
+    }, [])
 }

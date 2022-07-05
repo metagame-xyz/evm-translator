@@ -33,7 +33,7 @@ function interpretGnosisExecution(decodedData: DecodedTx, interpretation: Interp
 
     const exampleDescription = `${userName} ${action} a transaction on a Gnosis Safe (${counterpartyName})`
 
-    interpretation.action = action
+    interpretation.actions.push(action)
     interpretation.exampleDescription = exampleDescription
     interpretation.extra = {}
 }

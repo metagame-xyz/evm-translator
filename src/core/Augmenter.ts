@@ -1,4 +1,5 @@
-import { transformDecodedData, transformDecodedLogs } from './transformDecodedLogs'
+import { decodeRawTxTrace } from './MulticallTxInterpreter'
+import { transformDecodedData, transformDecodedLogs, transformTraceData } from './transformDecodedLogs'
 import { AlchemyProvider, Formatter } from '@ethersproject/providers'
 import axios from 'axios'
 // import abiDecoder from 'abi-decoder'
@@ -84,10 +85,10 @@ export class Augmenter {
         rawTxData: RawTxData | RawTxDataWithoutTrace,
         abiMap: Record<string, ABI_Item[]>,
         contractDataMap: Record<string, ContractData>,
-    ): Promise<{ decodedLogs: Interaction[]; decodedCallData: DecodedCallData }> {
+    ): Promise<{ decodedLogs: Interaction[]; decodedCallData: DecodedCallData; decodedTraceData: DecodedCallData[] }> {
         const abiDecoder = new ABIDecoder(this.db)
-        abiDecoder.addABI(abiMap)
 
+        abiDecoder.addABI(abiMap)
         const { logs } = rawTxData.txReceipt
 
         const rawDecodedLogs = await abiDecoder.decodeLogs(logs, contractDataMap)
@@ -95,16 +96,19 @@ export class Augmenter {
             name: null,
             params: [],
         }
+        const rawDecodedTraceData = await decodeRawTxTrace(abiDecoder, (rawTxData as any)?.txTrace || [])
 
-        const decodedLogs = transformDecodedLogs(rawDecodedLogs, contractDataMap)
-        const decodedCallData = transformDecodedData(rawDecodedCallData)
+        const decodedLogs: Interaction[] = transformDecodedLogs(rawDecodedLogs, contractDataMap)
+        const decodedCallData: DecodedCallData = transformDecodedData(rawDecodedCallData)
+        const decodedTraceData: DecodedCallData[] = transformTraceData(rawDecodedTraceData)
 
-        return { decodedLogs, decodedCallData }
+        return { decodedLogs, decodedCallData, decodedTraceData }
     }
 
     augmentDecodedData(
         decodedLogs: Interaction[],
         decodedCallData: DecodedCallData,
+        decodedTraceData: DecodedCallData[],
         ensMap: Record<string, string>,
         contractDataMap: Record<string, ContractData>,
         rawTxData: RawTxData | RawTxDataWithoutTrace,
@@ -143,6 +147,7 @@ export class Augmenter {
                 arguments: decodedCallData.params,
                 ...(!decodedCallData.decoded && { decoded: decodedCallData.decoded }),
             },
+            traceCalls: decodedTraceData,
             nativeValueSent: value,
             chainSymbol: this.chain.symbol,
             interactions,

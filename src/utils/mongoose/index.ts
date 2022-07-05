@@ -168,6 +168,7 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
             console.log(e)
             // return null
         }
+
         // return here instead of in the try, so that it still works if the db is down
         return decodedTxMap
     }

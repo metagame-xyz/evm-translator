@@ -37,7 +37,7 @@ function interpretGenericTransfer(
 
     const exampleDescription = `${userName} ${action} ${amountSent} ${chainSymbol} ${direction} ${counterpartyName}`
 
-    interpretation.action = action
+    interpretation.actions = [action]
     interpretation.exampleDescription = exampleDescription
     interpretation.extra = {}
 

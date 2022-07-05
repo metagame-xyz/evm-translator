@@ -170,7 +170,17 @@ This is an example of the decoded event logs when the `addLiquidity` function ge
         }
     ],
     "contractType": "OTHER",
-    "contractMethod": "addLiquidity",
+    "methodCall": {
+        "name": "addLiquidity",
+        "arguments": {...}
+    },
+    "traceCalls": [
+        {
+            "name": "getPair",
+            "params": {}
+        }
+        ...
+    ],
     "timestamp": "2021-12-01T00:06:38Z",
     "officialContractName": "UniswapV2Router02"
 }
@@ -185,7 +195,7 @@ When the above map is applied to above decoded event logs, this is the interpret
     "userName": "0xf1a9",
     "contractName": "Uniswap V2",
     "contractOfficialName": "UniswapV2Router02",
-    "action": "added liquidity",
+    "action": ["added liquidity"],
     "exampleDescription": "0xf1a9 added liquidity to the SUPER-WETH Uniswap V2 pool",
     "nativeValueSent": "0",
     "nativeValueReceived": "0",
@@ -226,3 +236,19 @@ When the above map is applied to above decoded event logs, this is the interpret
 The Interpreter Map supplies `contractName`, `action`, `extra`, and a more specific `exampleDescription`.
 
 All other values come from generic interpretations.
+
+## Handling special transactions
+
+### Double-sided transactions
+
+Some transactions like an NFT sale should have very different interpretations based on the perspective we view it from. The `getActionFromInterpretation` function within `/src/core/DoubleSidedInterpreter.ts` uses the `tokensSent` and `tokensReceived` fields from the interpretation to deduce the `action`.
+
+Within the contract specific interpreter JSON files that handle such transactions, the `"action": "__NFTSALE__"` is used to denote an action that varies on the perspective of the user. Also `{__NATIVEVALUETRANSFERRED__}` denotes the selling price of the NFT when we are unsure if we should use `nativeValueSent` or `nativeValueReceived`.
+
+See `0xc814cb6b61222beda8a9bcc359e776e72ae732a1c29df572099ecef27c8461e4` as an example of such a transaction.
+
+### Multicall transactions
+
+Some transactions like a Uniswap V3 multicall are really multiple transactions disguised as one. During the decoding process, the `decodeRawTxTrace` function within `/src/core/MulticallTxInterpreter.ts` grabs the "second-level" method calls and put those into the `traceCalls` field within the `DecodedTx`. We keep track of multicall method names and contract addresses within `/src/interfaces/utils.ts` and when we identify a transaction falling into this category, we use the second-level methods to populate the `action` array within the `Interpretation` object.
+
+See `0xb38f55471c5a8539a605287b4116a4bf83a58261b3cfe00bc53337298003b9ae` as an example of such a transaction.

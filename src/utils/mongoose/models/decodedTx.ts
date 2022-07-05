@@ -17,6 +17,10 @@ const DecodedTxSchema = new Schema<DecodedTx, DecodedTxModelType>(
             },
             required: true,
         },
+        traceCalls: {
+            type: [],
+            required: true,
+        },
         contractName: String,
         officialContractName: { type: String, required: false },
         fromENS: { type: String, required: false },

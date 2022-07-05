@@ -12,9 +12,9 @@ export type Interpretation = {
     userAddress: string
     contractName: string | null
     contractAddress: string | null
+    actions: Action[]
     fromName?: string
     toName?: string
-    action: Action
     exampleDescription: string
     tokensSent: Token[] // usually just one token
     tokensReceived: Token[] // usually just one token
@@ -62,6 +62,9 @@ export const enum Action {
     approved = 'approved',
     revoked = 'revoked',
     gotAirdropped = 'got airdropped',
+    collected = 'collected',
+    multicall = 'executed a multicall transaction',
+    __NFTSALE__ = '__NFTSALE__',
     ______TODO______ = '______TODO______',
 }
 

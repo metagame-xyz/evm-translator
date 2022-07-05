@@ -216,7 +216,7 @@ class Translator {
         rawTxData: RawTxData | RawTxDataWithoutTrace,
         ABIs: Record<string, ABI_Item[]>,
         contractDataMap: Record<string, ContractData>,
-    ): Promise<{ decodedLogs: Interaction[]; decodedCallData: DecodedCallData }> {
+    ): Promise<{ decodedLogs: Interaction[]; decodedCallData: DecodedCallData; decodedTraceData: DecodedCallData[] }> {
         return await this.augmenter.decodeTxData(rawTxData, ABIs, contractDataMap)
     }
 
@@ -227,11 +227,19 @@ class Translator {
     augmentDecodedData(
         decodedLogs: Interaction[],
         decodedCallData: DecodedCallData,
+        decodedTraceData: DecodedCallData[],
         ensMap: Record<string, string>,
         contractDataMap: Record<string, ContractData>,
         rawTxData: RawTxData | RawTxDataWithoutTrace,
     ): DecodedTx {
-        return this.augmenter.augmentDecodedData(decodedLogs, decodedCallData, ensMap, contractDataMap, rawTxData)
+        return this.augmenter.augmentDecodedData(
+            decodedLogs,
+            decodedCallData,
+            decodedTraceData,
+            ensMap,
+            contractDataMap,
+            rawTxData,
+        )
     }
 
     /**********************************************/
@@ -276,10 +284,15 @@ class Translator {
         const ensMap = await this.getENSNames(addresses)
         const contractDataMap = await this.getContractsData(AbiMap, officialContractNamesMap, proxyAddressMap)
 
-        const { decodedLogs, decodedCallData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)
+        const { decodedLogs, decodedCallData, decodedTraceData } = await this.decodeTxData(
+            rawTxData,
+            AbiMap,
+            contractDataMap,
+        )
         const decodedWithAugmentation = this.augmentDecodedData(
             decodedLogs,
             decodedCallData,
+            decodedTraceData,
             ensMap,
             contractDataMap,
             rawTxData,
@@ -328,8 +341,11 @@ class Translator {
 
             const AbiMap = filterABIMap(unfilteredAbiMap)
             logData.functionName = 'decodeTxData'
-            const { decodedLogs, decodedCallData } = await this.decodeTxData(rawTxData, AbiMap, contractDataMap)
-
+            const { decodedLogs, decodedCallData, decodedTraceData } = await this.decodeTxData(
+                rawTxData,
+                AbiMap,
+                contractDataMap,
+            )
             const allAddresses = this.getAllAddresses(decodedLogs, decodedCallData, contractAddresses)
 
             logData.functionName = 'getENSNames'
@@ -338,6 +354,7 @@ class Translator {
             const decodedWithAugmentation = this.augmentDecodedData(
                 decodedLogs,
                 decodedCallData,
+                decodedTraceData,
                 ensMap,
                 contractDataMap,
                 rawTxData,
