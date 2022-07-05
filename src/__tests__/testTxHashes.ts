@@ -14,6 +14,8 @@ const testTxHashes = {
     AaveV2: {
         repay: '0xdf2f782ab0296121318cca140ef069f9f074c51ff4b11f0c677bcb01126f81de',
         deposit: '0x24ee705da17a6061091880f47335d92950c72398980e271cdb9c69e8502827f4',
+        withdraw: '0x8df7e436048d687edfaf351e913783729eeaa9ece741391b2a8428d6b7762fe1',
+        borrow: '0x564544c9aef01836615254504677b91a9ef96d5ae15eac50d98e08774ed1096c'
     },
     UniswapV3: {
         exactInputSingle: '0xe4737f2b6174dfcc9482a50aacdc0a919f12c14ede767d6dbfc2cd502747e4f5',
