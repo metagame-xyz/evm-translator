@@ -81,8 +81,8 @@ export function transformDecodedData(rawDecodedCallData: RawDecodedCallData): De
 
 export function transformTraceData(rawDecodedTraceData: RawDecodedCallData[]): DecodedCallData[] {
     const decodedTraceData = []
-    let params: Record<string, MostTypes> = {}
     for (const call of rawDecodedTraceData) {
+        const params: Record<string, MostTypes> = {}
         call.params.forEach((param) => {
             params[param.name] = param.value
         })
@@ -91,7 +91,6 @@ export function transformTraceData(rawDecodedTraceData: RawDecodedCallData[]): D
             name: call.name,
             params,
         })
-        params = {}
     }
     return decodedTraceData
 }

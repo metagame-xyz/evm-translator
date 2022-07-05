@@ -113,12 +113,8 @@ export default class ABIDecoder {
         const abiResult = this.methodSigs[methodID] || (await this.db.getFirstABIForHexSignature(methodID))
         const abiItem = abiResult ? ABI_FunctionZ.parse(abiResult) : null
         if (abiItem) {
-            let decoded: Record<any, any> = {}
-            try {
-                decoded = abiCoder.decodeParameters(abiItem.inputs, data.slice(10))
-            } catch {
-                // TODO: log this error
-            }
+            const decoded: Record<any, any> = abiCoder.decodeParameters(abiItem.inputs, data.slice(10))
+
 
             const retData: RawDecodedCallData = {
                 name: abiItem.name,
