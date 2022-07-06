@@ -1,0 +1,55 @@
+{
+  "contractAddress": "0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85",
+  "contractOfficialName": "ENSBaseRegistrar",
+  "contractName": "ENS",
+  "writeFunctions": {
+    "transferFrom": {
+      "exampleDescriptionTemplate": "{userName} {action} an {contractName} domain to {recipientUser}",
+      "exampleDescription": "leotheprocess.eth transferred leojacoby.eth to 0xa344t94wo9gj4wsr",
+      "action": "transferred",
+      "keywords": {
+        "recipientUser": {
+          "key": "to",
+          "filters": {
+            "eventName": "Transfer"
+          },
+          "defaultValue": "an unknown address"
+        }
+      }
+    },
+    "safeTransferFrom": {
+      "exampleDescriptionTemplate": "{userName} {action} an {contractName} domain to {recipientUser}",
+      "exampleDescription": "leotheprocess.eth transferred leojacoby.eth to 0xa344t94wo9gj4wsr",
+      "action": "transferred",
+      "keywords": {
+        "recipientUser": {
+          "key": "to",
+          "filters": {
+            "eventName": "Transfer"
+          },
+          "defaultValue": "an unknown address"
+        }
+      }
+    },
+    "setApprovalForAll": {
+      "exampleDescriptionTemplate": "{userName} {action} for {operatorUser} to control an {contractName} domain",
+      "exampleDescription": "leotheprocess.eth set approval for brenner.eth to control an ENS domain",
+      "action": "set approval",
+      "keywords": {
+        "operatorUser": {
+          "key": "operator",
+          "filters": {
+            "eventName": "ApprovalForAll"
+          },
+          "defaultValue": "an unknown address"
+        }
+      }
+    },
+    "reclaim": {
+      "exampleDescriptionTemplate": "{userName} {action} an {contractName} domain",
+      "exampleDescription": "0x7f76 reclaimed an ENS domain",
+      "action": "reclaimed",
+      "keywords": {}
+    }
+  }
+}

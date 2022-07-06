@@ -1217,3 +1217,172 @@ Object {
   "userName": "0x10f6",
 }
 `;
+
+exports[`Interpreter 31`] = `
+Object {
+  "actions": Array [
+    "transferred",
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85",
+  "contractName": "ENS",
+  "counterpartyName": null,
+  "exampleDescription": "mariannedoesnft.eth transferred an ENS domain to 0xd426",
+  "extra": Object {
+    "recipientUser": "0xd426cad0c37f50151582649f26a5191dd5c179ef",
+  },
+  "gasPaid": "0.002102285415375633",
+  "nativeValueReceived": "0.0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1657116533,
+  "tokensReceived": Array [],
+  "tokensSent": Array [
+    Object {
+      "address": "0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85",
+      "name": null,
+      "symbol": null,
+      "tokenId": "77827450512977049925405665834974022484034454940950638432846545044999949975083",
+      "type": "ERC721",
+    },
+  ],
+  "txHash": "0x03daff6bd6d1b9792ff1973a1d5104b14fa76fcea6165eb821076cda7f4b2624",
+  "userAddress": "0x8e497d816a3fbe78527a7fed80027927285813ee",
+  "userName": "mariannedoesnft.eth",
+}
+`;
+
+exports[`Interpreter 32`] = `
+Object {
+  "actions": Array [
+    "set approval",
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85",
+  "contractName": "ENS",
+  "counterpartyName": null,
+  "exampleDescription": "veryboredape.eth set approval for 0x1e00 to control an ENS domain",
+  "extra": Object {
+    "operatorUser": "0x1e0049783f008a0085193e00003d00cd54003c71",
+  },
+  "gasPaid": "0.00192759016795774",
+  "nativeValueReceived": "0.0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1657116688,
+  "tokensReceived": Array [],
+  "tokensSent": Array [],
+  "txHash": "0xfc52130191555ad7892906f1d018945b7b45034fb200dbe6945579fef6fe07b5",
+  "userAddress": "0x17a77d63765963d0cb9dec12fa8f62e68fee8fd4",
+  "userName": "veryboredape.eth",
+}
+`;
+
+exports[`Interpreter 33`] = `
+Object {
+  "actions": Array [
+    "reclaimed",
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85",
+  "contractName": "ENS",
+  "counterpartyName": null,
+  "exampleDescription": "revery.eth reclaimed an ENS domain",
+  "extra": Object {},
+  "gasPaid": "0.001560464",
+  "nativeValueReceived": "0.0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1657117472,
+  "tokensReceived": Array [],
+  "tokensSent": Array [],
+  "txHash": "0x100ee7ec909ddd63c03d33261f6658b4050216e63c7a87fa2ccfff32c1d4a7e6",
+  "userAddress": "0xaf4d9e13dc0f2e2d3ec0a17972db215e77c3f83c",
+  "userName": "revery.eth",
+}
+`;
+
+exports[`Interpreter 34`] = `
+Object {
+  "actions": Array [
+    "registered",
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x283af0b28c62c092c9727f1ee09c02ca627eb7f5",
+  "contractName": "ENS",
+  "counterpartyName": null,
+  "exampleDescription": "2pc.eth registered i-guns.eth with ENS",
+  "extra": Object {
+    "domain": "i-guns",
+  },
+  "gasPaid": "0.015443331375856581",
+  "nativeValueReceived": "0.00044167547969984299",
+  "nativeValueSent": "0.004858430276698273",
+  "reverted": null,
+  "timestamp": 1657121522,
+  "tokensReceived": Array [
+    Object {
+      "address": "0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85",
+      "name": null,
+      "symbol": null,
+      "tokenId": "12286167365605814071853261433598271875168515458559594443639135101043030965358",
+      "type": "ERC721",
+    },
+  ],
+  "tokensSent": Array [],
+  "txHash": "0xd3f7d0c363f5dc8c7e8d4285afcc0d40063a661075619b09d93105d81200749b",
+  "userAddress": "0x87596fc0fdd191ba5b236eefce47a4c4203b2501",
+  "userName": "2pc.eth",
+}
+`;
+
+exports[`Interpreter 35`] = `
+Object {
+  "actions": Array [
+    "renewed",
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x283af0b28c62c092c9727f1ee09c02ca627eb7f5",
+  "contractName": "ENS",
+  "counterpartyName": null,
+  "exampleDescription": "0xf72a renewed their ownership of tfu.eth with ENS",
+  "extra": Object {
+    "domain": "tfu",
+    "recipientUser": "an unknown address",
+  },
+  "gasPaid": "0.005347699737515274",
+  "nativeValueReceived": "0.00452275662548034391",
+  "nativeValueSent": "0.04975032288028379",
+  "reverted": null,
+  "timestamp": 1657121522,
+  "tokensReceived": Array [],
+  "tokensSent": Array [],
+  "txHash": "0xcc8a09291cf751d8714289ded45a7ae7b7b2d52560ab120f50b75a771e97a969",
+  "userAddress": "0xf72aebbd82355ad657333fd9262b5f8966a47f6a",
+  "userName": "0xf72a",
+}
+`;
+
+exports[`Interpreter 36`] = `
+Object {
+  "actions": Array [
+    "set a default ENS name",
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x084b1c3c81545d370f3634392de611caabff8148",
+  "contractName": "ENS",
+  "counterpartyName": null,
+  "exampleDescription": "0x29f1 set a default ENS name",
+  "extra": Object {},
+  "gasPaid": "0.00250949028836601",
+  "nativeValueReceived": "0.0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1657121712,
+  "tokensReceived": Array [],
+  "tokensSent": Array [],
+  "txHash": "0x419feb4f564baacf3ca6643ac0a4dc00ee76334cdb6fd17f2ee3929278b86d7c",
+  "userAddress": "0x29f1e1445f0212e20d439abac9acabbedd4ac2e7",
+  "userName": "0x29f1",
+}
+`;

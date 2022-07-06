@@ -1,0 +1,42 @@
+{
+  "contractAddress": "0x283af0b28c62c092c9727f1ee09c02ca627eb7f5",
+  "contractOfficialName": "ENSRegistrarController",
+  "contractName": "ENS",
+  "writeFunctions": {
+    "registerWithConfig": {
+      "exampleDescriptionTemplate": "{userName} {action} {domain}.eth with {contractName}",
+      "exampleDescription": "leotheprocess.eth registered a leo.eth with ENS",
+      "action": "registered",
+      "keywords": {
+        "domain": {
+          "key": "name",
+          "filters": {
+            "eventName": "NameRegistered",
+            "owner": "{userAddress}"
+          }
+        }
+      }
+    },
+    "renew": {
+      "exampleDescriptionTemplate": "{userName} {action} their ownership of {domain}.eth with {contractName}",
+      "exampleDescription": "leotheprocess.eth transferred leojacoby.eth to 0xa344t94wo9gj4wsr",
+      "action": "renewed",
+      "keywords": {
+        "recipientUser": {
+          "key": "to",
+          "filters": {
+            "eventName": "Transfer"
+          },
+          "defaultValue": "an unknown address"
+        },
+        "domain": {
+          "key": "name",
+          "filters": {
+            "eventName": "NameRenewed"
+          },
+          "index": 1
+        }
+      }
+    }
+  }
+}

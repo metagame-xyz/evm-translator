@@ -1,0 +1,13 @@
+{
+  "contractAddress": "0x084b1c3c81545d370f3634392de611caabff8148",
+  "contractOfficialName": "ENSReverseRegistrar",
+  "contractName": "ENS",
+  "writeFunctions": {
+    "setName": {
+      "exampleDescriptionTemplate": "{userName} {action}",
+      "exampleDescription": "leotheprocess.eth set a default ENS name",
+      "action": "set a default ENS name",
+      "keywords": {}
+    }
+  }
+}
