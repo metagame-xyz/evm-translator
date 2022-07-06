@@ -63,7 +63,7 @@ export const enum Action {
     revoked = 'revoked',
     gotAirdropped = 'got airdropped',
     collected = 'collected',
-    multicall = 'executed a multicall transaction',
+    multicall = 'executed multiple transactions',
     __NFTSALE__ = '__NFTSALE__',
     ______TODO______ = '______TODO______',
 }
