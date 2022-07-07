@@ -305,11 +305,11 @@ class Translator {
 
     async allDataFromTxHash(txHash: string, providedUserAddress: string | null = null): Promise<ActivityData> {
         const logData: LogData = {
-            txHash,
+            tx_hash: txHash,
         }
 
         try {
-            logData.functionName = 'getRawTxData'
+            logData.function_name = 'getRawTxData'
             const rawTxData = await this.getRawTxData(txHash)
 
             const userAddressUnvalidated = providedUserAddress || rawTxData.txResponse.from
@@ -326,7 +326,7 @@ class Translator {
             const proxyAddressMap: Record<string, string> = {}
 
             const contractAndProxyAddresses = [...contractAddresses, ...getValues(proxyAddressMap)]
-            logData.functionName = 'getABIsAndNamesForContracts'
+            logData.function_name = 'getABIsAndNamesForContracts'
             const [unfilteredAbiMap, officialContractNamesMap] = await this.getABIsAndNamesForContracts(
                 contractAndProxyAddresses,
             )
@@ -340,7 +340,7 @@ class Translator {
             // contractDataMap = await this.augmentProxyContractABIs(contractDataMap)
 
             const AbiMap = filterABIMap(unfilteredAbiMap)
-            logData.functionName = 'decodeTxData'
+            logData.function_name = 'decodeTxData'
             const { decodedLogs, decodedCallData, decodedTraceData } = await this.decodeTxData(
                 rawTxData,
                 AbiMap,
@@ -348,7 +348,7 @@ class Translator {
             )
             const allAddresses = this.getAllAddresses(decodedLogs, decodedCallData, contractAddresses)
 
-            logData.functionName = 'getENSNames'
+            logData.function_name = 'getENSNames'
             const ensMap = await this.getENSNames(allAddresses)
 
             const decodedWithAugmentation = this.augmentDecodedData(
