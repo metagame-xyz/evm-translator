@@ -62,7 +62,7 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
     - **contractOfficialName**: A specific but still readable name for the contract(s) you're interpreting.
     - **contractName**: A highly readable name for the contract(s) you're interpreting. This name can appear in the `exampleDescription` field of the interpretation so choose it wisely.
 
-    - **writeFunctions**: this is the meat of your interpretation. Each key/value pair is a contract method name that corresponds to another object. This inner object has the following fields...
+    - **writeFunctions**: this is the meat of your interpretation. You dEach key/value pair is a contract method name that corresponds to another object. This inner object has the following fields...
 
         - (required!) **action**: A very short (1-2 words ideally) description of what the user _did_ in the transaction. This should include a past tense verb. See the `Action` enum from [this file](https://github.com/metagame-xyz/evm-translator/blob/main/src/interfaces/interpreted.ts) for a bunch of action names. If at all possible, pick an action from this enum.
 

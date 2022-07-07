@@ -1,6 +1,6 @@
 import Etherscan, { SourceCodeObject } from './clients/Etherscan'
 
-import { ABI_Item, ABI_ItemUnfiltered, ABI_Type, writeStates } from 'interfaces/abi'
+import { ABI_Item, ABI_ItemUnfiltered, ABI_Type, readStates, writeStates } from 'interfaces/abi'
 import { InterpreterMap } from 'interfaces/contractInterpreter'
 import { Action } from 'interfaces/interpreted'
 
@@ -15,6 +15,7 @@ export default class InterpreterTemplateGenerator {
 
     async generateInterpreter(contractAddress: string): Promise<InterpreterMap> {
         let sourceCode: SourceCodeObject
+        debugger
         try {
             sourceCode = await this.etherscan.getSourceCode(contractAddress)
         } catch (e: any) {
@@ -34,7 +35,8 @@ export default class InterpreterTemplateGenerator {
 
         const writeFunctions = abiRows.filter(
             (abiRow) =>
-                abiRow.type === ABI_Type.enum.function && writeStates.includes(abiRow.abiJSON.stateMutability || ''),
+                abiRow.type === ABI_Type.enum.function && 
+                (writeStates.includes(abiRow.abiJSON.stateMutability || '') || !readStates.includes(abiRow.abiJSON.stateMutability || '')),
         )
 
         const interpreterMap: InterpreterMap = {

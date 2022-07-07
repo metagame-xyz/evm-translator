@@ -23,6 +23,7 @@ export type ABI_EventInput = z.infer<typeof ABI_EventInputZ>
 export const ABI_Type = z.enum(['function', 'event', 'constructor', 'fallback', 'receive', 'error'])
 export const StateMutability = z.enum(['pure', 'view', 'nonpayable', 'payable'])
 export const writeStates = [StateMutability.enum.payable, StateMutability.enum.nonpayable]
+export const readStates = [StateMutability.enum.view, StateMutability.enum.pure]
 
 export const ABI_ConstructorZ = z.object({
     type: z.literal(ABI_Type.enum.constructor),
