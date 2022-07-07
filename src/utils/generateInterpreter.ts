@@ -39,14 +39,12 @@ export default class InterpreterTemplateGenerator {
 
         const interpreterMap: InterpreterMap = {
             contractAddress,
-            methods: {},
             contractOfficialName,
             contractName: '______TODO______',
             writeFunctions: {},
         }
 
         writeFunctions.forEach((abi) => {
-            interpreterMap.methods[abi.hashedSignature] = abi.hashableSignature
             interpreterMap.writeFunctions[abi.name] = {
                 action: Action.______TODO______,
                 exampleDescriptionTemplate: '______TODO______',

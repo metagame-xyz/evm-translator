@@ -3,8 +3,6 @@ import { Action } from 'interfaces/interpreted'
 export type InterpreterMap = {
     /** The address of the contract this map is for */
     contractAddress: string
-    /** We're getting rid of this */
-    methods: Record<string, string>
     /** The official name of the contract as defined in the source code */
     contractOfficialName: string
     /** A sensible name that will explain what this contract is for */
