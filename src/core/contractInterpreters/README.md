@@ -14,23 +14,11 @@ You don't need to be an advanced web3 software developer to contribute a contrac
 
 ### Part 1: Set up a local testing environment (recommended)
 
-1.  **Clone the repos by following [these steps](https://github.com/metagame-xyz/evm-translator-demo/blob/main/README.md)**
+1.  **Clone and link the repos by following [these steps](https://github.com/metagame-xyz/evm-translator-demo/blob/main/README.md)**
 
-2.  **Set up the database**
+    You MUST follow the above steps to `yarn link` the evm-translator repo to evm-translator-demo or else your changes will take effect.
 
-    Folllow [MongoDB's local installation guide](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/)
-
-    Run `brew services start mongodb-community@5.0`
-
-    To see the data in a GUI I've been using [Compass](https://www.mongodb.com/products/compass) (by the MongoDB team)
-
-    You can connect to a local instance using `mongodb://localhost:27017`
-
-    Seed erc721 & erc20 ABIs with `yarn run seed` (it runs `evm-translator/scripts/seed-db.js`) (we should add erc1155 here too)
-
-    TODO: set up a endpoint for this...Seed contracts with `https://metabot.loca.lt/api/seed/contracts`
-
-3.  **Bringing it all together**
+2.  **Bringing it all together**
 
     Now, run `yarn dev` within the evm-translator-demo folder in your terminal. In a new terminal tab, run `yarn dev` within the evm-translator folder. Go to localhost:3000/interpret in your browser of choice. Put an example transaction in the first text field, clear the second text field, and select "Get Interpretation". Here is a particularly interesting transaction you could try...0xca8f8c315c8b6c48cee0675677b786d1babe726773829a588efa500b71cbdb65.
 

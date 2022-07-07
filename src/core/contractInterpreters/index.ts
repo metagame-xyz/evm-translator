@@ -28,7 +28,7 @@ const contractInterpreters = {
     '0xc36442b4a4522e871399cd717abdd847ab11fe88': require('./UniswapV3NonFungiblePositionManager.json'),
     '0x283af0b28c62c092c9727f1ee09c02ca627eb7f5': require('./ENSRegistrarController_0x283a.json'), // registering names
     '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85': require('./ENSBaseRegistrar_0x57f1.json'), // transferring names
-    '0x084b1c3c81545d370f3634392de611caabff8148': require('./ENSReverseRegistrar_0x084b.json') // setting default names
+    '0x084b1c3c81545d370f3634392de611caabff8148': require('./ENSReverseRegistrar_0x084b.json'), // setting default names
 }
 
 export default contractInterpreters
