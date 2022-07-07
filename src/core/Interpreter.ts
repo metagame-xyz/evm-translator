@@ -66,7 +66,7 @@ class Interpreter {
         this.db = db || new NullDatabaseInterface()
 
         for (const [address, map] of Object.entries(contractInterpreters)) {
-            this.contractSpecificInterpreters[address] = map as InterpreterMap
+            this.contractSpecificInterpreters[address.toLowerCase()] = map as InterpreterMap
         }
     }
 
