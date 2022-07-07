@@ -5,7 +5,8 @@ import ABIDecoder from 'utils/abi-decoder'
 
 const pruneTraceRecursive = (calls: TraceLog[]): TraceLog[] => {
     if (!calls.length) {
-        throw new Error("This shouldn't happen")
+        console.log("ERROR! Faulty structure of multicall subtraces")
+        return []
     }
     if (!calls[0].subtraces) {
         return calls
@@ -33,7 +34,8 @@ export async function decodeRawTxTrace(abiDecoder: ABIDecoder, txTrace: TraceLog
         callsToPrune.shift()
     }
     if (callsToPrune.length) {
-        throw new Error("This shouldn't happen")
+        console.log("ERROR! Faulty structure of multicall subtraces")
+        return new Promise((resolve) => resolve([]))
     }
     return Promise.all(
         secondLevelCalls.map((call) =>
