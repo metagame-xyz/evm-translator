@@ -1,6 +1,6 @@
 import Etherscan, { SourceCodeObject } from './clients/Etherscan'
 
-import { ABI_Item, ABI_ItemUnfiltered, ABI_Type, writeStates } from 'interfaces/abi'
+import { ABI_Item, ABI_ItemUnfiltered, ABI_Type, readStates, writeStates } from 'interfaces/abi'
 import { InterpreterMap } from 'interfaces/contractInterpreter'
 import { Action } from 'interfaces/interpreted'
 
@@ -34,19 +34,19 @@ export default class InterpreterTemplateGenerator {
 
         const writeFunctions = abiRows.filter(
             (abiRow) =>
-                abiRow.type === ABI_Type.enum.function && writeStates.includes(abiRow.abiJSON.stateMutability || ''),
+                abiRow.type === ABI_Type.enum.function &&
+                (writeStates.includes(abiRow.abiJSON.stateMutability || '') ||
+                    !readStates.includes(abiRow.abiJSON.stateMutability || '')),
         )
 
         const interpreterMap: InterpreterMap = {
             contractAddress,
-            methods: {},
             contractOfficialName,
             contractName: '______TODO______',
             writeFunctions: {},
         }
 
         writeFunctions.forEach((abi) => {
-            interpreterMap.methods[abi.hashedSignature] = abi.hashableSignature
             interpreterMap.writeFunctions[abi.name] = {
                 action: Action.______TODO______,
                 exampleDescriptionTemplate: '______TODO______',

@@ -43,6 +43,14 @@ const testTxHashes = {
         redeem: '0x63a27f1f7e10fd37477e3e4c35986adb58daaa4b8ab541909a54cb43b0aed5aa',
         repayBorrow: '0xc5380c861d5817a30b42442f32f93cdc91e1ca395b607ec4ecd9e9cf5fc3c2b9',
     },
+    ENS: {
+        safeTransferFrom: '0x03daff6bd6d1b9792ff1973a1d5104b14fa76fcea6165eb821076cda7f4b2624',
+        setApprovalForAll: '0xfc52130191555ad7892906f1d018945b7b45034fb200dbe6945579fef6fe07b5',
+        reclaim: '0x100ee7ec909ddd63c03d33261f6658b4050216e63c7a87fa2ccfff32c1d4a7e6',
+        registerWithConfig: '0xd3f7d0c363f5dc8c7e8d4285afcc0d40063a661075619b09d93105d81200749b',
+        renew: '0xcc8a09291cf751d8714289ded45a7ae7b7b2d52560ab120f50b75a771e97a969',
+        setName: '0x419feb4f564baacf3ca6643ac0a4dc00ee76334cdb6fd17f2ee3929278b86d7c',
+    },
 }
 
 // test multiple roles for a single tx
