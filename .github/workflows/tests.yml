@@ -10,31 +10,30 @@ on: push
 #     branches: [ "main" ]
 
 jobs:
-  build:
-    name: Run tests
-    runs-on: ubuntu-latest
-    environment: test
-    env:
-      EVM_TRANSLATOR_CONNECTION_STRING: ${{ secrets.EVM_TRANSLATOR_CONNECTION_STRING }}
-      NEXT_PUBLIC_ALCHEMY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_ALCHEMY_PROJECT_ID }}
-      ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
-      COVALENT_API_KEY: ${{ secrets.COVALENT_API_KEY }}
-      
+    build:
+        name: Run tests
+        runs-on: ubuntu-latest
+        environment: test
+        env:
+            EVM_TRANSLATOR_CONNECTION_STRING: ${{ secrets.EVM_TRANSLATOR_CONNECTION_STRING }}
+            NEXT_PUBLIC_ALCHEMY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_ALCHEMY_PROJECT_ID }}
+            ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+            COVALENT_API_KEY: ${{ secrets.COVALENT_API_KEY }}
 
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x, 16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        strategy:
+            matrix:
+                node-version: [12.x, 14.x, 16.x]
+                # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: yarn
-    - run: yarn install --immutable
-    - run: yarn lint
-    - run: yarn format
-    - run: yarn run seed-test-txs
-    - run: yarn test
+        steps:
+            - uses: actions/checkout@v3
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: yarn
+            - run: yarn install --immutable
+            - run: yarn lint
+            - run: yarn format-workflow
+            - run: yarn run seed-test-txs
+            - run: yarn test
