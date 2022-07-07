@@ -17,7 +17,7 @@ import {
 import { AddressNameData, ContractData, DecodedTx } from 'interfaces/decoded'
 
 import { DatabaseInterface } from 'utils/DatabaseInterface'
-import { logInfo } from 'utils/logging'
+import { LogData, logInfo } from 'utils/logging'
 import { ABI_RowModel } from 'utils/mongoose/models/abi'
 
 export class MongooseDatabaseInterface extends DatabaseInterface {
@@ -93,7 +93,9 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
                 })),
             )
 
-            logInfo({}, `Added ${result.nUpserted} ABIs`)
+            if (result.nUpserted > 0) {
+                logInfo({}, `Added ${result.nUpserted} ABIs`)
+            }
             return result
         } catch (e) {
             console.log('abi mongoose error')

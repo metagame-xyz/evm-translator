@@ -198,7 +198,9 @@ export default class ABIDecoder {
                 return blankReturnData
             }
         } else {
-            logWarning(warningLogData, 'No abiItem and/or decodedData found')
+            if (data !== '0x') {
+                logWarning(warningLogData, 'No abiItem and/or decodedData found')
+            }
             return blankReturnData
         }
     }
