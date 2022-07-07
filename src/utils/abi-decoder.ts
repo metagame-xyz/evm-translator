@@ -199,7 +199,7 @@ export default class ABIDecoder {
             }
         } else {
             if (data !== '0x') {
-                logWarning(warningLogData, 'No abiItem and/or decodedData found')
+                logWarning(warningLogData, 'No abiItem and/or decoded method found')
             }
             return blankReturnData
         }
@@ -349,7 +349,7 @@ export default class ABIDecoder {
                             return blankRawLog
                         }
                     } else {
-                        logWarning(warningLogData, 'No abiItem and/or decodedData found')
+                        logWarning(warningLogData, 'No abiItem and/or decoded log data found')
                         return blankRawLog
                     }
                 }),
