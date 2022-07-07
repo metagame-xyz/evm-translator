@@ -9,7 +9,7 @@ import { EVMTransaction } from 'interfaces/s3'
 import { Chain } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
-import { filterABIMap, getProxyAddresses, getValues } from 'utils'
+import { filterABIMap, getValues } from 'utils'
 import Covalent from 'utils/clients/Covalent'
 import Etherscan, { EtherscanServiceLevel } from 'utils/clients/Etherscan'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
@@ -185,14 +185,6 @@ class Translator {
         return this.augmenter.getENSNames(addresses)
     }
 
-    async getOfficialNamesForContracts(contractAddresses: string[]): Promise<Record<string, string>> {
-        throw new Error('Not implemented')
-    }
-
-    async getContractName(address: string): Promise<string | null> {
-        throw new Error('Not implemented')
-    }
-
     async getContractsData(
         contractToAbiMap: Record<string, ABI_ItemUnfiltered[]>,
         contractToOfficialNameMap: Record<string, string | null>,
@@ -206,9 +198,6 @@ class Translator {
         return this.augmenter.getContractType(address, abi)
     }
 
-    getContractTypes(contractToAbiMap: Record<string, ABI_Item[]>): Promise<Record<string, ContractType>> {
-        throw new Error('Not implemented')
-    }
     /**********************************************/
     /******      DECODING / AUGMENTING     ********/
     /**********************************************/
@@ -220,6 +209,7 @@ class Translator {
         return await this.augmenter.decodeTxData(rawTxData, ABIs, contractDataMap)
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     decodeTxDataArr(rawTxDataArr: RawTxData[], ABIs: Record<string, ABI_Item[]>[]): DecodedTx[] {
         throw new Error('Not implemented')
     }
