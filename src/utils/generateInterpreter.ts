@@ -64,9 +64,3 @@ export default class InterpreterTemplateGenerator {
         return interpreterMap
     }
 }
-
-
-
-
-
-
