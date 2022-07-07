@@ -1,8 +1,5 @@
-// import DatadogWinston from 'datadog-winston';
+import DatadogWinston from 'datadog-winston'
 import winston, { format } from 'winston'
-import { ConsoleTransportInstance, Transports } from 'winston/lib/winston/transports'
-
-// import { DATADOG_API_KEY } from './constants';
 
 const { combine, printf, colorize, errors } = format
 
@@ -60,7 +57,19 @@ const timingFormat = printf((d) => {
     return `${d.level}: ${type}: ${val} ${message}${error}${extra}`
 })
 
-const prodTransports = [new winston.transports.Console({ level: 'debug' })]
+const service = process.env.VERCEL_ENV === 'production' ? 'metabot-logger' : 'metabot-dev-logger'
+
+const prodTransports = process.env.DATADOG_API_KEY
+    ? [
+          new DatadogWinston({
+              apiKey: process.env.DATADOG_API_KEY,
+              hostname: 'vercel',
+              service,
+              ddsource: 'nodejs',
+              ddtags: `env:${process.env.VERCEL_ENV}, git_sha:${process.env.VERCEL_GIT_COMMIT_SHA}, git_ref:${process.env.VERCEL_GIT_COMMIT_REF}`,
+          }),
+      ]
+    : []
 
 const localTransports: any = [new winston.transports.Console({ level: 'debug' })]
 
@@ -71,11 +80,9 @@ const isProdEnv = process.env.NODE_ENV === 'production'
 if (!isProdEnv) {
     localTransports.push(new winston.transports.File({ level: 'warning', filename: 'logs/warnings.log' }))
     localTransports.push(new winston.transports.File({ level: 'error', filename: 'logs/errors.log' }))
-    localTransports.push(new winston.transports.File({ level: 'info', filename: 'logs/info.log' }))
+    // localTransports.push(new winston.transports.File({ level: 'info', filename: 'logs/info.log' }))
     timerTransports.push(new winston.transports.File({ level: 'debug', filename: 'logs/timers.log' }))
 }
-
-//combine(colorize(), prodFormat)
 
 export const winstonLogger = winston.createLogger({
     levels: winston.config.syslog.levels,
@@ -177,19 +184,6 @@ export type LogDataWithLevelAnd = LogData & {
     level: 'emerg' | 'alert' | 'crit' | 'error' | 'warning' | 'notice' | 'info' | 'debug'
     message: any
 }
-
-// const service =
-//     process.env.VERCEL_ENV === 'production' ? 'evm-translator-logger' : 'evm-translator-dev-logger';
-
-// const service = process.env.NODE_ENV === 'production' ? 'evm-translator-logger' : 'evm-translator-dev-logger'
-
-// const datadogTransport = new DatadogWinston({
-//     apiKey: DATADOG_API_KEY,
-//     hostname: 'vercel',
-//     service,
-//     ddsource: 'nodejs',
-//     ddtags: `env:${process.env.VERCEL_ENV}, git_sha:${process.env.VERCEL_GIT_COMMIT_SHA}, git_ref:${process.env.VERCEL_GIT_COMMIT_REF}`,
-// });
 
 // const prodFormat = printf(
 //     (d) =>
