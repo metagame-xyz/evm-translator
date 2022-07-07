@@ -891,7 +891,7 @@ Object {
   "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0x6b92 executed a multicall transaction on Uniswap V3",
+  "exampleDescription": "0x6b92 executed multiple transactions on Uniswap V3",
   "extra": Object {
     "tokenName0": "an unknown token",
     "tokenName1": "an unknown token",

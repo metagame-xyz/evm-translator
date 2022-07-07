@@ -8,7 +8,7 @@
         "test": "jest",
         "build": "tsc && tsc-alias",
         "dev": "concurrently --kill-others \"tsc -w\" \"tsc-alias -w\"",
-        "format": "prettier --list-different --write \"src/**/*.ts\" \"docs/**/*.md\"",
+        "format": "prettier --loglevel error --list-different --write \"src/**/*.ts\" \"docs/**/*.md\"",
         "lint": "eslint --exit-on-fatal-error --ignore-path .eslintignore --ext .ts .",
         "check": "yarn run lint && yarn run format && yarn run test",
         "seed": "node lib/scripts/seed-db.js",
