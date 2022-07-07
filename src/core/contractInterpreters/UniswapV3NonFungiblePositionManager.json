@@ -160,9 +160,9 @@
       }
     },
     "multicall": {
-      "action": "executed multiple transactions",
+      "action": "executed multiple actions",
       "exampleDescriptionTemplate": "{userAddress} {action} on {contractName}",
-      "exampleDescription": "leotheprocess.eth executed multiple transactions on Uniswap V3",
+      "exampleDescription": "leotheprocess.eth executed multiple actions on Uniswap V3",
       "keywords": {}
     }
   }

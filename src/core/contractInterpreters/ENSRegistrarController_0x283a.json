@@ -19,7 +19,7 @@
     },
     "renew": {
       "exampleDescriptionTemplate": "{userName} {action} their ownership of {domain}.eth with {contractName}",
-      "exampleDescription": "leotheprocess.eth transferred leojacoby.eth to 0xa344t94wo9gj4wsr",
+      "exampleDescription": "leotheprocess.eth renewed leojacoby.eth to 0xa344t94wo9gj4wsr",
       "action": "renewed",
       "keywords": {
         "recipientUser": {

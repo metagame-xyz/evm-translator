@@ -79,7 +79,7 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
     <br><br>
     **Dealing with "multicall" methods**
 
-    Some contracts use methods like "multicall", which bundle multiple method calls into one. If your contract does this, have no fear! Simply use `"executed multiple transactions"` for your `action` field and don't worry about `keywords`. Your `exampleDescriptionTemplate` could be something like `"{userAddress} {action} on {contractName}"` if you choose to fill this field.
+    Some contracts use methods like "multicall", which bundle multiple method calls into one. If your contract does this, have no fear! Simply use `"executed multiple actions"` for your `action` field and don't worry about `keywords`. Your `exampleDescriptionTemplate` could be something like `"{userAddress} {action} on {contractName}"` if you choose to fill this field.
 
     Make sure you implement all the important methods within `writeFunctions` that the multicall method could call. You can analyze the trace calls of a multicall transaction on [Bloxy.info](bloxy.info) in the "Execution trace" section. Only concern yourself with the first level of idented method calls.
 
