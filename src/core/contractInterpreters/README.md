@@ -16,7 +16,7 @@ You don't need to be an advanced web3 software developer to contribute a contrac
 
 1.  **Clone and link the repos by following [these steps](https://github.com/metagame-xyz/evm-translator-demo/blob/main/README.md)**
 
-    You MUST follow the above steps to `yarn link` the evm-translator repo to evm-translator-demo or else your changes will take effect.
+    You MUST follow the above steps to `yarn link` the evm-translator repo to evm-translator-demo or else your changes will take effect. Also, make sure you get the necessary API keys and stash them in .env as described.
 
 2.  **Run the package and demo**
 
@@ -128,9 +128,9 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
 
 ### Part 4: Submit your interpretation
 
-1. Push your changes to your branch
+1. Add, commit, and push your changes to your branch. See [this tutorial](https://www.earthdatascience.org/workshops/intro-version-control-git/basic-git-commands/) if you don't know how.
 
-2. Open an pull request
+2. Open an pull request. See [this tutorial](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) if you don't know how.
 
     Please spend time detailing your proposed interpretation using the title and description of the PR. The only files that you should have edited are your own JSON file, `contractInterpreters/index.ts`, `__tests__/testTxHashes.ts`, and maybe `utils/constants.ts` if you have a multicall method. **We will not accept proposals that edit aditional files**
 
