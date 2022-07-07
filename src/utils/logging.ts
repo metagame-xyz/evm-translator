@@ -142,15 +142,19 @@ export const logSuccess = (logData: LogData, message = 'success') => {
 
 export type LogData = {
     level?: 'emerg' | 'alert' | 'crit' | 'error' | 'warning' | 'notice' | 'info' | 'debug'
-    txHash?: string
+    tx_hash?: string
     address?: string
     message?: any
-    eventHash?: string
-    methodHash?: string
-    secondsElapsed?: number
+    event_hash?: string
+    method_hash?: string
+    seconds_elapsed?: number
     thrown_error?: any
     extra?: any
-    functionName?: string
+    function_name?: string
+    log_item?: any
+    abi_item?: any
+    method_id?: string
+    method_data?: string
 }
 // export type LogData = {
 //     level?: 'emerg' | 'alert' | 'crit' | 'error' | 'warning' | 'notice' | 'info' | 'debug'

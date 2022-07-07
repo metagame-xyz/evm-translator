@@ -23,9 +23,9 @@ function interpretGnosisExecution(decodedData: DecodedTx, interpretation: Interp
     if (!isExecutionSuccess) {
         logWarning(
             {
-                txHash: decodedData.txHash,
+                tx_hash: decodedData.txHash,
                 address: toAddress || undefined,
-                functionName: 'interpretGnosisExecution',
+                function_name: 'interpretGnosisExecution',
             },
             'Gnosis tx didnt include ExecutionSuccess event',
         )

@@ -1,6 +1,6 @@
 import fourByteDirectory from './clients/FourByteDirectory'
 import { DatabaseInterface } from './DatabaseInterface'
-import { logWarning } from './logging'
+import { LogData, logWarning } from './logging'
 import { Log } from '@ethersproject/providers'
 import { BigNumber } from 'ethers'
 
@@ -139,53 +139,67 @@ export default class ABIDecoder {
             }
         }
 
+        const blankReturnData = {
+            name: null,
+            params: [],
+        }
+        const warningLogData: LogData = {
+            function_name: 'decodeMethod',
+            method_id: methodID,
+            method_data: data,
+            abi_item: abiItem,
+        }
+
         if (abiItem && decoded) {
-            const retData: RawDecodedCallData = {
-                name: abiItem.name,
-                params: [],
-            }
-            for (let i = 0; i < Object.keys(decoded).length; i++) {
-                // for (let i = 0; i < decoded.__length__; i++) {
-                const param = decoded[i]
-                let parsedParam = param
-                const isUint = abiItem.inputs[i].type.indexOf('uint') === 0
-                const isInt = abiItem.inputs[i].type.indexOf('int') === 0
-                const isAddress = abiItem.inputs[i].type.indexOf('address') === 0
+            try {
+                const returnData: RawDecodedCallData = {
+                    name: abiItem.name,
+                    params: [],
+                }
+                for (let i = 0; i < Object.keys(decoded).length; i++) {
+                    // for (let i = 0; i < decoded.__length__; i++) {
+                    const param = decoded[i]
+                    let parsedParam = param
+                    const isUint = abiItem.inputs[i].type.indexOf('uint') === 0
+                    const isInt = abiItem.inputs[i].type.indexOf('int') === 0
+                    const isAddress = abiItem.inputs[i].type.indexOf('address') === 0
 
-                if (isUint || isInt) {
-                    const isArray = Array.isArray(param)
+                    if (isUint || isInt) {
+                        const isArray = Array.isArray(param)
 
-                    if (isArray) {
-                        parsedParam = param.map((val) => BigNumber.from(val).toString())
-                    } else {
-                        parsedParam = param ? BigNumber.from(param).toString() : null
+                        if (isArray) {
+                            parsedParam = param.map((val) => BigNumber.from(val).toString())
+                        } else {
+                            parsedParam = param ? BigNumber.from(param).toString() : null
+                        }
                     }
+
+                    // Addresses returned by web3 are randomly cased so we need to standardize and lowercase all
+                    if (isAddress) {
+                        const isArray = Array.isArray(param)
+
+                        if (isArray) {
+                            parsedParam = param.map((_) => _.toLowerCase())
+                        } else {
+                            parsedParam = param.toLowerCase()
+                        }
+                    }
+
+                    returnData.params.push({
+                        name: abiItem.inputs[i].name || '',
+                        value: parsedParam,
+                        type: abiItem.inputs[i].type,
+                    })
                 }
 
-                // Addresses returned by web3 are randomly cased so we need to standardize and lowercase all
-                if (isAddress) {
-                    const isArray = Array.isArray(param)
-
-                    if (isArray) {
-                        parsedParam = param.map((_) => _.toLowerCase())
-                    } else {
-                        parsedParam = param.toLowerCase()
-                    }
-                }
-
-                retData.params.push({
-                    name: abiItem.inputs[i].name || '',
-                    value: parsedParam,
-                    type: abiItem.inputs[i].type,
-                })
+                return returnData
+            } catch (e: any) {
+                logWarning(warningLogData, e.message)
+                return blankReturnData
             }
-
-            return retData
         } else {
-            return {
-                name: null,
-                params: [],
-            }
+            logWarning(warningLogData, 'No abiItem and/or decodedData found')
+            return blankReturnData
         }
     }
     async decodeLogs(logs: Log[], contractDataMap: Record<string, ContractData>): Promise<RawDecodedLog[]> {
@@ -252,74 +266,89 @@ export default class ABIDecoder {
                         }
                     }
 
+                    const blankRawLog: RawDecodedLog = {
+                        name: null,
+                        events: [],
+                        address: logItem.address,
+                        logIndex: logItem.logIndex,
+                        decoded: false,
+                    }
+
+                    const warningLogData: LogData = {
+                        function_name: 'decodeLogs',
+                        address: logItem.address,
+                        tx_hash: logItem.transactionHash,
+                        log_item: logItem,
+                        abi_item: abiItem,
+                    }
+
                     if (abiItem && decodedData) {
-                        type DecodedParam = {
-                            name: string
-                            value: string | BigNumber
-                            type: string
-                        }
-
-                        type DecodedParamStringOnly = {
-                            name: string
-                            value: string
-                            type: string
-                        }
-
-                        const decodedParams: RawDecodedLogEvent[] = []
-                        // Loop topic and data to get the params
-                        abiItem.inputs.map(function (param) {
-                            const decodedP: DecodedParam = {
-                                name: param.name || '',
-                                type: param.type,
-                                value: '',
+                        try {
+                            type DecodedParam = {
+                                name: string
+                                value: string | BigNumber
+                                type: string
                             }
 
-                            if (param.indexed) {
-                                decodedP.value = logItem.topics[topicsIndex]
-                                topicsIndex++
-                            } else {
-                                decodedP.value = decodedData[dataIndex]
-                                dataIndex++
+                            type DecodedParamStringOnly = {
+                                name: string
+                                value: string
+                                type: string
                             }
 
-                            if (param.type === 'address' && typeof decodedP.value === 'string') {
-                                decodedP.value = decodedP.value.toLowerCase()
-                                // 42 because len(0x) + 40
-                                if (decodedP.value.length > 42) {
-                                    const toRemove = decodedP.value.length - 42
-                                    const temp = decodedP.value.split('')
-                                    temp.splice(2, toRemove)
-                                    decodedP.value = temp.join('')
+                            const decodedParams: RawDecodedLogEvent[] = []
+                            // Loop topic and data to get the params
+                            abiItem.inputs.map(function (param) {
+                                const decodedP: DecodedParam = {
+                                    name: param.name || '',
+                                    type: param.type,
+                                    value: '',
                                 }
-                            }
 
-                            if (param.type === 'uint256' || param.type === 'uint8' || param.type === 'int') {
-                                if (typeof decodedP.value === 'string') {
-                                    decodedP.value = BigNumber.from(decodedP.value).toString()
+                                if (param.indexed) {
+                                    decodedP.value = logItem.topics[topicsIndex]
+                                    topicsIndex++
                                 } else {
-                                    decodedP.value = decodedP.value.toString()
+                                    decodedP.value = decodedData[dataIndex]
+                                    dataIndex++
                                 }
-                            }
 
-                            decodedParams.push(decodedP as DecodedParamStringOnly)
-                        })
+                                if (param.type === 'address' && typeof decodedP.value === 'string') {
+                                    decodedP.value = decodedP.value.toLowerCase()
+                                    // 42 because len(0x) + 40
+                                    if (decodedP.value.length > 42) {
+                                        const toRemove = decodedP.value.length - 42
+                                        const temp = decodedP.value.split('')
+                                        temp.splice(2, toRemove)
+                                        decodedP.value = temp.join('')
+                                    }
+                                }
 
-                        return {
-                            events: decodedParams,
-                            name: abiItem.name,
-                            address: AddressZ.parse(logItem.address),
-                            logIndex: logItem.logIndex,
-                            decoded: true,
-                        } as RawDecodedLog
+                                if (param.type === 'uint256' || param.type === 'uint8' || param.type === 'int') {
+                                    if (typeof decodedP.value === 'string') {
+                                        decodedP.value = BigNumber.from(decodedP.value).toString()
+                                    } else {
+                                        decodedP.value = decodedP.value.toString()
+                                    }
+                                }
+
+                                decodedParams.push(decodedP as DecodedParamStringOnly)
+                            })
+
+                            return {
+                                events: decodedParams,
+                                name: abiItem.name,
+                                address: AddressZ.parse(logItem.address),
+                                logIndex: logItem.logIndex,
+                                decoded: true,
+                            } as RawDecodedLog
+                        } catch (e: any) {
+                            logWarning(warningLogData, e.message)
+                            return blankRawLog
+                        }
                     } else {
-                        // logWarning({ address, eventHash: eventID }, 'no abi found')
-                        return {
-                            name: null,
-                            events: [],
-                            address: AddressZ.parse(logItem.address),
-                            logIndex: logItem.logIndex,
-                            decoded: false,
-                        } as RawDecodedLog
+                        logWarning(warningLogData, 'No abiItem and/or decodedData found')
+                        return blankRawLog
                     }
                 }),
         )

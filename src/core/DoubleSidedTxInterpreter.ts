@@ -6,7 +6,9 @@ export function getActionForDoubleSidedTx(interpretation: Interpretation): Actio
     } else if (parseFloat(interpretation.nativeValueReceived) !== 0 && interpretation.tokensSent.length) {
         return Action.sold
     } else {
-        console.log(`ERROR! Invalid NFT sale: received ${interpretation.nativeValueReceived} ETH and ${interpretation.tokensReceived.length} tokens, sent ${interpretation.nativeValueSent} ETH and ${interpretation.tokensSent.length} tokens`)
+        console.log(
+            `ERROR! Invalid NFT sale: received ${interpretation.nativeValueReceived} ETH and ${interpretation.tokensReceived.length} tokens, sent ${interpretation.nativeValueSent} ETH and ${interpretation.tokensSent.length} tokens`,
+        )
         return Action.unknown
     }
 }
@@ -25,7 +27,9 @@ export function getNativeValueTransferredForDoubleSidedTx(interpretation: Interp
     ) {
         return interpretation.nativeValueReceived
     } else {
-        console.log(`Invalid NFT sale: action: ${interpretation.actions[0]}, received ${interpretation.nativeValueReceived} ETH and ${interpretation.tokensReceived.length} tokens, sent ${interpretation.nativeValueSent} ETH and ${interpretation.tokensSent.length} tokens`)
+        console.log(
+            `Invalid NFT sale: action: ${interpretation.actions[0]}, received ${interpretation.nativeValueReceived} ETH and ${interpretation.tokensReceived.length} tokens, sent ${interpretation.nativeValueSent} ETH and ${interpretation.tokensSent.length} tokens`,
+        )
         return Action.unknown
     }
 }
