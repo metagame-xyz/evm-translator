@@ -355,7 +355,7 @@ export default class ABIDecoder {
                     logWarning(warningLogData, 'No abiItem and/or decoded log data found')
                     return blankRawLog
                 }
-            }))
+            })
     }
 
     removeABI(abiArray: ABI_Item[]) {
