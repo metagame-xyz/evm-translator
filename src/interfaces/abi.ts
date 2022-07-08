@@ -153,3 +153,7 @@ export type ABI_Error = z.infer<typeof ABI_ErrorZ>
 
 export type ABI_ItemUnfiltered = z.infer<typeof ABI_ItemUnfilteredZ>
 export type ABI_Item = z.infer<typeof ABI_ItemZ>
+
+export type EventSigOptions = {
+    [hashedSignature: string]: ABI_Event[]
+}

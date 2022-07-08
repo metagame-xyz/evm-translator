@@ -86,13 +86,13 @@ if (!isProdEnv) {
 
 export const winstonLogger = winston.createLogger({
     levels: winston.config.syslog.levels,
-    format: timingFormat,
+    format: debugFormat,
     transports: isProdEnv ? prodTransports : localTransports,
 })
 
 export const timingLogger = winston.createLogger({
     levels: winston.config.syslog.levels,
-    format: timingFormat,
+    format: debugFormat,
     transports: isProdEnv ? undefined : timerTransports,
 })
 

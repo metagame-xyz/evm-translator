@@ -4,7 +4,7 @@ import { LogData, logWarning } from './logging'
 import { Log } from '@ethersproject/providers'
 import { BigNumber } from 'ethers'
 
-import { ABI_Event, ABI_Function, ABI_FunctionZ, ABI_Item, ABI_Row, ABI_Type } from 'interfaces/abi'
+import { ABI_Event, ABI_Function, ABI_FunctionZ, ABI_Item, ABI_Row, ABI_Type, EventSigOptions } from 'interfaces/abi'
 import { ContractData, ContractType, RawDecodedCallData, RawDecodedLog, RawDecodedLogEvent } from 'interfaces/decoded'
 import { AddressZ } from 'interfaces/utils'
 
@@ -39,22 +39,24 @@ function getABIForApprovalEvent(contractType: ContractType | null): ABI_Event | 
 
 const abiCoder = new ABICoder()
 
-type methodSigs = {
+type MethodSigs = {
     [key: string]: ABI_Function
 }
-type eventSigs = {
+type EventSigs = {
     [key: string]: { [key: string]: ABI_Event }
 }
 
 export default class ABIDecoder {
-    methodSigs: methodSigs
-    eventSigs: eventSigs
+    methodSigs: MethodSigs
+    eventSigs: EventSigs
+    eventSigOptions: EventSigOptions
     abiRows: ABI_Row[]
     db: DatabaseInterface
 
     constructor(databaseInterface: DatabaseInterface) {
         this.methodSigs = {}
         this.eventSigs = {}
+        this.eventSigOptions = {}
         this.abiRows = []
         this.db = databaseInterface
     }
@@ -146,7 +148,6 @@ export default class ABIDecoder {
         const warningLogData: LogData = {
             function_name: 'decodeMethod',
             method_id: methodID,
-            method_data: data,
             abi_item: abiItem,
         }
 
@@ -198,162 +199,163 @@ export default class ABIDecoder {
                 return blankReturnData
             }
         } else {
-            if (data !== '0x') {
+            if (!['0x', ''].includes(data)) {
                 logWarning(warningLogData, 'No abiItem and/or decoded method found')
             }
             return blankReturnData
         }
     }
     async decodeLogs(logs: Log[], contractDataMap: Record<string, ContractData>): Promise<RawDecodedLog[]> {
-        return await Promise.all(
-            logs
-                .filter((log) => log.topics.length > 0)
-                .map(async (logItem) => {
-                    const eventID = logItem.topics[0]
-                    const address = AddressZ.parse(logItem.address)
+        const eventIDs = [...new Set(logs.map((log) => log.topics[0]))]
 
-                    // first check if it the contract's abi has it
-                    let abiItem: ABI_Event | null = this.eventSigs[address] ? this.eventSigs[address][eventID] : null
+        this.eventSigOptions = await this.db.getManyEventABIsForHexSignatures(eventIDs)
 
-                    let abiItemOptions: ABI_Event[] = []
+        return logs
+            .filter((log) => log.topics.length > 0)
+            .map((logItem) => {
+                const eventID = logItem.topics[0]
+                const address = AddressZ.parse(logItem.address)
 
-                    // if not, and it's the ambiguous Transfer event, check the contract type
-                    if (!abiItem && eventID === transferHash) {
-                        abiItem = getABIForTransferEvent(contractDataMap[address].type)
+                // first check if it the contract's abi has it
+                let abiItem: ABI_Event | null = this.eventSigs[address] ? this.eventSigs[address][eventID] : null
+
+                let abiItemOptions: ABI_Event[] = []
+
+                // if not, and it's the ambiguous Transfer event, check the contract type
+                if (!abiItem && eventID === transferHash) {
+                    abiItem = getABIForTransferEvent(contractDataMap[address].type)
+                }
+
+                if (!abiItem && eventID === approvalHash) {
+                    abiItem = getABIForApprovalEvent(contractDataMap[address].type)
+                }
+
+                let decodedData: any = null
+                let dataIndex = 0
+                let topicsIndex = 1
+                const logData = logItem.data.slice(2)
+                const topicsCount = logItem.topics.length - 1
+                let indexedCount = 0
+
+                function getDecodedData(logData: string, abiItem: ABI_Event) {
+                    const dataTypes: any[] = []
+                    abiItem.inputs.map(function (input) {
+                        if (!input.indexed) {
+                            dataTypes.push(input.type)
+                        }
+                    })
+                    return abiCoder.decodeParameters(dataTypes, logData)
+                }
+
+                // if we found a match, try to decode. if it doesn't fit, or we don't have a match, get options from the db
+                if (abiItem) {
+                    try {
+                        decodedData = getDecodedData(logData, abiItem)
+                    } catch (e) {
+                        abiItemOptions = [...this.eventSigOptions[eventID]] || []
                     }
+                } else {
+                    abiItemOptions = [...this.eventSigOptions[eventID]] || []
+                }
 
-                    if (!abiItem && eventID === approvalHash) {
-                        abiItem = getABIForApprovalEvent(contractDataMap[address].type)
-                    }
+                if (abiItemOptions.length > 0) {
+                    // try all of the options, it'll throw an error if it doesn't match, catch it, try the next one
+                    while (!(decodedData || abiItemOptions.length === 0 || topicsCount == indexedCount)) {
+                        abiItem = abiItemOptions.shift() as ABI_Event
+                        indexedCount = abiItem.inputs.filter((_) => _.indexed).length
 
-                    let decodedData: any = null
-                    let dataIndex = 0
-                    let topicsIndex = 1
-                    const logData = logItem.data.slice(2)
-                    const topicsCount = logItem.topics.length - 1
-                    let indexedCount = 0
-
-                    function getDecodedData(logData: string, abiItem: ABI_Event) {
-                        const dataTypes: any[] = []
-                        abiItem.inputs.map(function (input) {
-                            if (!input.indexed) {
-                                dataTypes.push(input.type)
-                            }
-                        })
-                        return abiCoder.decodeParameters(dataTypes, logData)
-                    }
-
-                    // if we found a match, try to decode. if it doesn't fit, or we don't have a match, get options from the db
-                    if (abiItem) {
                         try {
                             decodedData = getDecodedData(logData, abiItem)
                         } catch (e) {
-                            abiItemOptions = (await this.db.getEventABIsForHexSignature(eventID)) || []
-                        }
-                    } else {
-                        abiItemOptions = (await this.db.getEventABIsForHexSignature(eventID)) || []
-                    }
-
-                    if (abiItemOptions.length > 0) {
-                        // try all of the options, it'll throw an error if it doesn't match, catch it, try the next one
-                        while (!(decodedData || abiItemOptions.length === 0 || topicsCount == indexedCount)) {
-                            abiItem = abiItemOptions.shift() as ABI_Event
-                            indexedCount = abiItem.inputs.filter((_) => _.indexed).length
-
-                            try {
-                                decodedData = getDecodedData(logData, abiItem)
-                            } catch (e) {
-                                //try again
-                            }
+                            //try again
                         }
                     }
+                }
+                const blankRawLog: RawDecodedLog = {
+                    name: null,
+                    events: [],
+                    address: logItem.address,
+                    logIndex: logItem.logIndex,
+                    decoded: false,
+                }
 
-                    const blankRawLog: RawDecodedLog = {
-                        name: null,
-                        events: [],
-                        address: logItem.address,
-                        logIndex: logItem.logIndex,
-                        decoded: false,
-                    }
+                const warningLogData: LogData = {
+                    function_name: 'decodeLogs',
+                    address: logItem.address,
+                    tx_hash: logItem.transactionHash,
+                    log_item: logItem,
+                    abi_item: abiItem,
+                }
 
-                    const warningLogData: LogData = {
-                        function_name: 'decodeLogs',
-                        address: logItem.address,
-                        tx_hash: logItem.transactionHash,
-                        log_item: logItem,
-                        abi_item: abiItem,
-                    }
+                if (abiItem && decodedData) {
+                    try {
+                        type DecodedParam = {
+                            name: string
+                            value: string | BigNumber
+                            type: string
+                        }
 
-                    if (abiItem && decodedData) {
-                        try {
-                            type DecodedParam = {
-                                name: string
-                                value: string | BigNumber
-                                type: string
+                        type DecodedParamStringOnly = {
+                            name: string
+                            value: string
+                            type: string
+                        }
+
+                        const decodedParams: RawDecodedLogEvent[] = []
+                        // Loop topic and data to get the params
+                        abiItem.inputs.map(function (param) {
+                            const decodedP: DecodedParam = {
+                                name: param.name || '',
+                                type: param.type,
+                                value: '',
                             }
 
-                            type DecodedParamStringOnly = {
-                                name: string
-                                value: string
-                                type: string
+                            if (param.indexed) {
+                                decodedP.value = logItem.topics[topicsIndex]
+                                topicsIndex++
+                            } else {
+                                decodedP.value = decodedData[dataIndex]
+                                dataIndex++
                             }
 
-                            const decodedParams: RawDecodedLogEvent[] = []
-                            // Loop topic and data to get the params
-                            abiItem.inputs.map(function (param) {
-                                const decodedP: DecodedParam = {
-                                    name: param.name || '',
-                                    type: param.type,
-                                    value: '',
+                            if (param.type === 'address' && typeof decodedP.value === 'string') {
+                                decodedP.value = decodedP.value.toLowerCase()
+                                // 42 because len(0x) + 40
+                                if (decodedP.value.length > 42) {
+                                    const toRemove = decodedP.value.length - 42
+                                    const temp = decodedP.value.split('')
+                                    temp.splice(2, toRemove)
+                                    decodedP.value = temp.join('')
                                 }
+                            }
 
-                                if (param.indexed) {
-                                    decodedP.value = logItem.topics[topicsIndex]
-                                    topicsIndex++
+                            if (param.type === 'uint256' || param.type === 'uint8' || param.type === 'int') {
+                                if (typeof decodedP.value === 'string') {
+                                    decodedP.value = BigNumber.from(decodedP.value).toString()
                                 } else {
-                                    decodedP.value = decodedData[dataIndex]
-                                    dataIndex++
+                                    decodedP.value = decodedP.value.toString()
                                 }
+                            }
 
-                                if (param.type === 'address' && typeof decodedP.value === 'string') {
-                                    decodedP.value = decodedP.value.toLowerCase()
-                                    // 42 because len(0x) + 40
-                                    if (decodedP.value.length > 42) {
-                                        const toRemove = decodedP.value.length - 42
-                                        const temp = decodedP.value.split('')
-                                        temp.splice(2, toRemove)
-                                        decodedP.value = temp.join('')
-                                    }
-                                }
+                            decodedParams.push(decodedP as DecodedParamStringOnly)
+                        })
 
-                                if (param.type === 'uint256' || param.type === 'uint8' || param.type === 'int') {
-                                    if (typeof decodedP.value === 'string') {
-                                        decodedP.value = BigNumber.from(decodedP.value).toString()
-                                    } else {
-                                        decodedP.value = decodedP.value.toString()
-                                    }
-                                }
-
-                                decodedParams.push(decodedP as DecodedParamStringOnly)
-                            })
-
-                            return {
-                                events: decodedParams,
-                                name: abiItem.name,
-                                address: AddressZ.parse(logItem.address),
-                                logIndex: logItem.logIndex,
-                                decoded: true,
-                            } as RawDecodedLog
-                        } catch (e: any) {
-                            logWarning(warningLogData, e.message)
-                            return blankRawLog
-                        }
-                    } else {
-                        logWarning(warningLogData, 'No abiItem and/or decoded log data found')
+                        return {
+                            events: decodedParams,
+                            name: abiItem.name,
+                            address: AddressZ.parse(logItem.address),
+                            logIndex: logItem.logIndex,
+                            decoded: true,
+                        } as RawDecodedLog
+                    } catch (e: any) {
+                        logWarning(warningLogData, e.message)
                         return blankRawLog
                     }
-                }),
-        )
+                } else {
+                    logWarning(warningLogData, 'No abiItem and/or decoded log data found')
+                    return blankRawLog
+                }
+            }))
     }
 
     removeABI(abiArray: ABI_Item[]) {

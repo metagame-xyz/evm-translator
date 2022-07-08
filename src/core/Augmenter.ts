@@ -381,10 +381,6 @@ export class Augmenter {
             tokenName = contractName
         }
 
-        if (contractName) {
-            logDebug({ address }, `${contractName} (${tokenSymbol})`)
-        }
-
         return { tokenName, tokenSymbol, contractName }
     }
 
