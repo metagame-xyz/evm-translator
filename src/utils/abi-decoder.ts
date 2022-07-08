@@ -252,10 +252,10 @@ export default class ABIDecoder {
                     try {
                         decodedData = getDecodedData(logData, abiItem)
                     } catch (e) {
-                        abiItemOptions = [...this.eventSigOptions[eventID]] || []
+                        abiItemOptions = [...(this.eventSigOptions[eventID] || [])]
                     }
                 } else {
-                    abiItemOptions = [...this.eventSigOptions[eventID]] || []
+                    abiItemOptions = [...(this.eventSigOptions[eventID] || [])]
                 }
 
                 if (abiItemOptions.length > 0) {
