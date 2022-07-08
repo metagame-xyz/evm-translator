@@ -51,6 +51,10 @@ const testTxHashes = {
         renew: '0xcc8a09291cf751d8714289ded45a7ae7b7b2d52560ab120f50b75a771e97a969',
         setName: '0x419feb4f564baacf3ca6643ac0a4dc00ee76334cdb6fd17f2ee3929278b86d7c',
     },
+    generic: {
+        mintErc1155: '0x737a57f5de926d43d2118d4e5fbeb552d68b4b8a68e4f801e1e6641960462b06',
+        
+    }
 }
 
 // test multiple roles for a single tx

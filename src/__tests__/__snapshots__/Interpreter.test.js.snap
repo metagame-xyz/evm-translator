@@ -1386,3 +1386,43 @@ Object {
   "userName": "0x29f1",
 }
 `;
+
+exports[`Interpreter 37`] = `
+Object {
+  "actions": Array [
+    "minted",
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+  "contractName": "Rarible",
+  "counterpartyName": null,
+  "exampleDescription": "0x1e80 minted 0.0 RARI from Rarible",
+  "extra": Object {},
+  "gasPaid": "0.000836130552245292",
+  "nativeValueReceived": "0.0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1657268452,
+  "tokensReceived": Array [
+    Object {
+      "address": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+      "amount": "0.0",
+      "name": "Rarible",
+      "symbol": "RARI",
+      "type": "ERC20",
+    },
+  ],
+  "tokensSent": Array [
+    Object {
+      "address": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+      "amount": "0.0",
+      "name": "Rarible",
+      "symbol": "RARI",
+      "type": "ERC20",
+    },
+  ],
+  "txHash": "0x737a57f5de926d43d2118d4e5fbeb552d68b4b8a68e4f801e1e6641960462b06",
+  "userAddress": "0x1e8009784ae24f42cb3c081259395df74f91b614",
+  "userName": "0x1e80",
+}
+`;

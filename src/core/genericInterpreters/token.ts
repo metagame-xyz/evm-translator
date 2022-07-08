@@ -29,10 +29,10 @@ const vars: Record<EIP, TokenVars> = {
         transfer: 'TransferSingle',
         transferBatch: 'TransferBatch',
         approval: 'ApprovalForAll',
-        to: '_to',
-        toENS: '_toENS',
-        from: '_from',
-        fromENS: '_fromENS',
+        to: 'to',
+        toENS: 'toENS',
+        from: 'from',
+        fromENS: 'fromENS',
         owner: '_owner',
         ownerENS: '_ownerENS',
         operator: '_operator',
@@ -337,7 +337,6 @@ function interpretGenericToken(decodedData: DecodedTx, interpretation: Interpret
         contractType: ContractType.OTHER,
         events: [],
     }
-
     const tokenContractInteraction =
         interactions.find((interaction) => interaction.contractAddress === toAddress) || defaultTokenInteraction
 

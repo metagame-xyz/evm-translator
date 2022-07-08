@@ -77,7 +77,7 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         }
     }
 
-    async addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<BulkResult> {
+    async addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<boolean> {
         // prob don'`t need these 3 lines but might it optimize the writes
         const uniqueABIsAsStrings = new Set<string>()
         abiArr.map((abi) => uniqueABIsAsStrings.add(JSON.stringify(abi)))
@@ -98,11 +98,12 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
             if (result.nUpserted > 0) {
                 logInfo({}, `Added ${result.nUpserted} ABIs`)
             }
-            return result
+            return true
         } catch (e) {
             console.log('abi mongoose error')
             console.log(e)
-            throw e
+            return false
+            // throw e
         }
     }
 

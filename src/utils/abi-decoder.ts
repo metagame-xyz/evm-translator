@@ -11,10 +11,12 @@ import { AddressZ } from 'interfaces/utils'
 import { abiToAbiRow, getEntries, hash } from 'utils'
 import erc20 from 'utils/ABIs/erc20.json'
 import erc721 from 'utils/ABIs/erc721.json'
+import erc1155 from 'utils/ABIs/erc1155.json'
 import ABICoder from 'utils/web3-abi-coder'
 
 const transferHash = hash('Transfer(address,address,uint256)')
 const approvalHash = hash('Approval(address,address,uint256)')
+const transferSingleHashErc1155 = hash('TransferSingle(address,address,address,uint256,uint256)')
 
 function getABIForTransferEvent(contractType: ContractType | null): ABI_Event | null {
     switch (contractType) {
@@ -22,6 +24,8 @@ function getABIForTransferEvent(contractType: ContractType | null): ABI_Event | 
             return erc20.find((abi) => abi.name === 'Transfer') as ABI_Event
         case ContractType.ERC721:
             return erc721.find((abi) => abi.name === 'Transfer') as ABI_Event
+        case ContractType.ERC1155:
+            return erc1155.find((abi) => abi.name === 'TransferSingle') as ABI_Event
         default:
             return null
     }
@@ -220,9 +224,12 @@ export default class ABIDecoder {
                 let abiItem: ABI_Event | null = this.eventSigs[address] ? this.eventSigs[address][eventID] : null
 
                 let abiItemOptions: ABI_Event[] = []
-
                 // if not, and it's the ambiguous Transfer event, check the contract type
                 if (!abiItem && eventID === transferHash) {
+                    abiItem = getABIForTransferEvent(contractDataMap[address].type)
+                }
+
+                if (eventID === transferSingleHashErc1155) {
                     abiItem = getABIForTransferEvent(contractDataMap[address].type)
                 }
 
