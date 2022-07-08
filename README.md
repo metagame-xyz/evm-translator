@@ -7,6 +7,8 @@ Add more things from here https://shields.io/category/build
 
 a library for making EVM-based blockchain data more human-readable
 
+If you're looking to contribute to evm-translator, click [here](/CONTRIBUTE.md).
+
 If a transaction interacts with 5 addresses, there will be 5 different interpretations, each from the perspective of each address. When interpreting a transaction, if an address is not provided, the interpretation will default to using the `from` address of the transaction.
 
 ## Logical Layout
@@ -78,6 +80,8 @@ An example of an Interpreter Map
     }
 }
 ```
+
+If you want to add your own contract specific interpretation, click [here](/CONTRIBUTE.md).
 
 This is an example of the decoded event logs when the `addLiquidity` function gets called.
 
