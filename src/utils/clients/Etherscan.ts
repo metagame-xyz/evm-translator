@@ -1,7 +1,7 @@
 import { ABI_ItemUnfiltered, ABI_ItemUnfilteredZ } from 'interfaces/abi'
 
 import { Fetcher, promiseAll } from 'utils'
-import { logError } from 'utils/logging'
+import { LogData, logError } from 'utils/logging'
 
 export const enum EtherscanServiceLevel {
     free = 5,
@@ -59,8 +59,14 @@ export default class Etherscan {
             return []
         }
 
+        const logData: LogData = {
+            address: address ?? '',
+            function_name: 'parseABIResponse',
+            extra: response,
+        }
+
         if (response.status !== '1') {
-            logError({ address: address ?? '', thrown_error: response.result }, {})
+            logError(logData, { message: response.result })
             // console.warn(`Etherscan API error: ${response.result}`)
             // throw new Error(`Etherscan API error: ${response.result}`)
             return []

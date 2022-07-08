@@ -7,7 +7,7 @@ class Timer {
     public logDev(secondsElapsed: number, message: string): void {
         if (process.env.NODE_ENV !== 'development') return
 
-        logTimer({ secondsElapsed }, message)
+        logTimer({ seconds_elapsed: secondsElapsed }, message)
     }
 
     public startGlobalTimer(): void {

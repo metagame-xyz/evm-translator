@@ -9,7 +9,7 @@ import { EVMTransaction } from 'interfaces/s3'
 import { Chain } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
-import { filterABIMap, getProxyAddresses, getValues } from 'utils'
+import { filterABIMap, getValues } from 'utils'
 import Covalent from 'utils/clients/Covalent'
 import Etherscan, { EtherscanServiceLevel } from 'utils/clients/Etherscan'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
@@ -185,14 +185,6 @@ class Translator {
         return this.augmenter.getENSNames(addresses)
     }
 
-    async getOfficialNamesForContracts(contractAddresses: string[]): Promise<Record<string, string>> {
-        throw new Error('Not implemented')
-    }
-
-    async getContractName(address: string): Promise<string | null> {
-        throw new Error('Not implemented')
-    }
-
     async getContractsData(
         contractToAbiMap: Record<string, ABI_ItemUnfiltered[]>,
         contractToOfficialNameMap: Record<string, string | null>,
@@ -206,9 +198,6 @@ class Translator {
         return this.augmenter.getContractType(address, abi)
     }
 
-    getContractTypes(contractToAbiMap: Record<string, ABI_Item[]>): Promise<Record<string, ContractType>> {
-        throw new Error('Not implemented')
-    }
     /**********************************************/
     /******      DECODING / AUGMENTING     ********/
     /**********************************************/
@@ -220,6 +209,7 @@ class Translator {
         return await this.augmenter.decodeTxData(rawTxData, ABIs, contractDataMap)
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     decodeTxDataArr(rawTxDataArr: RawTxData[], ABIs: Record<string, ABI_Item[]>[]): DecodedTx[] {
         throw new Error('Not implemented')
     }
@@ -305,11 +295,11 @@ class Translator {
 
     async allDataFromTxHash(txHash: string, providedUserAddress: string | null = null): Promise<ActivityData> {
         const logData: LogData = {
-            txHash,
+            tx_hash: txHash,
         }
 
         try {
-            logData.functionName = 'getRawTxData'
+            logData.function_name = 'getRawTxData'
             const rawTxData = await this.getRawTxData(txHash)
 
             const userAddressUnvalidated = providedUserAddress || rawTxData.txResponse.from
@@ -326,7 +316,7 @@ class Translator {
             const proxyAddressMap: Record<string, string> = {}
 
             const contractAndProxyAddresses = [...contractAddresses, ...getValues(proxyAddressMap)]
-            logData.functionName = 'getABIsAndNamesForContracts'
+            logData.function_name = 'getABIsAndNamesForContracts'
             const [unfilteredAbiMap, officialContractNamesMap] = await this.getABIsAndNamesForContracts(
                 contractAndProxyAddresses,
             )
@@ -340,7 +330,7 @@ class Translator {
             // contractDataMap = await this.augmentProxyContractABIs(contractDataMap)
 
             const AbiMap = filterABIMap(unfilteredAbiMap)
-            logData.functionName = 'decodeTxData'
+            logData.function_name = 'decodeTxData'
             const { decodedLogs, decodedCallData, decodedTraceData } = await this.decodeTxData(
                 rawTxData,
                 AbiMap,
@@ -348,7 +338,7 @@ class Translator {
             )
             const allAddresses = this.getAllAddresses(decodedLogs, decodedCallData, contractAddresses)
 
-            logData.functionName = 'getENSNames'
+            logData.function_name = 'getENSNames'
             const ensMap = await this.getENSNames(allAddresses)
 
             const decodedWithAugmentation = this.augmentDecodedData(

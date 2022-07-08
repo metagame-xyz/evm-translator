@@ -48,7 +48,7 @@ export default class RawDataFetcher {
                 return data.data
             } else {
                 console.log('error in validateTraceLogs', data.error, tl)
-                logError({ txHash: tl.transactionHash, extra: tl }, data.error)
+                logError({ tx_hash: tl.transactionHash, extra: tl }, data.error)
                 return tl as TraceLog
             }
         })

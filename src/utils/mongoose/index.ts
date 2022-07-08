@@ -1,6 +1,7 @@
 import { AddressNameModel } from './models/addressName'
 import { ContractModel } from './models/contract'
 import { DecodedTxModel } from './models/decodedTx'
+import collect from 'collect.js'
 import { BulkResult } from 'mongodb'
 import { connect, connection, Document, Types } from 'mongoose'
 
@@ -13,6 +14,7 @@ import {
     ABI_Row,
     ABI_RowZ,
     ABI_Type,
+    EventSigOptions,
 } from 'interfaces/abi'
 import { AddressNameData, ContractData, DecodedTx } from 'interfaces/decoded'
 
@@ -93,7 +95,9 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
                 })),
             )
 
-            logInfo({}, `Added ${result.nUpserted} ABIs`)
+            if (result.nUpserted > 0) {
+                logInfo({}, `Added ${result.nUpserted} ABIs`)
+            }
             return result
         } catch (e) {
             console.log('abi mongoose error')
@@ -119,6 +123,17 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         const abis = abisRows.map((abi) => abi.abiJSON)
         const events = abis.filter((abi) => abi.type === ABI_Type.enum.event)
         return events.map((event) => ABI_EventZ.parse(event))
+    }
+
+    async getManyEventABIsForHexSignatures(hexSignatures: string[]): Promise<EventSigOptions> {
+        const abiModels = await ABI_RowModel.find({ hashedSignature: { $in: hexSignatures } })
+        const abisRows = abiModels.map((abi) => ABI_RowZ.parse(abi.toObject())) as ABI_Row[]
+        abisRows.sort((a, b) => Number(b.default || false) - Number(a.default || false)) // get default(s) first
+        const events = abisRows.filter((row) => row.type === ABI_Type.enum.event)
+        const eventSigMap = collect(events)
+            .mapToDictionary((row: ABI_Row) => [row.hashedSignature, row.abiJSON])
+            .all()
+        return eventSigMap
     }
 
     async getFunctionABIsForHexSignature(hexSignature: string): Promise<ABI_Function[]> {
