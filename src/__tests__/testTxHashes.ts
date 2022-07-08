@@ -53,8 +53,7 @@ const testTxHashes = {
     },
     generic: {
         mintErc1155: '0x737a57f5de926d43d2118d4e5fbeb552d68b4b8a68e4f801e1e6641960462b06',
-        
-    }
+    },
 }
 
 // test multiple roles for a single tx
