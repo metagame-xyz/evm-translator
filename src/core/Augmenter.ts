@@ -2,7 +2,6 @@ import { decodeRawTxTrace } from './MulticallTxInterpreter'
 import { transformDecodedData, transformDecodedLogs, transformTraceData } from './transformDecodedLogs'
 import { AlchemyProvider, Formatter } from '@ethersproject/providers'
 import axios from 'axios'
-// import abiDecoder from 'abi-decoder'
 import { Contract } from 'ethers'
 import traverse from 'traverse'
 
@@ -42,7 +41,7 @@ import { blackholeAddress, REVERSE_RECORDS_CONTRACT_ADDRESS } from 'utils/consta
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 import getTypeFromABI from 'utils/getTypeFromABI'
 import isGnosisSafeMaybe from 'utils/isGnosisSafeMaybe'
-import { logDebug } from 'utils/logging'
+import { logDebug, logWarning } from 'utils/logging'
 
 export type DecoderConfig = {
     covalentData?: CovalentTxData
@@ -275,7 +274,18 @@ export class Augmenter {
     async getENSNames(addresses: string[]): Promise<Record<string, string>> {
         const reverseRecords = new Contract(REVERSE_RECORDS_CONTRACT_ADDRESS, reverseRecordsABI, this.provider)
 
-        const allDirtyNames = (await reverseRecords.getNames(addresses)) as string[]
+        let allDirtyNames: string[] = []
+        try {
+            allDirtyNames = (await reverseRecords.getNames(addresses)) as string[]
+        } catch (e) {
+            logWarning(
+                {
+                    function_name: 'getENSNames',
+                },
+                `Error getting ENS names. ${addresses.length} in the array. Dunno which one triggered the error.`,
+            )
+            allDirtyNames = new Array(addresses.length).fill('')
+        }
 
         // remove illegal chars TODO allow more chars
         const names = allDirtyNames.map((name) => {
