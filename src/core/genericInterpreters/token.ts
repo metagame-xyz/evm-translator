@@ -330,11 +330,6 @@ function interpretGenericToken(decodedData: DecodedTx, interpretation: Interpret
     }
     const t = vars[contractType]
 
-    // console.log('generic erc721 hash: ', decodedData.txHash)
-    // console.log(decodedData)
-    // console.log(decodedData.interactions.map((i) => console.log(i.events)))
-    // console.log(interpretation)
-
     const defaultTokenInteraction: Interaction = {
         contractName,
         contractSymbol: null,
