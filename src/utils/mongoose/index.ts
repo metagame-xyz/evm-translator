@@ -95,9 +95,6 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
                 })),
             )
 
-            if (result.nUpserted > 0) {
-                logInfo({}, `Added ${result.nUpserted} ABIs`)
-            }
             return result
         } catch (e) {
             console.log('abi mongoose error')
