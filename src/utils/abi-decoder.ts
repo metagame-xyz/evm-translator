@@ -24,8 +24,6 @@ function getABIForTransferEvent(contractType: ContractType | null): ABI_Event | 
             return erc20.find((abi) => abi.name === 'Transfer') as ABI_Event
         case ContractType.ERC721:
             return erc721.find((abi) => abi.name === 'Transfer') as ABI_Event
-        case ContractType.ERC1155:
-            return erc1155.find((abi) => abi.name === 'TransferSingle') as ABI_Event
         default:
             return null
     }
@@ -221,17 +219,18 @@ export default class ABIDecoder {
                 let abiItem: ABI_Event | null = this.eventSigs[address] ? this.eventSigs[address][eventID] : null
 
                 let abiItemOptions: ABI_Event[] = []
-                // if not, and it's the ambiguous Transfer event, check the contract type
-                if (!abiItem && eventID === transferHash) {
-                    abiItem = getABIForTransferEvent(contractDataMap[address].type)
+
+                // hardcode known events that can be named differently by custom ABIs, but we use the default names for our generic Interpreters
+                if (eventID === transferHash) {
+                    abiItem = getABIForTransferEvent(contractDataMap[address].type) || abiItem
                 }
 
                 if (eventID === transferSingleHashErc1155) {
-                    abiItem = getABIForTransferEvent(contractDataMap[address].type)
+                    abiItem = erc1155.find((abi) => abi.name === 'TransferSingle') as ABI_Event
                 }
 
-                if (!abiItem && eventID === approvalHash) {
-                    abiItem = getABIForApprovalEvent(contractDataMap[address].type)
+                if (eventID === approvalHash) {
+                    abiItem = getABIForApprovalEvent(contractDataMap[address].type) || abiItem
                 }
 
                 let decodedData: any = null

@@ -71,9 +71,11 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
                     },
                 })),
             )
-        } catch (e) {
-            console.log('contract mongoose error')
-            console.log(e)
+        } catch (e: any) {
+            if (!e?.message?.includes('user is not allowed to do action [update]')) {
+                console.log('contract mongoose error')
+                console.log(e)
+            }
         }
     }
 
@@ -99,9 +101,11 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
                 logInfo({}, `Added ${result.nUpserted} ABIs`)
             }
             return true
-        } catch (e) {
-            console.log('abi mongoose error')
-            console.log(e)
+        } catch (e: any) {
+            if (!e?.message?.includes('user is not allowed to do action [update]')) {
+                console.log('abi mongoose error')
+                console.log(e)
+            }
             return false
             // throw e
         }
@@ -158,9 +162,11 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
                     },
                 })),
             )
-        } catch (e) {
-            console.log('decodedTx mongoose error')
-            console.log(e)
+        } catch (e: any) {
+            if (!e?.message?.includes('user is not allowed to do action [update]')) {
+                console.log('decodedTx mongoose error')
+                console.log(e)
+            }
         }
     }
 
