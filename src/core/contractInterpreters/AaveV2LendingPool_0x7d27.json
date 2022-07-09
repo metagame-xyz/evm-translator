@@ -1,101 +1,103 @@
 {
-  "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
-  "contractOfficialName": "AaveV2LendingPool",
-  "contractName": "Aave V2",
-  "writeFunctions": {
-    "borrow": {
-      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenSymbol} from {contractName}",
-      "exampleDescription": "0x7f76 borrowed 56.24 SNX from Aave V2",
-      "action": "borrowed",
-      "keywords": {
-        "tokenAmount": {
-          "key": "value",
-          "filters": {
-            "eventName": "Transfer",
-            "to": "{userAddress}"
-          },
-          "defaultValue": "an unknown amount of",
-          "index": 1
+    "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
+    "contractOfficialName": "AaveV2LendingPool",
+    "contractName": "Aave V2",
+    "writeFunctions": {
+        "borrow": {
+            "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenSymbol} from {contractName}",
+            "exampleDescription": "0x7f76 borrowed 56.24 SNX from Aave V2",
+            "action": "borrowed",
+            "keywords": {
+                "tokenAmount": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount of",
+                    "index": 1
+                },
+                "tokenSymbol": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token",
+                    "index": 1
+                }
+            }
         },
-        "tokenSymbol": {
-          "key": "contractSymbol",
-          "filters": {
-            "eventName": "Transfer",
-            "to": "{userAddress}"
-          },
-          "defaultValue": "an unknown token",
-          "index": 1
-        }
-      }
-    },
-    "deposit": {
-      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenSymbol} into {contractName}",
-      "exampleDescription": "0x7f76 desposited 56.24 SNX into Aave V2",
-      "action": "deposited",
-      "keywords": {
-        "tokenAmount": {
-          "key": "value",
-          "filters": {
-            "eventName": "Transfer",
-            "from": "{userAddress}"
-          },
-          "defaultValue": "an unknown amount of"
+        "deposit": {
+            "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenSymbol} into {contractName}",
+            "exampleDescription": "0x7f76 desposited 56.24 SNX into Aave V2",
+            "action": "deposited",
+            "keywords": {
+                "tokenAmount": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
+                },
+                "tokenSymbol": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                }
+            }
         },
-        "tokenSymbol": {
-          "key": "contractSymbol",
-          "filters": {
-            "eventName": "Transfer",
-            "from": "{userAddress}"
-          },
-          "defaultValue": "an unknown token"
-        }
-      }
-    },
-    "repay": {
-      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenSymbol} to {contractName}",
-      "exampleDescription": "0x7f76 repaid 56.24 SNX to Aave V2",
-      "action": "repaid",
-      "keywords": {
-        "tokenAmount": {
-          "key": "value",
-          "filters": {
-            "eventName": "Transfer",
-            "from": "{userAddress}"
-          },
-          "defaultValue": "an unknown amount of"
+        "repay": {
+            "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenSymbol} to {contractName}",
+            "exampleDescription": "0x7f76 repaid 56.24 SNX to Aave V2",
+            "action": "repaid",
+            "keywords": {
+                "tokenAmount": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount of",
+                    "index": 1
+                },
+                "tokenSymbol": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token",
+                    "index": 1
+                }
+            }
         },
-        "tokenSymbol": {
-          "key": "contractSymbol",
-          "filters": {
-            "eventName": "Transfer",
-            "_from": "{userAddress}"
-          },
-          "defaultValue": "an unknown token"
+        "withdraw": {
+            "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenSymbol} from {contractName}",
+            "exampleDescription": "0x7f76 withdrew 56.24 SNX from Aave V2",
+            "action": "withdrew",
+            "keywords": {
+                "tokenAmount": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
+                },
+                "tokenSymbol": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                }
+            }
         }
-      }
-    },
-    "withdraw": {
-      "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenSymbol} from {contractName}",
-      "exampleDescription": "0x7f76 withdrew 56.24 SNX from Aave V2",
-      "action": "withdrew",
-      "keywords": {
-        "tokenAmount": {
-          "key": "value",
-          "filters": {
-            "eventName": "Transfer",
-            "to": "{userAddress}"
-          },
-          "defaultValue": "an unknown amount of"
-        },
-        "tokenSymbol": {
-          "key": "contractSymbol",
-          "filters": {
-            "eventName": "Transfer",
-            "to": "{userAddress}"
-          },
-          "defaultValue": "an unknown token"
-        }
-      }
     }
-  }
 }

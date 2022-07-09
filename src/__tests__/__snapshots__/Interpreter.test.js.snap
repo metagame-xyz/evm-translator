@@ -351,9 +351,10 @@ Object {
     },
     Object {
       "address": "0xd533a949740bb3306d119cc777fa900ba034cd52",
+      "amount": "314305.817611832346",
       "name": "Curve DAO Token",
       "symbol": "CRV",
-      "type": "unknown",
+      "type": "ERC20",
     },
   ],
   "txHash": "0xdf2f782ab0296121318cca140ef069f9f074c51ff4b11f0c677bcb01126f81de",
@@ -652,7 +653,7 @@ Object {
       "amount": "0.1",
       "name": "Uniswap",
       "symbol": "UNI",
-      "type": "unknown",
+      "type": "ERC20",
     },
   ],
   "tokensSent": Array [
@@ -987,7 +988,7 @@ Object {
       "amount": "0.000000136839",
       "name": "Compound Ether",
       "symbol": "cETH",
-      "type": "unknown",
+      "type": "ERC20",
     },
   ],
   "tokensSent": Array [],
@@ -1049,7 +1050,7 @@ Object {
       "amount": "0.000000181837",
       "name": "Compound Ether",
       "symbol": "cETH",
-      "type": "unknown",
+      "type": "ERC20",
     },
   ],
   "txHash": "0xdaf683d90248db147b1fb22b3979c1902e7ad57ae1c46bc1f8293601cfa5e154",
@@ -1085,7 +1086,7 @@ Object {
       "amount": "0.000175811315",
       "name": "Compound ChainLink Token",
       "symbol": "cLINK",
-      "type": "unknown",
+      "type": "ERC20",
     },
   ],
   "tokensSent": Array [
@@ -1174,7 +1175,7 @@ Object {
       "amount": "0.000024982632",
       "name": "Compound ChainLink Token",
       "symbol": "cLINK",
-      "type": "unknown",
+      "type": "ERC20",
     },
   ],
   "txHash": "0x63a27f1f7e10fd37477e3e4c35986adb58daaa4b8ab541909a54cb43b0aed5aa",
@@ -1384,5 +1385,45 @@ Object {
   "txHash": "0x419feb4f564baacf3ca6643ac0a4dc00ee76334cdb6fd17f2ee3929278b86d7c",
   "userAddress": "0x29f1e1445f0212e20d439abac9acabbedd4ac2e7",
   "userName": "0x29f1",
+}
+`;
+
+exports[`Interpreter 37`] = `
+Object {
+  "actions": Array [
+    "minted",
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+  "contractName": "Rarible",
+  "counterpartyName": null,
+  "exampleDescription": "0x1e80 minted 0.0 RARI from Rarible",
+  "extra": Object {},
+  "gasPaid": "0.000836130552245292",
+  "nativeValueReceived": "0.0",
+  "nativeValueSent": "0",
+  "reverted": null,
+  "timestamp": 1657268452,
+  "tokensReceived": Array [
+    Object {
+      "address": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+      "amount": "0.0",
+      "name": "Rarible",
+      "symbol": "RARI",
+      "type": "ERC20",
+    },
+  ],
+  "tokensSent": Array [
+    Object {
+      "address": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+      "amount": "0.0",
+      "name": "Rarible",
+      "symbol": "RARI",
+      "type": "ERC20",
+    },
+  ],
+  "txHash": "0x737a57f5de926d43d2118d4e5fbeb552d68b4b8a68e4f801e1e6641960462b06",
+  "userAddress": "0x1e8009784ae24f42cb3c081259395df74f91b614",
+  "userName": "0x1e80",
 }
 `;

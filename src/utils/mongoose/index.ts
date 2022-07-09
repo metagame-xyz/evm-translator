@@ -71,13 +71,15 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
                     },
                 })),
             )
-        } catch (e) {
-            console.log('contract mongoose error')
-            console.log(e)
+        } catch (e: any) {
+            if (!e?.message?.includes('user is not allowed to do action [update]')) {
+                console.log('contract mongoose error')
+                console.log(e)
+            }
         }
     }
 
-    async addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<BulkResult> {
+    async addOrUpdateManyABI(abiArr: ABI_Row[]): Promise<boolean> {
         // prob don'`t need these 3 lines but might it optimize the writes
         const uniqueABIsAsStrings = new Set<string>()
         abiArr.map((abi) => uniqueABIsAsStrings.add(JSON.stringify(abi)))
@@ -98,11 +100,14 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
             if (result.nUpserted > 0) {
                 logInfo({}, `Added ${result.nUpserted} ABIs`)
             }
-            return result
-        } catch (e) {
-            console.log('abi mongoose error')
-            console.log(e)
-            throw e
+            return true
+        } catch (e: any) {
+            if (!e?.message?.includes('user is not allowed to do action [update]')) {
+                console.log('abi mongoose error')
+                console.log(e)
+            }
+            return false
+            // throw e
         }
     }
 
@@ -157,9 +162,11 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
                     },
                 })),
             )
-        } catch (e) {
-            console.log('decodedTx mongoose error')
-            console.log(e)
+        } catch (e: any) {
+            if (!e?.message?.includes('user is not allowed to do action [update]')) {
+                console.log('decodedTx mongoose error')
+                console.log(e)
+            }
         }
     }
 
