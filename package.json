@@ -1,11 +1,11 @@
 {
     "name": "evm-translator",
-    "version": "0.2.39",
+    "version": "0.2.40",
     "description": "a library for making EVM-based blockchain data more human-readable",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
     "scripts": {
-        "test": "jest",
+        "test": "node lib/scripts/seed-db-test-decoded-txs.js && jest",
         "build": "tsc && tsc-alias",
         "dev": "concurrently --kill-others \"tsc -w\" \"tsc-alias -w\"",
         "format": "prettier --write \"src/**/*.ts\" \"docs/**/*.md\"",
@@ -13,7 +13,6 @@
         "check": "yarn run lint && yarn run format && yarn run test",
         "format-workflow": "prettier --loglevel error --list-different --debug-check \"src/**/*.ts\" \"docs/**/*.md\"",
         "seed": "node lib/scripts/seed-db.js",
-        "seed-test-txs": "node lib/scripts/seed-db-test-decoded-txs.js",
         "prepare": "yarn run build",
         "preversion": "yarn run lint",
         "version": "yarn run format && git add -A src",

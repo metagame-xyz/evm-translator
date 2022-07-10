@@ -29,10 +29,10 @@ const vars: Record<EIP, TokenVars> = {
         transfer: 'TransferSingle',
         transferBatch: 'TransferBatch',
         approval: 'ApprovalForAll',
-        to: '_to',
-        toENS: '_toENS',
-        from: '_from',
-        fromENS: '_fromENS',
+        to: 'to',
+        toENS: 'toENS',
+        from: 'from',
+        fromENS: 'fromENS',
         owner: '_owner',
         ownerENS: '_ownerENS',
         operator: '_operator',
@@ -330,11 +330,6 @@ function interpretGenericToken(decodedData: DecodedTx, interpretation: Interpret
     }
     const t = vars[contractType]
 
-    // console.log('generic erc721 hash: ', decodedData.txHash)
-    // console.log(decodedData)
-    // console.log(decodedData.interactions.map((i) => console.log(i.events)))
-    // console.log(interpretation)
-
     const defaultTokenInteraction: Interaction = {
         contractName,
         contractSymbol: null,
@@ -342,7 +337,6 @@ function interpretGenericToken(decodedData: DecodedTx, interpretation: Interpret
         contractType: ContractType.OTHER,
         events: [],
     }
-
     const tokenContractInteraction =
         interactions.find((interaction) => interaction.contractAddress === toAddress) || defaultTokenInteraction
 

@@ -36,5 +36,4 @@ jobs:
             - run: yarn install --immutable
             - run: yarn lint
             - run: yarn format-workflow
-            - run: yarn run seed-test-txs
             - run: yarn test
