@@ -181,6 +181,10 @@ class Translator {
         return this.augmenter.downloadContractsFromTinTin()
     }
 
+    async getENSName(address: string): Promise<string> {
+        const nameMap = await this.augmenter.getENSNames([address])
+        return nameMap[address]
+    }
     async getENSNames(addresses: string[]): Promise<Record<string, string>> {
         return this.augmenter.getENSNames(addresses)
     }
@@ -293,7 +297,7 @@ class Translator {
         return interpretation
     }
 
-    async allDataFromTxHash(txHash: string, providedUserAddress: string | null = null): Promise<ActivityData> {
+    async decodeFromTxHash(txHash: string): Promise<{ decodedTx: DecodedTx; rawTxData: RawTxData }> {
         const logData: LogData = {
             tx_hash: txHash,
         }
@@ -302,11 +306,7 @@ class Translator {
             logData.function_name = 'getRawTxData'
             const rawTxData = await this.getRawTxData(txHash)
 
-            const userAddressUnvalidated = providedUserAddress || rawTxData.txResponse.from
-
-            const userAddress = AddressZ.parse(userAddressUnvalidated)
-
-            logData.address = userAddress
+            logData.address = rawTxData.txResponse.from
 
             const contractAddresses = this.getContractAddressesFromRawTxData(rawTxData)
 
@@ -350,11 +350,33 @@ class Translator {
                 rawTxData,
             )
 
-            const userName = ensMap[userAddress || ''] || null
+            return { decodedTx: decodedWithAugmentation, rawTxData }
+        } catch (error) {
+            logError(logData, error)
+            throw error
+        }
+    }
+    async allDataFromTxHash(txHash: string, providedUserAddress: string | null = null): Promise<ActivityData> {
+        const logData: LogData = {
+            tx_hash: txHash,
+        }
 
-            const interpretation = await this.interpretDecodedTx(decodedWithAugmentation, userAddress, userName)
+        try {
+            logData.function_name = 'decodeFromTxHash'
+            const { decodedTx, rawTxData } = await this.decodeFromTxHash(txHash)
 
-            return { interpretedData: interpretation, decodedTx: decodedWithAugmentation, rawTxData }
+            const userAddressUnvalidated = providedUserAddress || decodedTx.fromAddress
+            const userAddress = AddressZ.parse(userAddressUnvalidated)
+
+            logData.address = userAddress
+
+            logData.function_name = 'getENSName'
+            const userName = await this.getENSName(userAddress)
+
+            logData.function_name = 'interpretDecodedTx'
+            const interpretation = await this.interpretDecodedTx(decodedTx, userAddress, userName)
+
+            return { interpretedData: interpretation, decodedTx, rawTxData }
         } catch (error) {
             logError(logData, error)
             throw error
