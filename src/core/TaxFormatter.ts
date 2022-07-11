@@ -67,7 +67,6 @@ class TaxFormatter {
         const getAmountAndCurrency = (
             data: Interpretation,
             direction: 'in' | 'out',
-            userInitiated: boolean,
         ): [number | null, string | null, TokenTypeOrNative] => {
             if (data.reverted) return [null, null, null]
 
@@ -102,8 +101,8 @@ class TaxFormatter {
 
         const userInitiated = this.walletAddress === rawTxData.txResponse.from
 
-        const [inAmount, inCurrency, inType] = getAmountAndCurrency(interpretedData, 'in', userInitiated)
-        const [outAmount, outCurrency, outType] = getAmountAndCurrency(interpretedData, 'out', userInitiated)
+        const [inAmount, inCurrency, inType] = getAmountAndCurrency(interpretedData, 'in')
+        const [outAmount, outCurrency, outType] = getAmountAndCurrency(interpretedData, 'out')
 
         const row: ZenLedgerRow = {
             explorerUrl: this.chain.blockExplorerUrl + 'tx/' + rawTxData.txReceipt.transactionHash,

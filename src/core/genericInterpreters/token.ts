@@ -133,13 +133,7 @@ function isBurnEvent(t: TokenVars, event: InteractionEvent, userAddress: string)
     )
 }
 
-function getAction(
-    t: TokenVars,
-    events: InteractionEvent[],
-    userAddress: string,
-    fromAddress: string,
-    toAddress: string | null,
-): Action {
+function getAction(t: TokenVars, events: InteractionEvent[], userAddress: string, fromAddress: string): Action {
     const isMint = events.find((e) => isMintEvent(t, e, userAddress, fromAddress))
     const isAirdrop = events.find((e) => isAirdropEvent(t, e, userAddress, fromAddress))
     const isSend = events.find((e) => isSendEvent(t, e, userAddress))
@@ -343,7 +337,7 @@ function interpretGenericToken(decodedData: DecodedTx, interpretation: Interpret
     const tokenEvents = tokenContractInteraction?.events || []
 
     // use TokensReceived and TokensSent to determine the actions (besides mint), not the events. Bought, sold, traded
-    interpretation.actions.push(getAction(t, tokenEvents, userAddress, fromAddress, toAddress))
+    interpretation.actions.push(getAction(t, tokenEvents, userAddress, fromAddress))
 
     const token = getTokenInfo(tokenContractInteraction, interpretation)
 
