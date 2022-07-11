@@ -39,6 +39,7 @@ export default class Covalent {
                 params: {
                     'page-size': limit ?? 999999,
                     'page-number': 0,
+                    'no-logs': true,
                 },
             })
             .then((res: any) => {
