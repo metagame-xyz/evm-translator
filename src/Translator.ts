@@ -356,6 +356,21 @@ class Translator {
             throw error
         }
     }
+
+    async decodeFromTxHashArr(txHashArr: string[]): Promise<DecodedTx[]> {
+        const promises = txHashArr.map((txHash) => {
+            return this.decodeFromTxHash(txHash)
+        })
+
+        const results = await Promise.all(promises)
+
+        const decodedTxArr = results.map((result) => result.decodedTx)
+        await this.initializeMongoose()
+        await this.databaseInterface.addOrUpdateManyDecodedTx(decodedTxArr)
+
+        return decodedTxArr
+    }
+
     async allDataFromTxHash(txHash: string, providedUserAddress: string | null = null): Promise<ActivityData> {
         const logData: LogData = {
             tx_hash: txHash,

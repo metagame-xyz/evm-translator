@@ -430,9 +430,14 @@ class Interpreter {
                         // ERC1155 you can batchTransfer multiple tokens, each w their own amount, in 1 event
                         for (const [index, amount] of event.params._amounts.entries()) {
                             let newInteraction = deepCopy(flattenedInteraction)
-                            newInteraction.params._id = event.params._ids ? event.params._ids[index] : null
-                            newInteraction.params._amount = amount
-                            newInteraction = { ...newInteraction, ...event }
+                            const newEvent = deepCopy(event)
+                            newEvent.params._id = event.params._ids
+                                ? BigNumber.from(event.params._ids[index]).toString()
+                                : null
+                            delete newEvent.params._ids
+                            newEvent.params._amount = BigNumber.from(amount).toString()
+                            delete newEvent.params._amounts
+                            newInteraction = { ...newInteraction, ...newEvent }
                             flattenedInteractions.push(newInteraction)
                         }
                     } else {
@@ -460,7 +465,13 @@ class Interpreter {
             }
 
             if (amount) {
-                const decimal = [this.chain.usdcAddress, this.chain.usdtAddress].includes(i.contractAddress) ? 6 : 18 // TODO need to store the "decimal()" for all contracts and either store it on decoded, or call the db during interpretations
+                let decimal = 18
+                if (tokenType === TokenType.ERC1155) {
+                    decimal = 0
+                } else if ([this.chain.usdcAddress, this.chain.usdtAddress].includes(i.contractAddress)) {
+                    decimal = 6 // TODO need to store the "decimal()" for all contracts and either store it on decoded, or call the db during interpretations
+                }
+
                 const amountNumber = Number(formatUnits(amount, decimal))
 
                 token.amount = amountNumber.toFixed(12).replace(/^(\d+\.\d*?[0-9])0+$/g, '$1')
