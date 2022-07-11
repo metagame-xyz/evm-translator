@@ -50,6 +50,8 @@ export type Chain = {
     usdtAddress: string
     /** The singleton contract address for DAI */
     daiAddress: string
+    /** The singleton contract address for the native asset */
+    nativeAssetAddress: string
 }
 /** Map of EVM chain names to an object with Chain metadata */
 export type Chains = Record<string, Chain>

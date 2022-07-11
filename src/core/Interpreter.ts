@@ -11,7 +11,7 @@ import { formatEther, formatUnits } from 'ethers/lib/utils'
 
 import { InterpreterMap, MethodMap } from 'interfaces/contractInterpreter'
 import { ContractType, DecodedTx, Interaction, InteractionEvent, TxType } from 'interfaces/decoded'
-import { Action, Interpretation, Token, TokenType } from 'interfaces/interpreted'
+import { Action, Asset, AssetType, Interpretation } from 'interfaces/interpreted'
 import { Chain } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
@@ -23,7 +23,7 @@ import {
     shortenNamesInString,
     toOrFromUser,
 } from 'utils'
-import { multicallContractAddresses, multicallFunctionNames } from 'utils/constants'
+import { ethAddress, multicallContractAddresses, multicallFunctionNames } from 'utils/constants'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 
 function deepCopy<T>(obj: T): T {
@@ -45,6 +45,7 @@ type KeyMapping = {
     prefix?: string
     postfix?: string
     array?: boolean
+    decimals?: number
 }
 
 function includes<T extends U, U>(collection: ReadonlyArray<T>, element: U): element is T {
@@ -140,10 +141,8 @@ class Interpreter {
             userAddress,
             contractAddress: toAddress,
             actions: [],
-            nativeValueSent: this.getNativeTokenValueSent(interactions, nativeValueSent, fromAddress, userAddress),
-            nativeValueReceived: this.getNativeTokenValueReceived(interactions, userAddress),
-            tokensReceived: this.getTokensReceived(interactions, userAddress),
-            tokensSent: this.getTokensSent(interactions, userAddress),
+            assetsReceived: this.getAssetsReceived(interactions, userAddress),
+            assetsSent: this.getAssetsSent(interactions, nativeValueSent, userAddress, fromAddress),
             chainSymbol: this.chain.symbol,
             userName,
             gasPaid: gasUsed,
@@ -362,11 +361,16 @@ class Interpreter {
             //}
         }
 
+        if (typeof value === 'string' && Number(value)) {
+            const decimals = keyMapping.decimals || 18 // no good way to do this for USDC (6) right now
+            value = formatUnits(value, decimals)
+        }
+
         return value
     }
 
-    private getTokens(interactions: Interaction[], userAddress: string, direction: 'to' | 'from'): Token[] {
-        let tokens: Token[] = []
+    private getTokens(interactions: Interaction[], userAddress: string, direction: 'to' | 'from'): Asset[] {
+        let tokens: Asset[] = []
         type FlattenedInteraction = Omit<Interaction, 'events'> & InteractionEvent
 
         let filteredInteractions = deepCopy(interactions) as Interaction[]
@@ -390,26 +394,26 @@ class Interpreter {
 
         const flattenedInteractions = flattenEvents(filteredInteractions)
 
-        function getTokenType(interaction: FlattenedInteraction): TokenType {
+        function getTokenType(interaction: FlattenedInteraction): AssetType {
             const LPTokenSymbols = ['UNI-V2']
-            let tokenType = TokenType.DEFAULT
+            let tokenType = AssetType.DEFAULT
 
             // LP Token
             if (interaction.contractSymbol && LPTokenSymbols.includes(interaction.contractSymbol)) {
-                tokenType = TokenType.LPToken
+                tokenType = AssetType.LPToken
                 // ERC-1155
             } else if (
                 interaction.contractType == ContractType.ERC1155 ||
                 interaction.params._amount ||
                 interaction.params._amounts
             ) {
-                tokenType = TokenType.ERC1155
+                tokenType = AssetType.ERC1155
                 // ERC-721
             } else if (interaction.contractType == ContractType.ERC721 || interaction.params.tokenId) {
-                tokenType = TokenType.ERC721
+                tokenType = AssetType.ERC721
                 // ERC-20
             } else if (interaction.contractType == ContractType.ERC20 || Number(interaction.params.value) > 0) {
-                tokenType = TokenType.ERC20
+                tokenType = AssetType.ERC20
             }
 
             return tokenType
@@ -454,10 +458,10 @@ class Interpreter {
             const tokenType = getTokenType(i)
 
             const amount =
-                tokenType === TokenType.ERC1155 ? i.params._amount : i.params.value || i.params.amount || i.params.wad
-            const tokenId = (tokenType === TokenType.ERC1155 ? i.params._id : i.params.tokenId)?.toString()
+                tokenType === AssetType.ERC1155 ? i.params._amount : i.params.value || i.params.amount || i.params.wad
+            const tokenId = (tokenType === AssetType.ERC1155 ? i.params._id : i.params.tokenId)?.toString()
 
-            const token: Token = {
+            const token: Asset = {
                 type: tokenType,
                 name: i.contractName,
                 symbol: i.contractSymbol,
@@ -487,12 +491,45 @@ class Interpreter {
         return tokens
     }
 
-    private getTokensReceived(interactions: Interaction[], userAddress: string): Token[] {
-        return this.getTokens(interactions, userAddress, 'to')
+    private getAssetsReceived(interactions: Interaction[], userAddress: string): Asset[] {
+        const assets = this.getTokens(interactions, userAddress, 'to')
+
+        const nativeValueReceived = this.getNativeTokenValueReceived(interactions, userAddress)
+
+        if (Number(nativeValueReceived)) {
+            assets.push({
+                type: AssetType.native,
+                amount: nativeValueReceived,
+                name: 'Ethereum',
+                symbol: 'ETH',
+                address: ethAddress,
+            })
+        }
+
+        return assets
     }
 
-    private getTokensSent(interactions: Interaction[], userAddress: string): Token[] {
-        return this.getTokens(interactions, userAddress, 'from')
+    private getAssetsSent(
+        interactions: Interaction[],
+        nativeValueSent: string | undefined,
+        userAddress: string,
+        fromAddress: string,
+    ): Asset[] {
+        const assets = this.getTokens(interactions, userAddress, 'from')
+
+        const val = this.getNativeTokenValueSent(interactions, nativeValueSent, fromAddress, userAddress)
+
+        if (Number(nativeValueSent)) {
+            assets.push({
+                type: AssetType.native,
+                amount: val,
+                name: 'Ethereum',
+                symbol: 'ETH',
+                address: ethAddress,
+            })
+        }
+
+        return assets
     }
 
     private useKeywordMap(

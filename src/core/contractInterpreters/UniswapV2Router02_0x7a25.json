@@ -188,7 +188,7 @@
         },
         "swapETHForExactTokens": {
             "action": "bought",
-            "exampleDescriptionTemplate": "{userName} {action} {nativeValueSent} {chainSymbol} of {tokenName} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {ethValueSent} {chainSymbol} of {tokenName} on {contractName}",
             "exampleDescription": "0x4f1a9 bought 0.01 ETH of SUPER on Uniswap V2",
             "keywords": {
                 "tokenName": {
@@ -206,12 +206,20 @@
                         "to": "{userAddress}"
                     },
                     "defaultValue": "an unknown amount"
+                },
+                "ethValueSent": {
+                    "key": "amount0In",
+                    "filters": {
+                        "eventName": "Swap",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
                 }
             }
         },
         "swapExactETHForTokens": {
             "action": "bought",
-            "exampleDescriptionTemplate": "{userName} {action} {nativeValueSent} {chainSymbol} of {tokenName} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {ethValueSent} {chainSymbol} of {tokenName} on {contractName}",
             "exampleDescription": "0x4f1a9 bought 0.01 ETH of SUPER on Uniswap V2",
             "keywords": {
                 "tokenName": {
@@ -229,12 +237,20 @@
                         "to": "{userAddress}"
                     },
                     "defaultValue": "an unknown amount"
+                },
+                "ethValueSent": {
+                    "key": "amount0In",
+                    "filters": {
+                        "eventName": "Swap",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
                 }
             }
         },
         "swapExactETHForTokensSupportingFeeOnTransferTokens": {
             "action": "bought",
-            "exampleDescriptionTemplate": "{userName} {action} {nativeValueSent} {chainSymbol} of {tokenName} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {ethValueSent} {chainSymbol} of {tokenName} on {contractName}",
             "exampleDescription": "0x4f1a9 bought 0.01 ETH of SUPER on Uniswap V2",
             "keywords": {
                 "tokenName": {
@@ -252,6 +268,14 @@
                         "to": "{userAddress}"
                     },
                     "defaultValue": "an unknown amount"
+                },
+                "ethValueSent": {
+                    "key": "amount0In",
+                    "filters": {
+                        "eventName": "Swap",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
                 }
             }
         },

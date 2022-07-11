@@ -1,4 +1,4 @@
-import { proxyImplementationAddress } from './constants'
+import { ethAddress, proxyImplementationAddress } from './constants'
 import { logWarning } from './logging'
 import { AlchemyProvider } from '@alch/alchemy-sdk'
 import { BaseProvider } from '@ethersproject/providers'
@@ -36,6 +36,7 @@ const ethereum: Chain = {
     usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     usdtAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7',
     daiAddress: '0x6b175474e89094c44da98b954eedeac495271d0f',
+    nativeAssetAddress: ethAddress,
 }
 
 const polygon: Chain = {
@@ -49,6 +50,7 @@ const polygon: Chain = {
     usdcAddress: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
     usdtAddress: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
     daiAddress: '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063',
+    nativeAssetAddress: ethAddress, // maybe they use the same one idk
 }
 
 export const chains: Chains = {
@@ -74,7 +76,7 @@ export const getChainBySymbol = (symbol: string): Chain => {
 
 export const getStablecoinOrNativeWrappedAddressesBySymbol = (symbol: string): string[] => {
     const chain = getChainBySymbol(symbol)
-    return [chain.wethAddress, chain.usdcAddress, chain.usdtAddress, chain.daiAddress]
+    return [chain.wethAddress, chain.usdcAddress, chain.usdtAddress, chain.daiAddress, chain.nativeAssetAddress]
 }
 
 export const isAddress = (address: string): boolean => {

@@ -1,11 +1,11 @@
 import { ContractType, DecodedTx, Interaction, InteractionEvent } from 'interfaces/decoded'
-import { Action, Interpretation, Token, TokenType } from 'interfaces/interpreted'
+import { Action, Asset, AssetType, Interpretation } from 'interfaces/interpreted'
 
 import { shortenName } from 'utils'
 import { blackholeAddress, blackholeAddresses } from 'utils/constants'
 
 type TokenVars = {
-    type: TokenType
+    type: AssetType
     transfer: string
     transferBatch: string | null
     approval: string
@@ -25,7 +25,7 @@ type EIP = Exclude<ContractType, 'OTHER' | 'Gnosis Safe'>
 
 const vars: Record<EIP, TokenVars> = {
     ERC1155: {
-        type: TokenType.ERC1155,
+        type: AssetType.ERC1155,
         transfer: 'TransferSingle',
         transferBatch: 'TransferBatch',
         approval: 'ApprovalForAll',
@@ -41,7 +41,7 @@ const vars: Record<EIP, TokenVars> = {
         approvedENS: '_approvedENS',
     },
     ERC721: {
-        type: TokenType.ERC721,
+        type: AssetType.ERC721,
         transfer: 'Transfer',
         transferBatch: null,
         approval: 'ApprovalForAll',
@@ -57,7 +57,7 @@ const vars: Record<EIP, TokenVars> = {
         approvedENS: '_approvedENS',
     },
     ERC20: {
-        type: TokenType.ERC20,
+        type: AssetType.ERC20,
         transfer: 'Transfer',
         transferBatch: null,
         approval: 'Approval',
@@ -73,7 +73,7 @@ const vars: Record<EIP, TokenVars> = {
         approvedENS: '_approvedENS',
     },
     WETH: {
-        type: TokenType.ERC20,
+        type: AssetType.ERC20,
         transfer: 'Transfer',
         transferBatch: null,
         approval: 'Approval',
@@ -167,8 +167,8 @@ function getAction(
     return Action.______TODO______
 }
 
-function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Interpretation): Token {
-    const { actions, tokensReceived, tokensSent } = interpretation
+function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Interpretation): Asset {
+    const { actions, assetsReceived: tokensReceived, assetsSent: tokensSent } = interpretation
     if (actions.length) {
         switch (actions[0]) {
             case Action.minted:
@@ -181,7 +181,7 @@ function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Int
                 return tokensSent[0]
             case Action.approved:
                 return {
-                    type: TokenType.ERC721, // TODO this is a hack for now, we should add tokenType to each interaction
+                    type: AssetType.ERC721, // TODO this is a hack for now, we should add tokenType to each interaction
                     name: tokenContractInteraction?.contractName,
                     symbol: tokenContractInteraction?.contractSymbol,
                     address: tokenContractInteraction?.contractAddress,
@@ -189,7 +189,7 @@ function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Int
             default:
                 // console.log('getTokenInfo action not supported: ')
                 return {
-                    type: TokenType.DEFAULT,
+                    type: AssetType.DEFAULT,
                     name: '',
                     symbol: '',
                     address: '0x',
@@ -197,7 +197,7 @@ function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Int
         }
     }
     return {
-        type: TokenType.DEFAULT,
+        type: AssetType.DEFAULT,
         name: '',
         symbol: '',
         address: '0x',
@@ -269,8 +269,8 @@ function addCounterpartyNames(
     }
 }
 
-function addExampleDescription(interpretation: Interpretation, token: Token) {
-    const { tokensReceived, tokensSent } = interpretation
+function addExampleDescription(interpretation: Interpretation, token: Asset) {
+    const { assetsReceived: tokensReceived, assetsSent: tokensSent } = interpretation
     let exampleDescription = ''
     const i = interpretation
     const { userName, actions: action } = i
@@ -291,7 +291,7 @@ function addExampleDescription(interpretation: Interpretation, token: Token) {
         switch (action[0]) {
             case Action.minted: {
                 tokenId = receivedSingle ? tokenId : ''
-                tokenCount = i.tokensReceived.filter((t) => t.address === token.address).length
+                tokenCount = i.assetsReceived.filter((t) => t.address === token.address).length
                 counterpartyName = ' ' + tokenName
                 direction = ' from'
                 break
@@ -299,12 +299,12 @@ function addExampleDescription(interpretation: Interpretation, token: Token) {
             case Action.received:
             case Action.gotAirdropped:
                 tokenId = receivedSingle ? tokenId : ''
-                tokenCount = i.tokensReceived.length
+                tokenCount = i.assetsReceived.length
                 direction = ' from'
                 break
             case Action.sent:
                 tokenId = sentSingle ? tokenId : ''
-                tokenCount = i.tokensSent.length
+                tokenCount = i.assetsSent.length
                 direction = ' to'
                 break
             case Action.approved:
