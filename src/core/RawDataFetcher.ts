@@ -20,7 +20,7 @@ import { EVMTransaction, EVMTransactionReceiptStringified, EVMTransactionStringi
 
 import { retryProviderCall } from 'utils'
 import Covalent from 'utils/clients/Covalent'
-import { logDebug, logError } from 'utils/logging'
+import { logError } from 'utils/logging'
 
 export default class RawDataFetcher {
     provider: AlchemyProvider

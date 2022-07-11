@@ -8,8 +8,8 @@ function isExecutionSuccessEvent(event: InteractionEvent) {
 }
 
 function interpretGnosisExecution(decodedData: DecodedTx, interpretation: Interpretation) {
-    const { fromAddress, toAddress, interactions } = decodedData
-    const { userAddress, userName } = interpretation
+    const { toAddress, interactions } = decodedData
+    const { userName } = interpretation
 
     const action = Action.executed
 

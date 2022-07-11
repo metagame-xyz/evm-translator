@@ -470,7 +470,7 @@ class Interpreter {
 
             if (amount) {
                 let decimal = 18
-                if (tokenType === TokenType.ERC1155) {
+                if (tokenType === AssetType.ERC1155) {
                     decimal = 0
                 } else if ([this.chain.usdcAddress, this.chain.usdtAddress].includes(i.contractAddress)) {
                     decimal = 6 // TODO need to store the "decimal()" for all contracts and either store it on decoded, or call the db during interpretations
