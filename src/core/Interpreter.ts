@@ -19,6 +19,7 @@ import {
     checkMultipleKeys,
     fillDescriptionTemplate,
     flattenEventsFromInteractions,
+    getDecimals,
     getNativeTokenValueEvents,
     shortenNamesInString,
     toOrFromUser,
@@ -319,6 +320,7 @@ class Interpreter {
         }
 
         let value = null
+        let decimals = null
 
         if (!array) {
             const interaction = filteredInteractions[index]
@@ -336,6 +338,8 @@ class Interpreter {
             }
             const postfix = keyMapping.postfix || ''
             value = str ? prefix + str + postfix : keyMapping.defaultValue
+
+            decimals = getDecimals(interaction?.contractAddress)
         } else {
             value = []
             const prefix = keyMapping.prefix || ''
@@ -359,10 +363,10 @@ class Interpreter {
                 }
             }
             //}
+            decimals = getDecimals(filteredInteractions[0]?.contractAddress)
         }
 
         if (typeof value === 'string' && Number(value)) {
-            const decimals = keyMapping.decimals || 18 // no good way to do this for USDC (6) right now
             value = formatUnits(value, decimals)
         }
 
@@ -469,14 +473,14 @@ class Interpreter {
             }
 
             if (amount) {
-                let decimal = 18
+                let decimals
                 if (tokenType === AssetType.ERC1155) {
-                    decimal = 0
-                } else if ([this.chain.usdcAddress, this.chain.usdtAddress].includes(i.contractAddress)) {
-                    decimal = 6 // TODO need to store the "decimal()" for all contracts and either store it on decoded, or call the db during interpretations
+                    decimals = 0
+                } else {
+                    decimals = getDecimals(i.contractAddress)
                 }
 
-                const amountNumber = Number(formatUnits(amount, decimal))
+                const amountNumber = Number(formatUnits(amount, decimals))
 
                 token.amount = amountNumber.toFixed(12).replace(/^(\d+\.\d*?[0-9])0+$/g, '$1')
 

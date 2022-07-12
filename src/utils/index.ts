@@ -79,6 +79,22 @@ export const getStablecoinOrNativeWrappedAddressesBySymbol = (symbol: string): s
     return [chain.wethAddress, chain.usdcAddress, chain.usdtAddress, chain.daiAddress, chain.nativeAssetAddress]
 }
 
+// TODO hardcoded but should be a call to a db that checks the contractAddress's decimal()
+export const getDecimals = (contractAddress: string, chain = chains.ethereum): number => {
+    if (!contractAddress) return 18
+    const address = contractAddress.toLowerCase()
+    const hexAddress = '0x2b591e99afe9f32eaa6214f7b7629768c40eeb39' // hack
+    const wBTCAddress = '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599'
+
+    if ([chain.usdcAddress, chain.usdtAddress, hexAddress].includes(address)) {
+        return 6
+    } else if (address === wBTCAddress) {
+        return 8
+    } else {
+        return 18
+    }
+}
+
 export const isAddress = (address: string): boolean => {
     const validAddress = new RegExp(/^0x[a-fA-F0-9]{40}$/)
     return validAddress.test(address)
