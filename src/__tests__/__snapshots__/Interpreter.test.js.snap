@@ -1484,3 +1484,43 @@ Object {
   "userName": "0x1e80",
 }
 `;
+
+exports[`Interpreter 38`] = `
+Object {
+  "actions": Array [
+    "wrapped",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "amount": "1.0",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "1",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "contractName": "WETH",
+  "counterpartyName": null,
+  "exampleDescription": "brenner.eth wrapped 1.0 ETH",
+  "extra": Object {
+    "amount": "1.0",
+  },
+  "gasPaid": "0.00067557",
+  "reverted": null,
+  "timestamp": 1627149470,
+  "txHash": "0xe6e922f5330aa913012fb6844aa0a401a10e1b0807eb3a3f4133e9af78d1b3ca",
+  "userAddress": "0x17a059b6b0c8af433032d554b0392995155452e6",
+  "userName": "brenner.eth",
+}
+`;

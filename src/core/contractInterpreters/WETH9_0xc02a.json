@@ -1,0 +1,31 @@
+{
+    "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "contractOfficialName": "WETH9",
+    "contractName": "WETH",
+    "writeFunctions": {
+        "withdraw": {
+            "action": "unwrapped",
+            "exampleDescriptionTemplate": "{userName} {action} {amount} ETH",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "amount": {
+                    "key": "wad",
+                    "filters": { "eventName": "Withdraw" },
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "deposit": {
+            "action": "wrapped",
+            "exampleDescriptionTemplate": "{userName} {action} {amount} ETH",
+            "exampleDescription": "Carlos.eth wrapped 0.1 ETH",
+            "keywords": {
+                "amount": {
+                    "key": "wad",
+                    "filters": { "eventName": "Deposit" },
+                    "defaultValue": "______TODO______"
+                }
+            }
+        }
+    }
+}

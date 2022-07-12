@@ -29,6 +29,9 @@ const contractInterpreters = {
     '0x283af0b28c62c092c9727f1ee09c02ca627eb7f5': require('./ENSRegistrarController_0x283a.json'), // registering names
     '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85': require('./ENSBaseRegistrar_0x57f1.json'), // transferring names
     '0x084b1c3c81545d370f3634392de611caabff8148': require('./ENSReverseRegistrar_0x084b.json'), // setting default names
+    '0xa6b71e26c5e0845f74c812102ca7114b6a896ab2': require('./GnosisSafeProxyFactory_0xa6b7.json'),
+    '0x7be8076f4ea4a4ad08075c2508e481d6c946d12b': require('./WyvernExchange_0x7be8.json'),
+    '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2': require('./WETH9_0xc02a.json'),
 }
 
 export default contractInterpreters

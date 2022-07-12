@@ -1,0 +1,103 @@
+{
+    "contractAddress": "0x7be8076f4ea4a4ad08075c2508e481d6c946d12b",
+    "contractOfficialName": "WyvernExchange",
+    "contractName": "______TODO______",
+    "writeFunctions": {
+        "changeMinimumMakerProtocolFee": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "changeMinimumTakerProtocolFee": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "changeProtocolFeeRecipient": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "renounceOwnership": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "approveOrder_": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "cancelOrder_": {
+            "action": "cancelled a bid maybe",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "atomicMatch_": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "transferOwnership": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        }
+    }
+}

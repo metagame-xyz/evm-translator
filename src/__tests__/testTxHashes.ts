@@ -54,6 +54,10 @@ const testTxHashes = {
     generic: {
         mintErc1155: '0x737a57f5de926d43d2118d4e5fbeb552d68b4b8a68e4f801e1e6641960462b06',
     },
+    WETH: {
+        deposit: '0xe6e922f5330aa913012fb6844aa0a401a10e1b0807eb3a3f4133e9af78d1b3ca',
+    },
+    GnosisSafe: {},
 }
 
 // test multiple roles for a single tx

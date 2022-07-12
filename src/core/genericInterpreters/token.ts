@@ -5,26 +5,29 @@ import { shortenName } from 'utils'
 import { blackholeAddress, blackholeAddresses } from 'utils/constants'
 
 type TokenVars = {
+    contractType: ContractType
     type: AssetType
     transfer: string
     transferBatch: string | null
     approval: string
     to: string
-    toENS: '_toENS' | 'toENS'
+    toENS: string
     from: string
-    fromENS: '_fromENS' | 'fromENS'
+    fromENS: string
     owner: string
     ownerENS: string
-    operator: '_operator'
-    operatorENS: '_operatorENS'
+    operator: string
+    operatorENS: string
     approved: string
     approvedENS: string
+    value: string
 }
 
 type EIP = Exclude<ContractType, 'OTHER' | 'Gnosis Safe'>
 
 const vars: Record<EIP, TokenVars> = {
     ERC1155: {
+        contractType: ContractType.ERC1155,
         type: AssetType.ERC1155,
         transfer: 'TransferSingle',
         transferBatch: 'TransferBatch',
@@ -33,14 +36,16 @@ const vars: Record<EIP, TokenVars> = {
         toENS: 'toENS',
         from: 'from',
         fromENS: 'fromENS',
-        owner: '_owner',
-        ownerENS: '_ownerENS',
-        operator: '_operator',
-        operatorENS: '_operatorENS',
-        approved: '_approved',
-        approvedENS: '_approvedENS',
+        owner: 'account',
+        ownerENS: 'ownerENS',
+        operator: 'operator',
+        operatorENS: 'operatorENS',
+        approved: 'approved',
+        approvedENS: 'approvedENS',
+        value: 'amount',
     },
     ERC721: {
+        contractType: ContractType.ERC721,
         type: AssetType.ERC721,
         transfer: 'Transfer',
         transferBatch: null,
@@ -49,14 +54,16 @@ const vars: Record<EIP, TokenVars> = {
         toENS: 'toENS',
         from: 'from',
         fromENS: 'fromENS',
-        owner: '_owner',
-        ownerENS: '_ownerENS',
-        operator: '_operator',
-        operatorENS: '_operatorENS',
-        approved: '_approved',
-        approvedENS: '_approvedENS',
+        owner: 'owner',
+        ownerENS: 'ownerENS',
+        operator: 'operator',
+        operatorENS: 'operatorENS',
+        approved: 'approved',
+        approvedENS: 'approvedENS',
+        value: '__N_A__',
     },
     ERC20: {
+        contractType: ContractType.ERC20,
         type: AssetType.ERC20,
         transfer: 'Transfer',
         transferBatch: null,
@@ -65,28 +72,31 @@ const vars: Record<EIP, TokenVars> = {
         toENS: 'toENS',
         from: 'from',
         fromENS: 'fromENS',
-        owner: '_owner',
-        ownerENS: '_ownerENS',
-        operator: '_operator',
-        operatorENS: '_operatorENS',
-        approved: '_approved',
-        approvedENS: '_approvedENS',
+        owner: 'owner',
+        ownerENS: 'ownerENS',
+        operator: 'spender',
+        operatorENS: 'spenderENS',
+        approved: 'approved',
+        approvedENS: 'approvedENS',
+        value: 'value',
     },
     WETH: {
+        contractType: ContractType.WETH,
         type: AssetType.ERC20,
         transfer: 'Transfer',
         transferBatch: null,
         approval: 'Approval',
-        to: 'to',
-        toENS: 'toENS',
-        from: 'from',
-        fromENS: 'fromENS',
-        owner: '_owner',
-        ownerENS: '_ownerENS',
-        operator: '_operator',
-        operatorENS: '_operatorENS',
-        approved: '_approved',
-        approvedENS: '_approvedENS',
+        to: 'dst',
+        toENS: 'dstENS',
+        from: 'src',
+        fromENS: 'srcENS',
+        owner: 'src',
+        ownerENS: 'srcENS',
+        operator: 'guy',
+        operatorENS: 'guyENS',
+        approved: 'approved',
+        approvedENS: 'approvedENS',
+        value: 'wad',
     },
 }
 
@@ -122,7 +132,18 @@ function isClaimEvent(t: TokenVars, event: InteractionEvent, userAddress: string
 }
 
 function isApprovalEvent(t: TokenVars, event: InteractionEvent, userAddress: string) {
-    return event.eventName === t.approval && event.params[t.owner] === userAddress && event.params[t.approved] == true
+    return (
+        event.eventName === t.approval &&
+        event.params[t.owner] === userAddress &&
+        (event.params[t.approved] === true || Number(event.params[t.value]) > 0)
+    )
+}
+function isRevokeEvent(t: TokenVars, event: InteractionEvent, userAddress: string) {
+    return (
+        event.eventName === t.approval &&
+        event.params[t.owner] === userAddress &&
+        (event.params[t.approved] === false || Number(event.params[t.value]) === 0)
+    )
 }
 
 function isBurnEvent(t: TokenVars, event: InteractionEvent, userAddress: string) {
@@ -140,6 +161,7 @@ function getAction(t: TokenVars, events: InteractionEvent[], userAddress: string
     const isReceive = events.find((e) => isReceiveEvent(t, e, userAddress, fromAddress))
     const isClaim = events.find((e) => isClaimEvent(t, e, userAddress, fromAddress))
     const isApproved = events.find((e) => isApprovalEvent(t, e, userAddress))
+    const isRevoked = events.find((e) => isRevokeEvent(t, e, userAddress))
     const isBurn = events.find((e) => isBurnEvent(t, e, userAddress))
 
     if (isMint) {
@@ -156,24 +178,27 @@ function getAction(t: TokenVars, events: InteractionEvent[], userAddress: string
         return Action.claimed
     } else if (isApproved) {
         return Action.approved
+    } else if (isRevoked) {
+        return Action.revoked
     }
 
     return Action.______TODO______
 }
 
 function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Interpretation): Asset {
-    const { actions, assetsReceived: tokensReceived, assetsSent: tokensSent } = interpretation
+    const { actions, assetsReceived, assetsSent } = interpretation
     if (actions.length) {
         switch (actions[0]) {
             case Action.minted:
             case Action.gotAirdropped:
             case Action.received:
             case Action.claimed:
-                return tokensReceived[0]
+                return assetsReceived[0]
             case Action.sent:
             case Action.burned:
-                return tokensSent[0]
+                return assetsSent[0]
             case Action.approved:
+            case Action.revoked:
                 return {
                     type: AssetType.ERC721, // TODO this is a hack for now, we should add tokenType to each interaction
                     name: tokenContractInteraction?.contractName,
@@ -211,7 +236,7 @@ function addUserName(
             case 'received':
                 userName = tokenEvents
                     .filter((e) => isReceiveEvent(t, e, userAddress, fromAddress))
-                    .map((e) => e.params[t.toENS] || (e.params[t.to] as string))[0]
+                    .map((e) => e.params[t.toENS] || (e.params[t.to] as string))[0] as string
                 break
             default:
                 break
@@ -234,17 +259,22 @@ function addCounterpartyNames(
             case 'received':
                 counterpartyNames = tokenEvents
                     .filter((e) => isReceiveEvent(t, e, userAddress, fromAddress))
-                    .map((e) => e.params[t.fromENS] || (e.params[t.from] as string))
+                    .map((e) => e.params[t.fromENS] || (e.params[t.from] as string)) as string[]
                 break
             case 'sent':
                 counterpartyNames = tokenEvents
                     .filter((e) => isSendEvent(t, e, userAddress))
-                    .map((e) => e.params[t.toENS] || (e.params[t.to] as string))
+                    .map((e) => e.params[t.toENS] || (e.params[t.to] as string)) as string[]
                 break
             case 'approved':
                 counterpartyNames = tokenEvents
                     .filter((e) => isApprovalEvent(t, e, userAddress))
-                    .map((e) => e.params[t.operatorENS] || (e.params[t.operator] as string))
+                    .map((e) => e.params[t.operatorENS] || (e.params[t.operator] as string)) as string[]
+                break
+            case 'revoked':
+                counterpartyNames = tokenEvents
+                    .filter((e) => isRevokeEvent(t, e, userAddress))
+                    .map((e) => e.params[t.operatorENS] || (e.params[t.operator] as string)) as string[]
                 break
             case 'got airdropped':
                 counterpartyNames = [fromAddress]
@@ -292,6 +322,7 @@ function addExampleDescription(interpretation: Interpretation, token: Asset) {
             }
             case Action.received:
             case Action.gotAirdropped:
+            case Action.revoked:
                 tokenId = receivedSingle ? tokenId : ''
                 tokenCount = i.assetsReceived.length
                 direction = ' from'

@@ -93,7 +93,7 @@ class Interpreter {
     }
 
     async interpretSingleTx(
-        decodedData: DecodedTx,
+        decodedTx: DecodedTx,
         userAddressFromInput: string | null = null,
         userNameFromInput: string | null = null,
     ): Promise<Interpretation> {
@@ -109,11 +109,9 @@ class Interpreter {
             txHash,
             contractName,
             officialContractName,
-        } = decodedData
+        } = decodedTx
 
-        const gasUsed = formatEther(
-            BigNumber.from(decodedData.gasUsed).mul(BigNumber.from(decodedData.effectiveGasPrice)),
-        )
+        const gasUsed = formatEther(BigNumber.from(decodedTx.gasUsed).mul(BigNumber.from(decodedTx.effectiveGasPrice)))
 
         const parsedAddress = AddressZ.safeParse(userAddressFromInput)
 
@@ -122,10 +120,10 @@ class Interpreter {
         let userName = null
 
         if (fromAddress === userAddress) {
-            userName = decodedData.fromENS
+            userName = decodedTx.fromENS
         }
         if (toAddress === userAddress) {
-            userName = decodedData.toENS
+            userName = decodedTx.toENS
         }
 
         userName =
@@ -149,7 +147,7 @@ class Interpreter {
             gasPaid: gasUsed,
             extra: {},
             exampleDescription: 'no example description defined',
-            reverted: decodedData.reverted ? true : null,
+            reverted: decodedTx.reverted ? true : null,
             contractName: contractName || officialContractName,
             counterpartyName: null,
             timestamp,
@@ -191,7 +189,7 @@ class Interpreter {
         }
 
         // if there's no contract-specific mapping, try to use the fallback mapping
-        if (decodedData.txType === TxType.CONTRACT_DEPLOY) {
+        if (decodedTx.txType === TxType.CONTRACT_DEPLOY) {
             // Contract deploy
             interpretation.actions = [Action.deployed]
             interpretation.exampleDescription = contractDeployInterpreter.exampleDescription
@@ -205,9 +203,9 @@ class Interpreter {
                 contractDeployInterpreter.exampleDescriptionTemplate,
                 interpretation,
             )
-        } else if (decodedData.txType === TxType.TRANSFER) {
+        } else if (decodedTx.txType === TxType.TRANSFER) {
             // Generic transfer
-            interpretGenericTransfer(decodedData, interpretation, fromName, toName)
+            interpretGenericTransfer(decodedTx, interpretation, fromName, toName)
         } else if (interpretationMapping && methodSpecificMappings.length && methodName && toAddress) {
             // Contract-specific interpretation
             // some of these will be arbitrary keys
@@ -223,7 +221,7 @@ class Interpreter {
 
             interpretation.exampleDescription = methodSpecificMappings[0].exampleDescription
 
-            if (decodedData.reverted) {
+            if (decodedTx.reverted) {
                 interpretation.reverted = true
                 // TODO the description and extras should be different for reverted transactions
             }
@@ -238,12 +236,13 @@ class Interpreter {
                 interpretation,
             )
         } else {
-            if (decodedData.contractType === ContractType.GNOSIS) {
-                interpretGnosisExecution(decodedData, interpretation)
-            } else if (decodedData.contractType !== ContractType.OTHER) {
-                interpretGenericToken(decodedData, interpretation)
+            // TODO remove hardcode on 'execTransaction
+            if (decodedTx.contractType === ContractType.GNOSIS || decodedTx.methodCall.name === 'execTransaction') {
+                interpretGnosisExecution(decodedTx, interpretation)
+            } else if (decodedTx.contractType !== ContractType.OTHER) {
+                interpretGenericToken(decodedTx, interpretation)
             } else {
-                lastFallback(decodedData, interpretation)
+                lastFallback(decodedTx, interpretation)
             }
         }
         interpretation.exampleDescription = shortenNamesInString(interpretation.exampleDescription)
@@ -275,6 +274,22 @@ class Interpreter {
             (acc, event) => acc + Number(formatEther(event.params.value || 0)),
             0,
         )
+
+        return val.toFixed(20).replace(/^(\d+\.\d*?[0-9])0+$/g, '$1')
+    }
+
+    getWethValue(interactions: Interaction[], userAddress: string, direction: 'received' | 'sent'): string {
+        const eventDirection = direction === 'received' ? 'Deposit' : 'Withdraw'
+        const wethInteraction = interactions.find(
+            (interaction) => interaction.contractAddress === this.chain.wethAddress,
+        )
+        if (!wethInteraction) return '0'
+
+        const events = wethInteraction.events.filter(
+            (event) => event.eventName === eventDirection && event.params.dst === userAddress,
+        )
+
+        const val = events.reduce((acc, event) => acc + Number(formatEther(event.params.wad || 0)), 0)
 
         return val.toFixed(20).replace(/^(\d+\.\d*?[0-9])0+$/g, '$1')
     }
@@ -499,6 +514,7 @@ class Interpreter {
         const assets = this.getTokens(interactions, userAddress, 'to')
 
         const nativeValueReceived = this.getNativeTokenValueReceived(interactions, userAddress)
+        const wethValueReceived = this.getWethValue(interactions, userAddress, 'received')
 
         if (Number(nativeValueReceived)) {
             assets.push({
@@ -507,6 +523,16 @@ class Interpreter {
                 name: 'Ethereum',
                 symbol: 'ETH',
                 address: ethAddress,
+            })
+        }
+
+        if (Number(wethValueReceived)) {
+            assets.push({
+                type: AssetType.ERC20,
+                amount: wethValueReceived,
+                name: 'Wrapped Ether',
+                symbol: 'WETH',
+                address: this.chain.wethAddress,
             })
         }
 
@@ -521,15 +547,26 @@ class Interpreter {
     ): Asset[] {
         const assets = this.getTokens(interactions, userAddress, 'from')
 
-        const val = this.getNativeTokenValueSent(interactions, nativeValueSent, fromAddress, userAddress)
+        const ethValueSent = this.getNativeTokenValueSent(interactions, nativeValueSent, fromAddress, userAddress)
+        const wethValueSent = this.getWethValue(interactions, userAddress, 'sent')
 
         if (Number(nativeValueSent)) {
             assets.push({
                 type: AssetType.native,
-                amount: val,
+                amount: ethValueSent,
                 name: 'Ethereum',
                 symbol: 'ETH',
                 address: ethAddress,
+            })
+        }
+
+        if (Number(wethValueSent)) {
+            assets.push({
+                type: AssetType.ERC20,
+                amount: wethValueSent,
+                name: 'Wrapped Ether',
+                symbol: 'WETH',
+                address: this.chain.wethAddress,
             })
         }
 
