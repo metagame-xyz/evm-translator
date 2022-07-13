@@ -169,6 +169,19 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         }
     }
 
+    async deleteManyDecodedTxs(txHashes: string[]): Promise<number> {
+        try {
+            const { acknowledged, deletedCount } = await DecodedTxModel.deleteMany({ txHash: { $in: txHashes } })
+            return acknowledged ? deletedCount : 0
+        } catch (e: any) {
+            if (!e?.message?.includes('user is not allowed to do action [delete]')) {
+                console.log('decodedTx mongoose error')
+                console.log(e)
+            }
+            return 0
+        }
+    }
+
     async getManyDecodedTxMap(txHashes: string[]): Promise<Record<string, DecodedTx | null>> {
         const decodedTxMap: Record<string, DecodedTx | null> = {}
         for (let i = 0; i < txHashes.length; i++) {

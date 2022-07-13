@@ -32,6 +32,7 @@ export abstract class DatabaseInterface {
 
     // abstract addOrUpdateDecodedTx(decodedData: DecodedTx): Promise<void>
     abstract addOrUpdateManyDecodedTx(decodedDataArr: DecodedTx[]): Promise<void>
+    abstract deleteManyDecodedTxs(txHashes: string[]): Promise<number>
 
     abstract getEntityByAddress(address: string): Promise<string | null>
 
@@ -133,6 +134,9 @@ export class NullDatabaseInterface extends DatabaseInterface {
 
     async addOrUpdateManyDecodedTx(decodedData: DecodedTx[]): Promise<void> {
         return Promise.resolve()
+    }
+    async deleteManyDecodedTxs(txHashes: string[]): Promise<number> {
+        return Promise.resolve(0)
     }
 
     async addOrUpdateInterpretedData(interpretedData: Interpretation): Promise<void> {
