@@ -130,6 +130,7 @@ export type InteractionEventParams = {
     _amounts?: string[]
     _ids?: string[]
     _id?: string | null
+    id?: string
     [key: string]: string | string[] | undefined | null | number | boolean
 }
 

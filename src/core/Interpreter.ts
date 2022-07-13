@@ -153,6 +153,10 @@ class Interpreter {
             timestamp,
         }
 
+        if (decodedTx.reverted) {
+            interpretation.actions.push(Action.unknown)
+        }
+
         let fromName = await this.db.getEntityByAddress(fromAddress)
         let toName = await this.db.getEntityByAddress(toAddress || '')
 
@@ -476,9 +480,8 @@ class Interpreter {
         tokens = flattenedInteractions.map((i) => {
             const tokenType = getTokenType(i)
 
-            const amount =
-                tokenType === AssetType.ERC1155 ? i.params._amount : i.params.value || i.params.amount || i.params.wad
-            const tokenId = (tokenType === AssetType.ERC1155 ? i.params._id : i.params.tokenId)?.toString()
+            const amount = i.params.value || i.params.amount || i.params._amount || i.params.wad
+            const tokenId = (i.params.id || i.params.tokenId || '').toString()
 
             const token: Asset = {
                 type: tokenType,

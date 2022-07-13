@@ -127,6 +127,14 @@ function isReceiveEvent(t: TokenVars, event: InteractionEvent, userAddress: stri
     return event.eventName === t.transfer && event.params[t.to] === userAddress && fromAddress !== userAddress
 }
 
+// function isSwapEvent(t: TokenVars, event: InteractionEvent, userAddress: string) {
+//     return (
+//         event.eventName === t.transfer &&
+//         event.params[t.from] === userAddress &&
+//         blackholeAddresses.includes(event.params[t.to] as string)
+//     )
+// }
+
 function isClaimEvent(t: TokenVars, event: InteractionEvent, userAddress: string, fromAddress: string) {
     return event.eventName === t.transfer && event.params[t.to] === userAddress && fromAddress === userAddress
 }
@@ -159,6 +167,7 @@ function getAction(t: TokenVars, events: InteractionEvent[], userAddress: string
     const isAirdrop = events.find((e) => isAirdropEvent(t, e, userAddress, fromAddress))
     const isSend = events.find((e) => isSendEvent(t, e, userAddress))
     const isReceive = events.find((e) => isReceiveEvent(t, e, userAddress, fromAddress))
+    // const isSwap = events.find((e) => isSwapEvent(t, e, userAddress, fromAddress))
     const isClaim = events.find((e) => isClaimEvent(t, e, userAddress, fromAddress))
     const isApproved = events.find((e) => isApprovalEvent(t, e, userAddress))
     const isRevoked = events.find((e) => isRevokeEvent(t, e, userAddress))
