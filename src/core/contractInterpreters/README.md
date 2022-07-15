@@ -15,7 +15,7 @@ You don't need to be an advanced web3 software developer to contribute a contrac
 
 ## Part 1: Set up a local testing environment (recommended)
 
-1. **Clone and link the repos by following [these steps](https://github.com/metagame-xyz/evm-translator-demo/blob/ main/README.md)**
+1. **Fork and Clone the Demo repo and this repo by following [these steps](https://github.com/metagame-xyz/evm-translator-demo/blob/main/README.md)**
 
     You MUST follow the above steps to `yarn link` the evm-translator repo to evm-translator-demo or else your changes will take effect. Also, make sure you get the necessary API keys and stash them in .env as described.
 
