@@ -13,7 +13,7 @@ Do you have a protocol or contract you interact with frequently that you'd like 
 You don't need to be an advanced web3 software developer to contribute a contract interpretation to evm-translator. Note that Part 1 sets up a local environment for testing your new contract interpretations. This part is optional but highly encouraged if you are comfortable with the set up. Here's how it's done...
 <br><br><br>
 
-## Part 1: Set up a local testing environment (recommended)
+## Part 1: Set up a local testing environment
 
 1. **Clone and link the repos by following [these steps](https://github.com/metagame-xyz/evm-translator-demo/blob/ main/README.md)**
 
@@ -71,7 +71,7 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
 
         - There are a few other optional fields that will be detailed in step 4.
 
-          <br>
+              <br>
 
     **Gathering your contract's methods**
 
@@ -235,21 +235,23 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
 
 1.  **Test it yourself!**
 
-    If you followed Part 1 and set up a testing environment, you can do this next part. If not, you're going to have to submit your interpretation blind.
-
     Make sure that both evm-translator and evm-translator-demo are running by typing `yarn dev` into terminal tabs within those folders. Go to localhost:3000 and type in various example transactions from your contract. Make sure you test all methods. You can find example transactions from [etherscan.io](etherscan.io) or Bloxy.info as described above.
 
     Make sure that the interpretation looks good to you. If you implemented the `exampleDescriptionTemplate` and field, check that, but if not, don't worry about it. The first object in the JSON that appears on the screen is the interpretation and is the only part that you have control over. Pay special attention to the `actions` field.
 
 2.  **Let posterity test it!**
 
-    Do this step regardless if you followed Part 1 or not.
-
     Go to `evm-translator/src/__tests__/testTxHashes.ts`. This file contains a repository of transaction hashes with accurate interpretations that must be maintained as we continue to make changes to evm-translator. Before each PR merge, we automatically run these tests to ensure that new changes did not corrupt previously accurate interpretations.
 
     Add a new entry into the `testTxHashes` object with the key being a human readable name for your contract and the value being a bunch of example transaction hashes using all the methods of the contract. See prior entries as an example. Everything other than the transaction hashes are solely for human readability but please still use care when filling out contract and method names.
 
+    **IMPORTANT: Add your new contract and transactions to the end of the file.**
+
     If you implemented a method that has different interpretations depending on the perspective of the user, such as an NFT sale, add an entry to the `multiSidedTxMap` object. The key should be an example multi-sided transaction and the value should be an array of the different addresses that should be tested.
+
+3.  **Run the automated tests**
+
+    Run `yarn test` within the evm-translator folder in terminal. This step makes sure your new changes have not affected the results of other interpretations. You should see a bunch of tests succeed and your new tests get written to the snapshot file. If your test fails, either you added transactions to the middle of `testTxHashes` rather than the end, or you modified something you shouldn't have.
     <br><br><br>
 
 ## Part 4: Submit your interpretation
