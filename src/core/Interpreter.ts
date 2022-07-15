@@ -11,7 +11,7 @@ import { formatEther, formatUnits } from 'ethers/lib/utils'
 
 import { InterpreterMap, MethodMap } from 'interfaces/contractInterpreter'
 import { ContractType, DecodedTx, Interaction, InteractionEvent, TxType } from 'interfaces/decoded'
-import { Action, Interpretation, Token, TokenType } from 'interfaces/interpreted'
+import { Action, Asset, AssetType, Interpretation } from 'interfaces/interpreted'
 import { Chain } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
@@ -19,11 +19,12 @@ import {
     checkMultipleKeys,
     fillDescriptionTemplate,
     flattenEventsFromInteractions,
+    getDecimals,
     getNativeTokenValueEvents,
     shortenNamesInString,
     toOrFromUser,
 } from 'utils'
-import { multicallContractAddresses, multicallFunctionNames } from 'utils/constants'
+import { ethAddress, multicallContractAddresses, multicallFunctionNames } from 'utils/constants'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 
 function deepCopy<T>(obj: T): T {
@@ -45,6 +46,7 @@ type KeyMapping = {
     prefix?: string
     postfix?: string
     array?: boolean
+    decimals?: number
 }
 
 function includes<T extends U, U>(collection: ReadonlyArray<T>, element: U): element is T {
@@ -91,7 +93,7 @@ class Interpreter {
     }
 
     async interpretSingleTx(
-        decodedData: DecodedTx,
+        decodedTx: DecodedTx,
         userAddressFromInput: string | null = null,
         userNameFromInput: string | null = null,
     ): Promise<Interpretation> {
@@ -107,11 +109,9 @@ class Interpreter {
             txHash,
             contractName,
             officialContractName,
-        } = decodedData
+        } = decodedTx
 
-        const gasUsed = formatEther(
-            BigNumber.from(decodedData.gasUsed).mul(BigNumber.from(decodedData.effectiveGasPrice)),
-        )
+        const gasUsed = formatEther(BigNumber.from(decodedTx.gasUsed).mul(BigNumber.from(decodedTx.effectiveGasPrice)))
 
         const parsedAddress = AddressZ.safeParse(userAddressFromInput)
 
@@ -120,10 +120,10 @@ class Interpreter {
         let userName = null
 
         if (fromAddress === userAddress) {
-            userName = decodedData.fromENS
+            userName = decodedTx.fromENS
         }
         if (toAddress === userAddress) {
-            userName = decodedData.toENS
+            userName = decodedTx.toENS
         }
 
         userName =
@@ -140,19 +140,21 @@ class Interpreter {
             userAddress,
             contractAddress: toAddress,
             actions: [],
-            nativeValueSent: this.getNativeTokenValueSent(interactions, nativeValueSent, fromAddress, userAddress),
-            nativeValueReceived: this.getNativeTokenValueReceived(interactions, userAddress),
-            tokensReceived: this.getTokensReceived(interactions, userAddress),
-            tokensSent: this.getTokensSent(interactions, userAddress),
+            assetsReceived: this.getAssetsReceived(interactions, userAddress),
+            assetsSent: this.getAssetsSent(interactions, nativeValueSent, userAddress, fromAddress),
             chainSymbol: this.chain.symbol,
             userName,
             gasPaid: gasUsed,
             extra: {},
             exampleDescription: 'no example description defined',
-            reverted: decodedData.reverted ? true : null,
+            reverted: decodedTx.reverted ? true : null,
             contractName: contractName || officialContractName,
             counterpartyName: null,
             timestamp,
+        }
+
+        if (decodedTx.reverted) {
+            interpretation.actions.push(Action.unknown)
         }
 
         let fromName = await this.db.getEntityByAddress(fromAddress)
@@ -191,7 +193,7 @@ class Interpreter {
         }
 
         // if there's no contract-specific mapping, try to use the fallback mapping
-        if (decodedData.txType === TxType.CONTRACT_DEPLOY) {
+        if (decodedTx.txType === TxType.CONTRACT_DEPLOY) {
             // Contract deploy
             interpretation.actions = [Action.deployed]
             interpretation.exampleDescription = contractDeployInterpreter.exampleDescription
@@ -205,9 +207,9 @@ class Interpreter {
                 contractDeployInterpreter.exampleDescriptionTemplate,
                 interpretation,
             )
-        } else if (decodedData.txType === TxType.TRANSFER) {
+        } else if (decodedTx.txType === TxType.TRANSFER) {
             // Generic transfer
-            interpretGenericTransfer(decodedData, interpretation, fromName, toName)
+            interpretGenericTransfer(decodedTx, interpretation, fromName, toName)
         } else if (interpretationMapping && methodSpecificMappings.length && methodName && toAddress) {
             // Contract-specific interpretation
             // some of these will be arbitrary keys
@@ -223,7 +225,7 @@ class Interpreter {
 
             interpretation.exampleDescription = methodSpecificMappings[0].exampleDescription
 
-            if (decodedData.reverted) {
+            if (decodedTx.reverted) {
                 interpretation.reverted = true
                 // TODO the description and extras should be different for reverted transactions
             }
@@ -238,12 +240,13 @@ class Interpreter {
                 interpretation,
             )
         } else {
-            if (decodedData.contractType === ContractType.GNOSIS) {
-                interpretGnosisExecution(decodedData, interpretation)
-            } else if (decodedData.contractType !== ContractType.OTHER) {
-                interpretGenericToken(decodedData, interpretation)
+            // TODO remove hardcode on 'execTransaction
+            if (decodedTx.contractType === ContractType.GNOSIS || decodedTx.methodCall.name === 'execTransaction') {
+                interpretGnosisExecution(decodedTx, interpretation)
+            } else if (decodedTx.contractType !== ContractType.OTHER) {
+                interpretGenericToken(decodedTx, interpretation)
             } else {
-                lastFallback(decodedData, interpretation)
+                lastFallback(decodedTx, interpretation)
             }
         }
         interpretation.exampleDescription = shortenNamesInString(interpretation.exampleDescription)
@@ -275,6 +278,22 @@ class Interpreter {
             (acc, event) => acc + Number(formatEther(event.params.value || 0)),
             0,
         )
+
+        return val.toFixed(20).replace(/^(\d+\.\d*?[0-9])0+$/g, '$1')
+    }
+
+    getWethValue(interactions: Interaction[], userAddress: string, direction: 'received' | 'sent'): string {
+        const eventDirection = direction === 'received' ? 'Deposit' : 'Withdraw'
+        const wethInteraction = interactions.find(
+            (interaction) => interaction.contractAddress === this.chain.wethAddress,
+        )
+        if (!wethInteraction) return '0'
+
+        const events = wethInteraction.events.filter(
+            (event) => event.eventName === eventDirection && event.params.dst === userAddress,
+        )
+
+        const val = events.reduce((acc, event) => acc + Number(formatEther(event.params.wad || 0)), 0)
 
         return val.toFixed(20).replace(/^(\d+\.\d*?[0-9])0+$/g, '$1')
     }
@@ -320,6 +339,7 @@ class Interpreter {
         }
 
         let value = null
+        let decimals = null
 
         if (!array) {
             const interaction = filteredInteractions[index]
@@ -337,6 +357,8 @@ class Interpreter {
             }
             const postfix = keyMapping.postfix || ''
             value = str ? prefix + str + postfix : keyMapping.defaultValue
+
+            decimals = getDecimals(interaction?.contractAddress)
         } else {
             value = []
             const prefix = keyMapping.prefix || ''
@@ -360,13 +382,18 @@ class Interpreter {
                 }
             }
             //}
+            decimals = getDecimals(filteredInteractions[0]?.contractAddress)
+        }
+
+        if (typeof value === 'string' && Number(value)) {
+            value = formatUnits(value, decimals)
         }
 
         return value
     }
 
-    private getTokens(interactions: Interaction[], userAddress: string, direction: 'to' | 'from'): Token[] {
-        let tokens: Token[] = []
+    private getTokens(interactions: Interaction[], userAddress: string, direction: 'to' | 'from'): Asset[] {
+        let tokens: Asset[] = []
         type FlattenedInteraction = Omit<Interaction, 'events'> & InteractionEvent
 
         let filteredInteractions = deepCopy(interactions) as Interaction[]
@@ -390,26 +417,26 @@ class Interpreter {
 
         const flattenedInteractions = flattenEvents(filteredInteractions)
 
-        function getTokenType(interaction: FlattenedInteraction): TokenType {
+        function getTokenType(interaction: FlattenedInteraction): AssetType {
             const LPTokenSymbols = ['UNI-V2']
-            let tokenType = TokenType.DEFAULT
+            let tokenType = AssetType.DEFAULT
 
             // LP Token
             if (interaction.contractSymbol && LPTokenSymbols.includes(interaction.contractSymbol)) {
-                tokenType = TokenType.LPToken
+                tokenType = AssetType.LPToken
                 // ERC-1155
             } else if (
                 interaction.contractType == ContractType.ERC1155 ||
                 interaction.params._amount ||
                 interaction.params._amounts
             ) {
-                tokenType = TokenType.ERC1155
+                tokenType = AssetType.ERC1155
                 // ERC-721
             } else if (interaction.contractType == ContractType.ERC721 || interaction.params.tokenId) {
-                tokenType = TokenType.ERC721
+                tokenType = AssetType.ERC721
                 // ERC-20
             } else if (interaction.contractType == ContractType.ERC20 || Number(interaction.params.value) > 0) {
-                tokenType = TokenType.ERC20
+                tokenType = AssetType.ERC20
             }
 
             return tokenType
@@ -430,9 +457,14 @@ class Interpreter {
                         // ERC1155 you can batchTransfer multiple tokens, each w their own amount, in 1 event
                         for (const [index, amount] of event.params._amounts.entries()) {
                             let newInteraction = deepCopy(flattenedInteraction)
-                            newInteraction.params._id = event.params._ids ? event.params._ids[index] : null
-                            newInteraction.params._amount = amount
-                            newInteraction = { ...newInteraction, ...event }
+                            const newEvent = deepCopy(event)
+                            newEvent.params._id = event.params._ids
+                                ? BigNumber.from(event.params._ids[index]).toString()
+                                : null
+                            delete newEvent.params._ids
+                            newEvent.params._amount = BigNumber.from(amount).toString()
+                            delete newEvent.params._amounts
+                            newInteraction = { ...newInteraction, ...newEvent }
                             flattenedInteractions.push(newInteraction)
                         }
                     } else {
@@ -448,11 +480,10 @@ class Interpreter {
         tokens = flattenedInteractions.map((i) => {
             const tokenType = getTokenType(i)
 
-            const amount =
-                tokenType === TokenType.ERC1155 ? i.params._amount : i.params.value || i.params.amount || i.params.wad
-            const tokenId = (tokenType === TokenType.ERC1155 ? i.params._id : i.params.tokenId)?.toString()
+            const amount = i.params.value || i.params.amount || i.params._amount || i.params.wad
+            const tokenId = (i.params.id || i.params.tokenId || '').toString()
 
-            const token: Token = {
+            const token: Asset = {
                 type: tokenType,
                 name: i.contractName,
                 symbol: i.contractSymbol,
@@ -460,8 +491,14 @@ class Interpreter {
             }
 
             if (amount) {
-                const decimal = [this.chain.usdcAddress, this.chain.usdtAddress].includes(i.contractAddress) ? 6 : 18 // TODO need to store the "decimal()" for all contracts and either store it on decoded, or call the db during interpretations
-                const amountNumber = Number(formatUnits(amount, decimal))
+                let decimals
+                if (tokenType === AssetType.ERC1155) {
+                    decimals = 0
+                } else {
+                    decimals = getDecimals(i.contractAddress)
+                }
+
+                const amountNumber = Number(formatUnits(amount, decimals))
 
                 token.amount = amountNumber.toFixed(12).replace(/^(\d+\.\d*?[0-9])0+$/g, '$1')
 
@@ -476,12 +513,67 @@ class Interpreter {
         return tokens
     }
 
-    private getTokensReceived(interactions: Interaction[], userAddress: string): Token[] {
-        return this.getTokens(interactions, userAddress, 'to')
+    private getAssetsReceived(interactions: Interaction[], userAddress: string): Asset[] {
+        const assets = this.getTokens(interactions, userAddress, 'to')
+
+        const nativeValueReceived = this.getNativeTokenValueReceived(interactions, userAddress)
+        const wethValueReceived = this.getWethValue(interactions, userAddress, 'received')
+
+        if (Number(nativeValueReceived)) {
+            assets.push({
+                type: AssetType.native,
+                amount: nativeValueReceived,
+                name: 'Ethereum',
+                symbol: 'ETH',
+                address: ethAddress,
+            })
+        }
+
+        if (Number(wethValueReceived)) {
+            assets.push({
+                type: AssetType.ERC20,
+                amount: wethValueReceived,
+                name: 'Wrapped Ether',
+                symbol: 'WETH',
+                address: this.chain.wethAddress,
+            })
+        }
+
+        return assets
     }
 
-    private getTokensSent(interactions: Interaction[], userAddress: string): Token[] {
-        return this.getTokens(interactions, userAddress, 'from')
+    private getAssetsSent(
+        interactions: Interaction[],
+        nativeValueSent: string | undefined,
+        userAddress: string,
+        fromAddress: string,
+    ): Asset[] {
+        const assets = this.getTokens(interactions, userAddress, 'from')
+
+        const ethValueSent = this.getNativeTokenValueSent(interactions, nativeValueSent, fromAddress, userAddress)
+        const wethValueSent = this.getWethValue(interactions, userAddress, 'sent')
+
+        if (Number(nativeValueSent)) {
+            assets.push({
+                type: AssetType.native,
+                amount: ethValueSent,
+                name: 'Ethereum',
+                symbol: 'ETH',
+                address: ethAddress,
+            })
+        }
+
+        if (Number(wethValueSent)) {
+            assets.push({
+                type: AssetType.ERC20,
+                amount: wethValueSent,
+                name: 'Wrapped Ether',
+                symbol: 'WETH',
+                address: this.chain.wethAddress,
+            })
+        }
+
+        return assets
     }
 
     private useKeywordMap(

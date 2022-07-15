@@ -16,10 +16,8 @@ export type Interpretation = {
     fromName?: string
     toName?: string
     exampleDescription: string
-    tokensSent: Token[] // usually just one token
-    tokensReceived: Token[] // usually just one token
-    nativeValueSent: string
-    nativeValueReceived: string
+    assetsSent: Asset[] // usually just one token
+    assetsReceived: Asset[] // usually just one token
     chainSymbol: ChainSymbol
     userName: string
     counterpartyName: string | null // the opposite side of the tx, opposite of userName
@@ -68,21 +66,22 @@ export const enum Action {
     ______TODO______ = '______TODO______',
 }
 
-export const enum TokenType {
+export const enum AssetType {
     ERC20 = 'ERC20',
     ERC721 = 'ERC721',
     ERC1155 = 'ERC1155',
     LPToken = 'LPToken',
     DEFAULT = 'unknown',
+    native = 'native',
 }
-export type Token = {
-    type: TokenType
+export type Asset = {
+    type: AssetType
     name: string | null
     symbol: string | null
     address: string
     amount?: string
-    token0?: Token
-    token1?: Token
+    token0?: Asset
+    token1?: Asset
     pair?: string // "RARE-WETH"
     tokenId?: string
 }

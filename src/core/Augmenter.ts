@@ -398,6 +398,9 @@ export class Augmenter {
         if (contractAddress == this.chain.wethAddress) {
             return ContractType.WETH
         }
+        if (contractAddress == this.chain.usdcAddress) {
+            return ContractType.ERC20
+        }
 
         let contractType = await checkInterface(contractAddress, this.provider)
         if (contractType === ContractType.OTHER) {

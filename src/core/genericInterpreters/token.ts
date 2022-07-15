@@ -1,31 +1,34 @@
 import { ContractType, DecodedTx, Interaction, InteractionEvent } from 'interfaces/decoded'
-import { Action, Interpretation, Token, TokenType } from 'interfaces/interpreted'
+import { Action, Asset, AssetType, Interpretation } from 'interfaces/interpreted'
 
 import { shortenName } from 'utils'
 import { blackholeAddress, blackholeAddresses } from 'utils/constants'
 
 type TokenVars = {
-    type: TokenType
+    contractType: ContractType
+    type: AssetType
     transfer: string
     transferBatch: string | null
     approval: string
     to: string
-    toENS: '_toENS' | 'toENS'
+    toENS: string
     from: string
-    fromENS: '_fromENS' | 'fromENS'
+    fromENS: string
     owner: string
     ownerENS: string
-    operator: '_operator'
-    operatorENS: '_operatorENS'
+    operator: string
+    operatorENS: string
     approved: string
     approvedENS: string
+    value: string
 }
 
 type EIP = Exclude<ContractType, 'OTHER' | 'Gnosis Safe'>
 
 const vars: Record<EIP, TokenVars> = {
     ERC1155: {
-        type: TokenType.ERC1155,
+        contractType: ContractType.ERC1155,
+        type: AssetType.ERC1155,
         transfer: 'TransferSingle',
         transferBatch: 'TransferBatch',
         approval: 'ApprovalForAll',
@@ -33,15 +36,17 @@ const vars: Record<EIP, TokenVars> = {
         toENS: 'toENS',
         from: 'from',
         fromENS: 'fromENS',
-        owner: '_owner',
-        ownerENS: '_ownerENS',
-        operator: '_operator',
-        operatorENS: '_operatorENS',
-        approved: '_approved',
-        approvedENS: '_approvedENS',
+        owner: 'account',
+        ownerENS: 'ownerENS',
+        operator: 'operator',
+        operatorENS: 'operatorENS',
+        approved: 'approved',
+        approvedENS: 'approvedENS',
+        value: 'amount',
     },
     ERC721: {
-        type: TokenType.ERC721,
+        contractType: ContractType.ERC721,
+        type: AssetType.ERC721,
         transfer: 'Transfer',
         transferBatch: null,
         approval: 'ApprovalForAll',
@@ -49,15 +54,17 @@ const vars: Record<EIP, TokenVars> = {
         toENS: 'toENS',
         from: 'from',
         fromENS: 'fromENS',
-        owner: '_owner',
-        ownerENS: '_ownerENS',
-        operator: '_operator',
-        operatorENS: '_operatorENS',
-        approved: '_approved',
-        approvedENS: '_approvedENS',
+        owner: 'owner',
+        ownerENS: 'ownerENS',
+        operator: 'operator',
+        operatorENS: 'operatorENS',
+        approved: 'approved',
+        approvedENS: 'approvedENS',
+        value: '__N_A__',
     },
     ERC20: {
-        type: TokenType.ERC20,
+        contractType: ContractType.ERC20,
+        type: AssetType.ERC20,
         transfer: 'Transfer',
         transferBatch: null,
         approval: 'Approval',
@@ -65,28 +72,31 @@ const vars: Record<EIP, TokenVars> = {
         toENS: 'toENS',
         from: 'from',
         fromENS: 'fromENS',
-        owner: '_owner',
-        ownerENS: '_ownerENS',
-        operator: '_operator',
-        operatorENS: '_operatorENS',
-        approved: '_approved',
-        approvedENS: '_approvedENS',
+        owner: 'owner',
+        ownerENS: 'ownerENS',
+        operator: 'spender',
+        operatorENS: 'spenderENS',
+        approved: 'approved',
+        approvedENS: 'approvedENS',
+        value: 'value',
     },
     WETH: {
-        type: TokenType.ERC20,
+        contractType: ContractType.WETH,
+        type: AssetType.ERC20,
         transfer: 'Transfer',
         transferBatch: null,
         approval: 'Approval',
-        to: 'to',
-        toENS: 'toENS',
-        from: 'from',
-        fromENS: 'fromENS',
-        owner: '_owner',
-        ownerENS: '_ownerENS',
-        operator: '_operator',
-        operatorENS: '_operatorENS',
-        approved: '_approved',
-        approvedENS: '_approvedENS',
+        to: 'dst',
+        toENS: 'dstENS',
+        from: 'src',
+        fromENS: 'srcENS',
+        owner: 'src',
+        ownerENS: 'srcENS',
+        operator: 'guy',
+        operatorENS: 'guyENS',
+        approved: 'approved',
+        approvedENS: 'approvedENS',
+        value: 'wad',
     },
 }
 
@@ -117,12 +127,31 @@ function isReceiveEvent(t: TokenVars, event: InteractionEvent, userAddress: stri
     return event.eventName === t.transfer && event.params[t.to] === userAddress && fromAddress !== userAddress
 }
 
+// function isSwapEvent(t: TokenVars, event: InteractionEvent, userAddress: string) {
+//     return (
+//         event.eventName === t.transfer &&
+//         event.params[t.from] === userAddress &&
+//         blackholeAddresses.includes(event.params[t.to] as string)
+//     )
+// }
+
 function isClaimEvent(t: TokenVars, event: InteractionEvent, userAddress: string, fromAddress: string) {
     return event.eventName === t.transfer && event.params[t.to] === userAddress && fromAddress === userAddress
 }
 
 function isApprovalEvent(t: TokenVars, event: InteractionEvent, userAddress: string) {
-    return event.eventName === t.approval && event.params[t.owner] === userAddress && event.params[t.approved] == true
+    return (
+        event.eventName === t.approval &&
+        event.params[t.owner] === userAddress &&
+        (event.params[t.approved] === true || Number(event.params[t.value]) > 0)
+    )
+}
+function isRevokeEvent(t: TokenVars, event: InteractionEvent, userAddress: string) {
+    return (
+        event.eventName === t.approval &&
+        event.params[t.owner] === userAddress &&
+        (event.params[t.approved] === false || Number(event.params[t.value]) === 0)
+    )
 }
 
 function isBurnEvent(t: TokenVars, event: InteractionEvent, userAddress: string) {
@@ -133,19 +162,15 @@ function isBurnEvent(t: TokenVars, event: InteractionEvent, userAddress: string)
     )
 }
 
-function getAction(
-    t: TokenVars,
-    events: InteractionEvent[],
-    userAddress: string,
-    fromAddress: string,
-    toAddress: string | null,
-): Action {
+function getAction(t: TokenVars, events: InteractionEvent[], userAddress: string, fromAddress: string): Action {
     const isMint = events.find((e) => isMintEvent(t, e, userAddress, fromAddress))
     const isAirdrop = events.find((e) => isAirdropEvent(t, e, userAddress, fromAddress))
     const isSend = events.find((e) => isSendEvent(t, e, userAddress))
     const isReceive = events.find((e) => isReceiveEvent(t, e, userAddress, fromAddress))
+    // const isSwap = events.find((e) => isSwapEvent(t, e, userAddress, fromAddress))
     const isClaim = events.find((e) => isClaimEvent(t, e, userAddress, fromAddress))
     const isApproved = events.find((e) => isApprovalEvent(t, e, userAddress))
+    const isRevoked = events.find((e) => isRevokeEvent(t, e, userAddress))
     const isBurn = events.find((e) => isBurnEvent(t, e, userAddress))
 
     if (isMint) {
@@ -162,26 +187,29 @@ function getAction(
         return Action.claimed
     } else if (isApproved) {
         return Action.approved
+    } else if (isRevoked) {
+        return Action.revoked
     }
 
     return Action.______TODO______
 }
 
-function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Interpretation): Token {
-    const { actions, tokensReceived, tokensSent } = interpretation
+function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Interpretation): Asset {
+    const { actions, assetsReceived, assetsSent } = interpretation
     if (actions.length) {
         switch (actions[0]) {
             case Action.minted:
             case Action.gotAirdropped:
             case Action.received:
             case Action.claimed:
-                return tokensReceived[0]
+                return assetsReceived[0]
             case Action.sent:
             case Action.burned:
-                return tokensSent[0]
+                return assetsSent[0]
             case Action.approved:
+            case Action.revoked:
                 return {
-                    type: TokenType.ERC721, // TODO this is a hack for now, we should add tokenType to each interaction
+                    type: AssetType.ERC721, // TODO this is a hack for now, we should add tokenType to each interaction
                     name: tokenContractInteraction?.contractName,
                     symbol: tokenContractInteraction?.contractSymbol,
                     address: tokenContractInteraction?.contractAddress,
@@ -189,7 +217,7 @@ function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Int
             default:
                 // console.log('getTokenInfo action not supported: ')
                 return {
-                    type: TokenType.DEFAULT,
+                    type: AssetType.DEFAULT,
                     name: '',
                     symbol: '',
                     address: '0x',
@@ -197,7 +225,7 @@ function getTokenInfo(tokenContractInteraction: Interaction, interpretation: Int
         }
     }
     return {
-        type: TokenType.DEFAULT,
+        type: AssetType.DEFAULT,
         name: '',
         symbol: '',
         address: '0x',
@@ -217,7 +245,7 @@ function addUserName(
             case 'received':
                 userName = tokenEvents
                     .filter((e) => isReceiveEvent(t, e, userAddress, fromAddress))
-                    .map((e) => e.params[t.toENS] || (e.params[t.to] as string))[0]
+                    .map((e) => e.params[t.toENS] || (e.params[t.to] as string))[0] as string
                 break
             default:
                 break
@@ -240,17 +268,22 @@ function addCounterpartyNames(
             case 'received':
                 counterpartyNames = tokenEvents
                     .filter((e) => isReceiveEvent(t, e, userAddress, fromAddress))
-                    .map((e) => e.params[t.fromENS] || (e.params[t.from] as string))
+                    .map((e) => e.params[t.fromENS] || (e.params[t.from] as string)) as string[]
                 break
             case 'sent':
                 counterpartyNames = tokenEvents
                     .filter((e) => isSendEvent(t, e, userAddress))
-                    .map((e) => e.params[t.toENS] || (e.params[t.to] as string))
+                    .map((e) => e.params[t.toENS] || (e.params[t.to] as string)) as string[]
                 break
             case 'approved':
                 counterpartyNames = tokenEvents
                     .filter((e) => isApprovalEvent(t, e, userAddress))
-                    .map((e) => e.params[t.operatorENS] || (e.params[t.operator] as string))
+                    .map((e) => e.params[t.operatorENS] || (e.params[t.operator] as string)) as string[]
+                break
+            case 'revoked':
+                counterpartyNames = tokenEvents
+                    .filter((e) => isRevokeEvent(t, e, userAddress))
+                    .map((e) => e.params[t.operatorENS] || (e.params[t.operator] as string)) as string[]
                 break
             case 'got airdropped':
                 counterpartyNames = [fromAddress]
@@ -269,8 +302,8 @@ function addCounterpartyNames(
     }
 }
 
-function addExampleDescription(interpretation: Interpretation, token: Token) {
-    const { tokensReceived, tokensSent } = interpretation
+function addExampleDescription(interpretation: Interpretation, token: Asset) {
+    const { assetsReceived: tokensReceived, assetsSent: tokensSent } = interpretation
     let exampleDescription = ''
     const i = interpretation
     const { userName, actions: action } = i
@@ -291,20 +324,21 @@ function addExampleDescription(interpretation: Interpretation, token: Token) {
         switch (action[0]) {
             case Action.minted: {
                 tokenId = receivedSingle ? tokenId : ''
-                tokenCount = i.tokensReceived.filter((t) => t.address === token.address).length
+                tokenCount = i.assetsReceived.filter((t) => t.address === token.address).length
                 counterpartyName = ' ' + tokenName
                 direction = ' from'
                 break
             }
             case Action.received:
             case Action.gotAirdropped:
+            case Action.revoked:
                 tokenId = receivedSingle ? tokenId : ''
-                tokenCount = i.tokensReceived.length
+                tokenCount = i.assetsReceived.length
                 direction = ' from'
                 break
             case Action.sent:
                 tokenId = sentSingle ? tokenId : ''
-                tokenCount = i.tokensSent.length
+                tokenCount = i.assetsSent.length
                 direction = ' to'
                 break
             case Action.approved:
@@ -343,7 +377,7 @@ function interpretGenericToken(decodedData: DecodedTx, interpretation: Interpret
     const tokenEvents = tokenContractInteraction?.events || []
 
     // use TokensReceived and TokensSent to determine the actions (besides mint), not the events. Bought, sold, traded
-    interpretation.actions.push(getAction(t, tokenEvents, userAddress, fromAddress, toAddress))
+    interpretation.actions.push(getAction(t, tokenEvents, userAddress, fromAddress))
 
     const token = getTokenInfo(tokenContractInteraction, interpretation)
 

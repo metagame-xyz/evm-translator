@@ -1,7 +1,7 @@
 import { RawTxData } from './rawData'
 
 import { DecodedTx } from 'interfaces/decoded'
-import { Interpretation, TokenType } from 'interfaces/interpreted'
+import { AssetType, Interpretation } from 'interfaces/interpreted'
 
 export type ZenLedgerRow = {
     // ZenLedger required Columns
@@ -25,8 +25,8 @@ export type ZenLedgerRow = {
     userInitiated: 'true' | 'false'
     method: string
     contract: string
-    inType: TokenType | 'native' | null
-    outType: TokenType | 'native' | null
+    inType: AssetType | 'native' | null
+    outType: AssetType | 'native' | null
     lpRelated: 'true' | 'false'
     toAddress: string | null
     // reviewed: null

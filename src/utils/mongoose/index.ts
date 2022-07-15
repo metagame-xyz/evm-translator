@@ -2,7 +2,6 @@ import { AddressNameModel } from './models/addressName'
 import { ContractModel } from './models/contract'
 import { DecodedTxModel } from './models/decodedTx'
 import collect from 'collect.js'
-import { BulkResult } from 'mongodb'
 import { connect, connection, Document, Types } from 'mongoose'
 
 import {
@@ -62,7 +61,7 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
     async addOrUpdateManyContractData(contractDataArr: ContractData[]): Promise<void> {
         try {
             // only way to do bulk upsert
-            const { result } = await ContractModel.bulkWrite(
+            await ContractModel.bulkWrite(
                 contractDataArr.map((contract) => ({
                     updateOne: {
                         filter: { address: contract.address },
@@ -153,7 +152,7 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
     async addOrUpdateManyDecodedTx(decodedTxArr: DecodedTx[]): Promise<void> {
         try {
             // only way to do bulk upsert
-            const { result } = await DecodedTxModel.bulkWrite(
+            await DecodedTxModel.bulkWrite(
                 decodedTxArr.map((decodedTx) => ({
                     updateOne: {
                         filter: { txHash: decodedTx.txHash },
@@ -167,6 +166,19 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
                 console.log('decodedTx mongoose error')
                 console.log(e)
             }
+        }
+    }
+
+    async deleteManyDecodedTxs(txHashes: string[]): Promise<number> {
+        try {
+            const { acknowledged, deletedCount } = await DecodedTxModel.deleteMany({ txHash: { $in: txHashes } })
+            return acknowledged ? deletedCount : 0
+        } catch (e: any) {
+            if (!e?.message?.includes('user is not allowed to do action [delete]')) {
+                console.log('decodedTx mongoose error')
+                console.log(e)
+            }
+            return 0
         }
     }
 

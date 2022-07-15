@@ -1,0 +1,73 @@
+{
+    "contractAddress": "0xa6b71e26c5e0845f74c812102ca7114b6a896ab2",
+    "contractOfficialName": "GnosisSafeProxyFactory",
+    "contractName": "GnosisSafe",
+    "writeFunctions": {
+        "calculateCreateProxyWithNonceAddress": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "createProxy": {
+            "action": "created a Gnosis Safe",
+            "exampleDescriptionTemplate": "{userName} {action}",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "owners": {
+                    "key": "owners",
+                    "filters": { "eventName": "SafeSetup" },
+                    "defaultValue": "['unknown owners']"
+                },
+                "threshold": {
+                    "key": "threshold",
+                    "filters": { "eventName": "SafeSetup" },
+                    "defaultValue": "unknown threshold",
+                    "decimals": 0
+                }
+            }
+        },
+        "createProxyWithCallback": {
+            "action": "created a Gnosis Safe",
+            "exampleDescriptionTemplate": "{userName} {action}",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "owners": {
+                    "key": "owners",
+                    "filters": { "eventName": "SafeSetup" },
+                    "defaultValue": "['unknown owners']"
+                },
+                "threshold": {
+                    "key": "threshold",
+                    "filters": { "eventName": "SafeSetup" },
+                    "defaultValue": "unknown threshold",
+                    "decimals": 0
+                }
+            }
+        },
+        "createProxyWithNonce": {
+            "action": "created a Gnosis Safe",
+            "exampleDescriptionTemplate": "{userName} {action}",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "owners": {
+                    "key": "owners",
+                    "filters": { "eventName": "SafeSetup" },
+                    "defaultValue": "['unknown owners']"
+                },
+                "threshold": {
+                    "key": "threshold",
+                    "filters": { "eventName": "SafeSetup" },
+                    "defaultValue": "unknown threshold",
+                    "decimals": 0
+                }
+            }
+        }
+    }
+}

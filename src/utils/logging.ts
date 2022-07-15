@@ -1,7 +1,7 @@
 import DatadogWinston from 'datadog-winston'
 import winston, { format } from 'winston'
 
-const { combine, printf, colorize, errors } = format
+// const { combine, printf, colorize, errors } = format
 
 const colors = {
     error: 'red',
@@ -13,49 +13,49 @@ const colors = {
 
 winston.addColors(colors)
 
-const devFormat = printf((info) => `${info.level}: ${info.message}`)
+// const devFormat = printf((info) => `${info.level}: ${info.message}`)
 
 const debugFormat = format.prettyPrint()
 
-const prodFormat = printf((d) => {
-    const txHash = d.txHash ? `${d.txHash}` : 'unknown txHash'
-    const address = d.address ? ` | ${d.address}` : ' | unknown address'
-    const message = d.message ? ` | ${d.message}` : ''
-    const error = d.error ? ` | ${d.error}` : ''
+// const prodFormat = printf((d) => {
+//     const txHash = d.txHash ? `${d.txHash}` : 'unknown txHash'
+//     const address = d.address ? ` | ${d.address}` : ' | unknown address'
+//     const message = d.message ? ` | ${d.message}` : ''
+//     const error = d.error ? ` | ${d.error}` : ''
 
-    return `${d.level}: ${txHash}${address}${message}${error}`
-})
+//     return `${d.level}: ${txHash}${address}${message}${error}`
+// })
 
-const timingFormat = printf((d) => {
-    let type = 'unknown type'
-    let val = null
-    if (d.eventHash) {
-        type = 'eventHash'
-        val = `${d.address} | ${d.eventHash}`
-    } else if (d.methodHash) {
-        type = 'methodHash'
-        val = `${d.address} | ${d.methodHash}`
-    } else if (d.txHash) {
-        type = 'txHash'
-        val = d.txHash
-    } else if (d.blockNumber) {
-        type = 'blockNumber'
-        val = d.blockNumber
-    } else if (d.address) {
-        type = 'address'
-        val = d.address
-    } else if (d.secondsElapsed) {
-        type = 'timer'
-        val = d.secondsElapsed
-    }
-    // const txHash = d.txHash ? `${d.txHash}` : 'unknown txHash'
-    // const address = d.address ? ` | ${d.address}` : ' | unknown address'
-    const message = d.message ? ` | ${d.message}` : ''
-    const error = d.error ? ` | ${d.error}` : ''
-    const extra = d.extra ? ` | ${d.extra}` : ''
+// const timingFormat = printf((d) => {
+//     let type = 'unknown type'
+//     let val = null
+//     if (d.eventHash) {
+//         type = 'eventHash'
+//         val = `${d.address} | ${d.eventHash}`
+//     } else if (d.methodHash) {
+//         type = 'methodHash'
+//         val = `${d.address} | ${d.methodHash}`
+//     } else if (d.txHash) {
+//         type = 'txHash'
+//         val = d.txHash
+//     } else if (d.blockNumber) {
+//         type = 'blockNumber'
+//         val = d.blockNumber
+//     } else if (d.address) {
+//         type = 'address'
+//         val = d.address
+//     } else if (d.secondsElapsed) {
+//         type = 'timer'
+//         val = d.secondsElapsed
+//     }
+//     // const txHash = d.txHash ? `${d.txHash}` : 'unknown txHash'
+//     // const address = d.address ? ` | ${d.address}` : ' | unknown address'
+//     const message = d.message ? ` | ${d.message}` : ''
+//     const error = d.error ? ` | ${d.error}` : ''
+//     const extra = d.extra ? ` | ${d.extra}` : ''
 
-    return `${d.level}: ${type}: ${val} ${message}${error}${extra}`
-})
+//     return `${d.level}: ${type}: ${val} ${message}${error}${extra}`
+// })
 
 const service = process.env.VERCEL_ENV === 'production' ? 'metabot-logger' : 'metabot-dev-logger'
 

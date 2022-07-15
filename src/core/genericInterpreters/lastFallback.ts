@@ -4,33 +4,25 @@ import { Action, Interpretation } from 'interfaces/interpreted'
 import { getStablecoinOrNativeWrappedAddressesBySymbol } from 'utils'
 
 function sentBaseToken(interpretation: Interpretation): boolean {
-    const { chainSymbol, nativeValueSent } = interpretation
-    const currency = getStablecoinOrNativeWrappedAddressesBySymbol(chainSymbol)
-
-    return !!(
-        interpretation.tokensSent.find((token) => currency.includes(token.address)) || Number(nativeValueSent) > 0
-    )
+    const currency = getStablecoinOrNativeWrappedAddressesBySymbol(interpretation.chainSymbol)
+    return !!interpretation.assetsSent.find((token) => currency.includes(token.address))
 }
 
 function receivedBaseToken(interpretation: Interpretation): boolean {
-    const { chainSymbol, nativeValueReceived } = interpretation
-    const currency = getStablecoinOrNativeWrappedAddressesBySymbol(chainSymbol)
-    return !!(
-        interpretation.tokensReceived.find((token) => currency.includes(token.address)) ||
-        Number(nativeValueReceived) > 0
-    )
+    const currency = getStablecoinOrNativeWrappedAddressesBySymbol(interpretation.chainSymbol)
+    return !!interpretation.assetsReceived.find((token) => currency.includes(token.address))
 }
 
 function sentOtherToken(interpretation: Interpretation): boolean {
-    return interpretation.tokensSent.length > 0 && !sentBaseToken(interpretation)
+    return interpretation.assetsSent.length > 0 && !sentBaseToken(interpretation)
 }
 
 function receivedOtherToken(interpretation: Interpretation): boolean {
-    return interpretation.tokensReceived.length > 0 && !receivedBaseToken(interpretation)
+    return interpretation.assetsReceived.length > 0 && !receivedBaseToken(interpretation)
 }
 
 function isAirdrop(interpretation: Interpretation, userAddress: string, fromAddress: string): boolean {
-    if (interpretation.tokensReceived.length > 0 && userAddress !== fromAddress) {
+    if (interpretation.assetsReceived.length > 0 && userAddress !== fromAddress) {
         return true
     } else {
         return false
@@ -116,26 +108,20 @@ function getAction(interpretation: Interpretation, userAddress: string, fromAddr
 
 function lastFallback(decodedData: DecodedTx, interpretation: Interpretation) {
     const { fromAddress, toAddress } = decodedData
-    const { nativeValueReceived, nativeValueSent, chainSymbol, userAddress, tokensReceived, tokensSent } =
-        interpretation
+    const { chainSymbol, userAddress, assetsReceived: tokensReceived, assetsSent: tokensSent } = interpretation
 
     interpretation.actions.push(getAction(interpretation, userAddress, fromAddress))
 
-    const valueSent =
-        Number(nativeValueSent) > 0 ? nativeValueSent : tokensSent[0]?.amount || `#${tokensSent[0]?.tokenId}`
-
+    const valueSent = tokensSent[0]?.amount || `#${tokensSent[0]?.tokenId}`
     const symbolSent = tokensSent[0]?.symbol || chainSymbol
 
-    const valueReceived =
-        Number(nativeValueReceived) > 0
-            ? nativeValueReceived
-            : tokensReceived[0]?.amount || `#${tokensReceived[0]?.tokenId}`
-
+    const valueReceived = tokensReceived[0]?.amount || `#${tokensReceived[0]?.tokenId}`
     const symbolReceived = tokensReceived[0]?.symbol || chainSymbol
+
     const action = interpretation.actions[0]
     if (interpretation.actions.length && action === Action.gotAirdropped) {
         interpretation.counterpartyName = fromAddress
-        interpretation.exampleDescription = `${interpretation.userName} ${interpretation.actions} ${interpretation.tokensReceived[0].symbol} from ${interpretation.counterpartyName}`
+        interpretation.exampleDescription = `${interpretation.userName} ${interpretation.actions} ${interpretation.assetsReceived[0].symbol} from ${interpretation.counterpartyName}`
     } else if (
         interpretation.actions.length &&
         (action === Action.received || action === Action.bought || action === Action.claimed)
@@ -152,35 +138,3 @@ function lastFallback(decodedData: DecodedTx, interpretation: Interpretation) {
 }
 
 export default lastFallback
-
-/**
-0xe8e0b0e5a46a21beef5b8d73753a306f737aa932e30614ec3c416e8d6effe878
-"traded weth for car"
-
-{
-"nativeValueSent":"0"
-"tokensReceived":[
-0:{
-"type":"ERC721"
-"name":"CAR"
-"symbol":"CAR"
-"address":"0xa80617371a5f511bf4c1ddf822e6040acaa63e71"
-"tokenId":"746"
-}
-]
-"tokensSent":[
-0:{
-"type":"ERC20"
-"name":"Wrapped Ether"
-"symbol":"WETH"
-"address":"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
-"amount":"0.369"
-}
-]
-"chainSymbol":"ETH"
-"userName":"brenner.eth"
-"gasPaid":"0.010657716082272324"
-"extra":{}
-}
-
- */

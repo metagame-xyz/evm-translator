@@ -26,7 +26,15 @@ const DecodedTxSchema = new Schema<DecodedTx, DecodedTxModelType>(
         fromENS: { type: String, required: false },
         toENS: { type: String, required: false },
         interactions: {
-            type: [{ contractName: String, contractSymbol: String, contractAddress: String, events: [] }], // could go a few levels deeper on InteractionEvents but I'm lazy
+            type: [
+                {
+                    contractName: String,
+                    contractSymbol: String,
+                    contractAddress: String,
+                    contractType: String,
+                    events: [],
+                },
+            ], // could go a few levels deeper on InteractionEvents but I'm lazy
             required: true,
         },
         nativeValueSent: { type: String, required: true },

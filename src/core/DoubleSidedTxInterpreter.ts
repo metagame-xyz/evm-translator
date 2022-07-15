@@ -1,34 +1,42 @@
-import { Action, Interpretation } from 'interfaces/interpreted'
+import { Action, AssetType, Interpretation } from 'interfaces/interpreted'
 
 export function getActionForDoubleSidedTx(interpretation: Interpretation): Action {
-    if (parseFloat(interpretation.nativeValueSent) !== 0 && interpretation.tokensReceived.length) {
+    const nativeValueSent = interpretation.assetsSent.find((asset) => asset.type === AssetType.native)?.amount || '0'
+    const nativeValueReceived =
+        interpretation.assetsReceived.find((asset) => asset.type === AssetType.native)?.amount || '0'
+
+    if (parseFloat(nativeValueSent) !== 0 && interpretation.assetsReceived.length) {
         return Action.bought
-    } else if (parseFloat(interpretation.nativeValueReceived) !== 0 && interpretation.tokensSent.length) {
+    } else if (parseFloat(nativeValueReceived) !== 0 && interpretation.assetsSent.length) {
         return Action.sold
     } else {
         console.log(
-            `ERROR! Invalid NFT sale: received ${interpretation.nativeValueReceived} ETH and ${interpretation.tokensReceived.length} tokens, sent ${interpretation.nativeValueSent} ETH and ${interpretation.tokensSent.length} tokens`,
+            `ERROR! Invalid NFT sale: received ${nativeValueReceived} ETH and ${interpretation.assetsReceived.length} tokens, sent ${nativeValueSent} ETH and ${interpretation.assetsSent.length} tokens`,
         )
         return Action.unknown
     }
 }
 
 export function getNativeValueTransferredForDoubleSidedTx(interpretation: Interpretation): string {
+    const nativeValueSent = interpretation.assetsSent.find((asset) => asset.type === AssetType.native)?.amount || '0'
+    const nativeValueReceived =
+        interpretation.assetsReceived.find((asset) => asset.type === AssetType.native)?.amount || '0'
+
     if (
         interpretation.actions[0] == 'bought' &&
-        parseFloat(interpretation.nativeValueReceived) === 0 &&
-        parseFloat(interpretation.nativeValueSent) !== 0
+        parseFloat(nativeValueReceived) === 0 &&
+        parseFloat(nativeValueSent) !== 0
     ) {
-        return interpretation.nativeValueSent
+        return nativeValueSent
     } else if (
         interpretation.actions[0] == 'sold' &&
-        parseFloat(interpretation.nativeValueSent) === 0 &&
-        parseFloat(interpretation.nativeValueReceived) !== 0
+        parseFloat(nativeValueSent) === 0 &&
+        parseFloat(nativeValueReceived) !== 0
     ) {
-        return interpretation.nativeValueReceived
+        return nativeValueReceived
     } else {
         console.log(
-            `Invalid NFT sale: action: ${interpretation.actions[0]}, received ${interpretation.nativeValueReceived} ETH and ${interpretation.tokensReceived.length} tokens, sent ${interpretation.nativeValueSent} ETH and ${interpretation.tokensSent.length} tokens`,
+            `Invalid NFT sale: action: ${interpretation.actions[0]}, received ${nativeValueReceived} ETH and ${interpretation.assetsReceived.length} tokens, sent ${nativeValueSent} ETH and ${interpretation.assetsSent.length} tokens`,
         )
         return Action.unknown
     }

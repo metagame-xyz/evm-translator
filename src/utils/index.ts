@@ -1,4 +1,4 @@
-import { proxyImplementationAddress } from './constants'
+import { ethAddress, proxyImplementationAddress } from './constants'
 import { logWarning } from './logging'
 import { AlchemyProvider } from '@alch/alchemy-sdk'
 import { BaseProvider } from '@ethersproject/providers'
@@ -36,6 +36,7 @@ const ethereum: Chain = {
     usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     usdtAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7',
     daiAddress: '0x6b175474e89094c44da98b954eedeac495271d0f',
+    nativeAssetAddress: ethAddress,
 }
 
 const polygon: Chain = {
@@ -49,6 +50,7 @@ const polygon: Chain = {
     usdcAddress: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
     usdtAddress: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
     daiAddress: '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063',
+    nativeAssetAddress: ethAddress, // maybe they use the same one idk
 }
 
 export const chains: Chains = {
@@ -74,7 +76,23 @@ export const getChainBySymbol = (symbol: string): Chain => {
 
 export const getStablecoinOrNativeWrappedAddressesBySymbol = (symbol: string): string[] => {
     const chain = getChainBySymbol(symbol)
-    return [chain.wethAddress, chain.usdcAddress, chain.usdtAddress, chain.daiAddress]
+    return [chain.wethAddress, chain.usdcAddress, chain.usdtAddress, chain.daiAddress, chain.nativeAssetAddress]
+}
+
+// TODO hardcoded but should be a call to a db that checks the contractAddress's decimal()
+export const getDecimals = (contractAddress: string, chain = chains.ethereum): number => {
+    if (!contractAddress) return 18
+    const address = contractAddress.toLowerCase()
+    const hexAddress = '0x2b591e99afe9f32eaa6214f7b7629768c40eeb39' // hack
+    const wBTCAddress = '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599'
+
+    if ([chain.usdcAddress, chain.usdtAddress, hexAddress].includes(address)) {
+        return 6
+    } else if (address === wBTCAddress) {
+        return 8
+    } else {
+        return 18
+    }
 }
 
 export const isAddress = (address: string): boolean => {
@@ -202,7 +220,7 @@ export async function fetcher(url: string, options = fetchOptions) {
 }
 
 export const retryProviderCall = async <T>(providerPromise: Promise<T>): Promise<Awaited<T>> => {
-    let retry = 10
+    let retry = 3
     let error = null
     while (retry > 0) {
         try {
@@ -214,7 +232,7 @@ export const retryProviderCall = async <T>(providerPromise: Promise<T>): Promise
             if (retry === 0) {
                 error = err
             }
-            await sleep(200)
+            await sleep(1000)
         }
     }
     throw error
