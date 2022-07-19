@@ -4,10 +4,11 @@ import { AlchemyProvider } from '@ethersproject/providers'
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import { ContractData, ContractType, DecodedCallData, DecodedTx, Interaction } from 'interfaces/decoded'
 import { ActivityData, Interpretation } from 'interfaces/interpreted'
-import { RawTxData, RawTxDataWithoutTrace } from 'interfaces/rawData'
+import { RawTxData } from 'interfaces/rawData'
 import { EVMTransaction } from 'interfaces/s3'
 import { Chain } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
+import { ZenLedgerData, ZenLedgerRow } from 'interfaces/zenLedger'
 
 import { filterABIMap, getValues } from 'utils'
 import Covalent from 'utils/clients/Covalent'
@@ -20,6 +21,7 @@ import timer from 'utils/timer'
 import { Augmenter } from 'core/Augmenter'
 import Interpreter from 'core/Interpreter'
 import RawDataFetcher from 'core/RawDataFetcher'
+import TaxFormatter from 'core/TaxFormatter'
 
 export type TranslatorConfig = {
     chain: Chain
@@ -84,7 +86,7 @@ class Translator {
         if (this.alchemyProjectId) {
             const settings: AlchemyConfig = {
                 apiKey: this.alchemyProjectId, // Replace with your Alchemy API Key.
-                network: Network.ETH_MAINNET, // Replace with your network. // TODO move this to Chain config
+                network: this.chain.alchemyNetworkString, // Replace with your network. // TODO move this to Chain config
                 maxRetries: 10,
             }
 
@@ -113,7 +115,7 @@ class Translator {
         return this.rawDataFetcher.getTxData(txHash)
     }
 
-    async getRawTxDataWithoutTrace(txHash: string): Promise<RawTxDataWithoutTrace> {
+    async getRawTxDataWithoutTrace(txHash: string): Promise<RawTxData> {
         return this.rawDataFetcher.getTxDataWithoutTrace(txHash)
     }
 
@@ -143,7 +145,7 @@ class Translator {
     //     throw new Error('Not implemented')
     // }
 
-    getContractAddressesFromRawTxData(rawTxData: RawTxData | RawTxDataWithoutTrace): string[] {
+    getContractAddressesFromRawTxData(rawTxData: RawTxData): string[] {
         return RawDataFetcher.getContractAddressesFromRawTxData(rawTxData)
     }
 
@@ -206,7 +208,7 @@ class Translator {
     /******      DECODING / AUGMENTING     ********/
     /**********************************************/
     async decodeTxData(
-        rawTxData: RawTxData | RawTxDataWithoutTrace,
+        rawTxData: RawTxData,
         ABIs: Record<string, ABI_Item[]>,
         contractDataMap: Record<string, ContractData>,
     ): Promise<{ decodedLogs: Interaction[]; decodedCallData: DecodedCallData; decodedTraceData: DecodedCallData[] }> {
@@ -224,7 +226,7 @@ class Translator {
         decodedTraceData: DecodedCallData[],
         ensMap: Record<string, string>,
         contractDataMap: Record<string, ContractData>,
-        rawTxData: RawTxData | RawTxDataWithoutTrace,
+        rawTxData: RawTxData,
     ): DecodedTx {
         return this.augmenter.augmentDecodedData(
             decodedLogs,
@@ -297,14 +299,19 @@ class Translator {
         return interpretation
     }
 
-    async decodeFromTxHash(txHash: string): Promise<{ decodedTx: DecodedTx; rawTxData: RawTxData }> {
+    async decodeFromTxHash(
+        txHash: string,
+        excludeTraceLogs = false,
+    ): Promise<{ decodedTx: DecodedTx; rawTxData: RawTxData }> {
         const logData: LogData = {
             tx_hash: txHash,
         }
 
         try {
             logData.function_name = 'getRawTxData'
-            const rawTxData = await this.getRawTxData(txHash)
+            const rawTxData = excludeTraceLogs
+                ? await this.getRawTxDataWithoutTrace(txHash)
+                : await this.getRawTxData(txHash)
 
             logData.address = rawTxData.txResponse.from
 
@@ -321,6 +328,7 @@ class Translator {
                 contractAndProxyAddresses,
             )
 
+            logData.function_name = 'getContractsData'
             const contractDataMap = await this.getContractsData(
                 unfilteredAbiMap,
                 officialContractNamesMap,
@@ -357,9 +365,9 @@ class Translator {
         }
     }
 
-    async decodeFromTxHashArr(txHashArr: string[]): Promise<DecodedTx[]> {
+    async decodeFromTxHashArr(txHashArr: string[], excludeTraceLogs = false): Promise<DecodedTx[]> {
         const promises = txHashArr.map((txHash) => {
-            return this.decodeFromTxHash(txHash)
+            return this.decodeFromTxHash(txHash, excludeTraceLogs)
         })
 
         const results = await Promise.all(promises)
@@ -428,30 +436,21 @@ class Translator {
         return getValues(map)
     }
 
-    // public async translateWithTaxData(
-    //     addressUnclean: string,
-    //     includeInitiatedTxs = true,
-    //     includeNotInitiatedTxs = false,
-    //     limit = 100,
-    // ): Promise<ZenLedgerRow[]> {
-    //     try {
-    //         const address = addressUnclean.toLowerCase()
+    async translateWithTaxData(zenLedgerData: ZenLedgerData[], address: string): Promise<ZenLedgerRow[]> {
+        try {
+            const taxFormatter = new TaxFormatter(address, 'brenners wallet', this.chain)
+            const rows = taxFormatter.format(zenLedgerData)
 
-    //         const allData = await this.translateFromAddress(address, includeInitiatedTxs, includeNotInitiatedTxs, limit)
+            zenLedgerData.forEach((element, index) => {
+                ;(element as ZenLedgerData).taxData = rows[index]
+            })
 
-    //         const taxFormatter = new TaxFormatter(address, 'brenners wallet', this.config.chain)
-    //         const rows = taxFormatter.format(allData)
-
-    //         allData.forEach((element, index) => {
-    //             ;(element as ActivityDataWthZenLedger).taxData = rows[index]
-    //         })
-
-    //         return rows
-    //     } catch (error) {
-    //         console.log('error in translateWithTaxData', error)
-    //         return []
-    //     }
-    // }
+            return rows
+        } catch (error) {
+            console.log('error in translateWithTaxData', error)
+            return []
+        }
+    }
 }
 
 export default Translator

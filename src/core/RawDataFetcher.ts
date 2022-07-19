@@ -6,16 +6,7 @@ import {
 import { AlchemyProvider, Formatter } from '@ethersproject/providers'
 
 import { CovalentTxData } from 'interfaces/covalent'
-import {
-    RawTxData,
-    RawTxDataWithoutTrace,
-    TraceLog,
-    TraceLogZ,
-    TxReceipt,
-    TxReceiptZ,
-    TxResponse,
-    TxResponseZ,
-} from 'interfaces/rawData'
+import { RawTxData, TraceLog, TraceLogZ, TxReceipt, TxReceiptZ, TxResponse, TxResponseZ } from 'interfaces/rawData'
 import { EVMTransaction, EVMTransactionReceiptStringified, EVMTransactionStringified } from 'interfaces/s3'
 
 import { retryProviderCall } from 'utils'
@@ -123,7 +114,7 @@ export default class RawDataFetcher {
     }
 
     // TODO should we get the timestamp somehow here too?
-    async getTxDataWithoutTrace(txHash: string): Promise<RawTxDataWithoutTrace> {
+    async getTxDataWithoutTrace(txHash: string): Promise<RawTxData> {
         let txResponse: TxResponse
         let txReceipt: TxReceipt
 
@@ -137,6 +128,7 @@ export default class RawDataFetcher {
         return {
             txResponse,
             txReceipt,
+            txTrace: [],
         }
     }
 
@@ -175,7 +167,7 @@ export default class RawDataFetcher {
         }
     }
 
-    static getContractAddressesFromRawTxData(rawTxData: RawTxData | RawTxDataWithoutTrace): string[] {
+    static getContractAddressesFromRawTxData(rawTxData: RawTxData): string[] {
         const { txReceipt } = rawTxData
         const addresses: string[] = []
         if (txReceipt.to) {

@@ -333,13 +333,6 @@ Object {
       "tokenId": "228",
       "type": "ERC721",
     },
-    Object {
-      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-      "amount": "0.0",
-      "name": "Ethereum",
-      "symbol": "ETH",
-      "type": "native",
-    },
   ],
   "chainSymbol": "ETH",
   "contractAddress": "0x7f268357a8c2552623316e2562d90e642bb538e5",

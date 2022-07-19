@@ -1,6 +1,6 @@
 import { ethAddress, proxyImplementationAddress } from './constants'
 import { logWarning } from './logging'
-import { AlchemyProvider } from '@alch/alchemy-sdk'
+import { AlchemyProvider, Network } from '@alch/alchemy-sdk'
 import { BaseProvider } from '@ethersproject/providers'
 import Bottleneck from 'bottleneck'
 import collect from 'collect.js'
@@ -37,6 +37,7 @@ const ethereum: Chain = {
     usdtAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7',
     daiAddress: '0x6b175474e89094c44da98b954eedeac495271d0f',
     nativeAssetAddress: ethAddress,
+    alchemyNetworkString: Network.ETH_MAINNET,
 }
 
 const polygon: Chain = {
@@ -51,6 +52,7 @@ const polygon: Chain = {
     usdtAddress: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
     daiAddress: '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063',
     nativeAssetAddress: ethAddress, // maybe they use the same one idk
+    alchemyNetworkString: Network.MATIC_MAINNET,
 }
 
 export const chains: Chains = {
@@ -220,7 +222,8 @@ export async function fetcher(url: string, options = fetchOptions) {
 }
 
 export const retryProviderCall = async <T>(providerPromise: Promise<T>): Promise<Awaited<T>> => {
-    let retry = 3
+    let retry = 4
+    const waitTimes = [0, 8000, 4000, 2000]
     let error = null
     while (retry > 0) {
         try {
@@ -231,8 +234,9 @@ export const retryProviderCall = async <T>(providerPromise: Promise<T>): Promise
             logWarning({ thrown_error: err }, `retries left: ${retry}`)
             if (retry === 0) {
                 error = err
+            } else {
+                await sleep(waitTimes[retry])
             }
-            await sleep(1000)
         }
     }
     throw error

@@ -1,0 +1,173 @@
+{
+    "contractAddress": "0x0baccdd05a729ab8b56e09ef19c15f953e10885f",
+    "contractOfficialName": "NFTLoanFacilitator",
+    "contractName": "______TODO______",
+    "writeFunctions": {
+        "closeLoan": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "createLoan": {
+            "action": "create NFT Loan",
+            "exampleDescriptionTemplate": "{userName} created a loan for {loanedNftSymbol} #{loanedNftTokenID} with a max interest rate of {maxInterestRate}",
+            "exampleDescription": "negodiuk.eth created a loan for SER #1067",
+            "keywords": {
+                "loanedNftSymbol": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "from": "{userAddress}",
+                        "to": "{contractAddress}",
+                        "eventName": "Transfer"
+                    },
+                    "defaultValue": "______TODO______"
+                },
+                "loanedNftTokenID": {
+                    "key": "tokenId",
+                    "filters": {
+                        "from": "{userAddress}",
+                        "to": "{contractAddress}",
+                        "eventName": "Transfer"
+                    },
+                    "defaultValue": "______TODO______",
+                    "decimals": 0
+                },
+                "maxInterestRate": {
+                    "key": "maxInterestRate",
+                    "filters": {
+                        "eventName": "CreateLoan"
+                    },
+                    "defaultValue": "______TODO______",
+                    "decimals": 0
+                }
+            }
+        },
+        "lend": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "renounceOwnership": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "repayAndCloseLoan": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "seizeCollateral": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "setBorrowTicketContract": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "setLendTicketContract": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "transferOwnership": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "updateOriginationFeeRate": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "updateRequiredImprovementRate": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        },
+        "withdrawOriginationFees": {
+            "action": "______TODO______",
+            "exampleDescriptionTemplate": "______TODO______",
+            "exampleDescription": "______TODO______",
+            "keywords": {
+                "__EXAMPLE_KEYWORD__": {
+                    "key": "______TODO______",
+                    "filters": {},
+                    "defaultValue": "______TODO______"
+                }
+            }
+        }
+    }
+}

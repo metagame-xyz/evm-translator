@@ -1,7 +1,7 @@
 import { DecodedTx } from 'interfaces/decoded'
-import { ActivityData, AssetType, Interpretation } from 'interfaces/interpreted'
+import { Action, ActivityData, AssetType, Interpretation } from 'interfaces/interpreted'
 import { Chain } from 'interfaces/utils'
-import { ZenLedgerRowType as RowType, ZenLedgerRow } from 'interfaces/zenLedger'
+import { ZenLedgerRowType as RowType, ZenLedgerData, ZenLedgerRow } from 'interfaces/zenLedger'
 
 import { chains } from 'utils'
 
@@ -17,119 +17,161 @@ class TaxFormatter {
         this.chain = chain
     }
 
-    format(activityData: ActivityData[], walletAddress = null, walletName = '') {
+    format(activityData: ZenLedgerData[], walletAddress = null, walletName = '') {
         this.walletAddress = walletAddress ? walletAddress : this.walletAddress
         this.walletName = walletName ? walletName : this.walletName
 
+        activityData = activityData.filter(({ interpretedData }) => interpretedData && !interpretedData.reverted)
+
         for (const activity of activityData) {
             // console.log('formatting activity', activity)
-            this.formatSingleActivity(activity)
+            this.formatSingleActivity(activity.decodedTx, activity.interpretedData)
         }
 
         return this.rows
     }
 
-    formatSingleActivity(activity: ActivityData) {
-        const { rawTxData, decodedTx: decodedData, interpretedData } = activity
+    formatSingleActivity(decodedTx: DecodedTx, interpretedData: Interpretation) {
+        const {
+            txHash,
+            contractName,
+            contractAddress,
+            assetsReceived,
+            assetsSent,
+            chainSymbol,
+            reverted,
+            gasPaid,
+            timestamp,
+            userAddress,
+        } = interpretedData
 
-        const getType = (data: Interpretation, decodedData: DecodedTx): RowType | null => {
+        const getType = (data: Interpretation): RowType | null => {
             let rowType = null
 
-            // console.log('method:', decodedData.methodCall.name, 'tokens received', interpretedData.tokensReceived)
+            const action = data.actions[0]
 
-            const receivedSomething = data.assetsReceived.length > 0 // dont know how to get if you received eth
-            const receivedNothing = data.assetsReceived.length === 0 // dont know how to get if you received eth
-            const sentSomething = data.assetsSent.length > 0
-            const sentNothing = data.assetsSent.length === 0
+            const isNative =
+                data.assetsReceived.find((asset) => asset.type === AssetType.native) ||
+                data.assetsSent.find((asset) => asset.type === AssetType.native)
 
-            if (receivedNothing && sentNothing) {
-                rowType = RowType.fee
-            } else if (decodedData.methodCall.name === 'mint') {
-                rowType = RowType.nft_mint
-            } else if (receivedSomething && data.assetsSent[0]?.symbol === 'USDC') {
-                rowType = RowType.buy
-            } else if (sentSomething && data.assetsReceived[0]?.symbol === 'USDC') {
-                rowType = RowType.sell
-            } else if (sentSomething && receivedSomething) {
-                rowType = RowType.trade
-            } else if (sentSomething && receivedNothing) {
-                // rowType = RowType.
-                rowType = null
-            } else if (receivedSomething && sentNothing) {
-                rowType = RowType.staking_reward
+            switch (action) {
+                case Action.received:
+                case Action.claimed:
+                    rowType = RowType.receive
+                    break
+                case Action.sent:
+                    rowType = RowType.send
+                    break
+                case Action.minted:
+                    rowType = RowType.buy
+                    break
+                case Action.swapped:
+                    rowType = RowType.trade
+                    break
+                case Action.bought:
+                    rowType = isNative ? RowType.trade : RowType.buy
+                    break
+                case Action.sold:
+                    rowType = isNative ? RowType.trade : RowType.sell
+                    break
+                case Action.gotAirdropped:
+                    rowType = RowType.airdrop
+                    break
+                case Action.revoked:
+                case Action.approved:
+                case Action.transferredOwnership:
+                case Action.receivedOwnership:
+                case Action.deployed:
+                case Action.executed:
+                case Action.canceled:
+                    rowType = RowType.fee
+                    break
+                default:
+                    rowType = RowType.unknown
+                    break
             }
 
             return rowType
         }
 
-        type TokenTypeOrNative = AssetType | 'native' | null
+        // type TokenTypeOrNative = AssetType | 'native' | null
 
         const getAmountAndCurrency = (
             data: Interpretation,
             direction: 'in' | 'out',
-        ): [number | null, string | null, TokenTypeOrNative] => {
-            if (data.reverted) return [null, null, null]
-
+        ): [number | null, string | null, AssetType] => {
+            const assets = direction === 'in' ? data.assetsReceived : data.assetsSent
+            const opposite = direction === 'in' ? data.assetsSent : data.assetsReceived
             let amount = null
             let currency = null
-            let type: TokenTypeOrNative = null
+            let type = AssetType.DEFAULT
 
-            const tokens = direction === 'in' ? data.assetsReceived : data.assetsSent
-
-            if (tokens.length > 0) {
-                type = tokens[0].type
+            if (assets.length > 0) {
+                type = assets[0].type
 
                 if (type === AssetType.ERC20 || type === AssetType.native) {
-                    amount = Number(tokens[0].amount)
-                    currency = tokens[0].symbol
+                    amount = Number(assets[0].amount)
+                    currency = assets[0].symbol
                 } else if (type === AssetType.ERC721) {
                     amount = 1
-                    currency = tokens[0].symbol + '-' + tokens[0].tokenId?.toString().slice(0, 6)
+                    currency = assets[0].symbol + '-' + assets[0].tokenId?.toString().slice(0, 6)
+                } else if (type === AssetType.ERC1155) {
+                    amount = Number(assets[0].amount)
+                    currency = assets[0].symbol + '-' + assets[0].tokenId?.toString().slice(0, 6)
                 } else if (type === AssetType.LPToken) {
-                    amount = Number(tokens[0].amount)
-                    currency =
-                        tokens[0].symbol +
-                        ' ' +
-                        (data.extra?.token_0 ?? 'UNKNOWN') +
-                        '-' +
-                        (data.extra?.token_1 ?? 'UNKNOWN')
+                    amount = Number(assets[0].amount)
+                    currency = opposite[0].symbol + '-' + opposite[1].symbol
                 }
-                // TODO 1155
             }
             return [amount, currency, type]
         }
 
-        const userInitiated = this.walletAddress === rawTxData.txResponse.from
+        const userInitiated = this.walletAddress === userAddress
 
-        const [inAmount, inCurrency, inType] = getAmountAndCurrency(interpretedData, 'in')
-        const [outAmount, outCurrency, outType] = getAmountAndCurrency(interpretedData, 'out')
+        const [receivedAmount, receivedSymbol, receivedType] = getAmountAndCurrency(interpretedData, 'in')
+        const [sentAmount, sentSymbol, sentType] = getAmountAndCurrency(interpretedData, 'out')
+
+        const dateTime = new Date((timestamp || 0) * 1000)
 
         const row: ZenLedgerRow = {
-            explorerUrl: this.chain.blockExplorerUrl + 'tx/' + rawTxData.txReceipt.transactionHash,
+            explorerUrl: this.chain.blockExplorerUrl + 'tx/' + txHash,
             userInitiated: userInitiated ? 'true' : 'false',
-            Type: getType(interpretedData, decodedData),
-            inType: inType,
-            outType: outType,
-            method: decodedData.methodCall.name || 'UNKNOWN',
-            contract: interpretedData.contractName || 'UNKNOWN',
-            'In Amount': inAmount,
-            'In Currency': inCurrency,
-            'Out Amount': outAmount,
-            'Out Currency': outCurrency,
-            Timestamp: decodedData.timestamp || 0,
-            'Fee Amount': userInitiated ? Number(interpretedData.gasPaid) : 0,
-            'Fee Currency': interpretedData.chainSymbol || 'UNKNOWN',
-            'Exchange (optional)': 'Metamask',
-            'US Based': 'yes',
-            txHash: rawTxData.txReceipt.transactionHash,
+            Type: getType(interpretedData),
+            method: decodedTx.methodCall.name || 'UNKNOWN',
+            contract: contractName || 'UNKNOWN',
+            'In Amount': receivedAmount,
+            'In Currency': receivedSymbol,
+            'Out Amount': sentAmount,
+            'Out Currency': sentSymbol,
+            Timestamp: dateTime.toJSON(),
+
+            'Fee Amount': userInitiated ? Number(gasPaid) : 0,
+            'Fee Currency': chainSymbol || 'UNKNOWN',
+            'Exchange(optional)': 'Unified ETH Wallet',
+            'US Based': 'Yes',
+
+            txHash,
+            action: interpretedData.actions[0],
+
+            'received type': receivedType,
+            'received amount': receivedAmount,
+            'received symbol': receivedSymbol,
+
+            'received type 2': assetsReceived[1] ? assetsReceived[1].type : null,
+            'received amount 2': assetsReceived[1] ? Number(assetsReceived[1].amount) : null,
+            'received symbol 2': assetsReceived[1] ? assetsReceived[1].symbol : null,
+
+            'sent type': sentType,
+            'sent amount': sentAmount,
+            'sent symbol': sentSymbol,
+
+            'sent type 2': assetsSent[1] ? assetsSent[1].type : null,
+            'sent amount 2': assetsSent[1] ? Number(assetsSent[1].amount) : null,
+            'sent symbol 2': assetsSent[1] ? assetsSent[1].symbol : null,
+            toAddress: contractAddress,
             // network: interpretedData.chainSymbol || 'UNKNOWN',
             // walletAddress: this.walletAddress,
             // walletName: this.walletName,
-            // Todo this doesn't take into account when one of them is ETH
-            lpRelated:
-                interpretedData.assetsReceived.length > 1 || interpretedData.assetsSent.length > 1 ? 'true' : 'false',
-            // reviewed: null,
-            toAddress: decodedData.toAddress || null,
         }
 
         this.rows.push(row)

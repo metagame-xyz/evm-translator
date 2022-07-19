@@ -16,7 +16,7 @@ import {
     InteractionEvent,
     TxType,
 } from 'interfaces/decoded'
-import { CallTraceLog, RawTxData, RawTxDataWithoutTrace, TraceLog, TraceType } from 'interfaces/rawData'
+import { CallTraceLog, RawTxData, TraceLog, TraceType } from 'interfaces/rawData'
 import { Chain } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
 
@@ -41,7 +41,7 @@ import { blackholeAddress, REVERSE_RECORDS_CONTRACT_ADDRESS } from 'utils/consta
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
 import getTypeFromABI from 'utils/getTypeFromABI'
 import isGnosisSafeMaybe from 'utils/isGnosisSafeMaybe'
-import { logDebug, logWarning } from 'utils/logging'
+import { LogData, logDebug, logWarning } from 'utils/logging'
 
 export type DecoderConfig = {
     covalentData?: CovalentTxData
@@ -81,7 +81,7 @@ export class Augmenter {
     }
 
     async decodeTxData(
-        rawTxData: RawTxData | RawTxDataWithoutTrace,
+        rawTxData: RawTxData,
         abiMap: Record<string, ABI_Item[]>,
         contractDataMap: Record<string, ContractData>,
     ): Promise<{ decodedLogs: Interaction[]; decodedCallData: DecodedCallData; decodedTraceData: DecodedCallData[] }> {
@@ -110,7 +110,7 @@ export class Augmenter {
         decodedTraceData: DecodedCallData[],
         ensMap: Record<string, string>,
         contractDataMap: Record<string, ContractData>,
-        rawTxData: RawTxData | RawTxDataWithoutTrace,
+        rawTxData: RawTxData,
     ): DecodedTx {
         const { txReceipt, txResponse } = rawTxData
         const value = rawTxData.txResponse.value.toString()
@@ -251,7 +251,6 @@ export class Augmenter {
                 (i) => i.contractAddress == nt.action.from || i.contractAddress == nt.action.to,
             )
 
-            // debugger
             // usually it comes from one of the contracts that emitted other events
             if (interaction) {
                 interaction.events.push(traceLogToEvent(nt))
@@ -272,6 +271,7 @@ export class Augmenter {
     }
 
     async getENSNames(addresses: string[]): Promise<Record<string, string>> {
+        if (this.chain.symbol !== 'ETH') return {}
         const reverseRecords = new Contract(REVERSE_RECORDS_CONTRACT_ADDRESS, reverseRecordsABI, this.provider)
 
         let allDirtyNames: string[] = []
@@ -445,63 +445,68 @@ export class Augmenter {
         contractToOfficialNameMap: Record<string, string | null>,
         proxyAddressMap: Record<string, string>,
     ): Promise<Record<string, ContractData>> {
-        const contractDataMap: Record<string, ContractData> = {}
-        const filteredABIs = filterABIMap(contractToAbiMap)
+        try {
+            const contractDataMap: Record<string, ContractData> = {}
+            const filteredABIs = filterABIMap(contractToAbiMap)
 
-        const addresses = getKeys(contractToAbiMap).map((address) => AddressZ.parse(address))
+            const addresses = getKeys(contractToAbiMap).map((address) => AddressZ.parse(address))
 
-        const contractDataMapFromDB = await this.db.getManyContractDataMap(addresses)
+            const contractDataMapFromDB = await this.db.getManyContractDataMap(addresses)
 
-        await Promise.all(
-            addresses.map(async (address) => {
-                const proxyAddress = proxyAddressMap[address] || null
-                const abi = contractToAbiMap[address]
-                // if the contract has a proxy, add the proxy's ABI too
-                if (proxyAddress) abi.concat(contractToAbiMap[proxyAddress])
+            await Promise.all(
+                addresses.map(async (address) => {
+                    const proxyAddress = proxyAddressMap[address] || null
+                    const abi = contractToAbiMap[address]
+                    // if the contract has a proxy, add the proxy's ABI too
+                    if (proxyAddress) abi.concat(contractToAbiMap[proxyAddress])
 
-                let contractType = contractDataMapFromDB[address]?.type
+                    let contractType = contractDataMapFromDB[address]?.type
 
-                if (!contractType || contractType === ContractType.OTHER) {
-                    contractType = await this.getContractType(address, filteredABIs[address])
-                }
+                    if (!contractType || contractType === ContractType.OTHER) {
+                        contractType = await this.getContractType(address, filteredABIs[address])
+                    }
 
-                let tokenName = null
-                let tokenSymbol = null
-                let contractName = null
+                    let tokenName = null
+                    let tokenSymbol = null
+                    let contractName = null
 
-                if (contractDataMapFromDB[address]) {
-                    tokenName = contractDataMapFromDB[address]?.tokenName || null
-                    tokenSymbol = contractDataMapFromDB[address]?.tokenSymbol || null
-                    contractName = contractDataMapFromDB[address]?.contractName || null
-                }
+                    if (contractDataMapFromDB[address]) {
+                        tokenName = contractDataMapFromDB[address]?.tokenName || null
+                        tokenSymbol = contractDataMapFromDB[address]?.tokenSymbol || null
+                        contractName = contractDataMapFromDB[address]?.contractName || null
+                    }
 
-                // warning, we might assign contactName from somewhere else in the future, so it might not be null here even when we thought it would be, which means we might still need to get token symbol/name but we end up skipping it
+                    // warning, we might assign contactName from somewhere else in the future, so it might not be null here even when we thought it would be, which means we might still need to get token symbol/name but we end up skipping it
 
-                // commented this out to make sure we get the token name/symbol from the contract. we'll end up always doing this call no matter what now but we can optimize later (WARNING)
-                // if (!contractName) {
-                ;({ tokenName, tokenSymbol, contractName } = await this.getNameAndSymbol(address, contractType))
-                // }
+                    // commented this out to make sure we get the token name/symbol from the contract. we'll end up always doing this call no matter what now but we can optimize later (WARNING)
+                    // if (!contractName) {
+                    ;({ tokenName, tokenSymbol, contractName } = await this.getNameAndSymbol(address, contractType))
+                    // }
 
-                // const contractName = await this.getContractName(address)
-                const contractData: ContractData = {
-                    address,
-                    type: contractType,
-                    tokenName,
-                    tokenSymbol,
-                    abi,
-                    contractName,
-                    contractOfficialName: contractToOfficialNameMap[address],
-                    proxyAddress,
-                    txCount: null,
-                }
+                    // const contractName = await this.getContractName(address)
+                    const contractData: ContractData = {
+                        address,
+                        type: contractType,
+                        tokenName,
+                        tokenSymbol,
+                        abi,
+                        contractName,
+                        contractOfficialName: contractToOfficialNameMap[address],
+                        proxyAddress,
+                        txCount: null,
+                    }
 
-                // console.log('contractData', contractData)
-                contractDataMap[address] = contractData
-            }),
-        )
+                    // console.log('contractData', contractData)
+                    contractDataMap[address] = contractData
+                }),
+            )
 
-        await this.db.addOrUpdateManyContractData(getValues(contractDataMap).flat())
-        return contractDataMap
+            await this.db.addOrUpdateManyContractData(getValues(contractDataMap).flat())
+            return contractDataMap
+        } catch (e) {
+            console.log('getContractsData', e)
+            throw e
+        }
     }
 
     async getProxyContractMap(contractAddresses: string[]): Promise<Record<string, string>> {
@@ -521,51 +526,61 @@ export class Augmenter {
     async getABIsAndNamesForContracts(
         contractAddresses: string[],
     ): Promise<[Record<string, ABI_ItemUnfiltered[]>, Record<string, string | null>]> {
-        const addresses = contractAddresses.map((a) => AddressZ.parse(a))
+        try {
+            const addresses = contractAddresses.map((a) => AddressZ.parse(a))
 
-        const contractDataMapWithNulls = await this.db.getManyContractDataMap(addresses)
+            const logData: LogData = {
+                function_name: 'db.getManyContractDataMap',
+            }
+            const contractDataMapWithNulls = await this.db.getManyContractDataMap(addresses)
 
-        const addressesWithMissingABIs = getKeys(contractDataMapWithNulls).filter(
-            (address) => !contractDataMapWithNulls[address]?.abi,
-        )
+            const addressesWithMissingABIs = getKeys(contractDataMapWithNulls).filter(
+                (address) => !contractDataMapWithNulls[address]?.abi,
+            )
 
-        addressesWithMissingABIs.forEach((address) => {
-            logDebug({ address }, 'missing ABI. retrieving from etherscan')
-        })
+            addressesWithMissingABIs.forEach((address) => {
+                logDebug({ address }, 'missing ABI. retrieving from etherscan')
+            })
 
-        const contractDataMap = Object.fromEntries(
-            Object.entries(contractDataMapWithNulls).filter(([, v]) => v != null),
-        ) as Record<string, ContractData>
+            const contractDataMap = Object.fromEntries(
+                Object.entries(contractDataMapWithNulls).filter(([, v]) => v != null),
+            ) as Record<string, ContractData>
 
-        // get abis from etherscan only for contracts we dont have an abi for
-        const abiMapFromEtherscan = await this.etherscan.getABIs(addressesWithMissingABIs)
+            // get abis from etherscan only for contracts we dont have an abi for
+            logData.function_name = 'getABIs'
+            const abiMapFromEtherscan = await this.etherscan.getABIs(addressesWithMissingABIs)
 
-        // an array of all abis
-        const abiArray = getValues(abiMapFromEtherscan).flat()
-        // insert all abis into the abi table
+            // an array of all abis
+            const abiArray = getValues(abiMapFromEtherscan).flat()
+            // insert all abis into the abi table
 
-        const filtered = filterABIArray(abiArray)
+            const filtered = filterABIArray(abiArray)
 
-        await this.db.addOrUpdateManyABI(abiArrToAbiRows(filtered))
+            logData.function_name = 'db.addOrUpdateManyABI'
+            await this.db.addOrUpdateManyABI(abiArrToAbiRows(filtered))
 
-        const AbiMapFromDB = getEntries(contractDataMap).reduce((acc, [address, contractData]) => {
-            acc[address] = contractData.abi || null
-            return acc
-        }, {} as Record<string, ABI_ItemUnfiltered[]>)
+            const AbiMapFromDB = getEntries(contractDataMap).reduce((acc, [address, contractData]) => {
+                acc[address] = contractData.abi || null
+                return acc
+            }, {} as Record<string, ABI_ItemUnfiltered[]>)
 
-        const abiMap = { ...AbiMapFromDB, ...abiMapFromEtherscan }
+            const abiMap = { ...AbiMapFromDB, ...abiMapFromEtherscan }
 
-        const nameMapFromDB = getEntries(contractDataMap).reduce((acc, [address, contractData]) => {
-            acc[address] = contractData.contractOfficialName || null
-            return acc
-        }, {} as Record<string, string | null>)
+            const nameMapFromDB = getEntries(contractDataMap).reduce((acc, [address, contractData]) => {
+                acc[address] = contractData.contractOfficialName || null
+                return acc
+            }, {} as Record<string, string | null>)
 
-        // TODO get names from 3rd party APIs
-        const nameMapFromEtherscan: Record<string, string | null> = {}
+            // TODO get names from 3rd party APIs
+            const nameMapFromEtherscan: Record<string, string | null> = {}
 
-        const nameMap = { ...nameMapFromDB, ...nameMapFromEtherscan }
+            const nameMap = { ...nameMapFromDB, ...nameMapFromEtherscan }
 
-        return [abiMap, nameMap]
+            return [abiMap, nameMap]
+        } catch (e) {
+            console.log('error getting ABIs', e)
+            throw e
+        }
     }
 
     static getAllAddresses(

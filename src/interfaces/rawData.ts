@@ -200,8 +200,3 @@ export type RawTxData = {
     txReceipt: TxReceipt
     txTrace: TraceLog[]
 }
-
-export type RawTxDataWithoutTrace = {
-    txResponse: TxResponse
-    txReceipt: TxReceipt
-}

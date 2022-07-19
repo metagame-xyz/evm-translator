@@ -1,3 +1,4 @@
+import { Network } from '@alch/alchemy-sdk'
 import { BigNumber } from 'ethers'
 import { z } from 'zod'
 
@@ -52,6 +53,8 @@ export type Chain = {
     daiAddress: string
     /** The singleton contract address for the native asset */
     nativeAssetAddress: string
+    /** alchemy network string */
+    alchemyNetworkString: Network
 }
 /** Map of EVM chain names to an object with Chain metadata */
 export type Chains = Record<string, Chain>

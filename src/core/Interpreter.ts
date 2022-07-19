@@ -307,6 +307,7 @@ class Interpreter {
         const filters = keyMapping.filters || {}
         const index = keyMapping.index || 0
         const array = keyMapping.array || false
+        let decimals = keyMapping.decimals || null
 
         let filteredInteractions = deepCopy(interactions) as Interaction[]
 
@@ -339,7 +340,6 @@ class Interpreter {
         }
 
         let value = null
-        let decimals = null
 
         if (!array) {
             const interaction = filteredInteractions[index]
@@ -358,7 +358,7 @@ class Interpreter {
             const postfix = keyMapping.postfix || ''
             value = str ? prefix + str + postfix : keyMapping.defaultValue
 
-            decimals = getDecimals(interaction?.contractAddress)
+            decimals = decimals || getDecimals(interaction?.contractAddress, this.chain)
         } else {
             value = []
             const prefix = keyMapping.prefix || ''
@@ -382,7 +382,7 @@ class Interpreter {
                 }
             }
             //}
-            decimals = getDecimals(filteredInteractions[0]?.contractAddress)
+            decimals = decimals || getDecimals(filteredInteractions[0]?.contractAddress, this.chain)
         }
 
         if (typeof value === 'string' && Number(value)) {
@@ -495,7 +495,7 @@ class Interpreter {
                 if (tokenType === AssetType.ERC1155) {
                     decimals = 0
                 } else {
-                    decimals = getDecimals(i.contractAddress)
+                    decimals = getDecimals(i.contractAddress, this.chain)
                 }
 
                 const amountNumber = Number(formatUnits(amount, decimals))
@@ -553,7 +553,7 @@ class Interpreter {
         const ethValueSent = this.getNativeTokenValueSent(interactions, nativeValueSent, fromAddress, userAddress)
         const wethValueSent = this.getWethValue(interactions, userAddress, 'sent')
 
-        if (Number(nativeValueSent)) {
+        if (Number(ethValueSent)) {
             assets.push({
                 type: AssetType.native,
                 amount: ethValueSent,

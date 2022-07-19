@@ -1,11 +1,11 @@
 import { RawTxData } from './rawData'
 
 import { DecodedTx } from 'interfaces/decoded'
-import { AssetType, Interpretation } from 'interfaces/interpreted'
+import { Action, AssetType, Interpretation } from 'interfaces/interpreted'
 
 export type ZenLedgerRow = {
     // ZenLedger required Columns
-    Timestamp: number
+    Timestamp: string
     Type: ZenLedgerRowType | null
     'In Amount': number | null
     'In Currency': string | null
@@ -13,22 +13,37 @@ export type ZenLedgerRow = {
     'Out Currency': string | null
     'Fee Amount': number
     'Fee Currency': string
-    'Exchange (optional)': string | null
-    'US Based': 'yes' | 'no'
+    'Exchange(optional)': string | null
+    'US Based': 'Yes' | 'No'
 
     // Additional helpful columns
     txHash: string
-    // network: string // 'ETH' | 'MATIC' | 'UNKNOWN'
-    // walletAddress: string
-    // walletName: string
+    action: Action
+
+    'received type': AssetType | null
+    'received amount': number | null
+    'received symbol': string | null
+
+    'received type 2': AssetType | null
+    'received amount 2': number | null
+    'received symbol 2': string | null
+
+    'sent type': AssetType | null
+    'sent amount': number | null
+    'sent symbol': string | null
+
+    'sent type 2': AssetType | null
+    'sent amount 2': number | null
+    'sent symbol 2': string | null
     explorerUrl: string
     userInitiated: 'true' | 'false'
     method: string
     contract: string
-    inType: AssetType | 'native' | null
-    outType: AssetType | 'native' | null
-    lpRelated: 'true' | 'false'
+    // lpRelated: 'true' | 'false'
     toAddress: string | null
+    // network: string // 'ETH' | 'MATIC' | 'UNKNOWN'
+    // walletAddress: string
+    // walletName: string
     // reviewed: null
 }
 
@@ -36,8 +51,8 @@ export enum ZenLedgerRowType {
     buy = 'Buy',
     sell = 'Sell',
     trade = 'Trade',
-    // receive = 'receive',
-    // send = 'send',
+    receive = 'Receive',
+    send = 'Send',
     // Initial_Coin_Offering = 'Initial Coin Offering',
     // margin_trade = 'margin trade',
     // staking = 'staking',
@@ -61,11 +76,11 @@ export enum ZenLedgerRowType {
     // staking_return = 'Staking Return',
     // nft_trade = 'Nft Trade',
     // UNKNOWN_TX_TYPE = 'UNKNOWN TX TYPE',
+    unknown = 'Unknown',
 }
 
-export type ActivityDataWthZenLedger = {
-    rawTxData: RawTxData
-    decodedData: DecodedTx
+export type ZenLedgerData = {
+    decodedTx: DecodedTx
     interpretedData: Interpretation
     taxData?: ZenLedgerRow
 }
