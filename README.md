@@ -20,6 +20,13 @@ If you're looking to contribute to evm-translator, click [here](/CONTRIBUTE.md).
 
 ## Usage
 
+```zsh
+yarn add evm-translator
+```
+```zsh
+npm install evm-translator
+```
+
 ```typescript
 import Translator, { chains } from 'evm-translator'
 
@@ -39,7 +46,7 @@ import {
         alchemyProjectId: ALCHEMY_PROJECT_ID,
         etherscanAPIKey: ETHERSCAN_API_KEY,
         connectionString: EVM_TRANSLATOR_CONNECTION_STRING,
-        covalentAPIKey: COVALENT_API_KEY,
+        covalentAPIKey: COVALENT_API_KEY, // used for retrieving txHashArr of an address
         etherscanServiceLevel: 5,
         userAddress: address,
     })
