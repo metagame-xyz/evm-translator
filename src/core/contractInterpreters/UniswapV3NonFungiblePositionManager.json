@@ -1,169 +1,169 @@
 {
-  "contractAddress": "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
-  "contractOfficialName": "NonfungiblePositionManager",
-  "contractName": "Uniswap V3",
-  "writeFunctions": {
-    "burn": {
-      "action": "burned",
-      "exampleDescriptionTemplate": "{userAddress} {action} {contractName} liquidity position NFT #{tokenId}",
-      "exampleDescription": "leotheprocess.eth burned a liquidity position on Uniswap V3",
-      "keywords": {
-        "tokenId": {
-          "key": "tokenId",
-          "filters": {
-            "eventName": "Transfer",
-            "from": "{userAddress}"
-          },
-          "defaultValue": "???"
+    "contractAddress": "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
+    "contractOfficialName": "NonfungiblePositionManager",
+    "contractName": "Uniswap V3",
+    "writeFunctions": {
+        "burn": {
+            "action": "burned",
+            "exampleDescriptionTemplate": "{userAddress} {action} {contractName} liquidity position NFT #{tokenId}",
+            "exampleDescription": "leotheprocess.eth burned a liquidity position on Uniswap V3",
+            "keywords": {
+                "tokenId": {
+                    "key": "tokenId",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "???"
+                }
+            }
+        },
+        "collect": {
+            "action": "collected",
+            "exampleDescriptionTemplate": "{userAddress} collected {tokenAmount0} {tokenName0} and {tokenAmount1} {tokenName1} in fees from {contractName}",
+            "exampleDescription": "leotheprocess.eth collected 3206 HEX and 305 USDC in fees from Uniswap V3",
+            "keywords": {
+                "tokenName0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount0": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
+                },
+                "tokenName1": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "index": 1,
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount1": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "index": 1,
+                    "defaultValue": "an unknown amount of"
+                }
+            }
+        },
+        "increaseLiquidity": {
+            "action": "added liquidity",
+            "exampleDescriptionTemplate": "{userAddress} {action} to the {tokenName0}-{tokenName1} pool on {contractName} ",
+            "exampleDescription": "leotheprocess.eth added liquidity to the gOHM-BTRFLY pool on Uniswap V3",
+            "keywords": {
+                "tokenName0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount0": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
+                },
+                "tokenName1": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "index": 1,
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount1": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "index": 1,
+                    "defaultValue": "an unknown amount of"
+                }
+            }
+        },
+        "mint": {
+            "action": "minted",
+            "exampleDescriptionTemplate": "{userAddress} {action} an NFT for adding {tokenAmount0} {tokenName0} and {tokenAmount1} {tokenName1} in liquidity to {contractName}",
+            "exampleDescription": "leotheprocess.eth minted an NFT for adding 2 WBTC and 22999 USDC in liquidity to Uniswap V3",
+            "keywords": {
+                "tokenName0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount0": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
+                },
+                "tokenName1": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "index": 1,
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount1": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "index": 1,
+                    "defaultValue": "an unknown amount of"
+                }
+            }
+        },
+        "decreaseLiquidity": {
+            "action": "removed liquidity",
+            "exampleDescriptionTemplate": "{userAddress} {action} from the {tokenName0}-{tokenName1} pool on {contractAddress}",
+            "exampleDescription": "leotheprocess.eth removed liquidity from the DAI-USDC pool on Uniswap V3",
+            "keywords": {
+                "tokenName0": {
+                    "key": "__TODO__",
+                    "filters": {},
+                    "defaultValue": "an unknown token"
+                },
+                "tokenName1": {
+                    "key": "__TODO__",
+                    "filters": {},
+                    "index": 1,
+                    "defaultValue": "an unknown token"
+                }
+            }
+        },
+        "multicall": {
+            "action": "executed multiple actions",
+            "exampleDescriptionTemplate": "{userAddress} {action} on {contractName}",
+            "exampleDescription": "leotheprocess.eth executed multiple actions on Uniswap V3",
+            "keywords": {}
         }
-      }
-    },
-    "collect": {
-      "action": "collected",
-      "exampleDescriptionTemplate": "{userAddress} collected {tokenAmount0} {tokenName0} and {tokenAmount1} {tokenName1} in fees from {contractName}",
-      "exampleDescription": "leotheprocess.eth collected 3206 HEX and 305 USDC in fees from Uniswap V3",
-      "keywords": {
-        "tokenName0": {
-          "key": "contractSymbol",
-          "filters": {
-            "eventName": "Transfer",
-            "to": "{userAddress}"
-          },
-          "defaultValue": "an unknown token"
-        },
-        "tokenAmount0": {
-          "key": "value",
-          "filters": {
-            "eventName": "Transfer",
-            "to": "{userAddress}"
-          },
-          "defaultValue": "an unknown amount of"
-        },
-        "tokenName1": {
-          "key": "contractSymbol",
-          "filters": {
-            "eventName": "Transfer",
-            "to": "{userAddress}"
-          },
-          "index": 1,
-          "defaultValue": "an unknown token"
-        },
-        "tokenAmount1": {
-          "key": "value",
-          "filters": {
-            "eventName": "Transfer",
-            "to": "{userAddress}"
-          },
-          "index": 1,
-          "defaultValue": "an unknown amount of"
-        }
-      }
-    },
-    "increaseLiquidity": {
-      "action": "added liquidity",
-      "exampleDescriptionTemplate": "{userAddress} {action} to the {tokenName0}-{tokenName1} pool on {contractName} ",
-      "exampleDescription": "leotheprocess.eth added liquidity to the gOHM-BTRFLY pool on Uniswap V3",
-      "keywords": {
-        "tokenName0": {
-          "key": "contractSymbol",
-          "filters": {
-            "eventName": "Transfer",
-            "from": "{userAddress}"
-          },
-          "defaultValue": "an unknown token"
-        },
-        "tokenAmount0": {
-          "key": "value",
-          "filters": {
-            "eventName": "Transfer",
-            "from": "{userAddress}"
-          },
-          "defaultValue": "an unknown amount of"
-        },
-        "tokenName1": {
-          "key": "contractSymbol",
-          "filters": {
-            "eventName": "Transfer",
-            "from": "{userAddress}"
-          },
-          "index": 1,
-          "defaultValue": "an unknown token"
-        },
-        "tokenAmount1": {
-          "key": "value",
-          "filters": {
-            "eventName": "Transfer",
-            "from": "{userAddress}"
-          },
-          "index": 1,
-          "defaultValue": "an unknown amount of"
-        }
-      }
-    },
-    "mint": {
-      "action": "minted",
-      "exampleDescriptionTemplate": "{userAddress} {action} an NFT for adding {tokenAmount0} {tokenName0} and {tokenAmount1} {tokenName1} in liquidity to {contractName}",
-      "exampleDescription": "leotheprocess.eth minted an NFT for adding 2 WBTC and 22999 USDC in liquidity to Uniswap V3",
-      "keywords": {
-        "tokenName0": {
-          "key": "contractSymbol",
-          "filters": {
-            "eventName": "Transfer",
-            "from": "{userAddress}"
-          },
-          "defaultValue": "an unknown token"
-        },
-        "tokenAmount0": {
-          "key": "value",
-          "filters": {
-            "eventName": "Transfer",
-            "from": "{userAddress}"
-          },
-          "defaultValue": "an unknown amount of"
-        },
-        "tokenName1": {
-          "key": "contractSymbol",
-          "filters": {
-            "eventName": "Transfer",
-            "from": "{userAddress}"
-          },
-          "index": 1,
-          "defaultValue": "an unknown token"
-        },
-        "tokenAmount1": {
-          "key": "value",
-          "filters": {
-            "eventName": "Transfer",
-            "from": "{userAddress}"
-          },
-          "index": 1,
-          "defaultValue": "an unknown amount of"
-        }
-      }
-    },
-    "decreaseLiquidity": {
-      "action": "removed liquidity",
-      "exampleDescriptionTemplate": "{userAddress} {action} from the {tokenName0}-{tokenName1} pool on {contractAddress}",
-      "exampleDescription": "leotheprocess.eth removed liquidity from the DAI-USDC pool on Uniswap V3",
-      "keywords": {
-        "tokenName0": {
-          "key": "__TODO__",
-          "filters": {},
-          "defaultValue": "an unknown token"
-        },
-        "tokenName1": {
-          "key": "__TODO__",
-          "filters": {},
-          "index": 1,
-          "defaultValue": "an unknown token"
-        }
-      }
-    },
-    "multicall": {
-      "action": "executed multiple actions",
-      "exampleDescriptionTemplate": "{userAddress} {action} on {contractName}",
-      "exampleDescription": "leotheprocess.eth executed multiple actions on Uniswap V3",
-      "keywords": {}
     }
-  }
 }

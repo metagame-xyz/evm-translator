@@ -2,6 +2,7 @@
     "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
     "contractOfficialName": "UniswapV2Router02",
     "contractName": "Uniswap V2",
+    "entityName": "Uniswap",
     "writeFunctions": {
         "addLiquidity": {
             "exampleDescriptionTemplate": "{userName} added liquidity to the {token_0}-{token_1} {contractName} pool",
@@ -344,9 +345,9 @@
             }
         },
         "swapExactTokensForTokens": {
-            "action": "swapped",
+            "action": "traded",
             "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
-            "exampleDescription": "0x4f1a9 swapped 246 DAI for 247 USDC on Uniswap V2",
+            "exampleDescription": "0x4f1a9 traded 246 DAI for 247 USDC on Uniswap V2",
             "keywords": {
                 "tokenName0": {
                     "key": "contractSymbol",
@@ -383,9 +384,9 @@
             }
         },
         "swapExactTokensForTokensSupportingFeeOnTransferTokens": {
-            "action": "swapped",
+            "action": "traded",
             "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
-            "exampleDescription": "0x4f1a9 swapped 246 DAI for 247 USDC on Uniswap V2",
+            "exampleDescription": "0x4f1a9 traded 246 DAI for 247 USDC on Uniswap V2",
             "keywords": {
                 "tokenName0": {
                     "key": "contractSymbol",
@@ -454,9 +455,9 @@
             }
         },
         "swapTokensForExactTokens": {
-            "action": "swapped",
+            "action": "traded",
             "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
-            "exampleDescription": "0x4f1a9 swapped 246 DAI for 247 USDC on Uniswap V2",
+            "exampleDescription": "0x4f1a9 traded 246 DAI for 247 USDC on Uniswap V2",
             "keywords": {
                 "tokenName0": {
                     "key": "contractSymbol",

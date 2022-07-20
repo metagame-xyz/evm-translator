@@ -19,6 +19,8 @@ You don't need to be an advanced web3 software developer to contribute a contrac
 
     You MUST follow the above steps to `yarn link` the evm-translator repo to evm-translator-demo or else your changes will take effect. Also, make sure you get the necessary API keys and stash them in .env as described.
 
+    If you don't have access to Alchemy's growth plan or above, please post in the api-key channel in discord, and Leo or Brenner will DM you an API you can use. (This is so you can access the trace_transaction call, an expensive call that's limited to growth plan and above)
+
 2. **Run the package and demo**
 
     Now, run `yarn dev` within the evm-translator-demo folder in your terminal. In a new terminal tab, run `yarn dev` within the evm-translator folder. Go to localhost:3000/interpret in your browser of choice. Put an example transaction in the first text field, clear the second text field, and select "Get Interpretation". Here is a particularly interesting transaction you could try...0xca8f8c315c8b6c48cee0675677b786d1babe726773829a588efa500b71cbdb65.
@@ -31,17 +33,22 @@ You don't need to be an advanced web3 software developer to contribute a contrac
 
 You made it to the fun part, congrats. Here, I'll walk through an example interpretation of a the Uniswap V2 contract to explain the process.
 
-1. **Create a new branch**
+1.  **Create a new branch**
 
-    Please title the branch after the contract you plan to interpret. If you plan on interpreting multiple contracts, please make different branches for each contract. You can create a new branch by typing `git checkout -b {new branch name}` within the evm-translator folder in your terminal.
+    Please title the branch after the contract you plan to interpret. If you plan on interpreting multiple contracts, please make different branches for each contract. You can create a new branch by typing `git checkout -b {new branch name}` within the `evm-translator` folder in your terminal (not the `evm-translator-demo` folder).
 
-2. **Grab a contract interpretation template.**
+2.  **Grab a contract interpretation template.**
 
     Go to https://evm-translator-demo.themetagame.xyz/templateGenerator and input your contract address into the text field. Select "Get Template". Once the JSON loads and appears on the screen, select "Download JSON file". Then, move this file within the `evm-translator/src/core/contractInterpreters`.
 
     Note that sometimes, your contract can have a single interpretation but be deployed in multiple places (see [an example of this](https://compound.finance/docs#guides)). In this case, you can rename the JSON file to remove the underscore and everything after it. We will cover how to handle this case in a minute.
 
-3. **Customize your JSON file.**
+3.  **Enter the interpretation into the main directory.**
+
+    Go to `evm-translator/src/core/contractInterpreters/index.ts`. Add a new entry in the `contractInterpreters` object with the key being the contract's address and the value being `require('./{name of your JSON file})`. If you are using the same JSON interpreation file for multiple contract addresses, you can add multiple entries all with the same value.
+    <br><br>
+
+4.  **Customize your JSON file.**
 
     First, let's walk through the structure of this JSON file, as it will be the basis for your contract interpretation. See [the complete UniswapV2Router02_0x7a25.json file](https://github.com/metagame-xyz/evm-translator/blob/main/src/core/contractInterpreters/UniswapV2Router02_0x7a25.json) as reference.
 
@@ -59,19 +66,19 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
     }
     ```
 
-    - **contractAddress**: the address of the contract you're interpreting. If your interpretation applies to multiple contract addresses, feel free to leave off this field.
-    - **contractOfficialName**: A specific but still readable name for the contract(s) you're interpreting.
-    - **contractName**: A highly readable name for the contract(s) you're interpreting. This name can appear in the `exampleDescription` field of the interpretation so choose it wisely.
+    -   **contractAddress**: the address of the contract you're interpreting. If your interpretation applies to multiple contract addresses, feel free to leave off this field.
+    -   **contractOfficialName**: A specific but still readable name for the contract(s) you're interpreting.
+    -   **contractName**: A highly readable name for the contract(s) you're interpreting. This name can appear in the `exampleDescription` field of the interpretation so choose it wisely.
+    -   **entityName**: The entity related to this contract
 
-    - **writeFunctions**: this is the meat of your interpretation. Each entry has a key which is the method name and a value which is an inner object with the following fields...
+    -   **writeFunctions**: this is the meat of your interpretation. Each entry has a key which is the method name and a value which is an inner object with the following fields...
 
-        - (required!) **action**: A very short (1-2 words ideally) description of what the user _did_ in the transaction. This should include a past tense verb. See the `Action` enum from [this file](https://github.com/metagame-xyz/evm-translator/blob/main/src/interfaces/interpreted.ts) for a bunch of action names. If at all possible, pick an action from this enum.
+        -   (required!) **action**: A very short (1-2 words ideally) description of what the user _did_ in the transaction. This should include a past tense verb. See the `Action` enum from [this file](https://github.com/metagame-xyz/evm-translator/blob/main/src/interfaces/interpreted.ts) for a bunch of action names. If at all possible, pick an action from this enum.
 
             Some actions will depend on the perspective of the user, like an NFT sale. One user "bought" and the other "sold". If your action is an NFT sale, use the special `"__NFTSALE__"` action that will resolve to either "bought" or "sold" depending on the user's address.
 
-        - There are a few other optional fields that will be detailed in step 4.
-
-              <br>
+        -   There are a few other optional fields that will be detailed in step 4.
+            <br><br>
 
     **Gathering your contract's methods**
 
@@ -102,7 +109,7 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
     When you test it, the final interpretation should have an `actions` field with an array of all the "sub-actions" that the multicall method initiates.
     <br><br>
 
-4. **Filtering for keywords**
+5.  **Filtering for keywords**
 
     If you'd prefer to skip this step, add the following blank fields to each of the `writeFunctions.[methodName]` objects...
 
@@ -159,20 +166,20 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
 
     Let's walk through these fields and what they mean.
 
-    - **exampleDescriptionTemplate**: Creates a human readable one-sentence description of the transaction. You can use variables in this description by wrapping their names in curly braces. I will cover how to create your variables in the "keywords" section, but here are the ones that you can use with no extra setup...
+    -   **exampleDescriptionTemplate**: Creates a human readable one-sentence description of the transaction. You can use variables in this description by wrapping their names in curly braces. I will cover how to create your variables in the "keywords" section, but here are the ones that you can use with no extra setup...
 
-        - **{userName}**: The ENS (or address if no ENS is present) of the user interacting with the contract
-        - **{contractName}**: The value of the `contractName` field from above
-        - **{action}**: The value of the `action` field from above
-        - **{userAddress} (userName is recommended)**: The address of the user interacting with the contract
-        - **{\_\_NATIVEVALUETRANSFERRED\_\_}**: The amount of ETH transferred in a NFT sale.
+        -   **{userName}**: The ENS (or address if no ENS is present) of the user interacting with the contract
+        -   **{contractName}**: The value of the `contractName` field from above
+        -   **{action}**: The value of the `action` field from above
+        -   **{userAddress} (userName is recommended)**: The address of the user interacting with the contract
+        -   **{\_\_NATIVEVALUETRANSFERRED\_\_}**: The amount of ETH transferred in a NFT sale.
 
-    - **exampleDescription**: Just like `exampleDescriptionTemplate` but with example values plugged in for the variables.
-    - **keywords**: An object with each key that matches a variable wrapped in curly braces from`exampleDescriptionTemplate` and each value being an object with "instructions" on how to isolate the variable's value from the transaction's event logs. This inner object has the following keys...
+    -   **exampleDescription**: Just like `exampleDescriptionTemplate` but with example values plugged in for the variables.
+    -   **keywords**: An object with each key that matches a variable wrapped in curly braces from `exampleDescriptionTemplate` and each value being an object with "instructions" on how to isolate the variable's value from the transaction's event logs. This inner object has the following keys...
 
-        - **key**: The name of the field from the event. For example, if you want the value of a Transfer, this would likely be "value" or "amount". If you want an ERC20 token's symbol, use your filters to isolate an event emitted from the address of the token's contract, and use `"key": "contractSymbol"`. See the Uniswap interpretation for an example of this.
-        - **filters**: An object with each key/value pair being a criteria that the event must meet to be used to populate the keyword's value. For example, if you want to get the value of a Transfer from the user's address to someone else, you could use something like `"eventName": "Transfer"`, `"from": "{userAddress}"` for filters.
-        - **index**: Sometimes you must manually specify the event's position you want to isolate when you cannot isolate it with your filters. Defaults to 0. See the `removeLiquidityWithPermit` method within the Uniswap interpretation for an example of how this field is used (example tx: 0xe1147990da44812918868c75c795ae91592a59277692e9050f7e5ab89dc143da).
+        -   **key**: The name of the field from the event. For example, if you want the value of a Transfer, this would likely be "value" or "amount". If you want an ERC20 token's symbol, use your filters to isolate an event emitted from the address of the token's contract, and use `"key": "contractSymbol"`. See the Uniswap interpretation for an example of this.
+        -   **filters**: An object with each key/value pair being a criteria that the event must meet to be used to populate the keyword's value. For example, if you want to get the value of a Transfer from the user's address to someone else, you could use something like `"eventName": "Transfer"`, `"from": "{userAddress}"` for filters.
+        -   **index**: Sometimes you must manually specify the event's position you want to isolate when you cannot isolate it with your filters. Defaults to 0. See the `removeLiquidityWithPermit` method within the Uniswap interpretation for an example of how this field is used (example tx: 0xe1147990da44812918868c75c795ae91592a59277692e9050f7e5ab89dc143da).
 
         <br><br>
 
@@ -184,11 +191,11 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
 
     Then, enter the transaction hash into [Etherscan.io](etherscan.io) and navigate into the "Logs" section. Here, you can see all the pieces of data you can include as keywords. Let's look at [an example of a swapExactTokensForTokens transaction](https://etherscan.io/tx/0xb684992cdec31d2eeaf3866be82ddd2a9cfe2211bab96b1aa132d3a9ae50587b#eventlog). In this transaction, user (0x4090) is swapping 900 USDC for 202,899 KINGDOM. The four pieces of information we need are...
 
-    - Amount of tokens sent
-    - Symbol of tokens sent
-    - Amount of tokens received
-    - Symbol of tokens sent
-      <br><br>
+    -   Amount of tokens sent
+    -   Symbol of tokens sent
+    -   Amount of tokens received
+    -   Symbol of tokens sent
+        <br><br>
 
     ![Transfer event log ("from")](https://drive.google.com/uc?export=view&id=1G-VS8Y7aWI66lPzwE-XgJCIulNU45j0r)
     ![Transfer event log ("to")](https://drive.google.com/uc?export=view&id=1pxNpSvu26_m5zHfyxV222rS2jvtfnLIv)
@@ -224,11 +231,6 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
     The `"contractSymbol"` key takes the contract address that emits the event and gets the symbol of the ERC20 token it represents. We can use `"{tokenName0}"` within `exampleDescriptionTemplate`.
 
     We can repeat these steps for the tokens being received, except we use `"from"` instead of `"to"`.
-    <br><br><br>
-
-5. **Enter the interpretation into the main directory.**
-
-    Go to `evm-translator/src/core/contractInterpreters/index.ts`. Add a new entry in the `contractInterpreters` object with the key being the contract's address and the value being `require('./{name of your JSON file})`. If you are using the same JSON interpreation file for multiple contract addresses, you can add multiple entries all with the same value.
     <br><br><br>
 
 ## Part 3: Test it

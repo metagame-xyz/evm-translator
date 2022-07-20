@@ -1,15 +1,11 @@
 [![Tests](https://github.com/metagame-xyz/evm-translator/actions/workflows/tests.yml/badge.svg)](https://github.com/metagame-xyz/evm-translator/actions/workflows/tests.yml)
 [![GitHub license](https://img.shields.io/github/license/the-metagame/evm-translator)](https://github.com/the-metagame/evm-translator/blob/main/LICENSE)
 
-Add more things from here https://shields.io/category/build
-
 # evm-translator
 
 a library for making EVM-based blockchain data more human-readable
 
 If you're looking to contribute to evm-translator, click [here](/CONTRIBUTE.md).
-
-If a transaction interacts with 5 addresses, there will be 5 different interpretations, each from the perspective of each address. When interpreting a transaction, if an address is not provided, the interpretation will default to using the `from` address of the transaction.
 
 ## Logical Layout
 
@@ -21,6 +17,52 @@ If a transaction interacts with 5 addresses, there will be 5 different interpret
         -   transfers
         -   tokens
         -   fallback
+
+## Usage
+
+```typescript
+import Translator, { chains } from 'evm-translator'
+
+import {
+    ALCHEMY_PROJECT_ID,
+    COVALENT_API_KEY,
+    ETHERSCAN_API_KEY,
+    EVM_TRANSLATOR_CONNECTION_STRING,
+} from 'where/you/store/your/env/variables'
+
+    const networkId = 1
+    const chain = Object.values(chains).find((chain) => chain.id === networkId)
+    const address = '0x7d0414b0622f485d0368602e76f502cabef57bf4'
+
+    const translator = new Translator({
+        chain,
+        alchemyProjectId: ALCHEMY_PROJECT_ID,
+        etherscanAPIKey: ETHERSCAN_API_KEY,
+        connectionString: EVM_TRANSLATOR_CONNECTION_STRING,
+        covalentAPIKey: COVALENT_API_KEY,
+        etherscanServiceLevel: 5,
+        userAddress: address,
+    })
+
+    await translator.initializeMongoose()
+
+    // some option of what you can do
+
+    const txHash = '0x814ec7ed69beca48209597f4975aaab605069546da6fc330ad1c0d180d6e525f'
+
+    const { decodedTx, rawTxData } = await translator.decodeFromTxHash(txHash)
+    const { interpretedData, decodedTx, rawTxData} = await translator.allDataFromTxHash(txHash)
+
+
+    const txHashArr = await translator.getTxHashArrayForAddress(address)
+
+    const decodedTxArr = await translator.decodeFromTxHashArr(txHashArr)
+    const allDataArr = await translator.allDataFromTxHash(txHashArr)
+
+```
+
+If a transaction interacts with 5 addresses, there will be 5 different interpretations, each from the perspective of each address. When interpreting a transaction, if an address is not provided, the interpretation will default to using the `from` address of the transaction.
+<br><br>
 
 ## Contractor-specific Interpreter Maps
 
@@ -37,6 +79,7 @@ An example of an Interpreter Map
     "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
     "contractOfficialName": "UniswapV2Router02",
     "contractName": "Uniswap V2",
+    "entityName": "Uniswap",
     "writeFunctions": {
         "addLiquidity": {
             "action": "added liquidity",
@@ -197,6 +240,7 @@ When the above map is applied to above decoded event logs, this is the interpret
     "txHash": "0x0e6388e80a6023cfc8e7b9fb2ff94e3bf5d34cdc8bb348d124e2385e29d5bcf8",
     "userAddress": "0xf1a935a3588d20994e02848c93b107000a60110d",
     "userName": "0xf1a9",
+    "entityName": "Uniswap",
     "contractName": "Uniswap V2",
     "contractOfficialName": "UniswapV2Router02",
     "action": ["added liquidity"],

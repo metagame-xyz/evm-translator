@@ -2,8 +2,6 @@ evm-translator / [Exports](modules.md)
 
 [![GitHub license](https://img.shields.io/github/license/the-metagame/evm-translator)](https://github.com/the-metagame/evm-translator/blob/main/LICENSE)
 
-Add more things from here https://shields.io/category/build
-
 # evm-translator
 
 a library for making EVM-based blockchain data more human-readable
@@ -20,6 +18,47 @@ If a transaction interacts with 5 addresses, there will be 5 different interpret
         -   transfers
         -   tokens
         -   fallback
+
+```typescript
+import Translator, { chains } from 'evm-translator'
+
+import {
+    ALCHEMY_PROJECT_ID,
+    COVALENT_API_KEY,
+    ETHERSCAN_API_KEY,
+    EVM_TRANSLATOR_CONNECTION_STRING,
+} from 'where/you/store/your/env/variables'
+
+    const networkId = 1
+    const chain = Object.values(chains).find((chain) => chain.id === networkId)
+    const address = '0x7d0414b0622f485d0368602e76f502cabef57bf4'
+
+    const translator = new Translator({
+        chain,
+        alchemyProjectId: ALCHEMY_PROJECT_ID,
+        etherscanAPIKey: ETHERSCAN_API_KEY,
+        connectionString: EVM_TRANSLATOR_CONNECTION_STRING,
+        covalentAPIKey: COVALENT_API_KEY,
+        etherscanServiceLevel: 5,
+        userAddress: address,
+    })
+
+    await translator.initializeMongoose()
+
+    // some option of what you can do
+
+    const txHash = '0x814ec7ed69beca48209597f4975aaab605069546da6fc330ad1c0d180d6e525f'
+
+    const { decodedTx, rawTxData } = await translator.decodeFromTxHash(txHash)
+    const { interpretedData, decodedTx, rawTxData} = await translator.allDataFromTxHash(txHash)
+
+
+    const txHashArr = await translator.getTxHashArrayForAddress(address)
+
+    const decodedTxArr = await translator.decodeFromTxHashArr(txHashArr)
+    const allDataArr = await translator.allDataFromTxHash(txHashArr)
+
+```
 
 ## Contractor-specific Interpreter Maps
 

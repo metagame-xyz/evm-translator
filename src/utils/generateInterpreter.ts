@@ -43,6 +43,7 @@ export default class InterpreterTemplateGenerator {
             contractAddress,
             contractOfficialName,
             contractName: '______TODO______',
+            entityName: '______TODO______',
             writeFunctions: {},
         }
 

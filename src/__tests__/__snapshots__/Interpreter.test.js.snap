@@ -87,7 +87,7 @@ Object {
 exports[`Interpreter 3`] = `
 Object {
   "actions": Array [
-    "swapped",
+    "traded",
   ],
   "assetsReceived": Array [
     Object {
@@ -111,7 +111,7 @@ Object {
   "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
   "contractName": "Uniswap V2",
   "counterpartyName": null,
-  "exampleDescription": "0x4090 swapped 900.0 USDC for 0.000202899041047771 KINGDOM on Uniswap V2",
+  "exampleDescription": "0x4090 traded 900.0 USDC for 0.000202899041047771 KINGDOM on Uniswap V2",
   "extra": Object {
     "tokenAmount0": "900.0",
     "tokenAmount1": "0.000202899041047771",
@@ -517,7 +517,7 @@ Object {
 exports[`Interpreter 13`] = `
 Object {
   "actions": Array [
-    "swapped",
+    "traded",
   ],
   "assetsReceived": Array [
     Object {
@@ -541,7 +541,7 @@ Object {
   "contractAddress": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0x5596 swapped 280376.616698 USDC for 150.286887655178993883 WETH on Uniswap V3",
+  "exampleDescription": "0x5596 traded 280376.616698 USDC for 150.286887655178993883 WETH on Uniswap V3",
   "extra": Object {
     "tokenAmount0": "280376.616698",
     "tokenAmount1": "150.286887655178993883",
@@ -560,7 +560,7 @@ Object {
 exports[`Interpreter 14`] = `
 Object {
   "actions": Array [
-    "swapped",
+    "traded",
   ],
   "assetsReceived": Array [
     Object {
@@ -584,7 +584,7 @@ Object {
   "contractAddress": "0xe592427a0aece92de3edee1f18e0157c05861564",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0x7691 swapped 115.0 BYTES for 189.236064 USDC on Uniswap V3",
+  "exampleDescription": "0x7691 traded 115.0 BYTES for 189.236064 USDC on Uniswap V3",
   "extra": Object {
     "tokenAmount0": "115.0",
     "tokenAmount1": "189.236064",
@@ -603,7 +603,7 @@ Object {
 exports[`Interpreter 15`] = `
 Object {
   "actions": Array [
-    "swapped",
+    "traded",
   ],
   "assetsReceived": Array [
     Object {
@@ -627,7 +627,7 @@ Object {
   "contractAddress": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0x613a swapped 2.127028966431723238 WETH for 200.0 Metis on Uniswap V3",
+  "exampleDescription": "0x613a traded 2.127028966431723238 WETH for 200.0 Metis on Uniswap V3",
   "extra": Object {
     "tokenAmount0": "2.127028966431723238",
     "tokenAmount1": "200.0",
@@ -646,7 +646,7 @@ Object {
 exports[`Interpreter 16`] = `
 Object {
   "actions": Array [
-    "swapped",
+    "traded",
   ],
   "assetsReceived": Array [
     Object {
@@ -670,7 +670,7 @@ Object {
   "contractAddress": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0x5c4f swapped 1.767773 USDT for 0.1 UNI on Uniswap V3",
+  "exampleDescription": "0x5c4f traded 1.767773 USDT for 0.1 UNI on Uniswap V3",
   "extra": Object {
     "tokenAmount0": "1.767773",
     "tokenAmount1": "0.1",
@@ -689,7 +689,7 @@ Object {
 exports[`Interpreter 17`] = `
 Object {
   "actions": Array [
-    "swapped",
+    "traded",
   ],
   "assetsReceived": Array [
     Object {
@@ -713,7 +713,7 @@ Object {
   "contractAddress": "0xe592427a0aece92de3edee1f18e0157c05861564",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0xa5c1 swapped 340.4597021 RAE for 0.389162262040186058 WETH on Uniswap V3",
+  "exampleDescription": "0xa5c1 traded 340.4597021 RAE for 0.389162262040186058 WETH on Uniswap V3",
   "extra": Object {
     "tokenAmount0": "340.4597021",
     "tokenAmount1": "0.389162262040186058",

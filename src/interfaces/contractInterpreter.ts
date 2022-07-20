@@ -7,6 +7,8 @@ export type InterpreterMap = {
     contractOfficialName: string
     /** A sensible name that will explain what this contract is for */
     contractName: string
+    /** The entity related to this contract */
+    entityName: string
     /** The interpretation for a tx when it is initiated by calling the given write method */
     writeFunctions: Record<string, MethodMap>
 }
@@ -33,6 +35,8 @@ export type KeywordMap = {
     defaultValue: string
     /** If there are multiple events that match the filters, which event in the array to use. The default is 0 */
     index?: number
+    /** How many number of places the decimal needs to be moved for human readability. The default is 18 (the standard for ERC20s) */
+    decimals?: number
 }
 
 export type DeployInterpreterMap = {
