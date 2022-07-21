@@ -23,7 +23,7 @@ You don't need to be an advanced web3 software developer to contribute a contrac
 
 2. **Run the package and demo**
 
-    Now, run `yarn dev` within the evm-translator-demo folder in your terminal. In a new terminal tab, run `yarn dev` within the evm-translator folder. Go to localhost:3000/interpret in your browser of choice. Put an example transaction in the first text field, clear the second text field, and select "Get Interpretation". Here is a particularly interesting transaction you could try...0xca8f8c315c8b6c48cee0675677b786d1babe726773829a588efa500b71cbdb65.
+    Now, run `yarn dev` within the evm-translator-demo folder in your terminal. In a new terminal tab, run `yarn dev` within the evm-translator folder. Go to localhost:3000 in your browser of choice. Put an example transaction in the first text field, clear the second text field, and select "Get Interpretation". Here is a particularly interesting transaction you could try...0xca8f8c315c8b6c48cee0675677b786d1babe726773829a588efa500b71cbdb65.
 
     If that worked for you, then you have successfully set up your test environment. Well done! This interface will allow you to live-test example transactions of the contracts you're interpreting.
 

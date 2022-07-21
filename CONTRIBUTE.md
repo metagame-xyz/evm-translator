@@ -2,7 +2,9 @@
 
 ## What we need from you
 
-If you're here, you likely understand the power and potential of evm-translator to create human readble interpreations of ethereum transactions. We have the infrastructure in place to elegantly interpret transactions from nearly every contract deployed to the chain. However, **we still need lots of contract-specific interpretations** to improve our coverage and close our blind spots. That's where you come in.
+If you're here, you likely understand the power and potential of evm-translator to create human readable interpretations of ethereum transactions. We have the infrastructure in place to elegantly interpret transactions from nearly every contract deployed to the chain. However, **we still need lots of contract-specific interpretations** to improve our coverage and close our blind spots. That's where you come in.
+
+We've set up a [Wonder bounty board](https://app.wonderverse.xyz/organization/Metagame/boards) with ~$5k USDC of bounties across 50+ contracts waiting to be interpreted.
 
 Do you have a protocol or contract you interact with frequently that you'd like to see detailed, concise interpretations for? Have you deployed your own contract that deserves recognition by evm-translator? Contribute to evm-translator!
 
@@ -21,7 +23,7 @@ You don't need to be an advanced web3 software developer to contribute a contrac
 
 2. **Run the package and demo**
 
-    Now, run `yarn dev` within the evm-translator-demo folder in your terminal. In a new terminal tab, run `yarn dev` within the evm-translator folder. Go to localhost:3000/interpret in your browser of choice. Put an example transaction in the first text field, clear the second text field, and select "Get Interpretation". Here is a particularly interesting transaction you could try...0xca8f8c315c8b6c48cee0675677b786d1babe726773829a588efa500b71cbdb65.
+    Now, run `yarn dev` within the evm-translator-demo folder in your terminal. In a new terminal tab, run `yarn dev` within the evm-translator folder. Go to localhost:3000/interpret in your browser of choice. Put an example transaction in the first text field, clear the second text field, and select "Get Interpretation". Here is a particularly interesting transaction you could try...`0xca8f8c315c8b6c48cee0675677b786d1babe726773829a588efa500b71cbdb65`.
 
     If that worked for you, then you have successfully set up your test environment. Well done! This interface will allow you to live-test example transactions of the contracts you're interpreting.
 
@@ -33,7 +35,7 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
 
 1. **Create a new branch**
 
-    Please title the branch after the contract you plan to interpret. If you plan on interpreting multiple contracts, please make different branches for each contract. You can create a new branch by typing `git checkout -b {new branch name}` within the evm-translator folder in your terminal.
+    Please title the branch after the contract you plan to interpret. If you plan on interpreting multiple contracts, please make different branches for each contract. You can create a new branch by typing `git checkout -b {your-name/contract-name}` within the evm-translator folder in your terminal.
 
 2. **Grab a contract interpretation template.**
 
@@ -45,11 +47,12 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
 
     First, let's walk through the structure of this JSON file, as it will be the basis for your contract interpretation. See [the complete UniswapV2Router02_0x7a25.json file](https://github.com/metagame-xyz/evm-translator/blob/main/src/core/contractInterpreters/UniswapV2Router02_0x7a25.json) as reference.
 
-    ```
+    ```json
     {
         "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
         "contractOfficialName": "UniswapV2Router02",
         "contractName": "Uniswap V2",
+        "entityName": "Uniswap",
         "writeFunctions": {
             "addedLiquidity": {
                 "action": "added liquidity",
@@ -62,6 +65,7 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
     - **contractAddress**: the address of the contract you're interpreting. If your interpretation applies to multiple contract addresses, feel free to leave off this field.
     - **contractOfficialName**: A specific but still readable name for the contract(s) you're interpreting.
     - **contractName**: A highly readable name for the contract(s) you're interpreting. This name can appear in the `exampleDescription` field of the interpretation so choose it wisely.
+    - **entityName**: The name of the entity associated with the contract
 
     - **writeFunctions**: this is the meat of your interpretation. Each entry has a key which is the method name and a value which is an inner object with the following fields...
 
@@ -71,7 +75,7 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
 
         - There are a few other optional fields that will be detailed in step 4.
 
-            <br>
+              <br>
 
     **Gathering your contract's methods**
 
