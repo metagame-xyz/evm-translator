@@ -86,6 +86,7 @@
         "@types/webpack-env": "^1.16.3",
         "@typescript-eslint/eslint-plugin": "^5.16.0",
         "@typescript-eslint/parser": "^5.16.0",
+        "all-contributors-cli": "^6.20.0",
         "babel-jest": "^28.1.0",
         "concurrently": "^7.0.0",
         "dotenv": "^16.0.1",

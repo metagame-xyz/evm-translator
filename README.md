@@ -1,6 +1,11 @@
 [![Tests](https://github.com/metagame-xyz/evm-translator/actions/workflows/tests.yml/badge.svg)](https://github.com/metagame-xyz/evm-translator/actions/workflows/tests.yml)
 [![GitHub license](https://img.shields.io/github/license/the-metagame/evm-translator)](https://github.com/the-metagame/evm-translator/blob/main/LICENSE)
-[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors)
+
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
+[![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](#contributors-)
+
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # evm-translator
 
@@ -309,3 +314,17 @@ See `0xc814cb6b61222beda8a9bcc359e776e72ae732a1c29df572099ecef27c8461e4` as an e
 Some transactions like a Uniswap V3 multicall are really multiple transactions disguised as one. During the decoding process, the `decodeRawTxTrace` function within `/src/core/MulticallTxInterpreter.ts` grabs the "second-level" method calls and put those into the `traceCalls` field within the `DecodedTx`. We keep track of multicall method names and contract addresses within `/src/interfaces/utils.ts` and when we identify a transaction falling into this category, we use the second-level methods to populate the `action` array within the `Interpretation` object.
 
 See `0xb38f55471c5a8539a605287b4116a4bf83a58261b3cfe00bc53337298003b9ae` as an example of such a transaction.
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
