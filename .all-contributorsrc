@@ -1,14 +1,35 @@
 {
-    "projectName": "evm-translator",
-    "projectOwner": "metagame-xyz",
-    "repoType": "github",
-    "repoHost": "https://github.com",
-    "files": [
-        "README.md"
-    ],
-    "imageSize": 100,
-    "commit": true,
-    "commitConvention": "eslint",
-    "contributors": [],
-    "contributorsPerLine": 7
+  "projectName": "evm-translator",
+  "projectOwner": "metagame-xyz",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "eslint",
+  "contributors": [
+    {
+      "login": "BrennerSpear",
+      "name": "Brenner Spear",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12127609?v=4",
+      "profile": "https://rainbow.me/brenner.eth",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "leojacob1",
+      "name": "leotheprocess",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4212812?v=4",
+      "profile": "http://leojacoby.com",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
 }

@@ -2,9 +2,7 @@
 [![GitHub license](https://img.shields.io/github/license/the-metagame/evm-translator)](https://github.com/the-metagame/evm-translator/blob/main/LICENSE)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-
-[![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](#contributors-)
-
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # evm-translator
@@ -322,6 +320,13 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://rainbow.me/brenner.eth"><img src="https://avatars.githubusercontent.com/u/12127609?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Brenner Spear</b></sub></a><br /><a href="https://github.com/metagame-xyz/evm-translator/commits?author=BrennerSpear" title="Code">💻</a></td>
+    <td align="center"><a href="http://leojacoby.com"><img src="https://avatars.githubusercontent.com/u/4212812?v=4?s=100" width="100px;" alt=""/><br /><sub><b>leotheprocess</b></sub></a><br /><a href="https://github.com/metagame-xyz/evm-translator/commits?author=leojacob1" title="Code">💻</a> <a href="https://github.com/metagame-xyz/evm-translator/commits?author=leojacob1" title="Documentation">📖</a> <a href="https://github.com/metagame-xyz/evm-translator/commits?author=leojacob1" title="Tests">⚠️</a></td>
+  </tr>
+</table>
+
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
 
