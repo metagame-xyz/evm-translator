@@ -1,5 +1,6 @@
 [![Tests](https://github.com/metagame-xyz/evm-translator/actions/workflows/tests.yml/badge.svg)](https://github.com/metagame-xyz/evm-translator/actions/workflows/tests.yml)
 [![GitHub license](https://img.shields.io/github/license/the-metagame/evm-translator)](https://github.com/the-metagame/evm-translator/blob/main/LICENSE)
+[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors)
 
 # evm-translator
 
@@ -23,6 +24,7 @@ If you're looking to contribute to evm-translator, click [here](/CONTRIBUTE.md).
 ```zsh
 yarn add evm-translator
 ```
+
 ```zsh
 npm install evm-translator
 ```
