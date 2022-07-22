@@ -20,7 +20,8 @@
       "profile": "https://rainbow.me/brenner.eth",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "contract-interpretation"
       ]
     },
     {
@@ -31,7 +32,8 @@
       "contributions": [
         "code",
         "doc",
-        "test"
+        "test",
+        "contract-interpretation"
       ]
     },
     {
