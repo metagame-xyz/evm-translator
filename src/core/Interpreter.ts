@@ -26,6 +26,7 @@ import {
 } from 'utils'
 import { ethAddress, multicallContractAddresses, multicallFunctionNames } from 'utils/constants'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
+import timer from 'utils/timer'
 
 function deepCopy<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj))
@@ -126,11 +127,15 @@ class Interpreter {
             userName = decodedTx.toENS
         }
 
-        userName =
-            userName ||
-            userNameFromInput ||
-            (await this.db.getEntityByAddress(userAddress)) ||
-            userAddress.substring(0, 6)
+        const addressesToCheck = [fromAddress, userAddress]
+        if (toAddress) addressesToCheck.push(toAddress)
+        console.log('addressesToCheck', addressesToCheck.length)
+        timer.startTimer(txHash.substring(2, 8))
+        const entityMap = await this.db.getManyEntityMap(addressesToCheck)
+        timer.stopTimer(txHash.substring(2, 8))
+
+        // TODO batch getEntityByAddress
+        userName = userName || userNameFromInput || entityMap[userAddress] || userAddress.substring(0, 6)
 
         // TODO generalize this so it'll get any ENS (ex: _operatorENS)
 
@@ -157,8 +162,9 @@ class Interpreter {
             interpretation.actions.push(Action.unknown)
         }
 
-        let fromName = await this.db.getEntityByAddress(fromAddress)
-        let toName = await this.db.getEntityByAddress(toAddress || '')
+        // TODO batch getEntityByAddress
+        let fromName = entityMap[fromAddress]
+        let toName = entityMap[toAddress || '']
 
         if (fromName) interpretation.fromName = fromName
         if (toName) interpretation.toName = toName
