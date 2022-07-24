@@ -20,6 +20,7 @@ import {
     fillDescriptionTemplate,
     flattenEventsFromInteractions,
     getDecimals,
+    getKeys,
     getNativeTokenValueEvents,
     shortenNamesInString,
     toOrFromUser,
@@ -81,22 +82,11 @@ class Interpreter {
         this.chain = chain
     }
 
-    async interpret(decodedDataArr: DecodedTx[]): Promise<Interpretation[]> {
-        const interpretations: Interpretation[] = []
-
-        for (let i = 0; i < decodedDataArr.length; i++) {
-            const decodedData = decodedDataArr[i]
-            const interpretation = await this.interpretSingleTx(decodedData)
-            interpretations.push(interpretation)
-        }
-
-        return interpretations
-    }
-
     async interpretSingleTx(
         decodedTx: DecodedTx,
         userAddressFromInput: string | null = null,
         userNameFromInput: string | null = null,
+        entityMap: Record<string, string | null> = {},
     ): Promise<Interpretation> {
         // Prep data coming in from 'decodedData'
         const {
@@ -130,7 +120,9 @@ class Interpreter {
         const addressesToCheck = [fromAddress, userAddress]
         if (toAddress) addressesToCheck.push(toAddress)
         // timer.startTimer(txHash.substring(2, 8))
-        const entityMap = await this.db.getManyEntityMap(addressesToCheck)
+        if (getKeys(entityMap).length === 0) {
+            entityMap = await this.db.getManyEntityMap(addressesToCheck)
+        }
         // timer.stopTimer(txHash.substring(2, 8))
         userName = userName || userNameFromInput || entityMap[userAddress] || userAddress.substring(0, 6)
 

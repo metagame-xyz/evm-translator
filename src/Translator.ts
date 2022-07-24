@@ -246,8 +246,9 @@ class Translator {
         decoded: DecodedTx,
         userAddress: string | null = null,
         userName: string | null = null,
+        entityMap: Record<string, string | null> = {},
     ): Promise<Interpretation> {
-        return await this.interpreter.interpretSingleTx(decoded, userAddress, userName)
+        return await this.interpreter.interpretSingleTx(decoded, userAddress, userName, entityMap)
     }
 
     async interpretDecodedTxArr(
@@ -255,6 +256,13 @@ class Translator {
         userAddress: string | null = null,
         userName: string | null = null,
     ): Promise<(Interpretation | null)[]> {
+        const addresses = [
+            ...new Set(decodedTxArr.map((decoded) => [decoded?.toAddress, decoded?.fromAddress]).flat()),
+        ].filter((str) => str !== null && str !== undefined) as string[]
+
+        if (userAddress) addresses.push(userAddress)
+
+        const entityMap = await this.databaseInterface.getManyEntityMap(addresses)
         return Promise.all(
             decodedTxArr.map(async (decodedTx) => {
                 return decodedTx ? await this.interpretDecodedTx(decodedTx, userAddress, userName) : null
