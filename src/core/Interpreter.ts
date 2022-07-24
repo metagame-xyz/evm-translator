@@ -129,12 +129,9 @@ class Interpreter {
 
         const addressesToCheck = [fromAddress, userAddress]
         if (toAddress) addressesToCheck.push(toAddress)
-        console.log('addressesToCheck', addressesToCheck.length)
-        timer.startTimer(txHash.substring(2, 8))
+        // timer.startTimer(txHash.substring(2, 8))
         const entityMap = await this.db.getManyEntityMap(addressesToCheck)
-        timer.stopTimer(txHash.substring(2, 8))
-
-        // TODO batch getEntityByAddress
+        // timer.stopTimer(txHash.substring(2, 8))
         userName = userName || userNameFromInput || entityMap[userAddress] || userAddress.substring(0, 6)
 
         // TODO generalize this so it'll get any ENS (ex: _operatorENS)
@@ -162,7 +159,6 @@ class Interpreter {
             interpretation.actions.push(Action.unknown)
         }
 
-        // TODO batch getEntityByAddress
         let fromName = entityMap[fromAddress]
         let toName = entityMap[toAddress || '']
 
