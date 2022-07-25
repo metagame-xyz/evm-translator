@@ -1074,7 +1074,7 @@
     "@ethersproject/transactions" "^5.6.2"
     "@ethersproject/web" "^5.6.1"
 
-"@ethersproject/abstract-signer@5.6.2", "@ethersproject/abstract-signer@^5.6.0", "@ethersproject/abstract-signer@^5.6.2":
+"@ethersproject/abstract-signer@5.6.2", "@ethersproject/abstract-signer@^5.6.2":
   version "5.6.2"
   resolved "https://registry.yarnpkg.com/@ethersproject/abstract-signer/-/abstract-signer-5.6.2.tgz#491f07fc2cbd5da258f46ec539664713950b0b33"
   integrity sha512-n1r6lttFBG0t2vNiI3HoWaS/KdOt8xyDjzlP2cuevlWLG6EX0OwcKLyG/Kp/cuwNxdy/ous+R/DEMdTUwWQIjQ==
@@ -1387,46 +1387,47 @@
     "@ethersproject/properties" "^5.6.0"
     "@ethersproject/strings" "^5.6.1"
 
-"@gnosis.pm/safe-core-sdk-types@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-core-sdk-types/-/safe-core-sdk-types-1.1.0.tgz#dce372445ddbaf7eb960cfe98f5d4b2557004040"
-  integrity sha512-VvEqWCliA6KXwt9N4YTzN5JcqnhLxLjUTU7trpQqQ7wU9OQcF+Kdrer86wDOF5lYZVE24zudw1s4gW3dxUkm6A==
+"@gnosis.pm/safe-core-sdk-types@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-core-sdk-types/-/safe-core-sdk-types-1.2.1.tgz#ea68ad1784a70d67f6db0ddb89ece632fe2a2cbf"
+  integrity sha512-K2kTGk1FNKlCJtuDqbFrRPNxot/4dQPiI2pnquGJchpJXIMflKb7xPcjDY5CPTYlBG3lCoQ9ZRk7Ytlu66TcSQ==
   dependencies:
     "@ethersproject/bignumber" "^5.6.0"
     "@ethersproject/contracts" "^5.6.0"
-    "@gnosis.pm/safe-deployments" "^1.12.0"
+    "@gnosis.pm/safe-deployments" "1.15.0"
     web3-core "^1.7.1"
 
-"@gnosis.pm/safe-core-sdk-utils@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-core-sdk-utils/-/safe-core-sdk-utils-1.1.0.tgz#3fb93038cac143523fcfa8200010034cc42166a6"
-  integrity sha512-ZH1Ps3qsreczKHHfBb34dj55LDTiU7WAeKD7jgKnhiloGWRniLv+cbBfwFQNAezoyANvgyI5ky64wgwm1bm1YA==
+"@gnosis.pm/safe-core-sdk-utils@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-core-sdk-utils/-/safe-core-sdk-utils-1.2.1.tgz#1cc9de8187e724c02104a8c15c14fb77796d1240"
+  integrity sha512-VPnSLayGR4omwcNHPwzx8/aDyGXrWULKSF+ENeiWbmwgIhwQnB7T2gzhArNeUgt4BxmYft/HFm1MRSqiQnIQJw==
   dependencies:
-    "@gnosis.pm/safe-core-sdk-types" "^1.1.0"
+    "@gnosis.pm/safe-core-sdk-types" "^1.2.1"
+    semver "^7.3.7"
     web3-utils "^1.7.1"
 
-"@gnosis.pm/safe-deployments@^1.12.0":
+"@gnosis.pm/safe-deployments@1.15.0":
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-deployments/-/safe-deployments-1.15.0.tgz#71ed9a37437a3080443c49aa65308f2d8839d751"
   integrity sha512-twfC5HNuj+TKS2gOowf6A1FGZfOLBHAV2JhYpmOCf2MKsfcG+Fe4TrSRgQg605MhWdwFiaGVpNkcwjvpxhGuew==
   dependencies:
     semver "^7.3.7"
 
-"@gnosis.pm/safe-ethers-lib@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-ethers-lib/-/safe-ethers-lib-1.1.0.tgz#06dfe132f3590fbc5406918a193812cd922c641e"
-  integrity sha512-MG01hGu/3q/sl9fXE3sU7CMVpVMJ4k9/ro1JVZaE29jmsar1cHFUOJNws7Do3orxTLQZ2egkARcmyv+l673FoA==
+"@gnosis.pm/safe-ethers-lib@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-ethers-lib/-/safe-ethers-lib-1.2.1.tgz#d429480f187c6897fb9fcbfd7a526e3d422e6735"
+  integrity sha512-7A9t2fQW5VtfHVs++Fc5G+a45C/TO4/Tb0MB0G7eYfrrf/rnKZBsUaPIEm4J1ny5WMjGQv2f5DjA3hgaRL9VhA==
   dependencies:
-    "@gnosis.pm/safe-core-sdk-types" "^1.1.0"
-    "@gnosis.pm/safe-core-sdk-utils" "^1.1.0"
+    "@gnosis.pm/safe-core-sdk-types" "^1.2.1"
+    "@gnosis.pm/safe-core-sdk-utils" "^1.2.1"
 
-"@gnosis.pm/safe-service-client@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-service-client/-/safe-service-client-1.1.2.tgz#699aaca293dfe19bdfd60b29b726ce7b6a34b735"
-  integrity sha512-B8INt8jJVfvSGGboXV+0rm/hL2OSElhz19X7VdrZ7MSox3w7JEYE1nd6WWvsX0z2c4aZJQPVcN/PZC4i8BZgpQ==
+"@gnosis.pm/safe-service-client@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-service-client/-/safe-service-client-1.2.0.tgz#7dc4a5d7fb85a1628fb910140127712f05f8f54f"
+  integrity sha512-KAgnSgviYuMDYP/GETi5AxJTq/196qf+TXdXD5P136btPQo9XQta63IumpXY8+EQTZPJGmL8vSInXEUySy9SAA==
   dependencies:
-    "@ethersproject/abstract-signer" "^5.6.0"
-    "@gnosis.pm/safe-core-sdk-types" "^1.1.0"
+    "@ethersproject/abstract-signer" "^5.6.2"
+    "@gnosis.pm/safe-core-sdk-types" "^1.2.1"
     node-fetch "^2.6.6"
 
 "@humanwhocodes/config-array@^0.9.2":
