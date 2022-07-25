@@ -1,6 +1,6 @@
 import { decodeRawTxTrace } from './MulticallTxInterpreter'
 import { transformDecodedData, transformDecodedLogs, transformTraceData } from './transformDecodedLogs'
-import { AlchemyProvider, Formatter } from '@ethersproject/providers'
+import { AlchemyProvider, Formatter, JsonRpcProvider } from '@ethersproject/providers'
 import axios from 'axios'
 import { Contract } from 'ethers'
 import traverse from 'traverse'
@@ -51,7 +51,7 @@ export type DecoderConfig = {
 }
 
 export class Augmenter {
-    provider: AlchemyProvider
+    provider: AlchemyProvider | JsonRpcProvider
     covalent: Covalent | null
     etherscan: Etherscan
 
@@ -67,7 +67,7 @@ export class Augmenter {
     ensCache: Record<string, string> = {}
 
     constructor(
-        provider: AlchemyProvider,
+        provider: AlchemyProvider | JsonRpcProvider,
         covalent: Covalent | null,
         etherscan: Etherscan,
         databaseInterface: DatabaseInterface = new NullDatabaseInterface(),

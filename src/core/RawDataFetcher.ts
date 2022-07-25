@@ -3,7 +3,7 @@ import {
     TransactionReceipt as unvalidatedTransactionReceipt,
     TransactionResponse as unvalidatedTransactionResponse,
 } from '@ethersproject/abstract-provider'
-import { AlchemyProvider, Formatter } from '@ethersproject/providers'
+import { AlchemyProvider, Formatter, JsonRpcProvider } from '@ethersproject/providers'
 
 import { CovalentTxData } from 'interfaces/covalent'
 import { RawTxData, TraceLog, TraceLogZ, TxReceipt, TxReceiptZ, TxResponse, TxResponseZ } from 'interfaces/rawData'
@@ -14,11 +14,11 @@ import Covalent from 'utils/clients/Covalent'
 import { logError } from 'utils/logging'
 
 export default class RawDataFetcher {
-    provider: AlchemyProvider
+    provider: AlchemyProvider | JsonRpcProvider
     covalent: Covalent | null
     formatter = new Formatter()
 
-    constructor(provider: AlchemyProvider, covalent: Covalent | null = null) {
+    constructor(provider: AlchemyProvider | JsonRpcProvider, covalent: Covalent | null = null) {
         this.provider = provider
         this.covalent = covalent
     }

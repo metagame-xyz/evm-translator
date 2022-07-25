@@ -5,7 +5,7 @@ import { ethers } from 'ethers'
 
 import { ContractType } from 'interfaces/decoded'
 
-async function isGnosisSafeMaybe(address: string, provider: AlchemyProvider): Promise<ContractType> {
+async function isGnosisSafeMaybe(address: string, provider: AlchemyProvider | JsonRpcProvider): Promise<ContractType> {
     const jsonProvider = new JsonRpcProvider(provider.connection)
     const signer = jsonProvider.getSigner()
 
