@@ -19,6 +19,7 @@ jobs:
             NEXT_PUBLIC_ALCHEMY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_ALCHEMY_PROJECT_ID }}
             ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
             COVALENT_API_KEY: ${{ secrets.COVALENT_API_KEY }}
+            RPC_NODE_URL: ${{ secrets.RPC_NODE_URL }}
 
         strategy:
             matrix:
