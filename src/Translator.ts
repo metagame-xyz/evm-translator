@@ -1,5 +1,5 @@
-import { AlchemyConfig, initializeAlchemy, Network } from '@alch/alchemy-sdk'
-import { AlchemyProvider, JsonRpcProvider } from '@ethersproject/providers'
+import { AlchemyConfig, initializeAlchemy } from '@alch/alchemy-sdk'
+import { AlchemyProvider, StaticJsonRpcProvider } from '@ethersproject/providers'
 
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import { ContractData, ContractType, DecodedCallData, DecodedTx, Interaction } from 'interfaces/decoded'
@@ -44,7 +44,7 @@ class Translator {
     nodeUrl: string | null
     alchemyProjectId: string
     chain: Chain
-    provider: AlchemyProvider | JsonRpcProvider
+    provider: AlchemyProvider | StaticJsonRpcProvider
     rawDataFetcher: RawDataFetcher
     etherscan: Etherscan
     userAddress: string | null
@@ -76,9 +76,9 @@ class Translator {
         }
     }
 
-    private getProvider(): AlchemyProvider | JsonRpcProvider {
+    private getProvider(): AlchemyProvider | StaticJsonRpcProvider {
         if (this.nodeUrl) {
-            return new JsonRpcProvider(this.nodeUrl, this.chain.id)
+            return new StaticJsonRpcProvider(this.nodeUrl, this.chain.id)
         }
         if (this.alchemyProjectId) {
             const settings: AlchemyConfig = {
