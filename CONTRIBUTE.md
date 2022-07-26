@@ -12,7 +12,37 @@ Do you have a protocol or contract you interact with frequently that you'd like 
 
 ## How to contribute
 
-You don't need to be an advanced web3 software developer to contribute a contract interpretation to evm-translator. Note that Part 1 sets up a local environment for testing your new contract interpretations. This part is optional but highly encouraged if you are comfortable with the set up. Here's how it's done...
+You don't need to be an advanced web3 software developer to contribute a contract interpretation to evm-translator. Note: Once you've claimed a task, you'll have 24 hours to submit your work for it. This makes sure other folks have a chance to claim and do the task if it's not an immediate priority for you.
+
+## Contributing via our interface + Wonder only (no command line or Github required)
+
+At the end, you will submit 3 files with your Wonder Task:
+1. The Interpreter Map in JSON format (into a .json file)
+2. a list of tx hashes, 1 per function you interpreted. These will be added to our test suite
+3. An example of each function's interpreted output in JSON format. These can all be in 1 file. (into a .json file)
+
+### Instructions
+1. pick a contract from Wonder's dashboard (we suggest starting with an easy one)
+1. go to https://evm-translator-demo.themetagame.xyz/
+1. enter in the contract address
+1. click "generate template"
+1. take note of the writeFunctions in the template
+1. In a new tab, go to https://bloxy.info. Search for the contract's address
+1. For each of the write functions, click on the link in the "Smart Contract Function Calls" section in the "Calls Count" column
+1. Click on one of the hashes in the "Tx Hash" column. You can now copy and paste the tx hash to Etherscan to get a better idea of what happens in the tx.
+1. Go back to the evm-translator demo site, and paste the tx hash in.
+1. Click "interpret". This will use the interpreter map that's been generated to interpret the tx hash you just pasted in. 
+1. Update the interpreter map so the interpretation makes sense for this transaction
+1. note down the txHash and the interpretation output
+1. repeat steps 7-12 for each function
+1. Once you're done with the whole interpreter map, copy and paste it into a .json file
+1. Submit the 3 files to your Wonder Task!
+
+
+
+## Contributing via Github PR 
+
+Note that Part 1 sets up a local environment for testing your new contract interpretations. This part is optional but highly encouraged if you are comfortable with the set up. Here's how it's done...
 <br><br><br>
 
 ## Part 1: Set up a local testing environment (recommended)
