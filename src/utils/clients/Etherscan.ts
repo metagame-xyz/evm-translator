@@ -74,9 +74,14 @@ export default class Etherscan {
 
         const abiArray: any[] = JSON.parse(response.result)
 
-        const abiArrayValidated = abiArray.map((fragment) => {
-            return ABI_ItemUnfilteredZ.parse(fragment)
-        })
+        console.log('abiArray logan:', abiArray)
+
+        const abiArrayValidated = abiArray
+            .map((fragment) => {
+                const parsed = ABI_ItemUnfilteredZ.safeParse(fragment)
+                return parsed.success ? parsed.data : null
+            })
+            .filter((x) => x !== null) as ABI_ItemUnfiltered[]
 
         return abiArrayValidated
     }
