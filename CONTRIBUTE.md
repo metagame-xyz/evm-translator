@@ -10,14 +10,14 @@ Note: Once you've claimed a task, you'll have 24 hours to submit your work for i
 
 Do you have a protocol or contract you interact with frequently that you'd like to see detailed, concise interpretations for? Have you deployed your own contract that deserves recognition by evm-translator? Contribute to evm-translator!
 
-<br><br>
+<br>
 
-## How to contribute
+# How to contribute
 
 You don't need to be an advanced web3 software developer to contribute a contract interpretation to evm-translator.
 
-<!-- ## Contributing via our interface + Wonder only (no command line or Github required)
-
+Coming soon: Contributing via our interface + Wonder only (no command line or Github required)
+<!--
 At the end, you will submit 3 files with your Wonder Task:
 1. The Interpreter Map in JSON format (into a .json file)
 2. a list of tx hashes, 1 per function you interpreted. These will be added to our test suite
@@ -43,10 +43,7 @@ At the end, you will submit 3 files with your Wonder Task:
 
 ## Contributing via Github PR
 
-Note that Part 1 sets up a local environment for testing your new contract interpretations.
-<br><br>
-
-## Part 1: Set up a local testing environment (recommended)
+## Part 1: Set up a local testing environment
 
 1. **Clone and link the repos by following [these steps](https://github.com/metagame-xyz/evm-translator-demo/blob/main/README.md)**
 
@@ -58,7 +55,7 @@ Note that Part 1 sets up a local environment for testing your new contract inter
 
     If that worked for you, then you have successfully set up your test environment. Well done! This interface will allow you to live-test example transactions of the contracts you're interpreting.
 
-    <br></br>
+    <br>
 
 ## Part 2: Interpret a contract
 
