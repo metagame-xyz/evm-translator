@@ -541,7 +541,7 @@ Object {
   "contractAddress": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0x5596 traded 280376.616698 USDC for 150.286887655178993883 WETH on Uniswap V3",
+  "exampleDescription": "Lyda Kassulke traded 280376.616698 USDC for 150.286887655178993883 WETH on Uniswap V3",
   "extra": Object {
     "tokenAmount0": "280376.616698",
     "tokenAmount1": "150.286887655178993883",
@@ -584,7 +584,7 @@ Object {
   "contractAddress": "0xe592427a0aece92de3edee1f18e0157c05861564",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0x7691 traded 115.0 BYTES for 189.236064 USDC on Uniswap V3",
+  "exampleDescription": "Tania Koss traded 115.0 BYTES for 189.236064 USDC on Uniswap V3",
   "extra": Object {
     "tokenAmount0": "115.0",
     "tokenAmount1": "189.236064",
@@ -627,7 +627,7 @@ Object {
   "contractAddress": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0x613a traded 2.127028966431723238 WETH for 200.0 Metis on Uniswap V3",
+  "exampleDescription": "Mabel Will traded 2.127028966431723238 WETH for 200.0 Metis on Uniswap V3",
   "extra": Object {
     "tokenAmount0": "2.127028966431723238",
     "tokenAmount1": "200.0",
@@ -670,7 +670,7 @@ Object {
   "contractAddress": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0x5c4f traded 1.767773 USDT for 0.1 UNI on Uniswap V3",
+  "exampleDescription": "Krystina Cole traded 1.767773 USDT for 0.1 UNI on Uniswap V3",
   "extra": Object {
     "tokenAmount0": "1.767773",
     "tokenAmount1": "0.1",
@@ -713,7 +713,7 @@ Object {
   "contractAddress": "0xe592427a0aece92de3edee1f18e0157c05861564",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0xa5c1 traded 340.4597021 RAE for 0.389162262040186058 WETH on Uniswap V3",
+  "exampleDescription": "Fidel Mayert traded 340.4597021 RAE for 0.389162262040186058 WETH on Uniswap V3",
   "extra": Object {
     "tokenAmount0": "340.4597021",
     "tokenAmount1": "0.389162262040186058",
@@ -748,7 +748,7 @@ Object {
   "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0x0b96 burned Uniswap V3 liquidity position NFT #0.000000000000260993",
+  "exampleDescription": "Stefanie Kris burned Uniswap V3 liquidity position NFT #0.000000000000260993",
   "extra": Object {
     "tokenId": "0.000000000000260993",
   },
@@ -787,7 +787,7 @@ Object {
   "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0xb738 collected 320644.118148 HEX and 305.165646 USDC in fees from Uniswap V3",
+  "exampleDescription": "Johan Greenfelder collected 320644.118148 HEX and 305.165646 USDC in fees from Uniswap V3",
   "extra": Object {
     "tokenAmount0": "320644.118148",
     "tokenAmount1": "305.165646",
@@ -829,7 +829,7 @@ Object {
   "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0x6dd9 added liquidity to the gOHM-BTRFLY pool on Uniswap V3 ",
+  "exampleDescription": "Nat Harvey added liquidity to the gOHM-BTRFLY pool on Uniswap V3 ",
   "extra": Object {
     "tokenAmount0": "6.305593205049249187",
     "tokenAmount1": "0.000000070956438934",
@@ -879,7 +879,7 @@ Object {
   "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0x57bd minted an NFT for adding 2.02480816 WBTC and 22999.999914 USDC in liquidity to Uniswap V3",
+  "exampleDescription": "Emmalee Kovacek minted an NFT for adding 2.02480816 WBTC and 22999.999914 USDC in liquidity to Uniswap V3",
   "extra": Object {
     "tokenAmount0": "2.02480816",
     "tokenAmount1": "22999.999914",
@@ -922,7 +922,7 @@ Object {
   "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0x6b92 executed multiple actions on Uniswap V3",
+  "exampleDescription": "mrbayc.eth executed multiple actions on Uniswap V3",
   "extra": Object {
     "tokenName0": "an unknown token",
     "tokenName1": "an unknown token",
@@ -970,7 +970,7 @@ Object {
   "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
   "contractName": "Uniswap V3",
   "counterpartyName": null,
-  "exampleDescription": "0x0950 minted on Uniswap V3",
+  "exampleDescription": "Larue Carter minted on Uniswap V3",
   "extra": Object {
     "tokenAmount0": "195105.85536",
     "tokenAmount1": "an unknown amount of",
@@ -1013,9 +1013,9 @@ Object {
   "contractAddress": "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5",
   "contractName": "Compound",
   "counterpartyName": null,
-  "exampleDescription": "Meda Breitenberg minted 0.000000136838768906 cETH for 27.456475447692351502 ETH using Compound",
+  "exampleDescription": "Meda Breitenberg minted 1368.38768906 cETH for 27.456475447692351502 ETH using Compound",
   "extra": Object {
-    "tokenAmount0": "0.000000136838768906",
+    "tokenAmount0": "1368.38768906",
     "tokenAmount1": "27.456475447692351502",
   },
   "gasPaid": "0.00675417163658496",
@@ -1086,10 +1086,10 @@ Object {
   "contractAddress": "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5",
   "contractName": "Compound",
   "counterpartyName": null,
-  "exampleDescription": "Meda Breitenberg redeemed 36.485304088970207177 ETH for 0.000000181837058358 cETH using Compound",
+  "exampleDescription": "Meda Breitenberg redeemed 36.485304088970207177 ETH for 1818.37058358 cETH using Compound",
   "extra": Object {
     "tokenAmount0": "36.485304088970207177",
-    "tokenAmount1": "0.000000181837058358",
+    "tokenAmount1": "1818.37058358",
   },
   "gasPaid": "0.005135770747021752",
   "reverted": null,

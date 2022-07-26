@@ -4,7 +4,7 @@
     "writeFunctions": {
         "exactInput": {
             "action": "traded",
-            "exampleDescriptionTemplate": "{userAddress} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
             "exampleDescription": "leotheprocess.eth traded 500 DAI for 1600 USDC on Uniswap V3",
             "keywords": {
                 "tokenName0": {
@@ -43,7 +43,7 @@
         },
         "exactInputSingle": {
             "action": "traded",
-            "exampleDescriptionTemplate": "{userAddress} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
             "exampleDescription": "leotheprocess.eth traded 500 DAI for 1600 USDC on Uniswap V3",
             "keywords": {
                 "tokenName0": {
@@ -82,7 +82,7 @@
         },
         "exactOutput": {
             "action": "traded",
-            "exampleDescriptionTemplate": "{userAddress} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
             "exampleDescription": "leotheprocess.eth traded 500 DAI for 1600 USDC on Uniswap V3",
             "keywords": {
                 "tokenName0": {
@@ -121,7 +121,7 @@
         },
         "exactOutputSingle": {
             "action": "traded",
-            "exampleDescriptionTemplate": "{userAddress} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
             "exampleDescription": "leotheprocess.eth traded 500 DAI for 1600 USDC on Uniswap V3",
             "keywords": {
                 "tokenName0": {
@@ -160,7 +160,7 @@
         },
         "multicall": {
             "action": "traded",
-            "exampleDescriptionTemplate": "{userAddress} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
             "exampleDescription": "leotheprocess.eth traded 500 DAI for 1600 USDC on Uniswap V3",
             "keywords": {
                 "tokenName0": {
