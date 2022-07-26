@@ -1387,6 +1387,11 @@
     "@ethersproject/properties" "^5.6.0"
     "@ethersproject/strings" "^5.6.1"
 
+"@faker-js/faker@^6.2.0":
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-6.3.1.tgz#1ae963dd40405450a2945408cba553e1afa3e0fb"
+  integrity sha512-8YXBE2ZcU/pImVOHX7MWrSR/X5up7t6rPWZlk34RwZEcdr3ua6X+32pSd6XuOQRN+vbuvYNfA6iey8NbrjuMFQ==
+
 "@gnosis.pm/safe-core-sdk-types@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-core-sdk-types/-/safe-core-sdk-types-1.2.1.tgz#ea68ad1784a70d67f6db0ddb89ece632fe2a2cbf"
@@ -5379,6 +5384,13 @@ onetime@^5.1.0, onetime@^5.1.2:
   integrity sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==
   dependencies:
     mimic-fn "^2.1.0"
+
+onoma@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/onoma/-/onoma-0.1.1.tgz#8ae7c53eeafa4eee8464b7399beab3665ed3e382"
+  integrity sha512-FyVtfJ9ZjDVFC0MmrgIs08DvQ46SrSjf/YAWXRzUeUI9ecIkQBPOgBXWRy1FZG5jP9LVrLeO7B9a/cVLD4ysqA==
+  dependencies:
+    "@faker-js/faker" "^6.2.0"
 
 optionator@^0.8.1:
   version "0.8.3"

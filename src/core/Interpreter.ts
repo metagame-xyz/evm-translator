@@ -8,6 +8,7 @@ import interpretGenericToken from './genericInterpreters/token'
 import interpretGenericTransfer from './genericInterpreters/transfer'
 import { BigNumber } from 'ethers'
 import { formatEther, formatUnits } from 'ethers/lib/utils'
+import { addressToName } from 'onoma'
 
 import { InterpreterMap, MethodMap } from 'interfaces/contractInterpreter'
 import { ContractType, DecodedTx, Interaction, InteractionEvent, TxType } from 'interfaces/decoded'
@@ -124,7 +125,12 @@ class Interpreter {
             entityMap = await this.db.getManyEntityMap(addressesToCheck)
         }
         // timer.stopTimer(txHash.substring(2, 8))
-        userName = userName || userNameFromInput || entityMap[userAddress] || userAddress.substring(0, 6)
+        userName =
+            userName ||
+            userNameFromInput ||
+            entityMap[userAddress] ||
+            addressToName(userAddress) ||
+            userAddress.substring(0, 6)
 
         // TODO generalize this so it'll get any ENS (ex: _operatorENS)
 

@@ -27,7 +27,7 @@ Object {
   "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
   "contractName": "Uniswap V2",
   "counterpartyName": null,
-  "exampleDescription": "0xdcde sold 0.071782049366433048 ETH of KINGDOM on Uniswap V2",
+  "exampleDescription": "Nyah Kuhlman sold 0.071782049366433048 ETH of KINGDOM on Uniswap V2",
   "extra": Object {
     "ethValueReceived": "0.071782049366433048",
     "tokenAmount": "0.000458161051962122",
@@ -38,7 +38,7 @@ Object {
   "timestamp": 1638316845,
   "txHash": "0xd7be990f8849ec0b74d86fbda86eaf4c0cb25b814fb1ab9d2f056705b2fdfba6",
   "userAddress": "0xdcdee85472e19a9a1bba1b9c524c6105c727f3d6",
-  "userName": "0xdcde",
+  "userName": "Nyah Kuhlman",
 }
 `;
 
@@ -111,7 +111,7 @@ Object {
   "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
   "contractName": "Uniswap V2",
   "counterpartyName": null,
-  "exampleDescription": "0x4090 traded 900.0 USDC for 0.000202899041047771 KINGDOM on Uniswap V2",
+  "exampleDescription": "Felipa Luettgen traded 900.0 USDC for 0.000202899041047771 KINGDOM on Uniswap V2",
   "extra": Object {
     "tokenAmount0": "900.0",
     "tokenAmount1": "0.000202899041047771",
@@ -123,7 +123,7 @@ Object {
   "timestamp": 1638316845,
   "txHash": "0xb684992cdec31d2eeaf3866be82ddd2a9cfe2211bab96b1aa132d3a9ae50587b",
   "userAddress": "0x4090bd947f70b9b8c9522faa0d2f7f9bbb4b2377",
-  "userName": "0x4090",
+  "userName": "Felipa Luettgen",
 }
 `;
 
@@ -161,7 +161,7 @@ Object {
   "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
   "contractName": "Uniswap V2",
   "counterpartyName": null,
-  "exampleDescription": "0x8b7b added liquidity to the ACYC-ETH Uniswap V2 pool",
+  "exampleDescription": "Carol Abbott added liquidity to the ACYC-ETH Uniswap V2 pool",
   "extra": Object {
     "token_0": "ACYC",
   },
@@ -170,7 +170,7 @@ Object {
   "timestamp": 1638316877,
   "txHash": "0xb78ce1e0f55e78cf005b4b5af9978b3d20292dc8c88c94f7ecade67083e2b97f",
   "userAddress": "0x8b7b8448243559a5daa98a22cb6982796bce4271",
-  "userName": "0x8b7b",
+  "userName": "Carol Abbott",
 }
 `;
 
@@ -208,7 +208,7 @@ Object {
   "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
   "contractName": "Uniswap V2",
   "counterpartyName": null,
-  "exampleDescription": "0x888a removed liquidity from the KAKASHI-WETH Uniswap V2 pool",
+  "exampleDescription": "Mckayla Muller removed liquidity from the KAKASHI-WETH Uniswap V2 pool",
   "extra": Object {
     "token_0": "KAKASHI",
     "token_1": "WETH",
@@ -218,7 +218,7 @@ Object {
   "timestamp": 1638318188,
   "txHash": "0x967963d6eaad9e65d567cac325728d79aeaa319b1453e05ec55734f3b08445ec",
   "userAddress": "0x888ae876e588cd29715ab2b4a6ecce0bc2e44655",
-  "userName": "0x888a",
+  "userName": "Mckayla Muller",
 }
 `;
 
@@ -256,7 +256,7 @@ Object {
   "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
   "contractName": "Uniswap V2",
   "counterpartyName": null,
-  "exampleDescription": "0xc712 removed liquidity from the SAND-ETH Uniswap V2 pool",
+  "exampleDescription": "Else Quigley removed liquidity from the SAND-ETH Uniswap V2 pool",
   "extra": Object {
     "ethValueReceived": "6.538029747179976387",
     "token_0": "SAND",
@@ -266,7 +266,7 @@ Object {
   "timestamp": 1638318377,
   "txHash": "0x3dd8f41c008a6ce59ca8d2b24df700dc4441d0a83747b9b7c0587449a2e7c9ca",
   "userAddress": "0xc712b31175906564bb41a7b84169bd4a9b522011",
-  "userName": "0xc712",
+  "userName": "Else Quigley",
 }
 `;
 
@@ -297,7 +297,7 @@ Object {
   "contractAddress": "0x7f268357a8c2552623316e2562d90e642bb538e5",
   "contractName": "OpenSea",
   "counterpartyName": null,
-  "exampleDescription": "0x96a6 bought The Ninja Hideout #228 on OpenSea for 0.05 ETH",
+  "exampleDescription": "Vada Altenwerth bought The Ninja Hideout #228 on OpenSea for 0.05 ETH",
   "extra": Object {
     "NFT": "The Ninja Hideout",
     "tokenId": "#228",
@@ -307,7 +307,7 @@ Object {
   "timestamp": 1656089719,
   "txHash": "0xc814cb6b61222beda8a9bcc359e776e72ae732a1c29df572099ecef27c8461e4",
   "userAddress": "0x96a675775b8546a8602a1015efaacbc87358e478",
-  "userName": "0x96a6",
+  "userName": "Vada Altenwerth",
 }
 `;
 
@@ -338,7 +338,7 @@ Object {
   "contractAddress": "0x7f268357a8c2552623316e2562d90e642bb538e5",
   "contractName": "OpenSea",
   "counterpartyName": null,
-  "exampleDescription": "0x83eb sold The Ninja Hideout #228 on OpenSea for 0.04624999999999999944 ETH",
+  "exampleDescription": "Arianna Berge sold The Ninja Hideout #228 on OpenSea for 0.04624999999999999944 ETH",
   "extra": Object {
     "NFT": "The Ninja Hideout",
     "tokenId": "#228",
@@ -348,7 +348,7 @@ Object {
   "timestamp": 1656089719,
   "txHash": "0xc814cb6b61222beda8a9bcc359e776e72ae732a1c29df572099ecef27c8461e4",
   "userAddress": "0x83eb387c8f7c8903f2be1ca367197fc4b3cb573e",
-  "userName": "0x83eb",
+  "userName": "Arianna Berge",
 }
 `;
 
@@ -378,7 +378,7 @@ Object {
   "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
   "contractName": "Aave V2",
   "counterpartyName": null,
-  "exampleDescription": "0xd8a3 repaid 314305.817611832341382659 CRV to Aave V2",
+  "exampleDescription": "Eino Wisozk repaid 314305.817611832341382659 CRV to Aave V2",
   "extra": Object {
     "tokenAmount": "314305.817611832341382659",
     "tokenSymbol": "CRV",
@@ -388,7 +388,7 @@ Object {
   "timestamp": 1656357349,
   "txHash": "0xdf2f782ab0296121318cca140ef069f9f074c51ff4b11f0c677bcb01126f81de",
   "userAddress": "0xd8a3785869f3fc0f0019ec8e9f649b4c43a33383",
-  "userName": "0xd8a3",
+  "userName": "Eino Wisozk",
 }
 `;
 
@@ -419,7 +419,7 @@ Object {
   "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
   "contractName": "Aave V2",
   "counterpartyName": null,
-  "exampleDescription": "0x88a9 deposited 2800.0 USDT into Aave V2",
+  "exampleDescription": "Brennon Gleason deposited 2800.0 USDT into Aave V2",
   "extra": Object {
     "tokenAmount": "2800.0",
     "tokenSymbol": "USDT",
@@ -429,7 +429,7 @@ Object {
   "timestamp": 1656358062,
   "txHash": "0x24ee705da17a6061091880f47335d92950c72398980e271cdb9c69e8502827f4",
   "userAddress": "0x88a902adc0ff5bfe283d8d2365b51de6bc5e1666",
-  "userName": "0x88a9",
+  "userName": "Brennon Gleason",
 }
 `;
 
@@ -460,7 +460,7 @@ Object {
   "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
   "contractName": "Aave V2",
   "counterpartyName": null,
-  "exampleDescription": "0xf8fb withdrew 666.977520147507670024 LINK from Aave V2",
+  "exampleDescription": "Ashlynn Sawayn withdrew 666.977520147507670024 LINK from Aave V2",
   "extra": Object {
     "tokenAmount": "666.977520147507670024",
     "tokenSymbol": "LINK",
@@ -470,7 +470,7 @@ Object {
   "timestamp": 1657056840,
   "txHash": "0x8df7e436048d687edfaf351e913783729eeaa9ece741391b2a8428d6b7762fe1",
   "userAddress": "0xf8fb4a59846217eea1a15f5b776bf0b76b28ee67",
-  "userName": "0xf8fb",
+  "userName": "Ashlynn Sawayn",
 }
 `;
 
@@ -500,7 +500,7 @@ Object {
   "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
   "contractName": "Aave V2",
   "counterpartyName": null,
-  "exampleDescription": "0x7ca2 borrowed 2500.0 USDC from Aave V2",
+  "exampleDescription": "Jacques Metz borrowed 2500.0 USDC from Aave V2",
   "extra": Object {
     "tokenAmount": "2500.0",
     "tokenSymbol": "USDC",
@@ -510,7 +510,7 @@ Object {
   "timestamp": 1657056614,
   "txHash": "0x564544c9aef01836615254504677b91a9ef96d5ae15eac50d98e08774ed1096c",
   "userAddress": "0x7ca2491e5aec98fa36d917ffa57f599c530564b8",
-  "userName": "0x7ca2",
+  "userName": "Jacques Metz",
 }
 `;
 
@@ -553,7 +553,7 @@ Object {
   "timestamp": 1654532279,
   "txHash": "0xe4737f2b6174dfcc9482a50aacdc0a919f12c14ede767d6dbfc2cd502747e4f5",
   "userAddress": "0x55961e9fc41c07c13ec0c7103b3d34c0ae32c2eb",
-  "userName": "0x5596",
+  "userName": "Lyda Kassulke",
 }
 `;
 
@@ -596,7 +596,7 @@ Object {
   "timestamp": 1656530683,
   "txHash": "0xf41a45f5347db0d95bfac48325f8272dce56782574e91083e5025324928bc40c",
   "userAddress": "0x76914474c1e922aa1166b1d073373b3b1a2dab47",
-  "userName": "0x7691",
+  "userName": "Tania Koss",
 }
 `;
 
@@ -639,7 +639,7 @@ Object {
   "timestamp": 1654095700,
   "txHash": "0xce57de79e8898075e6512492b47661abd8e74eeffe4760cd43c054b53480b583",
   "userAddress": "0x613a3870f58893d760e942d0f9ec2e3f1772d336",
-  "userName": "0x613a",
+  "userName": "Mabel Will",
 }
 `;
 
@@ -682,7 +682,7 @@ Object {
   "timestamp": 1642499895,
   "txHash": "0x26854093b17b25f74bcdb8728a6c8d113e68aa69f2ae2463f9c14788df53aa45",
   "userAddress": "0x5c4f3b99c6c7be04bb2eac3f7bed560da85e0797",
-  "userName": "0x5c4f",
+  "userName": "Krystina Cole",
 }
 `;
 
@@ -725,7 +725,7 @@ Object {
   "timestamp": 1656531693,
   "txHash": "0x5efd5c0a1d3b1a0b42456aae4fc552e0924d8153f68196b011ef933b94614246",
   "userAddress": "0xa5c11f25f7b8eeaa531d31f4094e0f5b6e43a820",
-  "userName": "0xa5c1",
+  "userName": "Fidel Mayert",
 }
 `;
 
@@ -757,7 +757,7 @@ Object {
   "timestamp": 1656483817,
   "txHash": "0x1d2e706317c9457e43d4b0dfe6395c55b518f4f05386d1f455dd6ea984e04ae1",
   "userAddress": "0x0b96c91ab05629be9404746d5a7775f305a4f6a3",
-  "userName": "0x0b96",
+  "userName": "Stefanie Kris",
 }
 `;
 
@@ -799,7 +799,7 @@ Object {
   "timestamp": 1646028442,
   "txHash": "0x8d696e7ac40e22c25207a6eb3060d840fe4b1b4663fb988500f3bfc311da2a39",
   "userAddress": "0xb7387207cefaeee263817780c60deb9b9742b3c8",
-  "userName": "0xb738",
+  "userName": "Johan Greenfelder",
 }
 `;
 
@@ -841,7 +841,7 @@ Object {
   "timestamp": 1653349230,
   "txHash": "0xba7e346f46b1f5fa3bbff9868f1b6bf170b8fc8d212d2ad8e6f9fc84acdf30a1",
   "userAddress": "0x6dd91bdab368282dc4ea4f4befc831b78a7c38c0",
-  "userName": "0x6dd9",
+  "userName": "Nat Harvey",
 }
 `;
 
@@ -891,7 +891,7 @@ Object {
   "timestamp": 1656585855,
   "txHash": "0x8f97a7c09cb73c4da2de03f21bbf17c01f512a615da51a8bf721c4748b5f8475",
   "userAddress": "0x57bddbe968f67c416b5d97d285c7a48676655dd7",
-  "userName": "0x57bd",
+  "userName": "Emmalee Kovacek",
 }
 `;
 
@@ -982,7 +982,7 @@ Object {
   "timestamp": 1656597626,
   "txHash": "0x8dbab0967c491942e748c7fc305a3f9a3b2eb6c54c0dc48e1ba7f43babfc636a",
   "userAddress": "0x0950541696888bcfac9af6a5c479871d3e583cac",
-  "userName": "0x0950",
+  "userName": "Larue Carter",
 }
 `;
 
@@ -1013,7 +1013,7 @@ Object {
   "contractAddress": "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5",
   "contractName": "Compound",
   "counterpartyName": null,
-  "exampleDescription": "0x5617 minted 0.000000136838768906 cETH for 27.456475447692351502 ETH using Compound",
+  "exampleDescription": "Meda Breitenberg minted 0.000000136838768906 cETH for 27.456475447692351502 ETH using Compound",
   "extra": Object {
     "tokenAmount0": "0.000000136838768906",
     "tokenAmount1": "27.456475447692351502",
@@ -1023,7 +1023,7 @@ Object {
   "timestamp": 1656712377,
   "txHash": "0xbbb448dcb3b7e7216c609a97346d9f0553a29cdc8917a286c2aa00a1ba3fccde",
   "userAddress": "0x56178a0d5f301baf6cf3e1cd53d9863437345bf9",
-  "userName": "0x5617",
+  "userName": "Meda Breitenberg",
 }
 `;
 
@@ -1086,7 +1086,7 @@ Object {
   "contractAddress": "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5",
   "contractName": "Compound",
   "counterpartyName": null,
-  "exampleDescription": "0x5617 redeemed 36.485304088970207177 ETH for 0.000000181837058358 cETH using Compound",
+  "exampleDescription": "Meda Breitenberg redeemed 36.485304088970207177 ETH for 0.000000181837058358 cETH using Compound",
   "extra": Object {
     "tokenAmount0": "36.485304088970207177",
     "tokenAmount1": "0.000000181837058358",
@@ -1096,7 +1096,7 @@ Object {
   "timestamp": 1656707454,
   "txHash": "0xdaf683d90248db147b1fb22b3979c1902e7ad57ae1c46bc1f8293601cfa5e154",
   "userAddress": "0x56178a0d5f301baf6cf3e1cd53d9863437345bf9",
-  "userName": "0x5617",
+  "userName": "Meda Breitenberg",
 }
 `;
 
@@ -1127,7 +1127,7 @@ Object {
   "contractAddress": "0xface851a4921ce59e912d19329929ce6da6eb0c7",
   "contractName": "Compound",
   "counterpartyName": null,
-  "exampleDescription": "0x7779 minted 0.000175811315390231 cLINK for 35404.598209378275431444 LINK using Compound",
+  "exampleDescription": "Chad Kiehn minted 0.000175811315390231 cLINK for 35404.598209378275431444 LINK using Compound",
   "extra": Object {
     "tokenAmount0": "0.000175811315390231",
     "tokenAmount1": "35404.598209378275431444",
@@ -1139,7 +1139,7 @@ Object {
   "timestamp": 1656586902,
   "txHash": "0x37182c6beeed11222cd8a4f81fb897ae6fefb31c64c634fea3a277afdba9dd11",
   "userAddress": "0x777999be819ffecee44a995560a9d0e97780a30c",
-  "userName": "0x7779",
+  "userName": "Chad Kiehn",
 }
 `;
 
@@ -1162,7 +1162,7 @@ Object {
   "contractAddress": "0xface851a4921ce59e912d19329929ce6da6eb0c7",
   "contractName": "Compound",
   "counterpartyName": null,
-  "exampleDescription": "0x0aff borrowed 20000.0 LINK from Compound",
+  "exampleDescription": "Jonathan O'Connell borrowed 20000.0 LINK from Compound",
   "extra": Object {
     "tokenAmount": "20000.0",
     "tokenSymbol": "LINK",
@@ -1172,7 +1172,7 @@ Object {
   "timestamp": 1656374164,
   "txHash": "0x669b67fa88c60b07d892f09a87c24dd7bd691bdcbd7b1eb0efd969096067f1a6",
   "userAddress": "0x0aff497bd016000185b1c8302fa98a88ff4a4178",
-  "userName": "0x0aff",
+  "userName": "Jonathan O'Connell",
 }
 `;
 
@@ -1203,7 +1203,7 @@ Object {
   "contractAddress": "0xface851a4921ce59e912d19329929ce6da6eb0c7",
   "contractName": "Compound",
   "counterpartyName": null,
-  "exampleDescription": "0x50e1 redeemed 5030.925829814346184782 LINK for 0.000024982631778611 cLINK using Compound",
+  "exampleDescription": "Donnie Macejkovic redeemed 5030.925829814346184782 LINK for 0.000024982631778611 cLINK using Compound",
   "extra": Object {
     "tokenAmount0": "5030.925829814346184782",
     "tokenAmount1": "0.000024982631778611",
@@ -1215,7 +1215,7 @@ Object {
   "timestamp": 1656520150,
   "txHash": "0x63a27f1f7e10fd37477e3e4c35986adb58daaa4b8ab541909a54cb43b0aed5aa",
   "userAddress": "0x50e1738da6becfb834b26ab8251f58f1e4550d57",
-  "userName": "0x50e1",
+  "userName": "Donnie Macejkovic",
 }
 `;
 
@@ -1238,7 +1238,7 @@ Object {
   "contractAddress": "0xface851a4921ce59e912d19329929ce6da6eb0c7",
   "contractName": "Compound",
   "counterpartyName": null,
-  "exampleDescription": "0x10f6 repaid 158.984206345653112672 LINK to Compound",
+  "exampleDescription": "Pierce Skiles repaid 158.984206345653112672 LINK to Compound",
   "extra": Object {
     "tokenAmount": "158.984206345653112672",
     "tokenSymbol": "LINK",
@@ -1248,7 +1248,7 @@ Object {
   "timestamp": 1656502555,
   "txHash": "0xc5380c861d5817a30b42442f32f93cdc91e1ca395b607ec4ecd9e9cf5fc3c2b9",
   "userAddress": "0x10f69553c7b482536155cdc8d904ae833ed55f98",
-  "userName": "0x10f6",
+  "userName": "Pierce Skiles",
 }
 `;
 
@@ -1404,7 +1404,7 @@ Object {
   "contractAddress": "0x283af0b28c62c092c9727f1ee09c02ca627eb7f5",
   "contractName": "ENS",
   "counterpartyName": null,
-  "exampleDescription": "0xf72a renewed their ownership of tfu.eth with ENS",
+  "exampleDescription": "Rachelle Maggio renewed their ownership of tfu.eth with ENS",
   "extra": Object {
     "domain": "tfu",
     "recipientUser": "an unknown address",
@@ -1414,7 +1414,7 @@ Object {
   "timestamp": 1657121522,
   "txHash": "0xcc8a09291cf751d8714289ded45a7ae7b7b2d52560ab120f50b75a771e97a969",
   "userAddress": "0xf72aebbd82355ad657333fd9262b5f8966a47f6a",
-  "userName": "0xf72a",
+  "userName": "Rachelle Maggio",
 }
 `;
 
@@ -1429,14 +1429,14 @@ Object {
   "contractAddress": "0x084b1c3c81545d370f3634392de611caabff8148",
   "contractName": "ENS",
   "counterpartyName": null,
-  "exampleDescription": "0x29f1 set a default ENS name",
+  "exampleDescription": "Shawna Leffler set a default ENS name",
   "extra": Object {},
   "gasPaid": "0.00250949028836601",
   "reverted": null,
   "timestamp": 1657121712,
   "txHash": "0x419feb4f564baacf3ca6643ac0a4dc00ee76334cdb6fd17f2ee3929278b86d7c",
   "userAddress": "0x29f1e1445f0212e20d439abac9acabbedd4ac2e7",
-  "userName": "0x29f1",
+  "userName": "Shawna Leffler",
 }
 `;
 
@@ -1469,14 +1469,14 @@ Object {
   "contractAddress": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
   "contractName": "Rarible",
   "counterpartyName": null,
-  "exampleDescription": "0x1e80 minted 1.0 RARI #13795607240586553976876635506408083070229170130318302667271633221262579335170 from Rarible",
+  "exampleDescription": "Stephen Sipes minted 1.0 RARI #13795607240586553976876635506408083070229170130318302667271633221262579335170 from Rarible",
   "extra": Object {},
   "gasPaid": "0.000836130552245292",
   "reverted": null,
   "timestamp": 1657268452,
   "txHash": "0x737a57f5de926d43d2118d4e5fbeb552d68b4b8a68e4f801e1e6641960462b06",
   "userAddress": "0x1e8009784ae24f42cb3c081259395df74f91b614",
-  "userName": "0x1e80",
+  "userName": "Stephen Sipes",
 }
 `;
 
