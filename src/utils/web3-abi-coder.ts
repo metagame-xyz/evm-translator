@@ -1,4 +1,4 @@
-import { AbiCoder as EthersAbiCoder } from 'ethers/lib/utils'
+import { checkResultErrors, AbiCoder as EthersAbiCoder } from 'ethers/lib/utils'
 
 const ethersAbiCoder = new EthersAbiCoder(function (type, value) {
     if (
@@ -78,6 +78,10 @@ export default class ABICoder {
             )
         }
         const res = ethersAbiCoder.decode(this.mapTypes(outputs), '0x' + bytes.replace(/0x/i, ''), false)
+
+        const errors = checkResultErrors(res)
+        if (errors.length) throw errors[0].error
+
         const returnValue: Record<string, any> = {}
         outputs.forEach((output: any, i: number) => {
             let decodedValue = res[Object.keys(returnValue).length]
