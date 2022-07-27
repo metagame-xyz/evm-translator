@@ -2,9 +2,9 @@
 
 ## What we need from you
 
-If you're here, you likely understand the power and potential of evm-translator to create human readable interpretations of ethereum transactions. We have the infrastructure in place to elegantly interpret transactions from nearly every contract deployed to the chain. However, **we still need lots of contract-specific interpretations** to improve our coverage and close our blind spots. That's where you come in.
+If you're here, you likely understand the power and potential of evm-translator to create human readable interpretations of ethereum transactions. We have the infrastructure in place to elegantly interpret transactions from nearly every contract deployed to the chain. However, **we still need lots of contract-specific interpretations** to improve coverage. That's where you come in.
 
-We've set up a [Wonder bounty board](https://app.wonderverse.xyz/organization/Metagame/boards) with ~$5k USDC of bounties across 50+ contracts waiting to be interpreted.
+We've set up a [Wonder bounty board](https://app.wonderverse.xyz/organization/Metagame/boards) with ~$5k USDC of bounties across ~50 contracts waiting to be interpreted.
 
 Note: Once you've claimed a task, you'll have 24 hours to submit your work for it. This makes sure other folks have a chance to claim and do the task if it's not an immediate priority for you.
 
@@ -16,19 +16,24 @@ Do you have a protocol or contract you interact with frequently that you'd like 
 
 You don't need to be an advanced web3 software developer to contribute a contract interpretation to evm-translator.
 
-Coming soon: Contributing via our interface + Wonder only (no command line or Github required)
-<!--
+If you need any help, hop in our [discord](https://discord.gg/eupEsdWA)! There is a help channel.
+
+## Contributing (no coding required)
+
 At the end, you will submit 3 files with your Wonder Task:
+
 1. The Interpreter Map in JSON format (into a .json file)
 2. a list of tx hashes, 1 per function you interpreted. These will be added to our test suite
 3. An example of each function's interpreted output in JSON format. These can all be in 1 file. (into a .json file)
 
 ### Instructions
+
 1. pick a contract from Wonder's dashboard (we suggest starting with an easy one)
-1. go to https://evm-translator-demo.themetagame.xyz/
-1. enter in the contract address
+1. go to https://evm-translator-demo.themetagame.xyz/contribute
+1. enter in the contract address (on the right)
 1. click "generate template"
 1. take note of the writeFunctions in the template
+1. check out [how to interpret a contract](#interpreting-a-contract)
 1. In a new tab, go to https://bloxy.info. Search for the contract's address
 1. For each of the write functions, click on the link in the "Smart Contract Function Calls" section in the "Calls Count" column
 1. Click on one of the hashes in the "Tx Hash" column. You can now copy and paste the tx hash to Etherscan to get a better idea of what happens in the tx.
@@ -39,25 +44,77 @@ At the end, you will submit 3 files with your Wonder Task:
 1. repeat steps 7-12 for each function
 1. Once you're done with the whole interpreter map, copy and paste it into a .json file
 1. Submit the 3 files to your Wonder Task!
- -->
 
-## Contributing via Github PR
+Note: For any contract that is a proxy contract, the writeFunctions may not be correct. You'll need to do a bit of extra work to get implementation contract's functions that you want to actually interpret.
 
-## Part 1: Set up a local testing environment
+## Contributing via Github PR (some coding / terminal use required )
 
-1. **Clone and link the repos by following [these steps](https://github.com/metagame-xyz/evm-translator-demo/blob/main/README.md)**
+The difference here is submitting a PR with the relevant file changes, rather than submitting files via Wonder. This gives us an easier way to give you a contributor credential in the future! (and not to mention easier on the Metagame team).
 
-    You MUST follow the above steps to `yarn link` the evm-translator repo to evm-translator-demo or else your changes will take effect. Also, make sure you get the necessary API keys and stash them in .env as described.
+A complete PR includes:
 
-2. **Run the package and demo**
+-   adding 1 file
+-   updating 2 files
+-   running the tests so a new snapshot gets generated.
 
-    Now, run `yarn dev` within the evm-translator-demo folder in your terminal. In a new terminal tab, run `yarn dev` within the evm-translator folder. Go to localhost:3000/interpret in your browser of choice. Put an example transaction in the first text field, clear the second text field, and select "Get Interpretation". Here is a particularly interesting transaction you could try...`0xca8f8c315c8b6c48cee0675677b786d1babe726773829a588efa500b71cbdb65`.
+Once you've completed an interpreter map via
 
-    If that worked for you, then you have successfully set up your test environment. Well done! This interface will allow you to live-test example transactions of the contracts you're interpreting.
+In your terminal
 
-    <br>
+```zsh
+gh repo clone metagame-xyz/evm-translator
+```
 
-## Part 2: Interpret a contract
+```zsh
+yarn install
+```
+
+1. Add the `.JSON` file you downloaded from https://evm-translator.xyz/contribute to [this folder](/src/core/contractInterpreters/)
+
+2. Add a link to the file in the [index.ts](/src//core/contractInterpreters/index.ts)
+
+3. **Add your test txs to [testTxHashes](/src/__tests__/testTxHashes.ts)**
+
+    something like:
+
+    ```typescript
+        AaveV2: {
+            repay: '0xdf2f782ab0296121318cca140ef069f9f074c51ff4b11f0c677bcb01126f81de',
+            deposit: '0x24ee705da17a6061091880f47335d92950c72398980e271cdb9c69e8502827f4',
+            withdraw: '0x8df7e436048d687edfaf351e913783729eeaa9ece741391b2a8428d6b7762fe1',
+            borrow: '0x564544c9aef01836615254504677b91a9ef96d5ae15eac50d98e08774ed1096c',
+        },
+    ```
+
+    where each hash is a txHash of an example of that function being called. There should be one for each function you've interpreted.
+
+    If you implemented a method that has different interpretations depending on the perspective of the user, such as an NFT sale, add an entry to the `multiSidedTxMap` object. The key should be an example multi-sided transaction and the value should be an array of the different addresses that should be tested.
+
+4. **Testing**
+
+    ```
+    yarn test
+    ```
+
+    This should generate new snapshots! Check them out and make sure they're what you think they're supposed to be!
+
+5. **Add, commit, and push your changes to your branch.**
+   See [this tutorial](https://www.earthdatascience.org/workshops/intro-version-control-git/basic-git-commands/) if you don't know how.
+
+6. **Open an pull request.**
+   See [this tutorial](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) if you don't know how.
+
+    Please spend time detailing your proposed interpretation using the title and description of the PR. The only files that you should have edited are your own JSON file, `contractInterpreters/index.ts`, `__tests__/testTxHashes.ts`, and maybe `utils/constants.ts` if you have a multicall method. **We will not accept proposals that edit aditional files**
+
+7. **Check tests in GitHub actions**
+
+    Right after you opened the PR, a GitHub action started up to make sure everything is kosher with your interpretation. You can see the actions [here](https://github.com/metagame-xyz/evm-translator/actions). If your action succeeds, you're all good! We will review the PR and merge it if meets our standards. Thank you for your contribution!
+
+    If your action fails, examine the error by clicking into it and then fix it. The test will automatically rerun when you push to a branch with an open PR. If you believe the failure isn't your fault, please open an issue on GitHub.
+
+<br><br>
+
+# Interpreting a contract
 
 You made it to the fun part, congrats. Here, I'll walk through an example interpretation of a the Uniswap V2 contract to explain the process.
 
@@ -103,7 +160,7 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
 
         -   There are a few other optional fields that will be detailed in step 4.
 
-                <br>
+    <br>
 
     **Gathering your contract's methods**
 
@@ -263,7 +320,7 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
     Go to `evm-translator/src/core/contractInterpreters/index.ts`. Add a new entry in the `contractInterpreters` object with the key being the contract's address and the value being `require('./{name of your JSON file})`. If you are using the same JSON interpreation file for multiple contract addresses, you can add multiple entries all with the same value.
     <br><br><br>
 
-## Part 3: Test it
+<!-- ## Part 3: Test it
 
 1.  **Test it yourself!**
 
@@ -282,25 +339,7 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
     Add a new entry into the `testTxHashes` object with the key being a human readable name for your contract and the value being a bunch of example transaction hashes using all the methods of the contract. See prior entries as an example. Everything other than the transaction hashes are solely for human readability but please still use care when filling out contract and method names.
 
     If you implemented a method that has different interpretations depending on the perspective of the user, such as an NFT sale, add an entry to the `multiSidedTxMap` object. The key should be an example multi-sided transaction and the value should be an array of the different addresses that should be tested.
-    <br><br><br>
-
-## Part 4: Submit your interpretation
-
-1. **Add, commit, and push your changes to your branch.**
-   See [this tutorial](https://www.earthdatascience.org/workshops/intro-version-control-git/basic-git-commands/) if you don't know how.
-
-2. **Open an pull request.**
-   See [this tutorial](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) if you don't know how.
-
-    Please spend time detailing your proposed interpretation using the title and description of the PR. The only files that you should have edited are your own JSON file, `contractInterpreters/index.ts`, `__tests__/testTxHashes.ts`, and maybe `utils/constants.ts` if you have a multicall method. **We will not accept proposals that edit aditional files**
-
-3. **Check tests in GitHub actions**
-
-    Right after you opened the PR, a GitHub action started up to make sure everything is kosher with your interpretation. You can see the actions [here](https://github.com/metagame-xyz/evm-translator/actions). If your action succeeds, you're all good! We will review the PR and merge it if meets our standards. Thank you for your contribution!
-
-    If your action fails, examine the error by clicking into it and then fix it. The test will automatically rerun when you push to a branch with an open PR. If you believe the failure isn't your fault, please open an issue on GitHub.
-
-<br><br>
+    <br><br><br> -->
 
 ## FAQ & Troubleshooting
 
