@@ -53,6 +53,15 @@
       "contributions": [
         "contract-interpretation"
       ]
+    },
+    {
+      "login": "carlosdp",
+      "name": "Carlos Diaz-Padron",
+      "avatar_url": "https://avatars.githubusercontent.com/u/198739?v=4",
+      "profile": "https://metaphor.xyz",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "evm-translator",
