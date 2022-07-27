@@ -33,7 +33,7 @@ export type TranslatorConfig = {
     connectionString?: string
     etherscanServiceLevel?: EtherscanServiceLevel
     covalentAPIKey?: string
-    additionalInterpeters?: Record<string, InterpreterMap>;
+    additionalInterpreters?: Record<string, InterpreterMap>;
 }
 
 export type NamesAndSymbolsMap = Record<string, { name: string | null; symbol: string | null }>
@@ -68,7 +68,7 @@ class Translator {
 
         this.rawDataFetcher = new RawDataFetcher(this.provider)
         this.augmenter = new Augmenter(this.provider, null, this.etherscan, this.databaseInterface)
-        this.interpreter = new Interpreter(config.chain, null, this.databaseInterface, config.additionalInterpeters)
+        this.interpreter = new Interpreter(config.chain, null, this.databaseInterface, config.additionalInterpreters)
         this.covalent = config.covalentAPIKey ? new Covalent(config.covalentAPIKey, config.chain.id) : null
     }
 
