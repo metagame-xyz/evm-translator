@@ -2,6 +2,7 @@ import { AlchemyConfig, initializeAlchemy } from '@alch/alchemy-sdk'
 import { AlchemyProvider, StaticJsonRpcProvider } from '@ethersproject/providers'
 
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
+import { InterpreterMap } from 'interfaces/contractInterpreter'
 import { ContractData, ContractType, DecodedCallData, DecodedTx, Interaction } from 'interfaces/decoded'
 import { ActivityData, Interpretation } from 'interfaces/interpreted'
 import { RawTxData } from 'interfaces/rawData'
@@ -22,7 +23,6 @@ import { Augmenter } from 'core/Augmenter'
 import Interpreter from 'core/Interpreter'
 import RawDataFetcher from 'core/RawDataFetcher'
 import TaxFormatter from 'core/TaxFormatter'
-import { InterpreterMap } from 'interfaces/contractInterpreter'
 
 export type TranslatorConfig = {
     chain: Chain
@@ -33,7 +33,7 @@ export type TranslatorConfig = {
     connectionString?: string
     etherscanServiceLevel?: EtherscanServiceLevel
     covalentAPIKey?: string
-    additionalInterpreters?: Record<string, InterpreterMap>;
+    additionalInterpreters?: Record<string, InterpreterMap>
 }
 
 export type NamesAndSymbolsMap = Record<string, { name: string | null; symbol: string | null }>

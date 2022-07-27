@@ -65,7 +65,12 @@ class Interpreter {
     chain: Chain
     db: DatabaseInterface
 
-    constructor(chain: Chain, userAddress: string | null = null, db: DatabaseInterface | null = null, additionalContractInterpreters?: Record<string, InterpreterMap>) {
+    constructor(
+        chain: Chain,
+        userAddress: string | null = null,
+        db: DatabaseInterface | null = null,
+        additionalContractInterpreters?: Record<string, InterpreterMap>,
+    ) {
         this.chain = chain
         this.userAddress = (userAddress && AddressZ.parse(userAddress)) || null
         this.db = db || new NullDatabaseInterface()
@@ -75,9 +80,9 @@ class Interpreter {
         }
 
         if (additionalContractInterpreters) {
-          for (const [address, map] of Object.entries(additionalContractInterpreters)) {
-              this.contractSpecificInterpreters[address.toLowerCase()] = map as InterpreterMap
-          }
+            for (const [address, map] of Object.entries(additionalContractInterpreters)) {
+                this.contractSpecificInterpreters[address.toLowerCase()] = map as InterpreterMap
+            }
         }
     }
 
