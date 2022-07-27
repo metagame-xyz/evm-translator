@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ABI_Event, ABI_Function, ABI_ItemUnfiltered, ABI_Row, EventSigOptions as EventSigMap } from 'interfaces/abi'
-import { ContractData, DecodedTx } from 'interfaces/decoded'
+import { AddressNameData, ContractData, DecodedTx } from 'interfaces/decoded'
 import { Interpretation } from 'interfaces/interpreted'
 
 export abstract class DatabaseInterface {
@@ -34,6 +34,8 @@ export abstract class DatabaseInterface {
     abstract addOrUpdateManyDecodedTx(decodedDataArr: DecodedTx[]): Promise<void>
     abstract deleteManyDecodedTxs(txHashes: string[]): Promise<number>
 
+    abstract getManyNameDataMap(names: string[]): Promise<Record<string, AddressNameData | null>>
+    abstract getManyEntityMap(addresses: string[]): Promise<Record<string, string | null>>
     abstract getEntityByAddress(address: string): Promise<string | null>
 
     // abstract addOrUpdateInterpretedData(interpretedData: Interpretation): Promise<void>
@@ -128,6 +130,20 @@ export class NullDatabaseInterface extends DatabaseInterface {
         const obj: Record<string, DecodedTx | null> = {}
         for (let i = 0; i < txHashes.length; i++) {
             obj[txHashes[i]] = null
+        }
+        return Promise.resolve(obj)
+    }
+    async getManyNameDataMap(addresses: string[]): Promise<Record<string, AddressNameData | null>> {
+        const obj: Record<string, AddressNameData | null> = {}
+        for (let i = 0; i < addresses.length; i++) {
+            obj[addresses[i]] = null
+        }
+        return Promise.resolve(obj)
+    }
+    async getManyEntityMap(addresses: string[]): Promise<Record<string, string | null>> {
+        const obj: Record<string, string | null> = {}
+        for (let i = 0; i < addresses.length; i++) {
+            obj[addresses[i]] = null
         }
         return Promise.resolve(obj)
     }

@@ -1,5 +1,5 @@
-import { AlchemyConfig, initializeAlchemy, Network } from '@alch/alchemy-sdk'
-import { AlchemyProvider } from '@ethersproject/providers'
+import { AlchemyConfig, initializeAlchemy } from '@alch/alchemy-sdk'
+import { AlchemyProvider, StaticJsonRpcProvider } from '@ethersproject/providers'
 
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import { ContractData, ContractType, DecodedCallData, DecodedTx, Interaction } from 'interfaces/decoded'
@@ -44,7 +44,7 @@ class Translator {
     nodeUrl: string | null
     alchemyProjectId: string
     chain: Chain
-    provider: AlchemyProvider
+    provider: AlchemyProvider | StaticJsonRpcProvider
     rawDataFetcher: RawDataFetcher
     etherscan: Etherscan
     userAddress: string | null
@@ -76,12 +76,9 @@ class Translator {
         }
     }
 
-    private getProvider(): AlchemyProvider {
+    private getProvider(): AlchemyProvider | StaticJsonRpcProvider {
         if (this.nodeUrl) {
-            throw new Error(
-                'the node url option (JsonRpcProvider instead of AlchemyProvider) Not implemented. RawDataFetcher uses AlchemyProvider b/c defaultProvider was throwing errors, and using just Alchemy was not throwing errors',
-            )
-            // return new JsonRpcProvider(this.nodeUrl, this.chain.id)
+            return new StaticJsonRpcProvider(this.nodeUrl, this.chain.id)
         }
         if (this.alchemyProjectId) {
             const settings: AlchemyConfig = {
@@ -246,8 +243,9 @@ class Translator {
         decoded: DecodedTx,
         userAddress: string | null = null,
         userName: string | null = null,
+        entityMap: Record<string, string | null> = {},
     ): Promise<Interpretation> {
-        return await this.interpreter.interpretSingleTx(decoded, userAddress, userName)
+        return await this.interpreter.interpretSingleTx(decoded, userAddress, userName, entityMap)
     }
 
     async interpretDecodedTxArr(
@@ -255,6 +253,13 @@ class Translator {
         userAddress: string | null = null,
         userName: string | null = null,
     ): Promise<(Interpretation | null)[]> {
+        const addresses = [
+            ...new Set(decodedTxArr.map((decoded) => [decoded?.toAddress, decoded?.fromAddress]).flat()),
+        ].filter((str) => str !== null && str !== undefined) as string[]
+
+        if (userAddress) addresses.push(userAddress)
+
+        const entityMap = await this.databaseInterface.getManyEntityMap(addresses)
         return Promise.all(
             decodedTxArr.map(async (decodedTx) => {
                 return decodedTx ? await this.interpretDecodedTx(decodedTx, userAddress, userName) : null

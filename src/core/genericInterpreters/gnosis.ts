@@ -20,16 +20,16 @@ function interpretGnosisExecution(decodedData: DecodedTx, interpretation: Interp
 
     const isExecutionSuccess = tokenEvents.find((e) => isExecutionSuccessEvent(e))
 
-    if (!isExecutionSuccess) {
-        logWarning(
-            {
-                tx_hash: decodedData.txHash,
-                address: toAddress || undefined,
-                function_name: 'interpretGnosisExecution',
-            },
-            'Gnosis tx didnt include ExecutionSuccess event',
-        )
-    }
+    // if (!isExecutionSuccess) {
+    //     logWarning(
+    //         {
+    //             tx_hash: decodedData.txHash,
+    //             address: toAddress || undefined,
+    //             function_name: 'interpretGnosisExecution',
+    //         },
+    //         'Gnosis tx didnt include ExecutionSuccess event',
+    //     )
+    // }
 
     const exampleDescription = `${userName} ${action} a transaction on a Gnosis Safe (${counterpartyName})`
 

@@ -8,6 +8,7 @@ import interpretGenericToken from './genericInterpreters/token'
 import interpretGenericTransfer from './genericInterpreters/transfer'
 import { BigNumber } from 'ethers'
 import { formatEther, formatUnits } from 'ethers/lib/utils'
+import { addressToName } from 'onoma'
 
 import { InterpreterMap, MethodMap } from 'interfaces/contractInterpreter'
 import { ContractType, DecodedTx, Interaction, InteractionEvent, TxType } from 'interfaces/decoded'
@@ -20,12 +21,14 @@ import {
     fillDescriptionTemplate,
     flattenEventsFromInteractions,
     getDecimals,
+    getKeys,
     getNativeTokenValueEvents,
     shortenNamesInString,
     toOrFromUser,
 } from 'utils'
 import { ethAddress, multicallContractAddresses, multicallFunctionNames } from 'utils/constants'
 import { DatabaseInterface, NullDatabaseInterface } from 'utils/DatabaseInterface'
+import timer from 'utils/timer'
 
 function deepCopy<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj))
@@ -84,22 +87,11 @@ class Interpreter {
         this.chain = chain
     }
 
-    async interpret(decodedDataArr: DecodedTx[]): Promise<Interpretation[]> {
-        const interpretations: Interpretation[] = []
-
-        for (let i = 0; i < decodedDataArr.length; i++) {
-            const decodedData = decodedDataArr[i]
-            const interpretation = await this.interpretSingleTx(decodedData)
-            interpretations.push(interpretation)
-        }
-
-        return interpretations
-    }
-
     async interpretSingleTx(
         decodedTx: DecodedTx,
         userAddressFromInput: string | null = null,
         userNameFromInput: string | null = null,
+        entityMap: Record<string, string | null> = {},
     ): Promise<Interpretation> {
         // Prep data coming in from 'decodedData'
         const {
@@ -130,10 +122,18 @@ class Interpreter {
             userName = decodedTx.toENS
         }
 
+        const addressesToCheck = [fromAddress, userAddress]
+        if (toAddress) addressesToCheck.push(toAddress)
+        // timer.startTimer(txHash.substring(2, 8))
+        if (getKeys(entityMap).length === 0) {
+            entityMap = await this.db.getManyEntityMap(addressesToCheck)
+        }
+        // timer.stopTimer(txHash.substring(2, 8))
         userName =
             userName ||
             userNameFromInput ||
-            (await this.db.getEntityByAddress(userAddress)) ||
+            entityMap[userAddress] ||
+            addressToName(userAddress) ||
             userAddress.substring(0, 6)
 
         // TODO generalize this so it'll get any ENS (ex: _operatorENS)
@@ -161,8 +161,8 @@ class Interpreter {
             interpretation.actions.push(Action.unknown)
         }
 
-        let fromName = await this.db.getEntityByAddress(fromAddress)
-        let toName = await this.db.getEntityByAddress(toAddress || '')
+        let fromName = entityMap[fromAddress]
+        let toName = entityMap[toAddress || '']
 
         if (fromName) interpretation.fromName = fromName
         if (toName) interpretation.toName = toName

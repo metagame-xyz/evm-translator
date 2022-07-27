@@ -1,6 +1,6 @@
 import { decodeRawTxTrace } from './MulticallTxInterpreter'
 import { transformDecodedData, transformDecodedLogs, transformTraceData } from './transformDecodedLogs'
-import { AlchemyProvider, Formatter } from '@ethersproject/providers'
+import { AlchemyProvider, Formatter, StaticJsonRpcProvider } from '@ethersproject/providers'
 import axios from 'axios'
 import { Contract } from 'ethers'
 import traverse from 'traverse'
@@ -51,7 +51,7 @@ export type DecoderConfig = {
 }
 
 export class Augmenter {
-    provider: AlchemyProvider
+    provider: AlchemyProvider | StaticJsonRpcProvider
     covalent: Covalent | null
     etherscan: Etherscan
 
@@ -67,7 +67,7 @@ export class Augmenter {
     ensCache: Record<string, string> = {}
 
     constructor(
-        provider: AlchemyProvider,
+        provider: AlchemyProvider | StaticJsonRpcProvider,
         covalent: Covalent | null,
         etherscan: Etherscan,
         databaseInterface: DatabaseInterface = new NullDatabaseInterface(),
@@ -479,9 +479,9 @@ export class Augmenter {
                     // warning, we might assign contactName from somewhere else in the future, so it might not be null here even when we thought it would be, which means we might still need to get token symbol/name but we end up skipping it
 
                     // commented this out to make sure we get the token name/symbol from the contract. we'll end up always doing this call no matter what now but we can optimize later (WARNING)
-                    // if (!contractName) {
-                    ;({ tokenName, tokenSymbol, contractName } = await this.getNameAndSymbol(address, contractType))
-                    // }
+                    if (!contractName || !tokenName || !tokenSymbol) {
+                        ;({ tokenName, tokenSymbol, contractName } = await this.getNameAndSymbol(address, contractType))
+                    }
 
                     // const contractName = await this.getContractName(address)
                     const contractData: ContractData = {

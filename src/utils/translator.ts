@@ -5,6 +5,7 @@ import {
     COVALENT_API_KEY,
     ETHERSCAN_API_KEY,
     EVM_TRANSLATOR_CONNECTION_STRING,
+    RPC_NODE_URL,
 } from 'utils/constants'
 
 export default async function getTranslator(address: string | null = null, networkId = 1): Promise<Translator> {
@@ -12,6 +13,7 @@ export default async function getTranslator(address: string | null = null, netwo
 
     const translator = new Translator({
         chain,
+        nodeUrl: RPC_NODE_URL,
         alchemyProjectId: ALCHEMY_PROJECT_ID ?? '',
         etherscanAPIKey: ETHERSCAN_API_KEY ?? '',
         connectionString: EVM_TRANSLATOR_CONNECTION_STRING,

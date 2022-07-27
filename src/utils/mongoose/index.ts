@@ -1,7 +1,7 @@
 import { AddressNameModel } from './models/addressName'
 import { ContractModel } from './models/contract'
 import { DecodedTxModel } from './models/decodedTx'
-import collect from 'collect.js'
+import collect, { Collection } from 'collect.js'
 import { connect, connection, Document, Types } from 'mongoose'
 
 import {
@@ -17,6 +17,7 @@ import {
 } from 'interfaces/abi'
 import { AddressNameData, ContractData, DecodedTx } from 'interfaces/decoded'
 
+import { getEntries } from 'utils'
 import { DatabaseInterface } from 'utils/DatabaseInterface'
 import { logInfo } from 'utils/logging'
 import { ABI_RowModel } from 'utils/mongoose/models/abi'
@@ -188,8 +189,22 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
             decodedTxMap[txHashes[i]] = null
         }
 
+        // hack for $in being n * log(m) where n = chunk.length and m = db size
+        // to actually fix this we'd have to add an 'indexedAddress' column to the DecodedTxModel
+        // and we'd probably just have multiple of the same decodedTx in the db in the case that multiple people were part of a tx
+        const chunks = collect(txHashes)
+            .chunk(512)
+            .all()
+            .map((chunk: any) => chunk.all())
+
+        const promises = chunks.map((chunk) => {
+            return DecodedTxModel.find({ txHash: { $in: chunk } })
+        })
+
         try {
-            const modelData = await DecodedTxModel.find({ txHash: { $in: txHashes } })
+            const dataChunked = await Promise.all(promises)
+            const modelData = dataChunked.reduce((acc, chunk) => acc.concat(chunk), [])
+            // const modelData = await DecodedTxModel.find({ txHash: { $in: txHashes } })
             const data = modelData.map((model) => model.toObject())
 
             for (let i = 0; i < txHashes.length; i++) {
@@ -248,6 +263,14 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         }
         // return here instead of in the try, so that it still works if the db is down
         return nameMap
+    }
+
+    async getManyEntityMap(addresses: string[]): Promise<Record<string, string | null>> {
+        const nameDataMap = await this.getManyNameDataMap(addresses)
+
+        const entityTuples = getEntries(nameDataMap).map(([address, nameData]) => [address, nameData?.entity || null])
+
+        return Object.fromEntries(entityTuples)
     }
 
     async getEntityByAddress(address: string): Promise<string | null> {

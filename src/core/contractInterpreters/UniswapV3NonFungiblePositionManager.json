@@ -5,7 +5,7 @@
     "writeFunctions": {
         "burn": {
             "action": "burned",
-            "exampleDescriptionTemplate": "{userAddress} {action} {contractName} liquidity position NFT #{tokenId}",
+            "exampleDescriptionTemplate": "{userName} {action} {contractName} liquidity position NFT #{tokenId}",
             "exampleDescription": "leotheprocess.eth burned a liquidity position on Uniswap V3",
             "keywords": {
                 "tokenId": {
@@ -20,7 +20,7 @@
         },
         "collect": {
             "action": "collected",
-            "exampleDescriptionTemplate": "{userAddress} collected {tokenAmount0} {tokenName0} and {tokenAmount1} {tokenName1} in fees from {contractName}",
+            "exampleDescriptionTemplate": "{userName} collected {tokenAmount0} {tokenName0} and {tokenAmount1} {tokenName1} in fees from {contractName}",
             "exampleDescription": "leotheprocess.eth collected 3206 HEX and 305 USDC in fees from Uniswap V3",
             "keywords": {
                 "tokenName0": {
@@ -61,7 +61,7 @@
         },
         "increaseLiquidity": {
             "action": "added liquidity",
-            "exampleDescriptionTemplate": "{userAddress} {action} to the {tokenName0}-{tokenName1} pool on {contractName} ",
+            "exampleDescriptionTemplate": "{userName} {action} to the {tokenName0}-{tokenName1} pool on {contractName} ",
             "exampleDescription": "leotheprocess.eth added liquidity to the gOHM-BTRFLY pool on Uniswap V3",
             "keywords": {
                 "tokenName0": {
@@ -102,7 +102,7 @@
         },
         "mint": {
             "action": "minted",
-            "exampleDescriptionTemplate": "{userAddress} {action} an NFT for adding {tokenAmount0} {tokenName0} and {tokenAmount1} {tokenName1} in liquidity to {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} an NFT for adding {tokenAmount0} {tokenName0} and {tokenAmount1} {tokenName1} in liquidity to {contractName}",
             "exampleDescription": "leotheprocess.eth minted an NFT for adding 2 WBTC and 22999 USDC in liquidity to Uniswap V3",
             "keywords": {
                 "tokenName0": {
@@ -143,7 +143,7 @@
         },
         "decreaseLiquidity": {
             "action": "removed liquidity",
-            "exampleDescriptionTemplate": "{userAddress} {action} from the {tokenName0}-{tokenName1} pool on {contractAddress}",
+            "exampleDescriptionTemplate": "{userName} {action} from the {tokenName0}-{tokenName1} pool on {contractAddress}",
             "exampleDescription": "leotheprocess.eth removed liquidity from the DAI-USDC pool on Uniswap V3",
             "keywords": {
                 "tokenName0": {
@@ -161,7 +161,7 @@
         },
         "multicall": {
             "action": "executed multiple actions",
-            "exampleDescriptionTemplate": "{userAddress} {action} on {contractName}",
+            "exampleDescriptionTemplate": "{userName} {action} on {contractName}",
             "exampleDescription": "leotheprocess.eth executed multiple actions on Uniswap V3",
             "keywords": {}
         }

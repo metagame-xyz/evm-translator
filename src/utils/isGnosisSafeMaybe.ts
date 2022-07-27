@@ -1,12 +1,15 @@
-import { AlchemyProvider, JsonRpcProvider } from '@ethersproject/providers'
+import { AlchemyProvider, StaticJsonRpcProvider } from '@ethersproject/providers'
 import EthersAdapter from '@gnosis.pm/safe-ethers-lib'
 import SafeServiceClient from '@gnosis.pm/safe-service-client'
 import { ethers } from 'ethers'
 
 import { ContractType } from 'interfaces/decoded'
 
-async function isGnosisSafeMaybe(address: string, provider: AlchemyProvider): Promise<ContractType> {
-    const jsonProvider = new JsonRpcProvider(provider.connection)
+async function isGnosisSafeMaybe(
+    address: string,
+    provider: AlchemyProvider | StaticJsonRpcProvider,
+): Promise<ContractType> {
+    const jsonProvider = new StaticJsonRpcProvider(provider.connection)
     const signer = jsonProvider.getSigner()
 
     const ethAdapter = new EthersAdapter({ ethers, signer })
