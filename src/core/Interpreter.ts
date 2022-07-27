@@ -70,14 +70,14 @@ class Interpreter {
         this.userAddress = (userAddress && AddressZ.parse(userAddress)) || null
         this.db = db || new NullDatabaseInterface()
 
+        for (const [address, map] of Object.entries(contractInterpreters)) {
+            this.contractSpecificInterpreters[address.toLowerCase()] = map as InterpreterMap
+        }
+
         if (additionalContractInterpreters) {
           for (const [address, map] of Object.entries(additionalContractInterpreters)) {
               this.contractSpecificInterpreters[address.toLowerCase()] = map as InterpreterMap
           }
-        }
-
-        for (const [address, map] of Object.entries(contractInterpreters)) {
-            this.contractSpecificInterpreters[address.toLowerCase()] = map as InterpreterMap
         }
     }
 
