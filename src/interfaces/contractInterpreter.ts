@@ -1,4 +1,34 @@
+import { record, z } from 'zod'
+
 import { Action } from 'interfaces/interpreted'
+import { boolean, number, string } from 'interfaces/utils'
+
+const KeywordMapZ = z.object({
+    key: string,
+    filters: record(string),
+    defaultValue: string,
+    index: number.optional(),
+    decimals: number.optional(),
+})
+
+const MethodMapZ = z.object({
+    action: string, // We need to restrict this to 'Action'
+    exampleDescriptionTemplate: string,
+    exampleDescription: string,
+    keywords: record(KeywordMapZ),
+})
+
+export const InterpreterMapZ = z.object({
+    contractAddress: string,
+    contractOfficialName: string,
+    contractName: string,
+    entityName: string,
+    writeFunctions: record(MethodMapZ),
+})
+
+// export type InterpreterMap = z.infer<typeof InterpreterMapZ> //Can't do this yet b/c action: string instead of action: Action
+// export type MethodMap = z.infer<typeof MethodMapZ>
+// export type KeywordMap = z.infer<typeof KeywordMapZ>
 
 export type InterpreterMap = {
     /** The address of the contract this map is for */
