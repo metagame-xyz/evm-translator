@@ -199,10 +199,16 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         }
     }
 
-    async getManyDecodedByAddress(address: string): Promise<DecodedTx[]> {
+    async getManyDecodedByAddress(address: string, maxAddresses = 50): Promise<DecodedTx[]> {
         try {
-            const decodedTxs = await DecodedTxModel.find({ allAddresses: address })
-            return decodedTxs
+            // const decodedTxs = await DecodedTxModel.find({ allAddresses: address })
+            const explain = await DecodedTxModel.find({
+                allAddresses: address,
+                [`allAddresses.${maxAddresses}`]: { $exists: false },
+            })
+
+            // console.log(explain.executionStats)
+            return explain
         } catch (err) {
             console.error('mongoose getManyDecodedByAddress error', err)
             return []
@@ -247,7 +253,7 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         // return here instead of in the try, so that it still works if the db is down
         return decodedTxMap
     }
-    async getManyDecodedTxArr(txHashes: string[]): Promise<DecodedTx[]> {
+    async getManyDecodedTxArr(txHashes: string[], maxAddresses = 50): Promise<DecodedTx[]> {
         let decodedTxArr = []
 
         // hack for $in being n * log(m) where n = chunk.length and m = db size
@@ -259,7 +265,7 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
             .map((chunk: any) => chunk.all())
 
         const promises = chunks.map((chunk) => {
-            return DecodedTxModel.find({ txHash: { $in: chunk } })
+            return DecodedTxModel.find({ txHash: { $in: chunk }, [`allAddresses.${maxAddresses}`]: { $exists: false } })
         })
 
         try {
