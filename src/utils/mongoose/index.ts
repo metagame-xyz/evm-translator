@@ -183,6 +183,32 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         }
     }
 
+    async getDecodedTxByMongoId(
+        lastId: string,
+        batchSize: number,
+    ): Promise<(Document<unknown, any, DecodedTx> & DecodedTx & { _id: Types.ObjectId })[] | null> {
+        try {
+            const _id = new Types.ObjectId(lastId)
+            const decodedTxs = await DecodedTxModel.find({ _id: { $gt: _id } }).limit(batchSize)
+            // console.log(user)
+
+            return decodedTxs
+        } catch (err) {
+            console.error('mongoose getUserByMongoId error', err)
+            return null
+        }
+    }
+
+    async getManyDecodedByAddress(address: string): Promise<DecodedTx[]> {
+        try {
+            const decodedTxs = await DecodedTxModel.find({ allAddresses: address })
+            return decodedTxs
+        } catch (err) {
+            console.error('mongoose getManyDecodedByAddress error', err)
+            return []
+        }
+    }
+
     async getManyDecodedTxMap(txHashes: string[]): Promise<Record<string, DecodedTx | null>> {
         const decodedTxMap: Record<string, DecodedTx | null> = {}
         for (let i = 0; i < txHashes.length; i++) {
@@ -193,7 +219,7 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         // to actually fix this we'd have to add an 'indexedAddress' column to the DecodedTxModel
         // and we'd probably just have multiple of the same decodedTx in the db in the case that multiple people were part of a tx
         const chunks = collect(txHashes)
-            .chunk(512)
+            .chunk(128)
             .all()
             .map((chunk: any) => chunk.all())
 
@@ -220,6 +246,35 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
 
         // return here instead of in the try, so that it still works if the db is down
         return decodedTxMap
+    }
+    async getManyDecodedTxArr(txHashes: string[]): Promise<DecodedTx[]> {
+        let decodedTxArr = []
+
+        // hack for $in being n * log(m) where n = chunk.length and m = db size
+        // to actually fix this we'd have to add an 'indexedAddress' column to the DecodedTxModel
+        // and we'd probably just have multiple of the same decodedTx in the db in the case that multiple people were part of a tx
+        const chunks = collect(txHashes)
+            .chunk(512)
+            .all()
+            .map((chunk: any) => chunk.all())
+
+        const promises = chunks.map((chunk) => {
+            return DecodedTxModel.find({ txHash: { $in: chunk } })
+        })
+
+        try {
+            const dataChunked = await Promise.all(promises)
+            const modelData = dataChunked.reduce((acc, chunk) => acc.concat(chunk), [])
+            // const modelData = await DecodedTxModel.find({ txHash: { $in: txHashes } })
+            decodedTxArr = modelData.map((model) => model.toObject())
+        } catch (e) {
+            console.log('get decodedTxs mongoose error')
+            console.log(e)
+            // return null
+        }
+
+        // return here instead of in the try, so that it still works if the db is down
+        return decodedTxArr
     }
 
     async getContractsBatch(
@@ -284,3 +339,49 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         }
     }
 }
+
+// async getManyDecodedTxMap(txHashes: string[]): Promise<Record<string, DecodedTx | null>> {
+//     const decodedTxMap: Record<string, DecodedTx | null> = {}
+//     for (let i = 0; i < txHashes.length; i++) {
+//         decodedTxMap[txHashes[i]] = null
+//     }
+
+//     // hack for $in being n * log(m) where n = chunk.length and m = db size
+//     // to actually fix this we'd have to add an 'indexedAddress' column to the DecodedTxModel
+//     // and we'd probably just have multiple of the same decodedTx in the db in the case that multiple people were part of a tx
+//     const chunks = collect(txHashes)
+//         .chunk(512)
+//         .all()
+//         .map((chunk: any) => chunk.all())
+
+//     // const promises = chunks.map((chunk) => {
+//     //     return DecodedTxModel.find({ txHash: { $in: chunk } })
+//     // })
+//     const dataChunked = []
+//     for (let i = 0; i < chunks.length; i++) {
+//         console.log('getting chunk', i)
+//         const chunk = chunks[i]
+//         const decodedTxs = await DecodedTxModel.find({ txHash: { $in: chunk } })
+//         dataChunked.push(decodedTxs)
+//     }
+
+//     try {
+//         // const dataChunked = await Promise.all(promises)
+//         const modelData = dataChunked.reduce((acc, chunk) => acc.concat(chunk), [])
+//         // const modelData = await DecodedTxModel.find({ txHash: { $in: txHashes } })
+//         const data = modelData.map((model) => model.toObject())
+
+//         for (let i = 0; i < txHashes.length; i++) {
+//             const txHash = txHashes[i]
+//             const decodedTx = data.find((tx) => tx.txHash === txHash)
+//             decodedTxMap[txHash] = decodedTx || null
+//         }
+//     } catch (e) {
+//         console.log('get decodedTxs mongoose error')
+//         console.log(e)
+//         // return null
+//     }
+
+//     // return here instead of in the try, so that it still works if the db is down
+//     return decodedTxMap
+// }

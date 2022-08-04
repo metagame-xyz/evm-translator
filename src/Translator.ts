@@ -226,6 +226,7 @@ class Translator {
         ensMap: Record<string, string>,
         contractDataMap: Record<string, ContractData>,
         rawTxData: RawTxData,
+        allAddresses: string[] = [],
     ): DecodedTx {
         return this.augmenter.augmentDecodedData(
             decodedLogs,
@@ -234,6 +235,7 @@ class Translator {
             ensMap,
             contractDataMap,
             rawTxData,
+            allAddresses,
         )
     }
 
@@ -363,6 +365,7 @@ class Translator {
                 ensMap,
                 contractDataMap,
                 rawTxData,
+                allAddresses,
             )
 
             return { decodedTx: decodedWithAugmentation, rawTxData }
@@ -439,8 +442,8 @@ class Translator {
             throw new Error('This function only works with MongodB')
         }
         await this.initializeMongoose()
-        const map = await this.databaseInterface.getManyDecodedTxMap(txHashArr)
-        return getValues(map)
+        const txArr = await this.databaseInterface.getManyDecodedTxArr(txHashArr)
+        return txArr
     }
 
     async translateWithTaxData(zenLedgerData: ZenLedgerData[], address: string): Promise<ZenLedgerRow[]> {

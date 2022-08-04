@@ -80,6 +80,7 @@ export type DecodedTx = {
     timestamp: number
     gasUsed: string
     effectiveGasPrice: string | null
+    allAddresses: string[]
 }
 
 export type MethodCall = {

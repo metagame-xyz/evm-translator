@@ -8,30 +8,19 @@ function isExecutionSuccessEvent(event: InteractionEvent) {
 }
 
 function interpretGnosisExecution(decodedData: DecodedTx, interpretation: Interpretation) {
-    const { toAddress, interactions } = decodedData
-    const { userName } = interpretation
+    const { toAddress, interactions, fromAddress } = decodedData
+    const { userName, userAddress } = interpretation
 
-    const action = Action.executed
+    const action = userAddress === fromAddress ? Action.executed : Action.involved
 
     const tokenContractInteraction = interactions.find((interaction) => interaction.contractAddress === toAddress)
     const tokenEvents = tokenContractInteraction?.events || []
 
-    const counterpartyName = decodedData.toENS || toAddress?.slice(0, 6)
+    const gnosisName = decodedData.toENS || toAddress?.slice(0, 6)
 
     const isExecutionSuccess = tokenEvents.find((e) => isExecutionSuccessEvent(e))
 
-    // if (!isExecutionSuccess) {
-    //     logWarning(
-    //         {
-    //             tx_hash: decodedData.txHash,
-    //             address: toAddress || undefined,
-    //             function_name: 'interpretGnosisExecution',
-    //         },
-    //         'Gnosis tx didnt include ExecutionSuccess event',
-    //     )
-    // }
-
-    const exampleDescription = `${userName} ${action} a transaction on a Gnosis Safe (${counterpartyName})`
+    const exampleDescription = `${userName} ${action} a transaction on a Gnosis Safe (${gnosisName})`
 
     interpretation.actions.push(action)
     interpretation.exampleDescription = exampleDescription

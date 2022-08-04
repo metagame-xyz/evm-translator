@@ -46,8 +46,11 @@ const DecodedTxSchema = new Schema<DecodedTx, DecodedTxModelType>(
         timestamp: { type: Number, required: true },
         gasUsed: { type: String, required: true },
         effectiveGasPrice: { type: String, required: false },
+        allAddresses: { type: [String], required: true },
     },
     { minimize: false },
-).index({ txHash: 1 }, { unique: true })
+)
+    .index({ txHash: 1 }, { unique: true })
+    .index({ allAddresses: 1 })
 
 export const DecodedTxModel = models.decodedTx || model<DecodedTx>('decodedTx', DecodedTxSchema)

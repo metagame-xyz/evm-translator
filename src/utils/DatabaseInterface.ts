@@ -29,6 +29,9 @@ export abstract class DatabaseInterface {
 
     // abstract getDecodedTx(txHash: string): Promise<Decoded | null>
     abstract getManyDecodedTxMap(txHashes: string[]): Promise<Record<string, DecodedTx | null>>
+    abstract getManyDecodedTxArr(txHashes: string[]): Promise<DecodedTx[]>
+    abstract getDecodedTxByMongoId(lastId: string, batchSize: number): Promise<any>
+    abstract getManyDecodedByAddress(address: string): Promise<DecodedTx[]>
 
     // abstract addOrUpdateDecodedTx(decodedData: DecodedTx): Promise<void>
     abstract addOrUpdateManyDecodedTx(decodedDataArr: DecodedTx[]): Promise<void>
@@ -124,6 +127,18 @@ export class NullDatabaseInterface extends DatabaseInterface {
 
     async getDecodedTx(txHash: string): Promise<DecodedTx | null> {
         return Promise.resolve(null)
+    }
+
+    async getManyDecodedTxArr(txHashes: string[]): Promise<DecodedTx[]> {
+        return Promise.resolve([])
+    }
+
+    async getDecodedTxByMongoId(lastId: string, batchSize: number): Promise<any> {
+        return Promise.resolve([])
+    }
+
+    async getManyDecodedByAddress(address: string): Promise<DecodedTx[]> {
+        return Promise.resolve([])
     }
 
     async getManyDecodedTxMap(txHashes: string[]): Promise<Record<string, DecodedTx | null>> {

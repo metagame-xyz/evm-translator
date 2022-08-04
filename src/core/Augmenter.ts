@@ -111,6 +111,7 @@ export class Augmenter {
         ensMap: Record<string, string>,
         contractDataMap: Record<string, ContractData>,
         rawTxData: RawTxData,
+        allAddresses: string[] = [],
     ): DecodedTx {
         const { txReceipt, txResponse } = rawTxData
         const value = rawTxData.txResponse.value.toString()
@@ -157,6 +158,7 @@ export class Augmenter {
             reverted: txReceipt.status == 0, // will return true if status==undefined
             fromENS,
             toENS,
+            allAddresses,
         }
 
         const transformedAugmentedData = Augmenter.augmentENSNames(transformedData, ensMap)
