@@ -9,7 +9,8 @@
         "baseUrl": "src/",
         "resolveJsonModule": true,
         "esModuleInterop": true,
-        "paths": {}
+        "paths": {},
+        "lib": ["es2020"]
     },
     "include": ["src", "src/**/*.json"],
     "exclude": ["node_modules"]
