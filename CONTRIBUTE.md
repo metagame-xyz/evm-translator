@@ -16,7 +16,7 @@ Do you have a protocol or contract you interact with frequently that you'd like 
 
 You don't need to be an advanced web3 software developer to contribute a contract interpretation to evm-translator.
 
-If you need any help, hop in our [discord](https://discord.gg/eupEsdWA)! There is a help channel.
+If you need any help, hop in our [discord](https://discord.gg/VMVMUAjceS)! There is a help channel.
 
 ## Contributing (no coding required)
 
