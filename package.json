@@ -1,6 +1,6 @@
 {
     "name": "evm-translator",
-    "version": "0.3.6",
+    "version": "0.3.7",
     "description": "a library for making EVM-based blockchain data more human-readable",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -58,7 +58,7 @@
         "@alch/alchemy-sdk": "^1.0.3",
         "@gnosis.pm/safe-ethers-lib": "^1.2.1",
         "@gnosis.pm/safe-service-client": "^1.2.0",
-        "axios": "^0.26.1",
+        "axios": "^0.27.2",
         "bottleneck": "^2.19.5",
         "collect.js": "^4.32.0",
         "datadog-winston": "^1.5.1",
