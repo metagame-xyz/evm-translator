@@ -253,7 +253,7 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
         // return here instead of in the try, so that it still works if the db is down
         return decodedTxMap
     }
-    async getManyDecodedTxArr(txHashes: string[], maxAddresses = 50): Promise<DecodedTx[]> {
+    async getManyDecodedTxArr(txHashes: string[], maxAddresses = 50, options: any = {}): Promise<DecodedTx[]> {
         let decodedTxArr = []
 
         // hack for $in being n * log(m) where n = chunk.length and m = db size
@@ -265,7 +265,11 @@ export class MongooseDatabaseInterface extends DatabaseInterface {
             .map((chunk: any) => chunk.all())
 
         const promises = chunks.map((chunk) => {
-            return DecodedTxModel.find({ txHash: { $in: chunk }, [`allAddresses.${maxAddresses}`]: { $exists: false } })
+            return DecodedTxModel.find({
+                txHash: { $in: chunk },
+                [`allAddresses.${maxAddresses}`]: { $exists: false },
+                timestamp: { $gte: options.tsStart || 0 },
+            })
         })
 
         try {

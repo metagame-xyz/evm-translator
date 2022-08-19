@@ -437,12 +437,12 @@ class Translator {
     /******       DB ONLY CALLs            ********/
     /**********************************************/
 
-    async getManyDecodedTxFromDB(txHashArr: string[]): Promise<(DecodedTx | null)[]> {
+    async getManyDecodedTxFromDB(txHashArr: string[], options?: any): Promise<(DecodedTx | null)[]> {
         if (!(this.databaseInterface instanceof MongooseDatabaseInterface)) {
             throw new Error('This function only works with MongodB')
         }
         await this.initializeMongoose()
-        const txArr = await this.databaseInterface.getManyDecodedTxArr(txHashArr)
+        const txArr = await this.databaseInterface.getManyDecodedTxArr(txHashArr, 50, options)
         return txArr
     }
 
