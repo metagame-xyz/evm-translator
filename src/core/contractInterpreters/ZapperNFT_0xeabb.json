@@ -9,6 +9,24 @@
             "exampleDescriptionTemplate": "{userName} {action} a Zapper NFT",
             "exampleDescription": "derekbrown.eth crafted a Zapper NFT",
             "keywords": {}
+        },
+        "claimVolts": {
+            "action": "claimed volts",
+            "exampleDescriptionTemplate": "{userName} {action} from Zapper",
+            "exampleDescription": "derekbrown.eth claimed volts from Zapper",
+            "keywords": {}
+        },
+        "mint": {
+            "action": "minted",
+            "exampleDescriptionTemplate": "{userName} {action} a Zapper NFT",
+            "exampleDescription": "derekbrown.eth minted a Zapper NFT",
+            "keywords": {}
+        },
+        "redeem": {
+            "action": "redeemed volts",
+            "exampleDescriptionTemplate": "{userName} {action} from Zapper",
+            "exampleDescription": "derekbrown.eth redeemed volts from Zapper",
+            "keywords": {}
         }
     }
 }
