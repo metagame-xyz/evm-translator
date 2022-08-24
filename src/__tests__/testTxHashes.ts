@@ -59,6 +59,9 @@ const testTxHashes = {
     },
     Zapper: {
         craft: '0x5aaf520a85cb38e6183799c482de919b7fc64b486cc80660d0aa8f683065825e',
+        claimVolts: '0x43363e57ee9d29572fae040cfeacd6107853f28292cc687318e3b7c4d4a3272c',
+        mint: '0x6b839c1d519f2f6b11eb304d5cc185b7b367278150b0fe3109084aa0ed78cfb2',
+        redeem: '0xf1f6e7aff98668f78398871484bdcd50afc12a923029a6c025f8835a3ef4a936',
     },
     GnosisSafe: {},
 }
