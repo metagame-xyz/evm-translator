@@ -57,7 +57,9 @@ A complete PR includes:
 -   updating 2 files
 -   running the tests so a new snapshot gets generated.
 
-Once you've completed an interpreter map via
+First, go to the [Metagame discord](https://discord.gg/3Mta5SSQ) and request api keys for your .env file in the #ask-for-api-key channel.
+
+Once you've completed an interpreter map...
 
 In your terminal
 

@@ -1519,3 +1519,127 @@ Object {
   "userName": "brenner.eth",
 }
 `;
+
+exports[`Interpreter 39`] = `
+Object {
+  "actions": Array [
+    "crafted",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+      "amount": "1.0",
+      "name": "Zapper NFT V2",
+      "symbol": "ZPR NFT",
+      "tokenId": "11",
+      "type": "ERC1155",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+      "amount": "3.0",
+      "name": "Zapper NFT V2",
+      "symbol": "ZPR NFT",
+      "tokenId": "3",
+      "type": "ERC1155",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+  "contractName": "Zapper",
+  "counterpartyName": null,
+  "exampleDescription": "Archibald Walter crafted a Zapper NFT",
+  "extra": Object {},
+  "gasPaid": "0.00083546616297618",
+  "reverted": null,
+  "timestamp": 1661240802,
+  "txHash": "0x5aaf520a85cb38e6183799c482de919b7fc64b486cc80660d0aa8f683065825e",
+  "userAddress": "0xeabb8d1c89d159e3db2973f12568e0927daae35d",
+  "userName": "Archibald Walter",
+}
+`;
+
+exports[`Interpreter 40`] = `
+Object {
+  "actions": Array [
+    "claimed volts",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+  "contractName": "Zapper",
+  "counterpartyName": null,
+  "exampleDescription": "Sylvester Feest claimed volts from Zapper",
+  "extra": Object {},
+  "gasPaid": "0.002434338695170954",
+  "reverted": null,
+  "timestamp": 1643633383,
+  "txHash": "0x43363e57ee9d29572fae040cfeacd6107853f28292cc687318e3b7c4d4a3272c",
+  "userAddress": "0x4850201540fda859acde50016c5d023806df7203",
+  "userName": "Sylvester Feest",
+}
+`;
+
+exports[`Interpreter 41`] = `
+Object {
+  "actions": Array [
+    "minted",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+      "amount": "1.0",
+      "name": "Zapper NFT V2",
+      "symbol": "ZPR NFT",
+      "tokenId": "3",
+      "type": "ERC1155",
+    },
+  ],
+  "assetsSent": Array [],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+  "contractName": "Zapper",
+  "counterpartyName": null,
+  "exampleDescription": "Angelo Hahn minted a Zapper NFT",
+  "extra": Object {},
+  "gasPaid": "0.000716544036650496",
+  "reverted": null,
+  "timestamp": 1661260613,
+  "txHash": "0x6b839c1d519f2f6b11eb304d5cc185b7b367278150b0fe3109084aa0ed78cfb2",
+  "userAddress": "0x0b43cdee3e18bf468b1def50f177f25cfcc8d452",
+  "userName": "Angelo Hahn",
+}
+`;
+
+exports[`Interpreter 42`] = `
+Object {
+  "actions": Array [
+    "redeemed volts",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [
+    Object {
+      "address": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+      "amount": "1.0",
+      "name": "Zapper NFT V2",
+      "symbol": "ZPR NFT",
+      "tokenId": "3",
+      "type": "ERC1155",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+  "contractName": "Zapper",
+  "counterpartyName": null,
+  "exampleDescription": "uzbeksamurai.eth redeemed volts from Zapper",
+  "extra": Object {},
+  "gasPaid": "0.000786976",
+  "reverted": null,
+  "timestamp": 1660364375,
+  "txHash": "0xf1f6e7aff98668f78398871484bdcd50afc12a923029a6c025f8835a3ef4a936",
+  "userAddress": "0x88398dac284753fc651cd475b42aa507413f4fd2",
+  "userName": "uzbeksamurai.eth",
+}
+`;
