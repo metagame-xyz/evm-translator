@@ -57,6 +57,9 @@ const testTxHashes = {
     WETH: {
         deposit: '0xe6e922f5330aa913012fb6844aa0a401a10e1b0807eb3a3f4133e9af78d1b3ca',
     },
+    Zapper: {
+        craft: '0x5aaf520a85cb38e6183799c482de919b7fc64b486cc80660d0aa8f683065825e',
+    },
     GnosisSafe: {},
 }
 

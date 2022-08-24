@@ -1519,3 +1519,43 @@ Object {
   "userName": "brenner.eth",
 }
 `;
+
+exports[`Interpreter 39`] = `
+Object {
+  "actions": Array [
+    "crafted",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+      "amount": "1.0",
+      "name": "Zapper NFT V2",
+      "symbol": "ZPR NFT",
+      "tokenId": "11",
+      "type": "ERC1155",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+      "amount": "3.0",
+      "name": "Zapper NFT V2",
+      "symbol": "ZPR NFT",
+      "tokenId": "3",
+      "type": "ERC1155",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+  "contractName": "Zapper",
+  "counterpartyName": null,
+  "exampleDescription": "Archibald Walter crafted a Zapper NFT",
+  "extra": Object {},
+  "gasPaid": "0.00083546616297618",
+  "reverted": null,
+  "timestamp": 1661240802,
+  "txHash": "0x5aaf520a85cb38e6183799c482de919b7fc64b486cc80660d0aa8f683065825e",
+  "userAddress": "0xeabb8d1c89d159e3db2973f12568e0927daae35d",
+  "userName": "Archibald Walter",
+}
+`;

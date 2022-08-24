@@ -32,6 +32,8 @@ const contractInterpreters = {
     '0xa6b71e26c5e0845f74c812102ca7114b6a896ab2': require('./GnosisSafeProxyFactory_0xa6b7.json'),
     '0x7be8076f4ea4a4ad08075c2508e481d6c946d12b': require('./WyvernExchange_0x7be8.json'),
     '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2': require('./WETH9_0xc02a.json'),
+    '0xf1f3ca6268f330fda08418db12171c3173ee39c9': require('./ZapperNFT_0xeabb.json'),
+    // '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F': require('./SushiSwapRouter_0xd9e1.json'),
     // '0x0baccdd05a729ab8b56e09ef19c15f953e10885f': require('./NFTLoanFacilitator_0x0bac.json'), will add once filled out
 }
 

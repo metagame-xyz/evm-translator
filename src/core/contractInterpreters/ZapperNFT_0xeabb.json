@@ -1,0 +1,14 @@
+{
+    "contractAddress": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+    "contractOfficialName": "Zapper_NFT_V2_0_1",
+    "contractName": "Zapper",
+    "entityName": "Zapper",
+    "writeFunctions": {
+        "craft": {
+            "action": "crafted",
+            "exampleDescriptionTemplate": "{userName} {action} a Zapper NFT",
+            "exampleDescription": "derekbrown.eth crafted a Zapper NFT",
+            "keywords": {}
+        }
+    }
+}
