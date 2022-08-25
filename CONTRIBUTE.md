@@ -258,7 +258,7 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
         -   **{userAddress} (userName is recommended)**: The address of the user interacting with the contract
         -   **{\_\_NATIVEVALUETRANSFERRED\_\_}**: The amount of ETH transferred in a NFT sale.
 
-    -   **exampleDescription**: Just like `exampleDescriptionTemplate` but with example values plugged in for the variables.
+    -   **exampleDescription**: Just like `exampleDescriptionTemplate` but with example values plugged in for the variables. These values can be whatever you like and are just meant to show what the `exampleDescriptionTemplate` field could look like when it gets filled in.
     -   **keywords**: An object with each key that matches a variable wrapped in curly braces from`exampleDescriptionTemplate` and each value being an object with "instructions" on how to isolate the variable's value from the transaction's event logs. This inner object has the following keys...
 
         -   **key**: The name of the field from the event. For example, if you want the value of a Transfer, this would likely be "value" or "amount". If you want an ERC20 token's symbol, use your filters to isolate an event emitted from the address of the token's contract, and use `"key": "contractSymbol"`. See the Uniswap interpretation for an example of this.
