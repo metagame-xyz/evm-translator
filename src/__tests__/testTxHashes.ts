@@ -64,6 +64,13 @@ const testTxHashes = {
         redeem: '0xf1f6e7aff98668f78398871484bdcd50afc12a923029a6c025f8835a3ef4a936',
     },
     GnosisSafe: {},
+    Asks: {
+        _handleRoyaltyEnginePayout: '0x34cc2538e95d6f1eb6fe4bfa3063e28fd801cfc20e1e09d839d5c140977d253f',
+        cancelAsk: '0xd440008541440e933afeecb6b6ca224750791b6b8d581f1d0a9b1297094b20f0',
+        createAsk: '0xa2c269f7d5242e89353f9bb28aa61783ed3337899eea28fbac9b9fa848d5580e',
+        fillAsk: '0xaab2e7717aa80d1163415a9a43f031dfd117ff21a180b640d11c7bdaec05698a',
+        setAskPrice: '0x267566ad876126ae6973fcc149b1e30c63643156750e9ed0e51f55adf958f00f',
+    },
 }
 
 // test multiple roles for a single tx

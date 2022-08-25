@@ -1,0 +1,44 @@
+{
+	"contractAddress": "0x6170B3C3A54C3d8c854934cBC314eD479b2B29A3",
+	"contractOfficialName": "AsksV1_1",
+	"contractName": "Asks V1",
+	"entityName": "Zora",
+	"writeFunctions": {
+		"_handleRoyaltyEnginePayout": {
+			"action": "handled royalty engine payout",
+			"exampleDescriptionTemplate": "",
+			"exampleDescription": "",
+			"keywords": {}
+		},
+		"cancelAsk": {
+			"action": "cancelled ask",
+			"exampleDescriptionTemplate": "{username} {action} for NFT",
+			"exampleDescription": "leotheprocess.eth cancelled ask for NFT",
+			"keywords": {}
+		},
+		"createAsk": {
+			"action": "created ask",
+			"exampleDescriptionTemplate": "{username} {action} for NFT",
+			"exampleDescription": "leotheprocess.eth created ask for NFT",
+			"keywords": {}
+		},
+		"fillAsk": {
+			"action": "filled ask",
+			"exampleDescriptionTemplate": "{username} {action} for NFT",
+			"exampleDescription": "leotheprocess.eth filled ask for NFT",
+			"keywords": {}
+		},
+		"setAskPrice": {
+			"action": "set ask price",
+			"exampleDescriptionTemplate": "{username} {action} for NFT",
+			"exampleDescription": "leotheprocess.eth set ask price for NFT",
+			"keywords": {}
+		},
+		"setRoyaltyEngineAddress": {
+			"action": "set royalty engine address",
+			"exampleDescriptionTemplate": "",
+			"exampleDescription": "",
+			"keywords": {}
+		}
+	}
+}
