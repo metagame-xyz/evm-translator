@@ -65,7 +65,6 @@ const testTxHashes = {
     },
     GnosisSafe: {},
     Asks: {
-        _handleRoyaltyEnginePayout: '0x34cc2538e95d6f1eb6fe4bfa3063e28fd801cfc20e1e09d839d5c140977d253f',
         cancelAsk: '0xd440008541440e933afeecb6b6ca224750791b6b8d581f1d0a9b1297094b20f0',
         createAsk: '0xa2c269f7d5242e89353f9bb28aa61783ed3337899eea28fbac9b9fa848d5580e',
         fillAsk: '0xaab2e7717aa80d1163415a9a43f031dfd117ff21a180b640d11c7bdaec05698a',
@@ -78,6 +77,10 @@ export const multiSidedTxMap: Record<string, string[]> = {
     '0xc814cb6b61222beda8a9bcc359e776e72ae732a1c29df572099ecef27c8461e4': [
         '0x96a675775b8546a8602a1015efaacbc87358e478',
         '0x83eb387c8f7c8903f2be1ca367197fc4b3cb573e',
+    ],
+    '0xaab2e7717aa80d1163415a9a43f031dfd117ff21a180b640d11c7bdaec05698a': [
+        '0x3612566e49770fd3137d0c3c2fcf35d5916a2452',
+        '0x6170b3c3a54c3d8c854934cbc314ed479b2b29a3',
     ],
 }
 

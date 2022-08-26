@@ -4,40 +4,28 @@
 	"contractName": "Asks V1",
 	"entityName": "Zora",
 	"writeFunctions": {
-		"_handleRoyaltyEnginePayout": {
-			"action": "handled royalty engine payout",
-			"exampleDescriptionTemplate": "",
-			"exampleDescription": "",
-			"keywords": {}
-		},
 		"cancelAsk": {
 			"action": "cancelled ask",
-			"exampleDescriptionTemplate": "{username} {action} for NFT",
+			"exampleDescriptionTemplate": "{userName} {action} for NFT",
 			"exampleDescription": "leotheprocess.eth cancelled ask for NFT",
 			"keywords": {}
 		},
 		"createAsk": {
 			"action": "created ask",
-			"exampleDescriptionTemplate": "{username} {action} for NFT",
+			"exampleDescriptionTemplate": "{userName} {action} for NFT",
 			"exampleDescription": "leotheprocess.eth created ask for NFT",
 			"keywords": {}
 		},
 		"fillAsk": {
-			"action": "filled ask",
-			"exampleDescriptionTemplate": "{username} {action} for NFT",
-			"exampleDescription": "leotheprocess.eth filled ask for NFT",
+			"action": "__NFTSALE__",
+			"exampleDescriptionTemplate": "{userName} {action} NFT",
+			"exampleDescription": "leotheprocess.eth sold NFT",
 			"keywords": {}
 		},
 		"setAskPrice": {
 			"action": "set ask price",
-			"exampleDescriptionTemplate": "{username} {action} for NFT",
+			"exampleDescriptionTemplate": "{userName} {action} for NFT",
 			"exampleDescription": "leotheprocess.eth set ask price for NFT",
-			"keywords": {}
-		},
-		"setRoyaltyEngineAddress": {
-			"action": "set royalty engine address",
-			"exampleDescriptionTemplate": "",
-			"exampleDescription": "",
 			"keywords": {}
 		}
 	}
