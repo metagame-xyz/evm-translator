@@ -64,6 +64,12 @@ const testTxHashes = {
         redeem: '0xf1f6e7aff98668f78398871484bdcd50afc12a923029a6c025f8835a3ef4a936',
     },
     GnosisSafe: {},
+    Asks: {
+        cancelAsk: '0xd440008541440e933afeecb6b6ca224750791b6b8d581f1d0a9b1297094b20f0',
+        createAsk: '0xa2c269f7d5242e89353f9bb28aa61783ed3337899eea28fbac9b9fa848d5580e',
+        fillAsk: '0xaab2e7717aa80d1163415a9a43f031dfd117ff21a180b640d11c7bdaec05698a',
+        setAskPrice: '0x267566ad876126ae6973fcc149b1e30c63643156750e9ed0e51f55adf958f00f',
+    },
 }
 
 // test multiple roles for a single tx
@@ -71,6 +77,10 @@ export const multiSidedTxMap: Record<string, string[]> = {
     '0xc814cb6b61222beda8a9bcc359e776e72ae732a1c29df572099ecef27c8461e4': [
         '0x96a675775b8546a8602a1015efaacbc87358e478',
         '0x83eb387c8f7c8903f2be1ca367197fc4b3cb573e',
+    ],
+    '0xaab2e7717aa80d1163415a9a43f031dfd117ff21a180b640d11c7bdaec05698a': [
+        '0x3612566e49770fd3137d0c3c2fcf35d5916a2452',
+        '0xaa38c5629f2383c92b995a2ff58835f474ff72f2',
     ],
 }
 

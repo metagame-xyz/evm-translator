@@ -1,0 +1,32 @@
+{
+	"contractAddress": "0x6170B3C3A54C3d8c854934cBC314eD479b2B29A3",
+	"contractOfficialName": "AsksV1_1",
+	"contractName": "Asks V1",
+	"entityName": "Zora",
+	"writeFunctions": {
+		"cancelAsk": {
+			"action": "cancelled ask",
+			"exampleDescriptionTemplate": "{userName} {action} for NFT",
+			"exampleDescription": "leotheprocess.eth cancelled ask for NFT",
+			"keywords": {}
+		},
+		"createAsk": {
+			"action": "created ask",
+			"exampleDescriptionTemplate": "{userName} {action} for NFT",
+			"exampleDescription": "leotheprocess.eth created ask for NFT",
+			"keywords": {}
+		},
+		"fillAsk": {
+			"action": "__NFTSALE__",
+			"exampleDescriptionTemplate": "{userName} {action} NFT",
+			"exampleDescription": "leotheprocess.eth sold NFT",
+			"keywords": {}
+		},
+		"setAskPrice": {
+			"action": "set ask price",
+			"exampleDescriptionTemplate": "{userName} {action} for NFT",
+			"exampleDescription": "leotheprocess.eth set ask price for NFT",
+			"keywords": {}
+		}
+	}
+}
