@@ -1,0 +1,38 @@
+{
+    "contractAddress": "0xDE3e5a990bCE7fC60a6f017e7c4a95fc4939299E",
+    "contractOfficialName": "TokenDistributor",
+    "contractName": "GTC Distributor",
+    "entityName": "Gitcoin",
+    "writeFunctions": {
+        "claimTokens": {
+            "action": "claimed",
+            "exampleDescriptionTemplate": "{userName} {action} {tokenName0}",
+            "exampleDescription": "leotheprocess.eth claimed GTC",
+            "keywords": {
+                "tokenName0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                }
+            }
+        },
+        "transferUnclaimed": {
+            "action": "unclaimed",
+            "exampleDescriptionTemplate": "{userName} {action} {tokenName0}",
+            "exampleDescription": "leotheprocess.eth unclaimed GTC",
+            "keywords": {
+                "tokenName0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{contractAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                }
+            }
+        }
+    }
+}
