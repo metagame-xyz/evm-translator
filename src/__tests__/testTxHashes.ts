@@ -64,6 +64,10 @@ const testTxHashes = {
         redeem: '0xf1f6e7aff98668f78398871484bdcd50afc12a923029a6c025f8835a3ef4a936',
     },
     GnosisSafe: {},
+    GTCDistributor: {
+        claimTokens: '0xd5ee4bc94756aaa3b188aced194c123cfa858fa516b29891ec370e656663ada4',
+        transferUnclaimed: '0xe96142692de802f707ec40a60732fee8f25ce5cbd788924d6cbaa03457d972f7',
+    },
 }
 
 // test multiple roles for a single tx
