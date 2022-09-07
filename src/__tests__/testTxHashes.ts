@@ -70,7 +70,7 @@ const testTxHashes = {
         removeLiquidityETH: '0x5c02ad31a4c7d33ba222c340c4d5f834f7965877c426701a6616e5b3809a6dc6',
         removeLiquidityETHSupportingFeeOnTransferTokens:
             '0xcd93f9a98673117e5c8bcbda0b9ec8d18b5d4450f1fa339f5ff14c31f8fe201b',
-        removeLiquidityETHWithPermit: '0xa0034a9325859ac39559c5ee5c7428b51620e29002fc14ae4c920ac8ba2582e7',
+        removeLiquidityETHWithPermit: '0x7a9059dbe5f9baea798147bb4a9efc36608e3693f7358872cafd020a4c16c910',
         removeLiquidityETHWithPermitSupportingFeeOnTransferTokens:
             '0x26c8c6f27845a2462035e71e382b9c6b241f9a5e414c94eb74f5cd24ebe9a772',
         removeLiquidityWithPermit: '0xfaababf2a3dec98d2b6ac4055151995ce89ffce74a1d7f72afa353ce036e1b20',
