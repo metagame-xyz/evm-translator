@@ -2421,3 +2421,50 @@ Object {
   "userName": "Norwood Bartell",
 }
 `;
+
+exports[`Interpreter 60`] = `
+Object {
+  "actions": Array [
+    "sent",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [
+    Object {
+      "address": "0x6661c87764adf7fffa3c7922fa6edfa2fd62ccfc",
+      "name": "Commoners by Commonopoly",
+      "symbol": "CMMNR",
+      "tokenId": "6513",
+      "type": "ERC721",
+    },
+    Object {
+      "address": "0x6661c87764adf7fffa3c7922fa6edfa2fd62ccfc",
+      "name": "Commoners by Commonopoly",
+      "symbol": "CMMNR",
+      "tokenId": "6473",
+      "type": "ERC721",
+    },
+    Object {
+      "address": "0x6661c87764adf7fffa3c7922fa6edfa2fd62ccfc",
+      "name": "Commoners by Commonopoly",
+      "symbol": "CMMNR",
+      "tokenId": "12",
+      "type": "ERC721",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x2e2234b3a848f895a60b2071f90303cd02f7491d",
+  "contractName": "BatchTransfer",
+  "counterpartyName": null,
+  "exampleDescription": "¿gc.eth sent CMMNR (Commoners by Commonopoly) to  multiple addresses",
+  "extra": Object {
+    "tokenName": "Commoners by Commonopoly",
+    "tokenSymbol": "CMMNR",
+  },
+  "gasPaid": "0.00136265504958525",
+  "reverted": null,
+  "timestamp": 1662095839,
+  "txHash": "0x4b86cff9a093e7c29ad86c3816e1f8e867f0264f6fc1052f57668a19b024b092",
+  "userAddress": "0x515299b1a2637181ec95a3efeaa42a466195a40f",
+  "userName": "¿gc.eth",
+}
+`;

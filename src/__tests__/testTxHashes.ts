@@ -87,6 +87,9 @@ const testTxHashes = {
         swapTokensForExactETH: '0x50886b0742fef7b3abb30427b5c4c8bcee4be2c0543d086740f0534546623cbd',
         swapTokensForExactTokens: '0xc7070e2bdd0e5e3558450c546ec173005bb2a0f488907ee709a320c07da166cd',
     },
+    BatchTransfer: {
+        batchTransfer: '0x4b86cff9a093e7c29ad86c3816e1f8e867f0264f6fc1052f57668a19b024b092',
+    },
 }
 
 // test multiple roles for a single tx
