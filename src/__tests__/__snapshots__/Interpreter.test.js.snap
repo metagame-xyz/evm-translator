@@ -1633,13 +1633,791 @@ Object {
   "contractAddress": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
   "contractName": "Zapper",
   "counterpartyName": null,
-  "exampleDescription": "uzbeksamurai.eth redeemed volts from Zapper",
+  "exampleDescription": "myunifund.eth redeemed volts from Zapper",
   "extra": Object {},
   "gasPaid": "0.000786976",
   "reverted": null,
   "timestamp": 1660364375,
   "txHash": "0xf1f6e7aff98668f78398871484bdcd50afc12a923029a6c025f8835a3ef4a936",
   "userAddress": "0x88398dac284753fc651cd475b42aa507413f4fd2",
-  "userName": "uzbeksamurai.eth",
+  "userName": "myunifund.eth",
+}
+`;
+
+exports[`Interpreter 43`] = `
+Object {
+  "actions": Array [
+    "added liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x397ff1542f962076d0bfe58ea045ffa2d347aca0",
+      "amount": "0.00001061172",
+      "name": "SushiSwap LP Token",
+      "symbol": "SLP",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "amount": "0.434035787205",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "unknown",
+    },
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "700.0",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Manuela Ullrich added liquidity to the WETH-USDC SushiSwap pool",
+  "extra": Object {
+    "token_0": "WETH",
+    "token_1": "USDC",
+  },
+  "gasPaid": "0.00134318351717995",
+  "reverted": null,
+  "timestamp": 1661230375,
+  "txHash": "0x77c810424f1493f0059ae11af084f5fea1d32654b9e6bf28fe7ea1eadd822432",
+  "userAddress": "0xe6268e4a1e42549a648c45d4015fa5f21e963220",
+  "userName": "Manuela Ullrich",
+}
+`;
+
+exports[`Interpreter 44`] = `
+Object {
+  "actions": Array [
+    "added liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x397ff1542f962076d0bfe58ea045ffa2d347aca0",
+      "amount": "0.000010720313",
+      "name": "SushiSwap LP Token",
+      "symbol": "SLP",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.000001379118193543",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "704.838157",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.44",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Sheila Little added liquidity to the USDC-ETH SushiSwap pool",
+  "extra": Object {
+    "token_0": "USDC",
+  },
+  "gasPaid": "0.002140281",
+  "reverted": null,
+  "timestamp": 1661250853,
+  "txHash": "0x21a385a77f3b99a83dda54ef36dbf4156522af0015eb68541693400b9b72d374",
+  "userAddress": "0x60ca1f1f3abc9146cc7561d39c9ab1a7a279f83f",
+  "userName": "Sheila Little",
+}
+`;
+
+exports[`Interpreter 45`] = `
+Object {
+  "actions": Array [
+    "removed liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+      "amount": "85.451464607436",
+      "name": "SushiToken",
+      "symbol": "SUSHI",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "amount": "0.062894646544",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "unknown",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+      "amount": "1.759919191961",
+      "name": "SushiSwap LP Token",
+      "symbol": "SLP",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Angelo Abbott removed liquidity from the SUSHI-WETH SushiSwap pool",
+  "extra": Object {
+    "token_0": "SUSHI",
+    "token_1": "WETH",
+  },
+  "gasPaid": "0.002478534680011456",
+  "reverted": null,
+  "timestamp": 1660863040,
+  "txHash": "0x8c0e9eb2a88c710f79487ddfd8f9df7806c938fc82025a7810cf09ec68727e26",
+  "userAddress": "0x02fb7c039a1db032be786dce909dd7ffd052bde7",
+  "userName": "Angelo Abbott",
+}
+`;
+
+exports[`Interpreter 46`] = `
+Object {
+  "actions": Array [
+    "removed liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x20ec84c46392cb3ae6a7925be92f597fcc7d88f9",
+      "amount": "8.959236389506",
+      "name": "SuperPool",
+      "symbol": "SUPER",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.2972664873606160052",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x586f48aa01029884b4ba113cdc70b615802aeebc",
+      "amount": "1.571257646476",
+      "name": "SushiSwap LP Token",
+      "symbol": "SLP",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Mya Halvorson removed liquidity from the SUPER-ETH SushiSwap pool",
+  "extra": Object {
+    "ethValueReceived": "0.297266487360616008",
+    "token_0": "SUPER",
+  },
+  "gasPaid": "0.005553959492753724",
+  "reverted": null,
+  "timestamp": 1661200279,
+  "txHash": "0x5c02ad31a4c7d33ba222c340c4d5f834f7965877c426701a6616e5b3809a6dc6",
+  "userAddress": "0x240ad467a71210629d71d4de22ebde27951c83fc",
+  "userName": "Mya Halvorson",
+}
+`;
+
+exports[`Interpreter 47`] = `
+Object {
+  "actions": Array [
+    "removed liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xa6dd98031551c23bb4a2fbe2c4d524e8f737c6f7",
+      "amount": "10274828.871470849961",
+      "name": "Tokenfy",
+      "symbol": "TKNFY",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "5.94064984546204399862",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x0bd2b9116f1e2f88e4fd4cc0fce3e15178de8df5",
+      "amount": "7217.372895562787",
+      "name": "SushiSwap LP Token",
+      "symbol": "SLP",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Valerie Gleason removed liquidity from the TKNFY-ETH SushiSwap pool",
+  "extra": Object {
+    "ethValueReceived": "5.940649845462044067",
+    "token_0": "TKNFY",
+  },
+  "gasPaid": "0.009203658786336319",
+  "reverted": null,
+  "timestamp": 1655497110,
+  "txHash": "0xcd93f9a98673117e5c8bcbda0b9ec8d18b5d4450f1fa339f5ff14c31f8fe201b",
+  "userAddress": "0x9528d0e415ed2172a75c06ddf01abd032fc3f891",
+  "userName": "Valerie Gleason",
+}
+`;
+
+exports[`Interpreter 48`] = `
+Object {
+  "actions": Array [
+    "removed liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x767fe9edc9e0df98e07454847909b5e959d7ca0e",
+      "amount": "2.510031651721",
+      "name": "Illuvium",
+      "symbol": "ILV",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.1390955892903228408",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x6a091a3406e0073c3cd6340122143009adac0eda",
+      "amount": "0.564310496002",
+      "name": "SushiSwap LP Token",
+      "symbol": "SLP",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Harold Toy removed liquidity from the ILV-ETH SushiSwap pool",
+  "extra": Object {
+    "ethValueReceived": "0.13909558929032283",
+    "token_0": "ILV",
+  },
+  "gasPaid": "0.003601738983120912",
+  "reverted": null,
+  "timestamp": 1661264115,
+  "txHash": "0xa0034a9325859ac39559c5ee5c7428b51620e29002fc14ae4c920ac8ba2582e7",
+  "userAddress": "0x20d978ccd87d42f8d9e56b99ecdc60a35548067c",
+  "userName": "Harold Toy",
+}
+`;
+
+exports[`Interpreter 49`] = `
+Object {
+  "actions": Array [
+    "removed liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xa6dd98031551c23bb4a2fbe2c4d524e8f737c6f7",
+      "amount": "119249.648714875482",
+      "name": "Tokenfy",
+      "symbol": "TKNFY",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.05062760444452207853",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x0bd2b9116f1e2f88e4fd4cc0fce3e15178de8df5",
+      "amount": "71.747194006431",
+      "name": "SushiSwap LP Token",
+      "symbol": "SLP",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Ivy Farrell removed liquidity from the TKNFY-ETH SushiSwap pool",
+  "extra": Object {
+    "ethValueReceived": "0.050627604444522076",
+    "token_0": "TKNFY",
+  },
+  "gasPaid": "0.01201474471437965",
+  "reverted": null,
+  "timestamp": 1657123706,
+  "txHash": "0x26c8c6f27845a2462035e71e382b9c6b241f9a5e414c94eb74f5cd24ebe9a772",
+  "userAddress": "0x3e0640f36ef9e76212485f7b1d9c80888290d292",
+  "userName": "Ivy Farrell",
+}
+`;
+
+exports[`Interpreter 50`] = `
+Object {
+  "actions": Array [
+    "removed liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x25f8087ead173b73d6e8b84329989a8eea16cf73",
+      "amount": "329231.358253753628",
+      "name": "Yield Guild Games Token",
+      "symbol": "YGG",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "amount": "120.414498998765",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "unknown",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x99b42f2b49c395d2a77d973f6009abb5d67da343",
+      "amount": "4929.421034644561",
+      "name": "SushiSwap LP Token",
+      "symbol": "SLP",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Wade Luettgen removed liquidity from the YGG-WETH SushiSwap pool",
+  "extra": Object {
+    "token_0": "YGG",
+    "token_1": "WETH",
+  },
+  "gasPaid": "0.004000276277669724",
+  "reverted": null,
+  "timestamp": 1661266096,
+  "txHash": "0xfaababf2a3dec98d2b6ac4055151995ce89ffce74a1d7f72afa353ce036e1b20",
+  "userAddress": "0x29f4efddfb009367b9ea066daae649c410d8e5f3",
+  "userName": "Wade Luettgen",
+}
+`;
+
+exports[`Interpreter 51`] = `
+Object {
+  "actions": Array [
+    "bought",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x090185f2135308bad17527004364ebcc2d37e5f6",
+      "amount": "4317206.290000000037",
+      "name": "Spell Token",
+      "symbol": "SPELL",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.00069189347862645397",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "4.276477502275241",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Jake Lockman bought 4.275785608796613994 ETH of SPELL on SushiSwap",
+  "extra": Object {
+    "ethValueSent": "4.275785608796613994",
+    "tokenAmount": "4317206.289999999807782912",
+    "tokenName": "SPELL",
+  },
+  "gasPaid": "0.0064473612",
+  "reverted": null,
+  "timestamp": 1661274621,
+  "txHash": "0xb6d5e2c3bec38fea8ad724a4a726c9a28e221923c8d101739e7b869947c49e5c",
+  "userAddress": "0xea61675774c491b3744ef161877698c422152010",
+  "userName": "Jake Lockman",
+}
+`;
+
+exports[`Interpreter 52`] = `
+Object {
+  "actions": Array [
+    "bought",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xd084944d3c05cd115c09d072b9f44ba3e0e45921",
+      "amount": "6.751227660366",
+      "name": "Manifold Finance",
+      "symbol": "FOLD",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.25",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "shirex.eth bought 0.25 ETH of FOLD on SushiSwap",
+  "extra": Object {
+    "ethValueSent": "0.25",
+    "tokenAmount": "6.751227660366390221",
+    "tokenName": "FOLD",
+  },
+  "gasPaid": "0.001363313521128386",
+  "reverted": null,
+  "timestamp": 1661277413,
+  "txHash": "0xacd7a3ce8f76c697517c72e6aba10eb4012edbe0e90ebf7920f75640cf27d42a",
+  "userAddress": "0x62117861da69ad0d6483f75508acd61871b8e058",
+  "userName": "shirex.eth",
+}
+`;
+
+exports[`Interpreter 53`] = `
+Object {
+  "actions": Array [
+    "bought",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xe7da1d8327ae1f320bbc23ca119b02ad3f85dceb",
+      "amount": "0.000000000185",
+      "name": "BlackDAO",
+      "symbol": "BLKD",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.1",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Olin Parker bought 0.00000000019396768 ETH of BLKD on SushiSwap",
+  "extra": Object {
+    "ethValueSent": "0.00000000019396768",
+    "tokenAmount": "0.000000000184766125",
+    "tokenName": "BLKD",
+  },
+  "gasPaid": "0.003911395669067428",
+  "reverted": null,
+  "timestamp": 1660524683,
+  "txHash": "0xe8179de2fba98287f09671beeabf16875465e977716d219a67d1df736108b756",
+  "userAddress": "0xf7d5ce660b96baec013533167e6004687ce90d23",
+  "userName": "Olin Parker",
+}
+`;
+
+exports[`Interpreter 54`] = `
+Object {
+  "actions": Array [
+    "sold",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "1.71835442495810974961",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xabea7663c472648d674bd3403d94c858dfeef728",
+      "amount": "0.5",
+      "name": "Pudgy Penguins",
+      "symbol": "PUDGY",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "ryanchandler.eth sold 1.718354424958109763 ETH of PUDGY on SushiSwap",
+  "extra": Object {
+    "ethValueReceived": "1.718354424958109763",
+    "tokenAmount": "0.499999999999999999",
+    "tokenName": "PUDGY",
+  },
+  "gasPaid": "0.002303984394541428",
+  "reverted": null,
+  "timestamp": 1661278229,
+  "txHash": "0x69a0f4c2d728ca7dffdc7d1cb56742c5dbfb43bcdee081eea68f97c6ccbb6806",
+  "userAddress": "0x25cf64beb03949c6283e719a67434ec64a564534",
+  "userName": "ryanchandler.eth",
+}
+`;
+
+exports[`Interpreter 55`] = `
+Object {
+  "actions": Array [
+    "sold",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "1.47940897360965495366",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x69fa8e7f6bf1ca1fb0de61e1366f7412b827cc51",
+      "amount": "0.000000800038",
+      "name": "EnreachDAO",
+      "symbol": "NRCH",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Barbara Schneider sold 1.479408973609654866 ETH of NRCH on SushiSwap",
+  "extra": Object {
+    "ethValueReceived": "1.479408973609654866",
+    "tokenAmount": "0.000000800037645503",
+    "tokenName": "NRCH",
+  },
+  "gasPaid": "0.001911231291670792",
+  "reverted": null,
+  "timestamp": 1661276973,
+  "txHash": "0x6cbddbccbe403f4b5d67295527d5e061e0819a561a1977c3c97e81990fffc0a9",
+  "userAddress": "0x9bf3134222ee4df13b872d7c036fd84eb3b1dbed",
+  "userName": "Barbara Schneider",
+}
+`;
+
+exports[`Interpreter 56`] = `
+Object {
+  "actions": Array [
+    "traded",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "1660.801776",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5",
+      "amount": "0.000000128385",
+      "name": "Olympus",
+      "symbol": "OHM",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "cripplerich.eth traded 0.000000128385273964 OHM for 1660.801776 USDC on SushiSwap",
+  "extra": Object {
+    "tokenAmount0": "0.000000128385273964",
+    "tokenAmount1": "1660.801776",
+    "tokenName0": "OHM",
+    "tokenName1": "USDC",
+  },
+  "gasPaid": "0.002507441832350378",
+  "reverted": null,
+  "timestamp": 1661279269,
+  "txHash": "0xff082dbc9b6b2135b41fda2b46ce642c3b29db22ba3fe14fc10be87f0b721839",
+  "userAddress": "0xe635909e655eb5c9a0c4c1e185f17b6a34923111",
+  "userName": "cripplerich.eth",
+}
+`;
+
+exports[`Interpreter 57`] = `
+Object {
+  "actions": Array [
+    "traded",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "amount": "1939.793511",
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xc18360217d8f7ab5e7c516566761ea12ce7f9d72",
+      "amount": "146.26198",
+      "name": "Ethereum Name Service",
+      "symbol": "ENS",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Melissa Oberbrunner traded 146.26198 ENS for 1939.793511 USDT on SushiSwap",
+  "extra": Object {
+    "tokenAmount0": "146.26198",
+    "tokenAmount1": "1939.793511",
+    "tokenName0": "ENS",
+    "tokenName1": "USDT",
+  },
+  "gasPaid": "0.00351744",
+  "reverted": null,
+  "timestamp": 1661278305,
+  "txHash": "0x551e05368ecbedad6f7d6ec8f407d60e84d30b8a93e815a2b52a19e481584715",
+  "userAddress": "0x3803da7df10ba9befe913f625fd868d1fa7e6e02",
+  "userName": "Melissa Oberbrunner",
+}
+`;
+
+exports[`Interpreter 58`] = `
+Object {
+  "actions": Array [
+    "sold",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "1.0",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "1652.799369",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "ganthony.eth sold 1.0 ETH of USDC on SushiSwap",
+  "extra": Object {
+    "ethValueReceived": "1.0",
+    "tokenAmount": "1652.799369",
+    "tokenName": "USDC",
+  },
+  "gasPaid": "0.00275322814796757",
+  "reverted": null,
+  "timestamp": 1661278876,
+  "txHash": "0x50886b0742fef7b3abb30427b5c4c8bcee4be2c0543d086740f0534546623cbd",
+  "userAddress": "0x2920c293c5b9aa5c64c2d57479cdaa861b95c141",
+  "userName": "ganthony.eth",
+}
+`;
+
+exports[`Interpreter 59`] = `
+Object {
+  "actions": Array [
+    "traded",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "amount": "0.47136344183",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "unknown",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x0de05f6447ab4d22c8827449ee4ba2d5c288379b",
+      "amount": "105194.51880456807",
+      "name": "Ooki Token",
+      "symbol": "OOKI",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Norwood Bartell traded 105194.518804568075057715 OOKI for 0.471363441830448703 WETH on SushiSwap",
+  "extra": Object {
+    "tokenAmount0": "105194.518804568075057715",
+    "tokenAmount1": "0.471363441830448703",
+    "tokenName0": "OOKI",
+    "tokenName1": "WETH",
+  },
+  "gasPaid": "0.0016246152327111",
+  "reverted": null,
+  "timestamp": 1661276793,
+  "txHash": "0xc7070e2bdd0e5e3558450c546ec173005bb2a0f488907ee709a320c07da166cd",
+  "userAddress": "0xf07704777d6bc182bf2c67fbda48913169b84983",
+  "userName": "Norwood Bartell",
 }
 `;
