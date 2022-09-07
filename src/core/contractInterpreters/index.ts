@@ -35,6 +35,7 @@ const contractInterpreters = {
     '0xf1f3ca6268f330fda08418db12171c3173ee39c9': require('./ZapperNFT_0xeabb.json'),
     '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F': require('./SushiSwap_0xd9e1.json'),
     '0x2e2234b3a848f895a60b2071f90303cd02f7491d': require('./BatchTransfer_0x2e22.json'),
+    '0xd152f549545093347a162dce210e7293f1452150': require('./DisperseApp_0xd152.json'),
     // '0x0baccdd05a729ab8b56e09ef19c15f953e10885f': require('./NFTLoanFacilitator_0x0bac.json'), will add once filled out
 }
 
