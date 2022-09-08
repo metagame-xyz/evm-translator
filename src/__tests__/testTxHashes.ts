@@ -63,7 +63,38 @@ const testTxHashes = {
         mint: '0x6b839c1d519f2f6b11eb304d5cc185b7b367278150b0fe3109084aa0ed78cfb2',
         redeem: '0xf1f6e7aff98668f78398871484bdcd50afc12a923029a6c025f8835a3ef4a936',
     },
-    GnosisSafe: {},
+    SushiSwap: {
+        addLiquidity: '0x77c810424f1493f0059ae11af084f5fea1d32654b9e6bf28fe7ea1eadd822432',
+        addLiquidityETH: '0x21a385a77f3b99a83dda54ef36dbf4156522af0015eb68541693400b9b72d374',
+        removeLiquidity: '0x8c0e9eb2a88c710f79487ddfd8f9df7806c938fc82025a7810cf09ec68727e26',
+        removeLiquidityETH: '0x5c02ad31a4c7d33ba222c340c4d5f834f7965877c426701a6616e5b3809a6dc6',
+        removeLiquidityETHSupportingFeeOnTransferTokens:
+            '0xcd93f9a98673117e5c8bcbda0b9ec8d18b5d4450f1fa339f5ff14c31f8fe201b',
+        removeLiquidityETHWithPermit: '0x7a9059dbe5f9baea798147bb4a9efc36608e3693f7358872cafd020a4c16c910',
+        removeLiquidityETHWithPermitSupportingFeeOnTransferTokens:
+            '0x26c8c6f27845a2462035e71e382b9c6b241f9a5e414c94eb74f5cd24ebe9a772',
+        removeLiquidityWithPermit: '0xfaababf2a3dec98d2b6ac4055151995ce89ffce74a1d7f72afa353ce036e1b20',
+        swapETHForExactTokens: '0xb6d5e2c3bec38fea8ad724a4a726c9a28e221923c8d101739e7b869947c49e5c',
+        swapExactETHForTokens: '0xacd7a3ce8f76c697517c72e6aba10eb4012edbe0e90ebf7920f75640cf27d42a',
+        swapExactETHForTokensSupportingFeeOnTransferTokens:
+            '0xe8179de2fba98287f09671beeabf16875465e977716d219a67d1df736108b756',
+        swapExactTokensForETH: '0x69a0f4c2d728ca7dffdc7d1cb56742c5dbfb43bcdee081eea68f97c6ccbb6806',
+        swapExactTokensForETHSupportingFeeOnTransferTokens:
+            '0x6cbddbccbe403f4b5d67295527d5e061e0819a561a1977c3c97e81990fffc0a9',
+        swapExactTokensForTokens: '0xff082dbc9b6b2135b41fda2b46ce642c3b29db22ba3fe14fc10be87f0b721839',
+        swapExactTokensForTokensSupportingFeeOnTransferTokens:
+            '0x551e05368ecbedad6f7d6ec8f407d60e84d30b8a93e815a2b52a19e481584715',
+        swapTokensForExactETH: '0x50886b0742fef7b3abb30427b5c4c8bcee4be2c0543d086740f0534546623cbd',
+        swapTokensForExactTokens: '0xc7070e2bdd0e5e3558450c546ec173005bb2a0f488907ee709a320c07da166cd',
+    },
+    BatchTransfer: {
+        batchTransfer: '0x4b86cff9a093e7c29ad86c3816e1f8e867f0264f6fc1052f57668a19b024b092',
+    },
+    DisperseApp: {
+        disperseTokenSimple: '0xbaf7354913380992f641ba1eb3345641069af4811bfa93356c4a148c7f951ba3',
+        disperseToken: '0x4f32fc855204597a1c3bf5dad15e1636ca1a56bc920578a5b233c50ce0035853',
+        disperseEther: '0x0218f4ea6f52110919badb90636cc72563e5b80160f7fcf575df9dca1fe8eb9c',
+    },
 }
 
 // test multiple roles for a single tx

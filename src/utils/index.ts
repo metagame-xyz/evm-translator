@@ -11,11 +11,9 @@ import traverse from 'traverse'
 
 import { ABI_Item, ABI_ItemUnfiltered, ABI_Row, ABI_RowZ, ABI_Type } from 'interfaces/abi'
 import { Interaction, InteractionEvent } from 'interfaces/decoded'
-import { Action, Interpretation } from 'interfaces/interpreted'
+import { Action, AssetType, Interpretation } from 'interfaces/interpreted'
 import { Chain, Chains, ChainSymbol } from 'interfaces/utils'
 import { AddressZ } from 'interfaces/utils'
-
-import { getNativeValueTransferredForDoubleSidedTx } from 'core/DoubleSidedTxInterpreter'
 
 // Despite most contracts using Open Zeppelin's standard naming convention of "to, from, value", not all do. Most notably, DAI and WETH use "src, dst, wad". These are used rename the keys to match the standard (both for generic and contract-specific interpretations).
 const toKeys = ['to', '_to', 'dst']
@@ -240,6 +238,31 @@ export const retryProviderCall = async <T>(providerPromise: Promise<T>): Promise
         }
     }
     throw error
+}
+
+export function getNativeValueTransferredForDoubleSidedTx(interpretation: Interpretation): string {
+    const nativeValueSent = interpretation.assetsSent.find((asset) => asset.type === AssetType.native)?.amount || '0'
+    const nativeValueReceived =
+        interpretation.assetsReceived.find((asset) => asset.type === AssetType.native)?.amount || '0'
+
+    if (
+        interpretation.actions[0] == 'bought' &&
+        parseFloat(nativeValueReceived) === 0 &&
+        parseFloat(nativeValueSent) !== 0
+    ) {
+        return nativeValueSent
+    } else if (
+        interpretation.actions[0] == 'sold' &&
+        parseFloat(nativeValueSent) === 0 &&
+        parseFloat(nativeValueReceived) !== 0
+    ) {
+        return nativeValueReceived
+    } else {
+        console.log(
+            `Invalid NFT sale: action: ${interpretation.actions[0]}, received ${nativeValueReceived} ETH and ${interpretation.assetsReceived.length} tokens, sent ${nativeValueSent} ETH and ${interpretation.assetsSent.length} tokens`,
+        )
+        return Action.unknown
+    }
 }
 
 export function fillDescriptionTemplate(template: string, interpretation: Interpretation): string {
