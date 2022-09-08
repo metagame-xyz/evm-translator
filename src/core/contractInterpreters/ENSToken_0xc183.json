@@ -1,0 +1,162 @@
+{
+    "contractAddress": "0xc18360217d8f7ab5e7c516566761ea12ce7f9d72",
+    "contractOfficialName": "ENSToken",
+    "contractName": "ENSToken",
+    "entityName": "Ethereum Name Service",
+    "writeFunctions": {
+        "approve": {
+            "action": "approved",
+            "exampleDescriptionTemplate": "{userName} {action} {spender} as spender",
+            "exampleDescription": "Carlos.eth approved Alice.eth as spender",
+            "keywords": {
+                "spender": {
+                    "key": "spender",
+                    "filters": {
+                        "eventName": "Approval",
+                        "owner": "{userAddress}"
+                    },
+                    "defaultValue": "unknown spender"
+                },
+                "tokenName": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Approval",
+                        "owner": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                }
+            }
+        },
+        "claimTokens": {
+            "action": "claimed",
+            "exampleDescriptionTemplate": "{userName} {action} {amountClaimed} {tokenName}",
+            "exampleDescription": "Carlos.eth claimed 0.1 ENS",
+            "keywords": {
+                "amountClaimed": {
+                    "key": "amount",
+                    "filters": {
+                        "eventName": "Claim",
+                        "claimant": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "tokenName": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                }
+            }
+        },
+        "delegate": {
+            "action": "delegated",
+            "exampleDescriptionTemplate": "{userName} {action} to {toDelegate}",
+            "exampleDescription": "Carlos.eth delegated to Alice.eth",
+            "keywords": {
+                "toDelegate": {
+                    "key": "toDelegate",
+                    "filters": {
+                        "eventName": "DelegateChanged"
+                    },
+                    "defaultValue": "unknown"
+                }
+            }
+        },
+        "delegateBySig": {
+            "action": "delegated",
+            "exampleDescriptionTemplate": "{userName} {action} to {toDelegate}",
+            "exampleDescription": "Carlos.eth delegated to Alice.eth",
+            "keywords": {
+                "toDelegate": {
+                    "key": "toDelegate",
+                    "filters": {
+                        "eventName": "DelegateChanged"
+                    },
+                    "defaultValue": "unknown"
+                }
+            }
+        },
+        "permit": {
+            "action": "approved",
+            "exampleDescriptionTemplate": "{userName} {action} {spender} as spender",
+            "exampleDescription": "Carlos.eth approved Alice.eth as spender",
+            "keywords": {
+                "spender": {
+                    "key": "spender",
+                    "filters": {
+                        "eventName": "Approval"
+                    },
+                    "defaultValue": "unknown spender"
+                },
+                "tokenName": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Approval"
+                    },
+                    "defaultValue": "unknown"
+                }
+            }
+        },
+        "transfer": {
+            "action": "tranferred",
+            "exampleDescriptionTemplate": "{userName} {action} {amountToken} {tokenName} to {toUser}",
+            "exampleDescription": "Carlos.eth transferred 1 ENS to Alice.eth",
+            "keywords": {
+                "amountToken": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "tokenName": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "toUser": {
+                    "key": "to",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "unknown user"
+                }
+            }
+        },
+        "transferFrom": {
+            "action": "tranferred",
+            "exampleDescriptionTemplate": "{userName} {action} {amountToken} {tokenName} to {toUser}",
+            "exampleDescription": "Carlos.eth transferred 1 ENS to Alice.eth",
+            "keywords": {
+                "amountToken": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "tokenName": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "toUser": {
+                    "key": "to",
+                    "filters": {
+                        "eventName": "Transfer"
+                    },
+                    "defaultValue": "unknown user"
+                }
+            }
+        }
+    }
+}

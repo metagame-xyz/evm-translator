@@ -64,6 +64,15 @@ const testTxHashes = {
         redeem: '0xf1f6e7aff98668f78398871484bdcd50afc12a923029a6c025f8835a3ef4a936',
     },
     GnosisSafe: {},
+    ENSToken: {
+        approve: '0x069d6005adbfa59da8cb453e766661a9c29ed2c365b068db6e9b1ef2afdfba14',
+        claimTokens: '0x8cb22ce766007a82ef5a47d20a8ab12f3ce708c24542e5286668615b66c2d4ee',
+        delegate: '0x9e99d58aac7eb76a93007318373f5dbcdfe024f0077163024b8109048ced91c3',
+        delegateBySig: '0xddf3a077d1be6c5e868cf0d271180844bf5ca0af7163d151c4fc9cef1c9d5265',
+        permit: '0x5a7875f2b9385e12e98aa25ca791d9211fe5e593ccf737b0f74ad97c63baec40',
+        transfer: '0xdbef5114dab90c4fd3c47aa1c227826ceab6cad78da8dac6ddd1da79b8f49d87',
+        transferFrom: '0x50506ac62e736e71b30356695f71dd42bc048a731dc6aaed366f113471fdc1e0',
+    },
 }
 
 // test multiple roles for a single tx
