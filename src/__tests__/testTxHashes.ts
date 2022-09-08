@@ -64,6 +64,9 @@ const testTxHashes = {
         redeem: '0xf1f6e7aff98668f78398871484bdcd50afc12a923029a6c025f8835a3ef4a936',
     },
     GnosisSafe: {},
+    BulkCheckout: {
+        donate: '0xeba5bdcd6a4b42b3d71f53b3e8a53ba924a65ff63422c8e45e0a20efb961da0a'
+    },
 }
 
 // test multiple roles for a single tx
