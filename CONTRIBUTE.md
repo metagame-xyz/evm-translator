@@ -160,6 +160,8 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
 
             Some actions will depend on the perspective of the user, like an NFT sale. One user "bought" and the other "sold". If your action is an NFT sale, use the special `"__NFTSALE__"` action that will resolve to either "bought" or "sold" depending on the user's address.
 
+            If your contract's task is labeled as multisided on Wonder, and it is not a basic NFT Sale, see the section on multisided transactions below. This will require writing code.
+
         -   There are a few other optional fields that will be detailed in step 4.
 
     <br>
@@ -173,6 +175,18 @@ You made it to the fun part, congrats. Here, I'll walk through an example interp
     You can also select the number under "Calls Count" to get examples of transactions with this method. At this point, we encourage you to copy the transaction hash into [Etherscan.io](etherscan.io) to get a better understanding of what is happening in a given transaction.
     <br><br>
 
+    **Dealing with multisided transactions**
+
+    Multisided transactions are transactions that have multiple parties involved, each with a different perspective on what happened. For example, in an NFT sale transaction, one address "bought" and the other "sold. Interpreting contracts with multisided transactions earns higher compensation because it is more difficult. Let's look at how this is done.
+
+    1. Decide what your special action keyword will be. It must start and end with a double underscore like `"__NFTSALE__"`. Then, add that keyword to the `Action` enum in `src/core/interfaces/interpreted.ts`.
+    2. Go to `/src/core/MultiSidedActionInterpreters.ts` and add a new key-value pair for your multisided action. There's a chance that an existing key-value fits your needs but this is unlikely. The key should be your new action wrapped in brackets like `[Action.__NFTSALE__]`. The function will take in an interpretation and spit out a basic action.
+    3. Write the function body. This is the tricky part. You need to take the interpretation, understanding who is sending and receiving what, and return the appropriate action based on the perspective of the address. The `assetsSent` and `assetsReceived` fields already take the address into account so these will likely be your best tools here.
+    4. Once you're all done with that, you can use your keyword in your JSON contract interpretation file. It would go in the `action` field within the value of a key-value pair in `writeFunctions`.
+
+    Good luck!
+
+    <br><br>
     **Dealing with "multicall" methods**
 
     Some contracts use methods like "multicall", which bundle multiple method calls into one. If your contract does this, have no fear! Simply use `"executed multiple actions"` for your `action` field. Here is an example from `UniswapV3NonFungiblePositionManager.json`...

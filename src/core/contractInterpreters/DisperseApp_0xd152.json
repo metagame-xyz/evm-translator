@@ -1,0 +1,60 @@
+{
+    "contractAddress": "0xd152f549545093347a162dce210e7293f1452150",
+    "contractOfficialName": "Disperse",
+    "contractName": "Disperse",
+    "entityName": "Disperse.app",
+    "writeFunctions": {
+        "disperseTokenSimple": {
+            "action": "dispersed",
+            "exampleDescriptionTemplate": "{userName} {action} ${tokenSymbol} ({tokenName} token) to multiple addresses",
+            "exampleDescription": "Craig Lebsack dispersed $ACR (Acreage token) to multiple addresses",
+            "keywords": {
+                "tokenName": {
+                    "key": "contractName",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "tokenSymbol": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                }
+            }
+        },
+        "disperseToken": {
+            "action": "dispersed",
+            "exampleDescriptionTemplate": "{userName} {action} ${tokenSymbol} ({tokenName} token) to multiple addresses",
+            "exampleDescription": "Sibyl Cole dispersed $NDS (Nodeseeds.com Token) to multiple addresses",
+            "keywords": {
+                "tokenName": {
+                    "key": "contractName",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "tokenSymbol": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                }
+            }
+        },
+        "disperseEther": {
+            "action": "dispersed",
+            "exampleDescriptionTemplate": "{userName} {action} {chainSymbol} to multiple addresses",
+            "exampleDescription": "Sibyl Cole dispersed ETH to multiple addresses",
+            "keywords": {}
+        }
+    }
+}
