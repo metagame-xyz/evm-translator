@@ -95,6 +95,11 @@ const testTxHashes = {
         disperseToken: '0x4f32fc855204597a1c3bf5dad15e1636ca1a56bc920578a5b233c50ce0035853',
         disperseEther: '0x0218f4ea6f52110919badb90636cc72563e5b80160f7fcf575df9dca1fe8eb9c',
     },
+    GnosisSafeProxyFactory: {
+        createProxy: "0x6581eb5cc7db3e6ba27ca8c9099023a80abfaa9b2cc0814335902c2c1a78dfe5",
+        createProxyWithCallback: "0x9fbd4f28304d79da925768b3f8caecc0b6edfcf2699e340ceb4d909f2c6a0a92",
+        createProxyWithNonce: "0x7276dfccd2dfc351e902905b7a136f25ec41b330b0b36cbd8a54648b9ac65763",
+    },
 }
 
 // test multiple roles for a single tx
