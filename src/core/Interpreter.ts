@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import contractInterpreters from './contractInterpreters'
-import { getActionForDoubleSidedTx } from './DoubleSidedTxInterpreter'
 import contractDeployInterpreter from './genericInterpreters/ContractDeploy.json'
 import interpretGnosisExecution from './genericInterpreters/gnosis'
 import lastFallback from './genericInterpreters/lastFallback'
 import interpretGenericToken from './genericInterpreters/token'
 import interpretGenericTransfer from './genericInterpreters/transfer'
+import multiSidedActionInterpreters, { MultiSidedActionInterpreter } from './MultiSidedActionInterpreters'
 import { BigNumber } from 'ethers'
 import { formatEther, formatUnits } from 'ethers/lib/utils'
 import { addressToName } from 'onoma'
@@ -227,10 +227,15 @@ class Interpreter {
             interpretation.contractName = interpretationMapping.contractName
 
             for (const methodSpecificMapping of methodSpecificMappings) {
-                if (methodSpecificMapping.action !== Action.__NFTSALE__) {
+                if (!Object.keys(multiSidedActionInterpreters).includes(methodSpecificMapping.action)) {
                     interpretation.actions.push(methodSpecificMapping.action)
                 } else {
-                    interpretation.actions.push(getActionForDoubleSidedTx(interpretation))
+                    const genericInterpreter: MultiSidedActionInterpreter = () => Action.unknown
+                    interpretation.actions.push(
+                        (multiSidedActionInterpreters[methodSpecificMapping.action] || genericInterpreter)(
+                            interpretation,
+                        ),
+                    )
                 }
             }
 

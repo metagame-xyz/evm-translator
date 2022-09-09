@@ -9,6 +9,11 @@
 
 a library for making EVM-based blockchain data more human-readable
 
+## Our ABI Dataset
+In the process of building this, we also assembled the most complete ABI dataset for Ethereum on the internet, with 441,000+ unique ABI Fragments.  We started with 4byte directory, but quickly realized it didn't have the information needed to decode events and functions calls - it doesn't store full signatures, which includes names of parameters and if they're indexed or not. To use this dataset for your own projects, [download it from Metagame’s Google Drive folder.](https://drive.google.com/drive/folders/1RwA8sS3W1UNn8vA0s0rkjwm9rle-DYc9)  It can be dropped directly into a MongoDB instance (we’ve been using Mongo's Compass as a GUI) to interact with programmatically.
+
+
+## Contribute
 If you're looking to contribute to evm-translator, click [here](/CONTRIBUTE.md).
 
 ## Logical Layout

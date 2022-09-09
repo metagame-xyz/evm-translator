@@ -1,0 +1,497 @@
+{
+    "contractAddress": "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F",
+    "contractOfficialName": "SushiSwapRouter",
+    "contractName": "SushiSwap",
+    "entityName": "Sushi",
+    "writeFunctions": {
+        "addLiquidity": {
+            "exampleDescriptionTemplate": "{userName} added liquidity to the {token_0}-{token_1} {contractName} pool",
+            "exampleDescription": "Manuela Ullrich added liquidity to the WETH-USDC SushiSwap pool",
+            "action": "added liquidity",
+            "keywords": {
+                "token_0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "token_1": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "index": 1,
+                    "defaultValue": "unknown"
+                }
+            }
+        },
+        "addLiquidityETH": {
+            "action": "added liquidity",
+            "exampleDescriptionTemplate": "{userName} {action} to the {token_0}-{chainSymbol} {contractName} pool",
+            "exampleDescription": "Sheila Little added liquidity to the USDC-ETH SushiSwap pool",
+            "keywords": {
+                "token_0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                }
+            }
+        },
+        "removeLiquidity": {
+            "action": "removed liquidity",
+            "exampleDescriptionTemplate": "{userName} {action} from the {token_0}-{token_1} {contractName} pool",
+            "exampleDescription": "Angelo Abbott removed liquidity from the SUSHI-WETH SushiSwap pool",
+            "keywords": {
+                "token_0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "token_1": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "index": 1,
+                    "defaultValue": "unknown"
+                }
+            }
+        },
+        "removeLiquidityETH": {
+            "action": "removed liquidity",
+            "exampleDescriptionTemplate": "{userName} {action} from the {token_0}-{chainSymbol} {contractName} pool",
+            "exampleDescription": "Mya Halvorson removed liquidity from the SUPER-ETH SushiSwap pool",
+            "keywords": {
+                "token_0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "ethValueReceived": {
+                    "key": "value",
+                    "filters": {
+                        "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                        "eventName": "NativeTransfer",
+                        "to": "{contractAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
+                }
+            }
+        },
+        "removeLiquidityETHSupportingFeeOnTransferTokens": {
+            "action": "removed liquidity",
+            "exampleDescriptionTemplate": "{userName} {action} from the {token_0}-{chainSymbol} {contractName} pool",
+            "exampleDescription": "Valerie Gleason removed liquidity from the TKNFY-ETH SushiSwap pool",
+            "keywords": {
+                "token_0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "ethValueReceived": {
+                    "key": "value",
+                    "filters": {
+                        "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                        "eventName": "NativeTransfer",
+                        "to": "{contractAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
+                }
+            }
+        },
+        "removeLiquidityETHWithPermit": {
+            "action": "removed liquidity",
+            "exampleDescriptionTemplate": "{userName} {action} from the {token_0}-{chainSymbol} {contractName} pool",
+            "exampleDescription": "Harold Toy removed liquidity from the ILV-ETH SushiSwap pool",
+            "keywords": {
+                "token_0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "ethValueReceived": {
+                    "key": "value",
+                    "filters": {
+                        "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                        "eventName": "NativeTransfer",
+                        "to": "{contractAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
+                }
+            }
+        },
+        "removeLiquidityETHWithPermitSupportingFeeOnTransferTokens": {
+            "action": "removed liquidity",
+            "exampleDescriptionTemplate": "{userName} {action} from the {token_0}-{chainSymbol} {contractName} pool",
+            "exampleDescription": "Ivy Farrell removed liquidity from the TKNFY-ETH SushiSwap pool",
+            "keywords": {
+                "token_0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "ethValueReceived": {
+                    "key": "value",
+                    "filters": {
+                        "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                        "eventName": "NativeTransfer",
+                        "to": "{contractAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
+                }
+            }
+        },
+        "removeLiquidityWithPermit": {
+            "action": "removed liquidity",
+            "exampleDescriptionTemplate": "{userName} {action} from the {token_0}-{token_1} {contractName} pool",
+            "exampleDescription": "Wade Luettgen removed liquidity from the YGG-WETH SushiSwap pool",
+            "keywords": {
+                "token_0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "token_1": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "index": 1,
+                    "defaultValue": "unknown"
+                }
+            }
+        },
+        "swapETHForExactTokens": {
+            "action": "bought",
+            "exampleDescriptionTemplate": "{userName} {action} {ethValueSent} {chainSymbol} of {tokenName} on {contractName}",
+            "exampleDescription": "Jake Lockman bought 4.27 ETH of SPELL on SushiSwap",
+            "keywords": {
+                "tokenName": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount"
+                },
+                "ethValueSent": {
+                    "key": "amount1In",
+                    "filters": {
+                        "eventName": "Swap",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
+                }
+            }
+        },
+        "swapExactETHForTokens": {
+            "action": "bought",
+            "exampleDescriptionTemplate": "{userName} {action} {ethValueSent} {chainSymbol} of {tokenName} on {contractName}",
+            "exampleDescription": "shirex.eth bought 0.25 ETH of FOLD on SushiSwap",
+            "keywords": {
+                "tokenName": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount"
+                },
+                "ethValueSent": {
+                    "key": "amount0In",
+                    "filters": {
+                        "eventName": "Swap",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
+                }
+            }
+        },
+        "swapExactETHForTokensSupportingFeeOnTransferTokens": {
+            "action": "bought",
+            "exampleDescriptionTemplate": "{userName} {action} {ethValueSent} {chainSymbol} of {tokenName} on {contractName}",
+            "exampleDescription": "Olin Parker bought 0.00000000019396768 ETH of BLKD on SushiSwap",
+            "keywords": {
+                "tokenName": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount"
+                },
+                "ethValueSent": {
+                    "key": "amount0In",
+                    "filters": {
+                        "eventName": "Swap",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
+                }
+            }
+        },
+        "swapExactTokensForETH": {
+            "action": "sold",
+            "exampleDescriptionTemplate": "{userName} {action} {ethValueReceived} {chainSymbol} of {tokenName} on {contractName}",
+            "exampleDescription": "ryanchandler.eth sold 1.718354424958109763 ETH of PUDGY on SushiSwap",
+            "keywords": {
+                "tokenName": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount"
+                },
+                "ethValueReceived": {
+                    "key": "value",
+                    "filters": {
+                        "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                        "eventName": "NativeTransfer",
+                        "to": "{contractAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
+                }
+            }
+        },
+        "swapExactTokensForETHSupportingFeeOnTransferTokens": {
+            "action": "sold",
+            "exampleDescriptionTemplate": "{userName} {action} {ethValueReceived} {chainSymbol} of {tokenName} on {contractName}",
+            "exampleDescription": "Barbara Schneider sold 1.479408973609654866 ETH of NRCH on SushiSwap",
+            "keywords": {
+                "tokenName": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount"
+                },
+                "ethValueReceived": {
+                    "key": "value",
+                    "filters": {
+                        "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                        "eventName": "NativeTransfer",
+                        "to": "{contractAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
+                }
+            }
+        },
+        "swapExactTokensForTokens": {
+            "action": "traded",
+            "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
+            "exampleDescription": "cripplerich.eth traded 0.000000128385273964 OHM for 1660.801776 USDC on SushiSwap",
+            "keywords": {
+                "tokenName0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount0": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount"
+                },
+                "tokenName1": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount1": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount"
+                }
+            }
+        },
+        "swapExactTokensForTokensSupportingFeeOnTransferTokens": {
+            "action": "traded",
+            "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
+            "exampleDescription": "Melissa Oberbrunner traded 146.26198 ENS for 1939.793511 USDT on SushiSwap",
+            "keywords": {
+                "tokenName0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount0": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount"
+                },
+                "tokenName1": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount1": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount"
+                }
+            }
+        },
+        "swapTokensForExactETH": {
+            "action": "sold",
+            "exampleDescriptionTemplate": "{userName} {action} {ethValueReceived} {chainSymbol} of {tokenName} on {contractName}",
+            "exampleDescription": "ganthony.eth sold 1.0 ETH of USDC on SushiSwap",
+            "keywords": {
+                "tokenName": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount"
+                },
+                "ethValueReceived": {
+                    "key": "value",
+                    "filters": {
+                        "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                        "eventName": "NativeTransfer",
+                        "to": "{contractAddress}"
+                    },
+                    "defaultValue": "an unknown amount of"
+                }
+            }
+        },
+        "swapTokensForExactTokens": {
+            "action": "traded",
+            "exampleDescriptionTemplate": "{userName} {action} {tokenAmount0} {tokenName0} for {tokenAmount1} {tokenName1} on {contractName}",
+            "exampleDescription": "Norwood Bartell traded 105194.518804568075057715 OOKI for 0.471363441830448703 WETH on SushiSwap",
+            "keywords": {
+                "tokenName0": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount0": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount"
+                },
+                "tokenName1": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown token"
+                },
+                "tokenAmount1": {
+                    "key": "value",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "to": "{userAddress}"
+                    },
+                    "defaultValue": "an unknown amount"
+                }
+            }
+        }
+    }
+}

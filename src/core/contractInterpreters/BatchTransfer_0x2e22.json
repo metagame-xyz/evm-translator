@@ -1,0 +1,31 @@
+{
+    "contractAddress": "0x2e2234b3a848f895a60b2071f90303cd02f7491d",
+    "contractOfficialName": "BatchTransfer",
+    "contractName": "BatchTransfer",
+    "entityName": "BatchTransfer",
+    "writeFunctions": {
+        "batchTransfer": {
+            "action": "sent",
+            "exampleDescriptionTemplate": "{userName} {action} {tokenSymbol} ({tokenName}) to  multiple addresses",
+            "exampleDescription": "7gc.eth sent CMMNR (Commoners by Commonopoly) to multiple addresses",
+            "keywords": {
+                "tokenSymbol": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                },
+                "tokenName": {
+                    "key": "contractName",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "unknown"
+                }
+            }
+        }
+    }
+}
