@@ -95,6 +95,10 @@ const testTxHashes = {
         disperseToken: '0x4f32fc855204597a1c3bf5dad15e1636ca1a56bc920578a5b233c50ce0035853',
         disperseEther: '0x0218f4ea6f52110919badb90636cc72563e5b80160f7fcf575df9dca1fe8eb9c',
     },
+    zkSyncProxy: {
+        getNoticePeriod: '0x2356bd86996cb0dd4416efca0f486b8d8d09569dd88b3156516594df440ed0e0',
+        isReadyForUpgrade: '0x6a03973f806602b491b1ebbc9f7134e8fdf8ea6aea44e4d6f7d9bbf8a5d1ffe7'
+    }
 }
 
 // test multiple roles for a single tx
