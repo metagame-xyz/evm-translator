@@ -1,0 +1,3989 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Interpreter 1`] = `
+Object {
+  "actions": Array [
+    "sold",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.39495711579265108115",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x9273b71cfd60e022c2107d5bcf5ee62a88346550",
+      "amount": "0.000458161052",
+      "name": "Kingdom Token",
+      "symbol": "KINGDOM",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+  "contractName": "Uniswap V2",
+  "counterpartyName": null,
+  "exampleDescription": "Nyah Kuhlman sold 0.071782049366433048 ETH of KINGDOM on Uniswap V2",
+  "extra": Object {
+    "ethValueReceived": "0.071782049366433048",
+    "tokenAmount": "0.000458161051962122",
+    "tokenName": "KINGDOM",
+  },
+  "gasPaid": "0.03127220866447174",
+  "reverted": null,
+  "timestamp": 1638316845,
+  "txHash": "0xd7be990f8849ec0b74d86fbda86eaf4c0cb25b814fb1ab9d2f056705b2fdfba6",
+  "userAddress": "0xdcdee85472e19a9a1bba1b9c524c6105c727f3d6",
+  "userName": "Nyah Kuhlman",
+}
+`;
+
+exports[`Interpreter 2`] = `
+Object {
+  "actions": Array [
+    "bought",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xfad45e47083e4607302aa43c65fb3106f1cd7607",
+      "amount": "0.011567525893",
+      "name": "hoge.finance",
+      "symbol": "HOGE",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "1",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+  "contractName": "Uniswap V2",
+  "counterpartyName": null,
+  "exampleDescription": "thememelord.eth bought 1.0 ETH of HOGE on Uniswap V2",
+  "extra": Object {
+    "ethValueSent": "1.0",
+    "tokenAmount": "0.011567525892826453",
+    "tokenName": "HOGE",
+  },
+  "gasPaid": "0.023564857708634499",
+  "reverted": null,
+  "timestamp": 1638316845,
+  "txHash": "0x32706fd90e141319710989feb555d6c9e394b1788802df6281d257cda0701c84",
+  "userAddress": "0x10fced9a7c5d1ae7186d5e5912b73d47c1283d65",
+  "userName": "thememelord.eth",
+}
+`;
+
+exports[`Interpreter 3`] = `
+Object {
+  "actions": Array [
+    "traded",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x9273b71cfd60e022c2107d5bcf5ee62a88346550",
+      "amount": "0.000202899041",
+      "name": "Kingdom Token",
+      "symbol": "KINGDOM",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "900.0",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+  "contractName": "Uniswap V2",
+  "counterpartyName": null,
+  "exampleDescription": "Felipa Luettgen traded 900.0 USDC for 0.000202899041047771 KINGDOM on Uniswap V2",
+  "extra": Object {
+    "tokenAmount0": "900.0",
+    "tokenAmount1": "0.000202899041047771",
+    "tokenName0": "USDC",
+    "tokenName1": "KINGDOM",
+  },
+  "gasPaid": "0.026273653630187205",
+  "reverted": null,
+  "timestamp": 1638316845,
+  "txHash": "0xb684992cdec31d2eeaf3866be82ddd2a9cfe2211bab96b1aa132d3a9ae50587b",
+  "userAddress": "0x4090bd947f70b9b8c9522faa0d2f7f9bbb4b2377",
+  "userName": "Felipa Luettgen",
+}
+`;
+
+exports[`Interpreter 4`] = `
+Object {
+  "actions": Array [
+    "added liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xc7b7dac697b03e11e4af085d927f0c9b24b3f27d",
+      "amount": "3162277.660168379545",
+      "name": "Uniswap V2",
+      "symbol": "UNI-V2",
+      "type": "LPToken",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xb56a1f3310578f23120182fb2e58c087efe6e147",
+      "amount": "1000000000000.0",
+      "name": "AllCoinsYieldCapital",
+      "symbol": "ACYC",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "10",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+  "contractName": "Uniswap V2",
+  "counterpartyName": null,
+  "exampleDescription": "Carol Abbott added liquidity to the ACYC-ETH Uniswap V2 pool",
+  "extra": Object {
+    "token_0": "ACYC",
+  },
+  "gasPaid": "0.037819919756787315",
+  "reverted": null,
+  "timestamp": 1638316877,
+  "txHash": "0xb78ce1e0f55e78cf005b4b5af9978b3d20292dc8c88c94f7ecade67083e2b97f",
+  "userAddress": "0x8b7b8448243559a5daa98a22cb6982796bce4271",
+  "userName": "Carol Abbott",
+}
+`;
+
+exports[`Interpreter 5`] = `
+Object {
+  "actions": Array [
+    "removed liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xb7b284c2ea09c637daa2f128a8756280a9bd9091",
+      "amount": "0.001868562428",
+      "name": "Kakashi",
+      "symbol": "KAKASHI",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "amount": "4.356835431802",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "unknown",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xbe2cee7429e427c262e73ea074bef59c6ad1d93b",
+      "amount": "0.093937438885",
+      "name": "Uniswap V2",
+      "symbol": "UNI-V2",
+      "type": "LPToken",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+  "contractName": "Uniswap V2",
+  "counterpartyName": null,
+  "exampleDescription": "Mckayla Muller removed liquidity from the KAKASHI-WETH Uniswap V2 pool",
+  "extra": Object {
+    "token_0": "KAKASHI",
+    "token_1": "WETH",
+  },
+  "gasPaid": "0.029644983060867926",
+  "reverted": null,
+  "timestamp": 1638318188,
+  "txHash": "0x967963d6eaad9e65d567cac325728d79aeaa319b1453e05ec55734f3b08445ec",
+  "userAddress": "0x888ae876e588cd29715ab2b4a6ecce0bc2e44655",
+  "userName": "Mckayla Muller",
+}
+`;
+
+exports[`Interpreter 6`] = `
+Object {
+  "actions": Array [
+    "removed liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
+      "amount": "4456.80372126116",
+      "name": "SAND",
+      "symbol": "SAND",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "6.53802974717997642529",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x3dd49f67e9d5bc4c5e6634b3f70bfd9dc1b6bd74",
+      "amount": "123.932818358485",
+      "name": "Uniswap V2",
+      "symbol": "UNI-V2",
+      "type": "LPToken",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+  "contractName": "Uniswap V2",
+  "counterpartyName": null,
+  "exampleDescription": "Else Quigley removed liquidity from the SAND-ETH Uniswap V2 pool",
+  "extra": Object {
+    "ethValueReceived": "6.538029747179976387",
+    "token_0": "SAND",
+  },
+  "gasPaid": "0.032858980114895286",
+  "reverted": null,
+  "timestamp": 1638318377,
+  "txHash": "0x3dd8f41c008a6ce59ca8d2b24df700dc4441d0a83747b9b7c0587449a2e7c9ca",
+  "userAddress": "0xc712b31175906564bb41a7b84169bd4a9b522011",
+  "userName": "Else Quigley",
+}
+`;
+
+exports[`Interpreter 7`] = `
+Object {
+  "actions": Array [
+    "bought",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x97e41d5ce9c8cb1f83947ef82a86e345aed673f3",
+      "name": "The Ninja Hideout",
+      "symbol": "TNH",
+      "tokenId": "228",
+      "type": "ERC721",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.05",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7f268357a8c2552623316e2562d90e642bb538e5",
+  "contractName": "OpenSea",
+  "counterpartyName": null,
+  "exampleDescription": "Vada Altenwerth bought The Ninja Hideout #228 on OpenSea for 0.05 ETH",
+  "extra": Object {
+    "NFT": "The Ninja Hideout",
+    "tokenId": "#228",
+  },
+  "gasPaid": "0.00837078350034528",
+  "reverted": null,
+  "timestamp": 1656089719,
+  "txHash": "0xc814cb6b61222beda8a9bcc359e776e72ae732a1c29df572099ecef27c8461e4",
+  "userAddress": "0x96a675775b8546a8602a1015efaacbc87358e478",
+  "userName": "Vada Altenwerth",
+}
+`;
+
+exports[`Interpreter 8`] = `
+Object {
+  "actions": Array [
+    "sold",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.04624999999999999944",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x97e41d5ce9c8cb1f83947ef82a86e345aed673f3",
+      "name": "The Ninja Hideout",
+      "symbol": "TNH",
+      "tokenId": "228",
+      "type": "ERC721",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7f268357a8c2552623316e2562d90e642bb538e5",
+  "contractName": "OpenSea",
+  "counterpartyName": null,
+  "exampleDescription": "Arianna Berge sold The Ninja Hideout #228 on OpenSea for 0.04624999999999999944 ETH",
+  "extra": Object {
+    "NFT": "The Ninja Hideout",
+    "tokenId": "#228",
+  },
+  "gasPaid": "0.00837078350034528",
+  "reverted": null,
+  "timestamp": 1656089719,
+  "txHash": "0xc814cb6b61222beda8a9bcc359e776e72ae732a1c29df572099ecef27c8461e4",
+  "userAddress": "0x83eb387c8f7c8903f2be1ca367197fc4b3cb573e",
+  "userName": "Arianna Berge",
+}
+`;
+
+exports[`Interpreter 9`] = `
+Object {
+  "actions": Array [
+    "repaid",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [
+    Object {
+      "address": "0x00ad8ebf64f141f1c81e9f8f792d3d1631c6c684",
+      "amount": "314305.817611832346",
+      "name": "Aave variable debt bearing CRV",
+      "symbol": "variableDebtCRV",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xd533a949740bb3306d119cc777fa900ba034cd52",
+      "amount": "314305.817611832346",
+      "name": "Curve DAO Token",
+      "symbol": "CRV",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
+  "contractName": "Aave V2",
+  "counterpartyName": null,
+  "exampleDescription": "Eino Wisozk repaid 314305.817611832341382659 CRV to Aave V2",
+  "extra": Object {
+    "tokenAmount": "314305.817611832341382659",
+    "tokenSymbol": "CRV",
+  },
+  "gasPaid": "0.012144212798965408",
+  "reverted": null,
+  "timestamp": 1656357349,
+  "txHash": "0xdf2f782ab0296121318cca140ef069f9f074c51ff4b11f0c677bcb01126f81de",
+  "userAddress": "0xd8a3785869f3fc0f0019ec8e9f649b4c43a33383",
+  "userName": "Eino Wisozk",
+}
+`;
+
+exports[`Interpreter 10`] = `
+Object {
+  "actions": Array [
+    "deposited",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x3ed3b47dd13ec9a98b44e6204a523e766b225811",
+      "amount": "0.0000000028",
+      "name": "Aave interest bearing USDT",
+      "symbol": "aUSDT",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "amount": "2800.0",
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
+  "contractName": "Aave V2",
+  "counterpartyName": null,
+  "exampleDescription": "Brennon Gleason deposited 2800.0 USDT into Aave V2",
+  "extra": Object {
+    "tokenAmount": "2800.0",
+    "tokenSymbol": "USDT",
+  },
+  "gasPaid": "0.015157096544929638",
+  "reverted": null,
+  "timestamp": 1656358062,
+  "txHash": "0x24ee705da17a6061091880f47335d92950c72398980e271cdb9c69e8502827f4",
+  "userAddress": "0x88a902adc0ff5bfe283d8d2365b51de6bc5e1666",
+  "userName": "Brennon Gleason",
+}
+`;
+
+exports[`Interpreter 11`] = `
+Object {
+  "actions": Array [
+    "withdrew",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+      "amount": "666.977520147508",
+      "name": "ChainLink Token",
+      "symbol": "LINK",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xa06bc25b5805d5f8d82847d191cb4af5a3e873e0",
+      "amount": "666.977520147508",
+      "name": "Aave interest bearing LINK",
+      "symbol": "aLINK",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
+  "contractName": "Aave V2",
+  "counterpartyName": null,
+  "exampleDescription": "Ashlynn Sawayn withdrew 666.977520147507670024 LINK from Aave V2",
+  "extra": Object {
+    "tokenAmount": "666.977520147507670024",
+    "tokenSymbol": "LINK",
+  },
+  "gasPaid": "0.018113192687317666",
+  "reverted": null,
+  "timestamp": 1657056840,
+  "txHash": "0x8df7e436048d687edfaf351e913783729eeaa9ece741391b2a8428d6b7762fe1",
+  "userAddress": "0xf8fb4a59846217eea1a15f5b776bf0b76b28ee67",
+  "userName": "Ashlynn Sawayn",
+}
+`;
+
+exports[`Interpreter 12`] = `
+Object {
+  "actions": Array [
+    "borrowed",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x619beb58998ed2278e08620f97007e1116d5d25b",
+      "amount": "0.0000000025",
+      "name": "Aave variable debt bearing USDC",
+      "symbol": "variableDebtUSDC",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "2500.0",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
+  "contractName": "Aave V2",
+  "counterpartyName": null,
+  "exampleDescription": "Jacques Metz borrowed 2500.0 USDC from Aave V2",
+  "extra": Object {
+    "tokenAmount": "2500.0",
+    "tokenSymbol": "USDC",
+  },
+  "gasPaid": "0.008698857193849088",
+  "reverted": null,
+  "timestamp": 1657056614,
+  "txHash": "0x564544c9aef01836615254504677b91a9ef96d5ae15eac50d98e08774ed1096c",
+  "userAddress": "0x7ca2491e5aec98fa36d917ffa57f599c530564b8",
+  "userName": "Jacques Metz",
+}
+`;
+
+exports[`Interpreter 13`] = `
+Object {
+  "actions": Array [
+    "traded",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "amount": "150.286887655179",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "unknown",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "280376.616697999998",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "Lyda Kassulke traded 280376.616698 USDC for 150.286887655178993883 WETH on Uniswap V3",
+  "extra": Object {
+    "tokenAmount0": "280376.616698",
+    "tokenAmount1": "150.286887655178993883",
+    "tokenName0": "USDC",
+    "tokenName1": "WETH",
+  },
+  "gasPaid": "0.07226057005959764",
+  "reverted": null,
+  "timestamp": 1654532279,
+  "txHash": "0xe4737f2b6174dfcc9482a50aacdc0a919f12c14ede767d6dbfc2cd502747e4f5",
+  "userAddress": "0x55961e9fc41c07c13ec0c7103b3d34c0ae32c2eb",
+  "userName": "Lyda Kassulke",
+}
+`;
+
+exports[`Interpreter 14`] = `
+Object {
+  "actions": Array [
+    "traded",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "189.236064",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x7d647b1a0dcd5525e9c6b3d14be58f27674f8c95",
+      "amount": "115.0",
+      "name": "BYTES",
+      "symbol": "BYTES",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xe592427a0aece92de3edee1f18e0157c05861564",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "Tania Koss traded 115.0 BYTES for 189.236064 USDC on Uniswap V3",
+  "extra": Object {
+    "tokenAmount0": "115.0",
+    "tokenAmount1": "189.236064",
+    "tokenName0": "BYTES",
+    "tokenName1": "USDC",
+  },
+  "gasPaid": "0.01376121884064768",
+  "reverted": null,
+  "timestamp": 1656530683,
+  "txHash": "0xf41a45f5347db0d95bfac48325f8272dce56782574e91083e5025324928bc40c",
+  "userAddress": "0x76914474c1e922aa1166b1d073373b3b1a2dab47",
+  "userName": "Tania Koss",
+}
+`;
+
+exports[`Interpreter 15`] = `
+Object {
+  "actions": Array [
+    "traded",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x9e32b13ce7f2e80a01932b42553652e053d6ed8e",
+      "amount": "200.0",
+      "name": "Metis Token",
+      "symbol": "Metis",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "amount": "2.127028966432",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "unknown",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "Mabel Will traded 2.127028966431723238 WETH for 200.0 Metis on Uniswap V3",
+  "extra": Object {
+    "tokenAmount0": "2.127028966431723238",
+    "tokenAmount1": "200.0",
+    "tokenName0": "WETH",
+    "tokenName1": "Metis",
+  },
+  "gasPaid": "0.00946193638459496",
+  "reverted": null,
+  "timestamp": 1654095700,
+  "txHash": "0xce57de79e8898075e6512492b47661abd8e74eeffe4760cd43c054b53480b583",
+  "userAddress": "0x613a3870f58893d760e942d0f9ec2e3f1772d336",
+  "userName": "Mabel Will",
+}
+`;
+
+exports[`Interpreter 16`] = `
+Object {
+  "actions": Array [
+    "traded",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "amount": "0.1",
+      "name": "Uniswap",
+      "symbol": "UNI",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "amount": "1.767773",
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "Krystina Cole traded 1.767773 USDT for 0.1 UNI on Uniswap V3",
+  "extra": Object {
+    "tokenAmount0": "1.767773",
+    "tokenAmount1": "0.1",
+    "tokenName0": "USDT",
+    "tokenName1": "UNI",
+  },
+  "gasPaid": "0.017258154195087624",
+  "reverted": null,
+  "timestamp": 1642499895,
+  "txHash": "0x26854093b17b25f74bcdb8728a6c8d113e68aa69f2ae2463f9c14788df53aa45",
+  "userAddress": "0x5c4f3b99c6c7be04bb2eac3f7bed560da85e0797",
+  "userName": "Krystina Cole",
+}
+`;
+
+exports[`Interpreter 17`] = `
+Object {
+  "actions": Array [
+    "traded",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.38916226204018605772",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xe5a3229ccb22b6484594973a03a3851dcd948756",
+      "amount": "340.4597021",
+      "name": "RAE Token",
+      "symbol": "RAE",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xe592427a0aece92de3edee1f18e0157c05861564",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "Fidel Mayert traded 340.4597021 RAE for 0.389162262040186058 WETH on Uniswap V3",
+  "extra": Object {
+    "tokenAmount0": "340.4597021",
+    "tokenAmount1": "0.389162262040186058",
+    "tokenName0": "RAE",
+    "tokenName1": "WETH",
+  },
+  "gasPaid": "0.0150073576790652",
+  "reverted": null,
+  "timestamp": 1656531693,
+  "txHash": "0x5efd5c0a1d3b1a0b42456aae4fc552e0924d8153f68196b011ef933b94614246",
+  "userAddress": "0xa5c11f25f7b8eeaa531d31f4094e0f5b6e43a820",
+  "userName": "Fidel Mayert",
+}
+`;
+
+exports[`Interpreter 18`] = `
+Object {
+  "actions": Array [
+    "burned",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [
+    Object {
+      "address": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+      "name": "Uniswap V3 Positions NFT-V1",
+      "symbol": "UNI-V3-POS",
+      "tokenId": "260993",
+      "type": "ERC721",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "Stefanie Kris burned Uniswap V3 liquidity position NFT #0.000000000000260993",
+  "extra": Object {
+    "tokenId": "0.000000000000260993",
+  },
+  "gasPaid": "0.002506870245171761",
+  "reverted": null,
+  "timestamp": 1656483817,
+  "txHash": "0x1d2e706317c9457e43d4b0dfe6395c55b518f4f05386d1f455dd6ea984e04ae1",
+  "userAddress": "0x0b96c91ab05629be9404746d5a7775f305a4f6a3",
+  "userName": "Stefanie Kris",
+}
+`;
+
+exports[`Interpreter 19`] = `
+Object {
+  "actions": Array [
+    "collected",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x2b591e99afe9f32eaa6214f7b7629768c40eeb39",
+      "amount": "320644.11814799998",
+      "name": "HEX",
+      "symbol": "HEX",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "305.165646",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "Johan Greenfelder collected 320644.118148 HEX and 305.165646 USDC in fees from Uniswap V3",
+  "extra": Object {
+    "tokenAmount0": "320644.118148",
+    "tokenAmount1": "305.165646",
+    "tokenName0": "HEX",
+    "tokenName1": "USDC",
+  },
+  "gasPaid": "0.006987365045529792",
+  "reverted": null,
+  "timestamp": 1646028442,
+  "txHash": "0x8d696e7ac40e22c25207a6eb3060d840fe4b1b4663fb988500f3bfc311da2a39",
+  "userAddress": "0xb7387207cefaeee263817780c60deb9b9742b3c8",
+  "userName": "Johan Greenfelder",
+}
+`;
+
+exports[`Interpreter 20`] = `
+Object {
+  "actions": Array [
+    "added liquidity",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [
+    Object {
+      "address": "0x0ab87046fbb341d058f17cbc4c1133f25a20a52f",
+      "amount": "6.305593205049",
+      "name": "Governance OHM",
+      "symbol": "gOHM",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xc0d4ceb216b3ba9c3701b291766fdcba977cec3a",
+      "amount": "0.000000070956",
+      "name": "BTRFLY",
+      "symbol": "BTRFLY",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "Nat Harvey added liquidity to the gOHM-BTRFLY pool on Uniswap V3 ",
+  "extra": Object {
+    "tokenAmount0": "6.305593205049249187",
+    "tokenAmount1": "0.000000070956438934",
+    "tokenName0": "gOHM",
+    "tokenName1": "BTRFLY",
+  },
+  "gasPaid": "0.00551313628814904",
+  "reverted": null,
+  "timestamp": 1653349230,
+  "txHash": "0xba7e346f46b1f5fa3bbff9868f1b6bf170b8fc8d212d2ad8e6f9fc84acdf30a1",
+  "userAddress": "0x6dd91bdab368282dc4ea4f4befc831b78a7c38c0",
+  "userName": "Nat Harvey",
+}
+`;
+
+exports[`Interpreter 21`] = `
+Object {
+  "actions": Array [
+    "minted",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+      "name": "Uniswap V3 Positions NFT-V1",
+      "symbol": "UNI-V3-POS",
+      "tokenId": "261722",
+      "type": "ERC721",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+      "amount": "2.02480816",
+      "name": "Wrapped BTC",
+      "symbol": "WBTC",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "22999.999914",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "Emmalee Kovacek minted an NFT for adding 2.02480816 WBTC and 22999.999914 USDC in liquidity to Uniswap V3",
+  "extra": Object {
+    "tokenAmount0": "2.02480816",
+    "tokenAmount1": "22999.999914",
+    "tokenName0": "WBTC",
+    "tokenName1": "USDC",
+  },
+  "gasPaid": "0.012234799351281643",
+  "reverted": null,
+  "timestamp": 1656585855,
+  "txHash": "0x8f97a7c09cb73c4da2de03f21bbf17c01f512a615da51a8bf721c4748b5f8475",
+  "userAddress": "0x57bddbe968f67c416b5d97d285c7a48676655dd7",
+  "userName": "Emmalee Kovacek",
+}
+`;
+
+exports[`Interpreter 22`] = `
+Object {
+  "actions": Array [
+    "removed liquidity",
+    "collected",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "287.925265",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "802.57273439268180936779",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "mrbayc.eth executed multiple actions on Uniswap V3",
+  "extra": Object {
+    "tokenName0": "an unknown token",
+    "tokenName1": "an unknown token",
+  },
+  "gasPaid": "0.0102171187901338",
+  "reverted": null,
+  "timestamp": 1656597816,
+  "txHash": "0xb38f55471c5a8539a605287b4116a4bf83a58261b3cfe00bc53337298003b9ae",
+  "userAddress": "0x6b92686c40747c85809a6772d0eda8e22a77c60c",
+  "userName": "mrbayc.eth",
+}
+`;
+
+exports[`Interpreter 23`] = `
+Object {
+  "actions": Array [
+    "minted",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+      "name": "Uniswap V3 Positions NFT-V1",
+      "symbol": "UNI-V3-POS",
+      "tokenId": "261805",
+      "type": "ERC721",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "195105.855359999987",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "186.99999999983515",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+  "contractName": "Uniswap V3",
+  "counterpartyName": null,
+  "exampleDescription": "Larue Carter minted on Uniswap V3",
+  "extra": Object {
+    "tokenAmount0": "195105.85536",
+    "tokenAmount1": "an unknown amount of",
+    "tokenName0": "USDC",
+    "tokenName1": "an unknown token",
+  },
+  "gasPaid": "0.02896727102188826",
+  "reverted": null,
+  "timestamp": 1656597626,
+  "txHash": "0x8dbab0967c491942e748c7fc305a3f9a3b2eb6c54c0dc48e1ba7f43babfc636a",
+  "userAddress": "0x0950541696888bcfac9af6a5c479871d3e583cac",
+  "userName": "Larue Carter",
+}
+`;
+
+exports[`Interpreter 24`] = `
+Object {
+  "actions": Array [
+    "minted",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5",
+      "amount": "0.000000136839",
+      "name": "Compound Ether",
+      "symbol": "cETH",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "27.456475447692352",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5",
+  "contractName": "Compound",
+  "counterpartyName": null,
+  "exampleDescription": "Meda Breitenberg minted 1368.38768906 cETH for 27.456475447692351502 ETH using Compound",
+  "extra": Object {
+    "tokenAmount0": "1368.38768906",
+    "tokenAmount1": "27.456475447692351502",
+  },
+  "gasPaid": "0.00675417163658496",
+  "reverted": null,
+  "timestamp": 1656712377,
+  "txHash": "0xbbb448dcb3b7e7216c609a97346d9f0553a29cdc8917a286c2aa00a1ba3fccde",
+  "userAddress": "0x56178a0d5f301baf6cf3e1cd53d9863437345bf9",
+  "userName": "Meda Breitenberg",
+}
+`;
+
+exports[`Interpreter 25`] = `
+Object {
+  "actions": Array [
+    "borrowed",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "81.0",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5",
+  "contractName": "Compound",
+  "counterpartyName": null,
+  "exampleDescription": "robertclarke.eth borrowed 81.0 ETH from Compound",
+  "extra": Object {
+    "tokenAmount": "81.0",
+  },
+  "gasPaid": "0.00979880143749471",
+  "reverted": null,
+  "timestamp": 1656709562,
+  "txHash": "0x5ced82f63bdbe55eaee49392afca90bf23473ba93d43eb5159e586fa8d343986",
+  "userAddress": "0x629d6688dd4546da8935ee1602be62d92b3c5a7c",
+  "userName": "robertclarke.eth",
+}
+`;
+
+exports[`Interpreter 26`] = `
+Object {
+  "actions": Array [
+    "redeemed",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "36.48530408897021004577",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5",
+      "amount": "0.000000181837",
+      "name": "Compound Ether",
+      "symbol": "cETH",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5",
+  "contractName": "Compound",
+  "counterpartyName": null,
+  "exampleDescription": "Meda Breitenberg redeemed 36.485304088970207177 ETH for 1818.37058358 cETH using Compound",
+  "extra": Object {
+    "tokenAmount0": "36.485304088970207177",
+    "tokenAmount1": "1818.37058358",
+  },
+  "gasPaid": "0.005135770747021752",
+  "reverted": null,
+  "timestamp": 1656707454,
+  "txHash": "0xdaf683d90248db147b1fb22b3979c1902e7ad57ae1c46bc1f8293601cfa5e154",
+  "userAddress": "0x56178a0d5f301baf6cf3e1cd53d9863437345bf9",
+  "userName": "Meda Breitenberg",
+}
+`;
+
+exports[`Interpreter 27`] = `
+Object {
+  "actions": Array [
+    "minted",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xface851a4921ce59e912d19329929ce6da6eb0c7",
+      "amount": "0.000175811315",
+      "name": "Compound ChainLink Token",
+      "symbol": "cLINK",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+      "amount": "35404.598209378273",
+      "name": "ChainLink Token",
+      "symbol": "LINK",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xface851a4921ce59e912d19329929ce6da6eb0c7",
+  "contractName": "Compound",
+  "counterpartyName": null,
+  "exampleDescription": "Chad Kiehn minted 0.000175811315390231 cLINK for 35404.598209378275431444 LINK using Compound",
+  "extra": Object {
+    "tokenAmount0": "0.000175811315390231",
+    "tokenAmount1": "35404.598209378275431444",
+    "tokenSymbol0": "cLINK",
+    "tokenSymbol1": "LINK",
+  },
+  "gasPaid": "0.00638980192409016",
+  "reverted": null,
+  "timestamp": 1656586902,
+  "txHash": "0x37182c6beeed11222cd8a4f81fb897ae6fefb31c64c634fea3a277afdba9dd11",
+  "userAddress": "0x777999be819ffecee44a995560a9d0e97780a30c",
+  "userName": "Chad Kiehn",
+}
+`;
+
+exports[`Interpreter 28`] = `
+Object {
+  "actions": Array [
+    "borrowed",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+      "amount": "20000.0",
+      "name": "ChainLink Token",
+      "symbol": "LINK",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xface851a4921ce59e912d19329929ce6da6eb0c7",
+  "contractName": "Compound",
+  "counterpartyName": null,
+  "exampleDescription": "Jonathan O'Connell borrowed 20000.0 LINK from Compound",
+  "extra": Object {
+    "tokenAmount": "20000.0",
+    "tokenSymbol": "LINK",
+  },
+  "gasPaid": "0.036063082766711096",
+  "reverted": null,
+  "timestamp": 1656374164,
+  "txHash": "0x669b67fa88c60b07d892f09a87c24dd7bd691bdcbd7b1eb0efd969096067f1a6",
+  "userAddress": "0x0aff497bd016000185b1c8302fa98a88ff4a4178",
+  "userName": "Jonathan O'Connell",
+}
+`;
+
+exports[`Interpreter 29`] = `
+Object {
+  "actions": Array [
+    "redeemed",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+      "amount": "5030.925829814346",
+      "name": "ChainLink Token",
+      "symbol": "LINK",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xface851a4921ce59e912d19329929ce6da6eb0c7",
+      "amount": "0.000024982632",
+      "name": "Compound ChainLink Token",
+      "symbol": "cLINK",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xface851a4921ce59e912d19329929ce6da6eb0c7",
+  "contractName": "Compound",
+  "counterpartyName": null,
+  "exampleDescription": "Donnie Macejkovic redeemed 5030.925829814346184782 LINK for 0.000024982631778611 cLINK using Compound",
+  "extra": Object {
+    "tokenAmount0": "5030.925829814346184782",
+    "tokenAmount1": "0.000024982631778611",
+    "tokenSymbol0": "LINK",
+    "tokenSymbol1": "cLINK",
+  },
+  "gasPaid": "0.010940176923101808",
+  "reverted": null,
+  "timestamp": 1656520150,
+  "txHash": "0x63a27f1f7e10fd37477e3e4c35986adb58daaa4b8ab541909a54cb43b0aed5aa",
+  "userAddress": "0x50e1738da6becfb834b26ab8251f58f1e4550d57",
+  "userName": "Donnie Macejkovic",
+}
+`;
+
+exports[`Interpreter 30`] = `
+Object {
+  "actions": Array [
+    "repaid",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [
+    Object {
+      "address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+      "amount": "158.984206345653",
+      "name": "ChainLink Token",
+      "symbol": "LINK",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xface851a4921ce59e912d19329929ce6da6eb0c7",
+  "contractName": "Compound",
+  "counterpartyName": null,
+  "exampleDescription": "Pierce Skiles repaid 158.984206345653112672 LINK to Compound",
+  "extra": Object {
+    "tokenAmount": "158.984206345653112672",
+    "tokenSymbol": "LINK",
+  },
+  "gasPaid": "0.005041919444771034",
+  "reverted": null,
+  "timestamp": 1656502555,
+  "txHash": "0xc5380c861d5817a30b42442f32f93cdc91e1ca395b607ec4ecd9e9cf5fc3c2b9",
+  "userAddress": "0x10f69553c7b482536155cdc8d904ae833ed55f98",
+  "userName": "Pierce Skiles",
+}
+`;
+
+exports[`Interpreter 31`] = `
+Object {
+  "actions": Array [
+    "transferred",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [
+    Object {
+      "address": "0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85",
+      "name": null,
+      "symbol": null,
+      "tokenId": "77827450512977049925405665834974022484034454940950638432846545044999949975083",
+      "type": "ERC721",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85",
+  "contractName": "ENS",
+  "counterpartyName": null,
+  "exampleDescription": "mariannedoesnft.eth transferred an ENS domain to 1211171139452549183084136921790.664528309140945391",
+  "extra": Object {
+    "recipientUser": "1211171139452549183084136921790.664528309140945391",
+  },
+  "gasPaid": "0.002102285415375633",
+  "reverted": null,
+  "timestamp": 1657116533,
+  "txHash": "0x03daff6bd6d1b9792ff1973a1d5104b14fa76fcea6165eb821076cda7f4b2624",
+  "userAddress": "0x8e497d816a3fbe78527a7fed80027927285813ee",
+  "userName": "mariannedoesnft.eth",
+}
+`;
+
+exports[`Interpreter 32`] = `
+Object {
+  "actions": Array [
+    "set approval",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85",
+  "contractName": "ENS",
+  "counterpartyName": null,
+  "exampleDescription": "veryboredape.eth set approval for 171276123239216397485782161645.482711224013569137 to control an ENS domain",
+  "extra": Object {
+    "operatorUser": "171276123239216397485782161645.482711224013569137",
+  },
+  "gasPaid": "0.00192759016795774",
+  "reverted": null,
+  "timestamp": 1657116688,
+  "txHash": "0xfc52130191555ad7892906f1d018945b7b45034fb200dbe6945579fef6fe07b5",
+  "userAddress": "0x17a77d63765963d0cb9dec12fa8f62e68fee8fd4",
+  "userName": "veryboredape.eth",
+}
+`;
+
+exports[`Interpreter 33`] = `
+Object {
+  "actions": Array [
+    "reclaimed",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85",
+  "contractName": "ENS",
+  "counterpartyName": null,
+  "exampleDescription": "revery.eth reclaimed an ENS domain",
+  "extra": Object {},
+  "gasPaid": "0.001560464",
+  "reverted": null,
+  "timestamp": 1657117472,
+  "txHash": "0x100ee7ec909ddd63c03d33261f6658b4050216e63c7a87fa2ccfff32c1d4a7e6",
+  "userAddress": "0xaf4d9e13dc0f2e2d3ec0a17972db215e77c3f83c",
+  "userName": "revery.eth",
+}
+`;
+
+exports[`Interpreter 34`] = `
+Object {
+  "actions": Array [
+    "registered",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85",
+      "name": null,
+      "symbol": null,
+      "tokenId": "12286167365605814071853261433598271875168515458559594443639135101043030965358",
+      "type": "ERC721",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.00044167547969984299",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.004858430276698273",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x283af0b28c62c092c9727f1ee09c02ca627eb7f5",
+  "contractName": "ENS",
+  "counterpartyName": null,
+  "exampleDescription": "2pc.eth registered i-guns.eth with ENS",
+  "extra": Object {
+    "domain": "i-guns",
+  },
+  "gasPaid": "0.015443331375856581",
+  "reverted": null,
+  "timestamp": 1657121522,
+  "txHash": "0xd3f7d0c363f5dc8c7e8d4285afcc0d40063a661075619b09d93105d81200749b",
+  "userAddress": "0x87596fc0fdd191ba5b236eefce47a4c4203b2501",
+  "userName": "2pc.eth",
+}
+`;
+
+exports[`Interpreter 35`] = `
+Object {
+  "actions": Array [
+    "renewed",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.00452275662548034391",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.04975032288028379",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x283af0b28c62c092c9727f1ee09c02ca627eb7f5",
+  "contractName": "ENS",
+  "counterpartyName": null,
+  "exampleDescription": "Rachelle Maggio renewed their ownership of tfu.eth with ENS",
+  "extra": Object {
+    "domain": "tfu",
+    "recipientUser": "an unknown address",
+  },
+  "gasPaid": "0.005347699737515274",
+  "reverted": null,
+  "timestamp": 1657121522,
+  "txHash": "0xcc8a09291cf751d8714289ded45a7ae7b7b2d52560ab120f50b75a771e97a969",
+  "userAddress": "0xf72aebbd82355ad657333fd9262b5f8966a47f6a",
+  "userName": "Rachelle Maggio",
+}
+`;
+
+exports[`Interpreter 36`] = `
+Object {
+  "actions": Array [
+    "set a default ENS name",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x084b1c3c81545d370f3634392de611caabff8148",
+  "contractName": "ENS",
+  "counterpartyName": null,
+  "exampleDescription": "Shawna Leffler set a default ENS name",
+  "extra": Object {},
+  "gasPaid": "0.00250949028836601",
+  "reverted": null,
+  "timestamp": 1657121712,
+  "txHash": "0x419feb4f564baacf3ca6643ac0a4dc00ee76334cdb6fd17f2ee3929278b86d7c",
+  "userAddress": "0x29f1e1445f0212e20d439abac9acabbedd4ac2e7",
+  "userName": "Shawna Leffler",
+}
+`;
+
+exports[`Interpreter 37`] = `
+Object {
+  "actions": Array [
+    "minted",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+      "amount": "1.0",
+      "name": "Rarible",
+      "symbol": "RARI",
+      "tokenId": "13795607240586553976876635506408083070229170130318302667271633221262579335170",
+      "type": "ERC1155",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+      "amount": "1.0",
+      "name": "Rarible",
+      "symbol": "RARI",
+      "tokenId": "13795607240586553976876635506408083070229170130318302667271633221262579335170",
+      "type": "ERC1155",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+  "contractName": "Rarible",
+  "counterpartyName": null,
+  "exampleDescription": "Stephen Sipes minted 1.0 RARI #13795607240586553976876635506408083070229170130318302667271633221262579335170 from Rarible",
+  "extra": Object {},
+  "gasPaid": "0.000836130552245292",
+  "reverted": null,
+  "timestamp": 1657268452,
+  "txHash": "0x737a57f5de926d43d2118d4e5fbeb552d68b4b8a68e4f801e1e6641960462b06",
+  "userAddress": "0x1e8009784ae24f42cb3c081259395df74f91b614",
+  "userName": "Stephen Sipes",
+}
+`;
+
+exports[`Interpreter 38`] = `
+Object {
+  "actions": Array [
+    "wrapped",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "amount": "1.0",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "1",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "contractName": "WETH",
+  "counterpartyName": null,
+  "exampleDescription": "brenner.eth wrapped 1.0 ETH",
+  "extra": Object {
+    "amount": "1.0",
+  },
+  "gasPaid": "0.00067557",
+  "reverted": null,
+  "timestamp": 1627149470,
+  "txHash": "0xe6e922f5330aa913012fb6844aa0a401a10e1b0807eb3a3f4133e9af78d1b3ca",
+  "userAddress": "0x17a059b6b0c8af433032d554b0392995155452e6",
+  "userName": "brenner.eth",
+}
+`;
+
+exports[`Interpreter 39`] = `
+Object {
+  "actions": Array [
+    "crafted",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+      "amount": "1.0",
+      "name": "Zapper NFT V2",
+      "symbol": "ZPR NFT",
+      "tokenId": "11",
+      "type": "ERC1155",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+      "amount": "3.0",
+      "name": "Zapper NFT V2",
+      "symbol": "ZPR NFT",
+      "tokenId": "3",
+      "type": "ERC1155",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+  "contractName": "Zapper",
+  "counterpartyName": null,
+  "exampleDescription": "Archibald Walter crafted a Zapper NFT",
+  "extra": Object {},
+  "gasPaid": "0.00083546616297618",
+  "reverted": null,
+  "timestamp": 1661240802,
+  "txHash": "0x5aaf520a85cb38e6183799c482de919b7fc64b486cc80660d0aa8f683065825e",
+  "userAddress": "0xeabb8d1c89d159e3db2973f12568e0927daae35d",
+  "userName": "Archibald Walter",
+}
+`;
+
+exports[`Interpreter 40`] = `
+Object {
+  "actions": Array [
+    "claimed volts",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+  "contractName": "Zapper",
+  "counterpartyName": null,
+  "exampleDescription": "Sylvester Feest claimed volts from Zapper",
+  "extra": Object {},
+  "gasPaid": "0.002434338695170954",
+  "reverted": null,
+  "timestamp": 1643633383,
+  "txHash": "0x43363e57ee9d29572fae040cfeacd6107853f28292cc687318e3b7c4d4a3272c",
+  "userAddress": "0x4850201540fda859acde50016c5d023806df7203",
+  "userName": "Sylvester Feest",
+}
+`;
+
+exports[`Interpreter 41`] = `
+Object {
+  "actions": Array [
+    "minted",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+      "amount": "1.0",
+      "name": "Zapper NFT V2",
+      "symbol": "ZPR NFT",
+      "tokenId": "3",
+      "type": "ERC1155",
+    },
+  ],
+  "assetsSent": Array [],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+  "contractName": "Zapper",
+  "counterpartyName": null,
+  "exampleDescription": "Angelo Hahn minted a Zapper NFT",
+  "extra": Object {},
+  "gasPaid": "0.000716544036650496",
+  "reverted": null,
+  "timestamp": 1661260613,
+  "txHash": "0x6b839c1d519f2f6b11eb304d5cc185b7b367278150b0fe3109084aa0ed78cfb2",
+  "userAddress": "0x0b43cdee3e18bf468b1def50f177f25cfcc8d452",
+  "userName": "Angelo Hahn",
+}
+`;
+
+exports[`Interpreter 42`] = `
+Object {
+  "actions": Array [
+    "redeemed volts",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [
+    Object {
+      "address": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+      "amount": "1.0",
+      "name": "Zapper NFT V2",
+      "symbol": "ZPR NFT",
+      "tokenId": "3",
+      "type": "ERC1155",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
+  "contractName": "Zapper",
+  "counterpartyName": null,
+  "exampleDescription": "myunifund.eth redeemed volts from Zapper",
+  "extra": Object {},
+  "gasPaid": "0.000786976",
+  "reverted": null,
+  "timestamp": 1660364375,
+  "txHash": "0xf1f6e7aff98668f78398871484bdcd50afc12a923029a6c025f8835a3ef4a936",
+  "userAddress": "0x88398dac284753fc651cd475b42aa507413f4fd2",
+  "userName": "myunifund.eth",
+}
+`;
+
+exports[`Interpreter 43`] = `
+Object {
+  "actions": Array [
+    "added liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x397ff1542f962076d0bfe58ea045ffa2d347aca0",
+      "amount": "0.00001061172",
+      "name": "SushiSwap LP Token",
+      "symbol": "SLP",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "amount": "0.434035787205",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "unknown",
+    },
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "700.0",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Manuela Ullrich added liquidity to the WETH-USDC SushiSwap pool",
+  "extra": Object {
+    "token_0": "WETH",
+    "token_1": "USDC",
+  },
+  "gasPaid": "0.00134318351717995",
+  "reverted": null,
+  "timestamp": 1661230375,
+  "txHash": "0x77c810424f1493f0059ae11af084f5fea1d32654b9e6bf28fe7ea1eadd822432",
+  "userAddress": "0xe6268e4a1e42549a648c45d4015fa5f21e963220",
+  "userName": "Manuela Ullrich",
+}
+`;
+
+exports[`Interpreter 44`] = `
+Object {
+  "actions": Array [
+    "added liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x397ff1542f962076d0bfe58ea045ffa2d347aca0",
+      "amount": "0.000010720313",
+      "name": "SushiSwap LP Token",
+      "symbol": "SLP",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.000001379118193543",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "704.838157",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.44",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Sheila Little added liquidity to the USDC-ETH SushiSwap pool",
+  "extra": Object {
+    "token_0": "USDC",
+  },
+  "gasPaid": "0.002140281",
+  "reverted": null,
+  "timestamp": 1661250853,
+  "txHash": "0x21a385a77f3b99a83dda54ef36dbf4156522af0015eb68541693400b9b72d374",
+  "userAddress": "0x60ca1f1f3abc9146cc7561d39c9ab1a7a279f83f",
+  "userName": "Sheila Little",
+}
+`;
+
+exports[`Interpreter 45`] = `
+Object {
+  "actions": Array [
+    "removed liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+      "amount": "85.451464607436",
+      "name": "SushiToken",
+      "symbol": "SUSHI",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "amount": "0.062894646544",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "unknown",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+      "amount": "1.759919191961",
+      "name": "SushiSwap LP Token",
+      "symbol": "SLP",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Angelo Abbott removed liquidity from the SUSHI-WETH SushiSwap pool",
+  "extra": Object {
+    "token_0": "SUSHI",
+    "token_1": "WETH",
+  },
+  "gasPaid": "0.002478534680011456",
+  "reverted": null,
+  "timestamp": 1660863040,
+  "txHash": "0x8c0e9eb2a88c710f79487ddfd8f9df7806c938fc82025a7810cf09ec68727e26",
+  "userAddress": "0x02fb7c039a1db032be786dce909dd7ffd052bde7",
+  "userName": "Angelo Abbott",
+}
+`;
+
+exports[`Interpreter 46`] = `
+Object {
+  "actions": Array [
+    "removed liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x20ec84c46392cb3ae6a7925be92f597fcc7d88f9",
+      "amount": "8.959236389506",
+      "name": "SuperPool",
+      "symbol": "SUPER",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.2972664873606160052",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x586f48aa01029884b4ba113cdc70b615802aeebc",
+      "amount": "1.571257646476",
+      "name": "SushiSwap LP Token",
+      "symbol": "SLP",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "collin.eth removed liquidity from the SUPER-ETH SushiSwap pool",
+  "extra": Object {
+    "ethValueReceived": "0.297266487360616008",
+    "token_0": "SUPER",
+  },
+  "gasPaid": "0.005553959492753724",
+  "reverted": null,
+  "timestamp": 1661200279,
+  "txHash": "0x5c02ad31a4c7d33ba222c340c4d5f834f7965877c426701a6616e5b3809a6dc6",
+  "userAddress": "0x240ad467a71210629d71d4de22ebde27951c83fc",
+  "userName": "collin.eth",
+}
+`;
+
+exports[`Interpreter 47`] = `
+Object {
+  "actions": Array [
+    "removed liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xa6dd98031551c23bb4a2fbe2c4d524e8f737c6f7",
+      "amount": "10274828.871470849961",
+      "name": "Tokenfy",
+      "symbol": "TKNFY",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "5.94064984546204399862",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x0bd2b9116f1e2f88e4fd4cc0fce3e15178de8df5",
+      "amount": "7217.372895562787",
+      "name": "SushiSwap LP Token",
+      "symbol": "SLP",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Valerie Gleason removed liquidity from the TKNFY-ETH SushiSwap pool",
+  "extra": Object {
+    "ethValueReceived": "5.940649845462044067",
+    "token_0": "TKNFY",
+  },
+  "gasPaid": "0.009203658786336319",
+  "reverted": null,
+  "timestamp": 1655497110,
+  "txHash": "0xcd93f9a98673117e5c8bcbda0b9ec8d18b5d4450f1fa339f5ff14c31f8fe201b",
+  "userAddress": "0x9528d0e415ed2172a75c06ddf01abd032fc3f891",
+  "userName": "Valerie Gleason",
+}
+`;
+
+exports[`Interpreter 48`] = `
+Object {
+  "actions": Array [
+    "removed liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x2e9d63788249371f1dfc918a52f8d799f4a38c94",
+      "amount": "4331.689388780883",
+      "name": "Tokemak",
+      "symbol": "TOKE",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "3.19670902351273333863",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xd4e7a6e2d03e4e48dfc27dd3f46df1c176647e38",
+      "amount": "112.289738129244",
+      "name": "SushiSwap LP Token",
+      "symbol": "SLP",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "mtrust.eth removed liquidity from the TOKE-ETH SushiSwap pool",
+  "extra": Object {
+    "ethValueReceived": "3.19670902351273325",
+    "token_0": "TOKE",
+  },
+  "gasPaid": "0.005793525",
+  "reverted": null,
+  "timestamp": 1662581880,
+  "txHash": "0x7a9059dbe5f9baea798147bb4a9efc36608e3693f7358872cafd020a4c16c910",
+  "userAddress": "0x8c1a4c98c470900567fb9e764243c89cda79400c",
+  "userName": "mtrust.eth",
+}
+`;
+
+exports[`Interpreter 49`] = `
+Object {
+  "actions": Array [
+    "removed liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xa6dd98031551c23bb4a2fbe2c4d524e8f737c6f7",
+      "amount": "119249.648714875482",
+      "name": "Tokenfy",
+      "symbol": "TKNFY",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.05062760444452207853",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x0bd2b9116f1e2f88e4fd4cc0fce3e15178de8df5",
+      "amount": "71.747194006431",
+      "name": "SushiSwap LP Token",
+      "symbol": "SLP",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Ivy Farrell removed liquidity from the TKNFY-ETH SushiSwap pool",
+  "extra": Object {
+    "ethValueReceived": "0.050627604444522076",
+    "token_0": "TKNFY",
+  },
+  "gasPaid": "0.01201474471437965",
+  "reverted": null,
+  "timestamp": 1657123706,
+  "txHash": "0x26c8c6f27845a2462035e71e382b9c6b241f9a5e414c94eb74f5cd24ebe9a772",
+  "userAddress": "0x3e0640f36ef9e76212485f7b1d9c80888290d292",
+  "userName": "Ivy Farrell",
+}
+`;
+
+exports[`Interpreter 50`] = `
+Object {
+  "actions": Array [
+    "removed liquidity",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x25f8087ead173b73d6e8b84329989a8eea16cf73",
+      "amount": "329231.358253753628",
+      "name": "Yield Guild Games Token",
+      "symbol": "YGG",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "amount": "120.414498998765",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "unknown",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x99b42f2b49c395d2a77d973f6009abb5d67da343",
+      "amount": "4929.421034644561",
+      "name": "SushiSwap LP Token",
+      "symbol": "SLP",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Wade Luettgen removed liquidity from the YGG-WETH SushiSwap pool",
+  "extra": Object {
+    "token_0": "YGG",
+    "token_1": "WETH",
+  },
+  "gasPaid": "0.004000276277669724",
+  "reverted": null,
+  "timestamp": 1661266096,
+  "txHash": "0xfaababf2a3dec98d2b6ac4055151995ce89ffce74a1d7f72afa353ce036e1b20",
+  "userAddress": "0x29f4efddfb009367b9ea066daae649c410d8e5f3",
+  "userName": "Wade Luettgen",
+}
+`;
+
+exports[`Interpreter 51`] = `
+Object {
+  "actions": Array [
+    "bought",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0x090185f2135308bad17527004364ebcc2d37e5f6",
+      "amount": "4317206.290000000037",
+      "name": "Spell Token",
+      "symbol": "SPELL",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.00069189347862645397",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "4.276477502275241",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Jake Lockman bought 4.275785608796613994 ETH of SPELL on SushiSwap",
+  "extra": Object {
+    "ethValueSent": "4.275785608796613994",
+    "tokenAmount": "4317206.289999999807782912",
+    "tokenName": "SPELL",
+  },
+  "gasPaid": "0.0064473612",
+  "reverted": null,
+  "timestamp": 1661274621,
+  "txHash": "0xb6d5e2c3bec38fea8ad724a4a726c9a28e221923c8d101739e7b869947c49e5c",
+  "userAddress": "0xea61675774c491b3744ef161877698c422152010",
+  "userName": "Jake Lockman",
+}
+`;
+
+exports[`Interpreter 52`] = `
+Object {
+  "actions": Array [
+    "bought",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xd084944d3c05cd115c09d072b9f44ba3e0e45921",
+      "amount": "6.751227660366",
+      "name": "Manifold Finance",
+      "symbol": "FOLD",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.25",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "shirex.eth bought 0.25 ETH of FOLD on SushiSwap",
+  "extra": Object {
+    "ethValueSent": "0.25",
+    "tokenAmount": "6.751227660366390221",
+    "tokenName": "FOLD",
+  },
+  "gasPaid": "0.001363313521128386",
+  "reverted": null,
+  "timestamp": 1661277413,
+  "txHash": "0xacd7a3ce8f76c697517c72e6aba10eb4012edbe0e90ebf7920f75640cf27d42a",
+  "userAddress": "0x62117861da69ad0d6483f75508acd61871b8e058",
+  "userName": "shirex.eth",
+}
+`;
+
+exports[`Interpreter 53`] = `
+Object {
+  "actions": Array [
+    "bought",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xe7da1d8327ae1f320bbc23ca119b02ad3f85dceb",
+      "amount": "0.000000000185",
+      "name": "BlackDAO",
+      "symbol": "BLKD",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.1",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Olin Parker bought 0.00000000019396768 ETH of BLKD on SushiSwap",
+  "extra": Object {
+    "ethValueSent": "0.00000000019396768",
+    "tokenAmount": "0.000000000184766125",
+    "tokenName": "BLKD",
+  },
+  "gasPaid": "0.003911395669067428",
+  "reverted": null,
+  "timestamp": 1660524683,
+  "txHash": "0xe8179de2fba98287f09671beeabf16875465e977716d219a67d1df736108b756",
+  "userAddress": "0xf7d5ce660b96baec013533167e6004687ce90d23",
+  "userName": "Olin Parker",
+}
+`;
+
+exports[`Interpreter 54`] = `
+Object {
+  "actions": Array [
+    "sold",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "1.71835442495810974961",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xabea7663c472648d674bd3403d94c858dfeef728",
+      "amount": "0.5",
+      "name": "Pudgy Penguins",
+      "symbol": "PUDGY",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "ryanchandler.eth sold 1.718354424958109763 ETH of PUDGY on SushiSwap",
+  "extra": Object {
+    "ethValueReceived": "1.718354424958109763",
+    "tokenAmount": "0.499999999999999999",
+    "tokenName": "PUDGY",
+  },
+  "gasPaid": "0.002303984394541428",
+  "reverted": null,
+  "timestamp": 1661278229,
+  "txHash": "0x69a0f4c2d728ca7dffdc7d1cb56742c5dbfb43bcdee081eea68f97c6ccbb6806",
+  "userAddress": "0x25cf64beb03949c6283e719a67434ec64a564534",
+  "userName": "ryanchandler.eth",
+}
+`;
+
+exports[`Interpreter 55`] = `
+Object {
+  "actions": Array [
+    "sold",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "1.47940897360965495366",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x69fa8e7f6bf1ca1fb0de61e1366f7412b827cc51",
+      "amount": "0.000000800038",
+      "name": "EnreachDAO",
+      "symbol": "NRCH",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Barbara Schneider sold 1.479408973609654866 ETH of NRCH on SushiSwap",
+  "extra": Object {
+    "ethValueReceived": "1.479408973609654866",
+    "tokenAmount": "0.000000800037645503",
+    "tokenName": "NRCH",
+  },
+  "gasPaid": "0.001911231291670792",
+  "reverted": null,
+  "timestamp": 1661276973,
+  "txHash": "0x6cbddbccbe403f4b5d67295527d5e061e0819a561a1977c3c97e81990fffc0a9",
+  "userAddress": "0x9bf3134222ee4df13b872d7c036fd84eb3b1dbed",
+  "userName": "Barbara Schneider",
+}
+`;
+
+exports[`Interpreter 56`] = `
+Object {
+  "actions": Array [
+    "traded",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "1660.801776",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5",
+      "amount": "0.000000128385",
+      "name": "Olympus",
+      "symbol": "OHM",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "cripplerich.eth traded 0.000000128385273964 OHM for 1660.801776 USDC on SushiSwap",
+  "extra": Object {
+    "tokenAmount0": "0.000000128385273964",
+    "tokenAmount1": "1660.801776",
+    "tokenName0": "OHM",
+    "tokenName1": "USDC",
+  },
+  "gasPaid": "0.002507441832350378",
+  "reverted": null,
+  "timestamp": 1661279269,
+  "txHash": "0xff082dbc9b6b2135b41fda2b46ce642c3b29db22ba3fe14fc10be87f0b721839",
+  "userAddress": "0xe635909e655eb5c9a0c4c1e185f17b6a34923111",
+  "userName": "cripplerich.eth",
+}
+`;
+
+exports[`Interpreter 57`] = `
+Object {
+  "actions": Array [
+    "traded",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "amount": "1939.793511",
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "type": "ERC20",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xc18360217d8f7ab5e7c516566761ea12ce7f9d72",
+      "amount": "146.26198",
+      "name": "Ethereum Name Service",
+      "symbol": "ENS",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Melissa Oberbrunner traded 146.26198 ENS for 1939.793511 USDT on SushiSwap",
+  "extra": Object {
+    "tokenAmount0": "146.26198",
+    "tokenAmount1": "1939.793511",
+    "tokenName0": "ENS",
+    "tokenName1": "USDT",
+  },
+  "gasPaid": "0.00351744",
+  "reverted": null,
+  "timestamp": 1661278305,
+  "txHash": "0x551e05368ecbedad6f7d6ec8f407d60e84d30b8a93e815a2b52a19e481584715",
+  "userAddress": "0x3803da7df10ba9befe913f625fd868d1fa7e6e02",
+  "userName": "Melissa Oberbrunner",
+}
+`;
+
+exports[`Interpreter 58`] = `
+Object {
+  "actions": Array [
+    "sold",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "1.0",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "amount": "1652.799369",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "ganthony.eth sold 1.0 ETH of USDC on SushiSwap",
+  "extra": Object {
+    "ethValueReceived": "1.0",
+    "tokenAmount": "1652.799369",
+    "tokenName": "USDC",
+  },
+  "gasPaid": "0.00275322814796757",
+  "reverted": null,
+  "timestamp": 1661278876,
+  "txHash": "0x50886b0742fef7b3abb30427b5c4c8bcee4be2c0543d086740f0534546623cbd",
+  "userAddress": "0x2920c293c5b9aa5c64c2d57479cdaa861b95c141",
+  "userName": "ganthony.eth",
+}
+`;
+
+exports[`Interpreter 59`] = `
+Object {
+  "actions": Array [
+    "traded",
+  ],
+  "assetsReceived": Array [
+    Object {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "amount": "0.47136344183",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "unknown",
+    },
+  ],
+  "assetsSent": Array [
+    Object {
+      "address": "0x0de05f6447ab4d22c8827449ee4ba2d5c288379b",
+      "amount": "105194.51880456807",
+      "name": "Ooki Token",
+      "symbol": "OOKI",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
+  "contractName": "SushiSwap",
+  "counterpartyName": null,
+  "exampleDescription": "Norwood Bartell traded 105194.518804568075057715 OOKI for 0.471363441830448703 WETH on SushiSwap",
+  "extra": Object {
+    "tokenAmount0": "105194.518804568075057715",
+    "tokenAmount1": "0.471363441830448703",
+    "tokenName0": "OOKI",
+    "tokenName1": "WETH",
+  },
+  "gasPaid": "0.0016246152327111",
+  "reverted": null,
+  "timestamp": 1661276793,
+  "txHash": "0xc7070e2bdd0e5e3558450c546ec173005bb2a0f488907ee709a320c07da166cd",
+  "userAddress": "0xf07704777d6bc182bf2c67fbda48913169b84983",
+  "userName": "Norwood Bartell",
+}
+`;
+
+exports[`Interpreter 60`] = `
+Object {
+  "actions": Array [
+    "sent",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [
+    Object {
+      "address": "0x6661c87764adf7fffa3c7922fa6edfa2fd62ccfc",
+      "name": "Commoners by Commonopoly",
+      "symbol": "CMMNR",
+      "tokenId": "6513",
+      "type": "ERC721",
+    },
+    Object {
+      "address": "0x6661c87764adf7fffa3c7922fa6edfa2fd62ccfc",
+      "name": "Commoners by Commonopoly",
+      "symbol": "CMMNR",
+      "tokenId": "6473",
+      "type": "ERC721",
+    },
+    Object {
+      "address": "0x6661c87764adf7fffa3c7922fa6edfa2fd62ccfc",
+      "name": "Commoners by Commonopoly",
+      "symbol": "CMMNR",
+      "tokenId": "12",
+      "type": "ERC721",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x2e2234b3a848f895a60b2071f90303cd02f7491d",
+  "contractName": "BatchTransfer",
+  "counterpartyName": null,
+  "exampleDescription": "   gc.eth sent CMMNR (Commoners by Commonopoly) to  multiple addresses",
+  "extra": Object {
+    "tokenName": "Commoners by Commonopoly",
+    "tokenSymbol": "CMMNR",
+  },
+  "gasPaid": "0.00136265504958525",
+  "reverted": null,
+  "timestamp": 1662095839,
+  "txHash": "0x4b86cff9a093e7c29ad86c3816e1f8e867f0264f6fc1052f57668a19b024b092",
+  "userAddress": "0x515299b1a2637181ec95a3efeaa42a466195a40f",
+  "userName": "   gc.eth",
+}
+`;
+
+exports[`Interpreter 61`] = `
+Object {
+  "actions": Array [
+    "dispersed",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+    Object {
+      "address": "0x76306f029f8f99effe509534037ba7030999e3cf",
+      "amount": "1.0",
+      "name": "Acreage",
+      "symbol": "ACR",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd152f549545093347a162dce210e7293f1452150",
+  "contractName": "Disperse",
+  "counterpartyName": null,
+  "exampleDescription": "Craig Lebsack dispersed $ACR (Acreage token) to multiple addresses",
+  "extra": Object {
+    "tokenName": "Acreage",
+    "tokenSymbol": "ACR",
+  },
+  "gasPaid": "0.023910385783957284",
+  "reverted": null,
+  "timestamp": 1659848465,
+  "txHash": "0xbaf7354913380992f641ba1eb3345641069af4811bfa93356c4a148c7f951ba3",
+  "userAddress": "0x1d58d26795b16e233e1f1ae660687e335905b78c",
+  "userName": "Craig Lebsack",
+}
+`;
+
+exports[`Interpreter 62`] = `
+Object {
+  "actions": Array [
+    "dispersed",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [
+    Object {
+      "address": "0x747f564d258612ec5c4e24742c5fd4110bcbe46b",
+      "amount": "19.02",
+      "name": "Nodeseeds.com Token",
+      "symbol": "NDS",
+      "type": "ERC20",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd152f549545093347a162dce210e7293f1452150",
+  "contractName": "Disperse",
+  "counterpartyName": null,
+  "exampleDescription": "Sibyl Cole dispersed $NDS (Nodeseeds.com Token token) to multiple addresses",
+  "extra": Object {
+    "tokenName": "Nodeseeds.com Token",
+    "tokenSymbol": "NDS",
+  },
+  "gasPaid": "0.000739546333947564",
+  "reverted": null,
+  "timestamp": 1662309038,
+  "txHash": "0x4f32fc855204597a1c3bf5dad15e1636ca1a56bc920578a5b233c50ce0035853",
+  "userAddress": "0x44fa1b69ad45c47a6c3a84930a80fe220cf38f50",
+  "userName": "Sibyl Cole",
+}
+`;
+
+exports[`Interpreter 63`] = `
+Object {
+  "actions": Array [
+    "dispersed",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "1",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0xd152f549545093347a162dce210e7293f1452150",
+  "contractName": "Disperse",
+  "counterpartyName": null,
+  "exampleDescription": "Margret Lesch dispersed ETH to multiple addresses",
+  "extra": Object {},
+  "gasPaid": "0.010340425924699192",
+  "reverted": null,
+  "timestamp": 1662326847,
+  "txHash": "0x0218f4ea6f52110919badb90636cc72563e5b80160f7fcf575df9dca1fe8eb9c",
+  "userAddress": "0x9d1cb67fd65fa0b842a873ebdc269f6f71988e9e",
+  "userName": "Margret Lesch",
+}
+`;
+
+exports[`Interpreter 64`] = `
+Object {
+  "actions": Array [
+    "deposited",
+  ],
+  "assetsReceived": Array [],
+  "assetsSent": Array [
+    Object {
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "amount": "0.02094",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "native",
+    },
+  ],
+  "chainSymbol": "ETH",
+  "contractAddress": "0x737901bea3eeb88459df9ef1be8ff3ae1b42a2ba",
+  "contractName": "Aztec",
+  "counterpartyName": null,
+  "exampleDescription": "edwardtay.eth deposited {tokenAmount} {tokenSymbol} to Aztec",
+  "extra": Object {},
+  "gasPaid": "0.004239092674210478",
+  "reverted": null,
+  "timestamp": 1651326430,
+  "txHash": "0x1aef69ed1bd6e9a8d43c72b54c1fea18355ca236292bdb6e9d0f0cf2864730ec",
+  "userAddress": "0x38430336153468dcf36af5cea7d6bc472425633a",
+  "userName": "edwardtay.eth",
+}
+`;

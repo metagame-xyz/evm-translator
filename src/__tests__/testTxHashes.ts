@@ -95,6 +95,9 @@ const testTxHashes = {
         disperseToken: '0x4f32fc855204597a1c3bf5dad15e1636ca1a56bc920578a5b233c50ce0035853',
         disperseEther: '0x0218f4ea6f52110919badb90636cc72563e5b80160f7fcf575df9dca1fe8eb9c',
     },
+    Aztec: {
+        depositPendingFunds: '0x1aef69ed1bd6e9a8d43c72b54c1fea18355ca236292bdb6e9d0f0cf2864730ec',
+    },
 }
 
 // test multiple roles for a single tx

@@ -1,0 +1,16 @@
+{
+    "contractAddress": "0x737901bea3eeb88459df9ef1be8ff3ae1b42a2ba",
+    "contractOfficialName": "RollupProcessor",
+    "contractName": "Aztec",
+    "entityName": "Aztec",
+    "writeFunctions": {
+        "depositPendingFunds": {
+            "action": "deposited",
+            "exampleDescriptionTemplate": "{userName} {action} {tokenAmount} {tokenSymbol} to {contractName}",
+            "exampleDescription": "0x7f76 deposited 0.02094 ETH into Aztec",
+            "keywords": {}
+        }
+        }
+        
+}
+    
