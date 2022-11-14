@@ -45,6 +45,8 @@ class TaxFormatter {
             userAddress,
         } = interpretedData
 
+        const { fromAddress } = decodedTx
+
         const getType = (data: Interpretation): RowType | null => {
             let rowType = null
 
@@ -106,6 +108,9 @@ class TaxFormatter {
             let currency = null
             let type = AssetType.DEFAULT
 
+            // console.log('txHash', data.txHash)
+            // console.log('assets', assets, 'opposite', opposite, 'direction', direction)
+
             if (assets.length > 0) {
                 type = assets[0].type
 
@@ -118,15 +123,16 @@ class TaxFormatter {
                 } else if (type === AssetType.ERC1155) {
                     amount = Number(assets[0].amount)
                     currency = assets[0].symbol + '-' + assets[0].tokenId?.toString().slice(0, 6)
-                } else if (type === AssetType.LPToken) {
+                } else if (type === AssetType.LPToken && opposite.length > 0) {
                     amount = Number(assets[0].amount)
-                    currency = opposite[0].symbol + '-' + opposite[1].symbol
+                    currency = opposite[0]?.symbol || '???' + '-' + (opposite[1]?.symbol || '???')
                 }
             }
             return [amount, currency, type]
         }
 
-        const userInitiated = this.walletAddress === userAddress
+        const userInitiated = this.walletAddress === fromAddress.toLowerCase()
+        // console.log('walletAddress', this.walletAddress, 'userAddress', userAddress, 'userInitiated', userInitiated)
 
         const [receivedAmount, receivedSymbol, receivedType] = getAmountAndCurrency(interpretedData, 'in')
         const [sentAmount, sentSymbol, sentType] = getAmountAndCurrency(interpretedData, 'out')
