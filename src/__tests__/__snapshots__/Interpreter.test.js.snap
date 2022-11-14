@@ -1046,7 +1046,7 @@ Object {
   "contractAddress": "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5",
   "contractName": "Compound",
   "counterpartyName": null,
-  "exampleDescription": "robertclarke.eth borrowed 81.0 ETH from Compound",
+  "exampleDescription": "hot.robertclarke.eth borrowed 81.0 ETH from Compound",
   "extra": Object {
     "tokenAmount": "81.0",
   },
@@ -1055,7 +1055,7 @@ Object {
   "timestamp": 1656709562,
   "txHash": "0x5ced82f63bdbe55eaee49392afca90bf23473ba93d43eb5159e586fa8d343986",
   "userAddress": "0x629d6688dd4546da8935ee1602be62d92b3c5a7c",
-  "userName": "robertclarke.eth",
+  "userName": "hot.robertclarke.eth",
 }
 `;
 
@@ -1633,14 +1633,14 @@ Object {
   "contractAddress": "0xf1f3ca6268f330fda08418db12171c3173ee39c9",
   "contractName": "Zapper",
   "counterpartyName": null,
-  "exampleDescription": "myunifund.eth redeemed volts from Zapper",
+  "exampleDescription": "up1000x.eth redeemed volts from Zapper",
   "extra": Object {},
   "gasPaid": "0.000786976",
   "reverted": null,
   "timestamp": 1660364375,
   "txHash": "0xf1f6e7aff98668f78398871484bdcd50afc12a923029a6c025f8835a3ef4a936",
   "userAddress": "0x88398dac284753fc651cd475b42aa507413f4fd2",
-  "userName": "myunifund.eth",
+  "userName": "up1000x.eth",
 }
 `;
 
@@ -1828,7 +1828,7 @@ Object {
   "contractAddress": "0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f",
   "contractName": "SushiSwap",
   "counterpartyName": null,
-  "exampleDescription": "Mya Halvorson removed liquidity from the SUPER-ETH SushiSwap pool",
+  "exampleDescription": "collindyer.eth removed liquidity from the SUPER-ETH SushiSwap pool",
   "extra": Object {
     "ethValueReceived": "0.297266487360616008",
     "token_0": "SUPER",
@@ -1838,7 +1838,7 @@ Object {
   "timestamp": 1661200279,
   "txHash": "0x5c02ad31a4c7d33ba222c340c4d5f834f7965877c426701a6616e5b3809a6dc6",
   "userAddress": "0x240ad467a71210629d71d4de22ebde27951c83fc",
-  "userName": "Mya Halvorson",
+  "userName": "collindyer.eth",
 }
 `;
 
@@ -2455,7 +2455,7 @@ Object {
   "contractAddress": "0x2e2234b3a848f895a60b2071f90303cd02f7491d",
   "contractName": "BatchTransfer",
   "counterpartyName": null,
-  "exampleDescription": "¿gc.eth sent CMMNR (Commoners by Commonopoly) to  multiple addresses",
+  "exampleDescription": "suicide.eth sent CMMNR (Commoners by Commonopoly) to  multiple addresses",
   "extra": Object {
     "tokenName": "Commoners by Commonopoly",
     "tokenSymbol": "CMMNR",
@@ -2465,7 +2465,7 @@ Object {
   "timestamp": 1662095839,
   "txHash": "0x4b86cff9a093e7c29ad86c3816e1f8e867f0264f6fc1052f57668a19b024b092",
   "userAddress": "0x515299b1a2637181ec95a3efeaa42a466195a40f",
-  "userName": "¿gc.eth",
+  "userName": "suicide.eth",
 }
 `;
 
