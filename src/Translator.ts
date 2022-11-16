@@ -1,5 +1,5 @@
-import { AlchemyConfig, initializeAlchemy } from '@alch/alchemy-sdk'
 import { AlchemyProvider, StaticJsonRpcProvider } from '@ethersproject/providers'
+import { AlchemyConfig, initializeAlchemy } from 'alchemy-sdk'
 
 import { ABI_Item, ABI_ItemUnfiltered } from 'interfaces/abi'
 import { InterpreterMap } from 'interfaces/contractInterpreter'

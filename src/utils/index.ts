@@ -1,7 +1,7 @@
 import { ethAddress, proxyImplementationAddress } from './constants'
 import { logWarning } from './logging'
-import { AlchemyProvider, Network } from '@alch/alchemy-sdk'
 import { BaseProvider } from '@ethersproject/providers'
+import { AlchemyProvider, Network } from 'alchemy-sdk'
 import Bottleneck from 'bottleneck'
 import collect from 'collect.js'
 import { BigNumber } from 'ethers'
@@ -315,7 +315,7 @@ export const getNativeTokenValueEvents = (interactions: Interaction[]): Interact
     return nativeTokenEvents
 }
 
-export const getKeys = <T>(obj: T) => Object.keys(obj) as Array<keyof T>
+export const getKeys = (obj: Record<string, any>) => Object.keys(obj) as Array<string>
 
 export const getEntries = <T>(obj: Record<string, T>) => Object.entries(obj) as Array<[string, T]>
 

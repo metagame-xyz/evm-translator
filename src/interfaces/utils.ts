@@ -1,4 +1,4 @@
-import { Network } from '@alch/alchemy-sdk'
+import { Network } from 'alchemy-sdk'
 import { BigNumber } from 'ethers'
 import { z } from 'zod'
 
