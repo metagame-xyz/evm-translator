@@ -1,5 +1,5 @@
 import { ethAddress, proxyImplementationAddress } from './constants'
-// import { logWarning } from './logging'
+import { logWarning } from './logging'
 import { BaseProvider } from '@ethersproject/providers'
 import { AlchemyProvider, Network } from 'alchemy-sdk'
 import Bottleneck from 'bottleneck'
@@ -229,7 +229,7 @@ export const retryProviderCall = async <T>(providerPromise: Promise<T>): Promise
             return data
         } catch (err) {
             retry--
-            // logWarning({ thrown_error: err }, `retries left: ${retry}`)
+            logWarning({ thrown_error: err }, `retries left: ${retry}`)
             if (retry === 0) {
                 error = err
             } else {
