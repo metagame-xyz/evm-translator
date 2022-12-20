@@ -1,0 +1,20 @@
+{
+    "contractAddress": "0xaBEA9132b05A70803a4E85094fD0e1800777fBEF",
+    "contractOfficialName": "Proxy",
+    "contractName": "zkSync Proxy",
+    "entityName": "zkSync",
+    "writeFunctions": {
+        "getNoticePeriod": {
+            "action": "get notice period",
+            "exampleDescriptionTemplate": "{action} before activation preparation status of upgrade mode",
+            "exampleDescription": "get notice period before activation preparation status of upgrade mode",
+            "keywords": {}
+        },
+        "isReadyForUpgrade": {
+            "action": "is ready for upgrade",
+            "exampleDescriptionTemplate": "Contract {action}",
+            "exampleDescription": "Contract is ready for upgrade",
+            "keywords": {}
+        }
+    }
+}
