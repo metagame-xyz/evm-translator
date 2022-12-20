@@ -95,6 +95,9 @@ const testTxHashes = {
         disperseToken: '0x4f32fc855204597a1c3bf5dad15e1636ca1a56bc920578a5b233c50ce0035853',
         disperseEther: '0x0218f4ea6f52110919badb90636cc72563e5b80160f7fcf575df9dca1fe8eb9c',
     },
+    BulkCheckout: {
+        donate: '0xeba5bdcd6a4b42b3d71f53b3e8a53ba924a65ff63422c8e45e0a20efb961da0a'
+    },
 }
 
 // test multiple roles for a single tx

@@ -1,0 +1,23 @@
+{
+    "contractAddress": "0x7d655c57f71464b6f83811c55d84009cd9f5221c",
+    "contractOfficialName": "BulkCheckout",
+    "contractName": "BulkCheckout",
+    "entityName": "BulkCheckout",
+    "writeFunctions": {
+        "donate": {
+            "action": "granted donations",
+            "exampleDescriptionTemplate": "{userName} {action} by sending {tokenName}",
+            "exampleDescription": "idunnowhattodo.eth granted donations by sending USDC",
+            "keywords": {
+                "tokenName": {
+                    "key": "contractSymbol",
+                    "filters": {
+                        "eventName": "Transfer",
+                        "from": "{userAddress}"
+                    },
+                    "defaultValue": "ETH"
+                }
+            }
+        }
+    }
+}
